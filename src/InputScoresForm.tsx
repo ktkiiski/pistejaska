@@ -1,5 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import SwipeableViews from "react-swipeable-views";
+import classNames from "classnames";
+
+import Button from "@material-ui/core/Button";
+import {
+  Typography,
+  Grid,
+  TextField,
+  Input,
+  InputBase
+} from "@material-ui/core";
 
 type GameDefinition = {
   name: string;
@@ -67,9 +77,12 @@ export const InputScoresForm = (props: {
     scores: []
   });
   const [focusOnPlayerIndex, setFocusOnPlayerIndex] = useState<number>(0);
+  const saveButton = useRef<HTMLDivElement>(null);
 
   const handleScoreChange = (
-    event: React.FormEvent<HTMLInputElement>,
+    event: React.FormEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >,
     field: GameFieldDefinition,
     player: Player
   ) => {
@@ -89,13 +102,17 @@ export const InputScoresForm = (props: {
   const onFocus = (player: Player, field: GameFieldDefinition) => {
     setFocusOnPlayerIndex(props.players.indexOf(player));
   };
-  let setFocus = false;
+
   const onSetFocusToNext = (field: GameFieldDefinition) => {
     if (focusOnPlayerIndex === props.players.length - 1) {
-      setFocus = true;
       setFocusOnPlayerIndex(0);
       if (selectedFieldIndex < props.game.fields.length - 1) {
         setSelectedFieldIndex(selectedFieldIndex + 1);
+      } else {
+        if (saveButton && saveButton.current) {
+          setFocusOnPlayerIndex(-1);
+          saveButton.current.focus(); // TODO PANU: useEffect?
+        }
       }
     } else {
       setFocusOnPlayerIndex(focusOnPlayerIndex + 1);
@@ -115,17 +132,25 @@ export const InputScoresForm = (props: {
   };
   const [selectedFieldIndex, setSelectedFieldIndex] = useState(0);
 
-  console.log(selectedFieldIndex);
+  const done =
+    scores.scores.length === props.players.length * props.game.fields.length;
+
+  let isSwitchingHack = false;
+
   return (
     <div>
-      <h2>{props.game.name}</h2>
+      <Typography variant="h6" gutterBottom>
+        {props.game.name}
+      </Typography>
 
       <SwipeableViews
         enableMouseEvents
         index={selectedFieldIndex}
         onChangeIndex={(newIndex, oldIndex) => {
-          setSelectedFieldIndex(newIndex);
+          if (isSwitchingHack) setSelectedFieldIndex(newIndex);
+          else setSelectedFieldIndex(oldIndex);
         }}
+        onSwitching={idx => (isSwitchingHack = true)}
       >
         {props.game.fields.map((field, idx) => (
           <div key={field.name.replace(" ", "")}>
@@ -140,11 +165,11 @@ export const InputScoresForm = (props: {
                 scores={scores}
                 onFocus={() => onFocus(p, field)}
                 key={p.id}
-                onKeyDown={e => handleKeyDown(e, field)}
+                onKeyDown={(e: any) => handleKeyDown(e, field)}
                 onHandleScoreChange={handleScoreChange}
                 focusOnMe={
-                  setFocus &&
-                  players.length > focusOnPlayerIndex &&
+                  selectedFieldIndex === props.game.fields.indexOf(field) &&
+                  focusOnPlayerIndex >= 0 &&
                   p.id === players[focusOnPlayerIndex].id
                 }
               />
@@ -173,7 +198,13 @@ export const InputScoresForm = (props: {
           </div>
         ))}
       </SwipeableViews>
-      <button>Save</button>
+      <Button
+        variant="contained"
+        color={done ? "primary" : "default"}
+        buttonRef={saveButton}
+      >
+        Save
+      </Button>
     </div>
   );
 };
@@ -183,15 +214,21 @@ const InputPlayerScoresForField = (props: {
   field: GameFieldDefinition;
   scores: Scores;
   onHandleScoreChange: (
-    e: React.ChangeEvent<HTMLInputElement>,
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >,
     field: GameFieldDefinition,
     player: Player
   ) => void;
   focusOnMe: boolean;
-  onFocus: (e: React.FocusEvent<HTMLInputElement>) => void;
-  onKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void;
+  onFocus: (
+    e: React.FocusEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >
+  ) => void;
+  onKeyDown: (e: React.KeyboardEvent<HTMLDivElement>) => void;
 }) => {
-  const inputRef = React.useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   const {
     player,
     field,
@@ -210,17 +247,26 @@ const InputPlayerScoresForField = (props: {
     }
   }, [focusOnMe]);
 
+  const score = scores.scores
+    .filter(s => s.playerId === player.id)
+    .map(s => s.score)
+    .reduce((s, memo) => s + memo, 0);
+
+  const inputProps = {
+    ref: inputRef,
+    min: field.minValue,
+    max: field.maxValue
+  };
+
   return (
     <div key={player.id}>
-      <label htmlFor={field.name.replace(" ", "_").concat(player.id)}>
-        {player.name}
-      </label>
-      <input
-        ref={inputRef}
+      <TextField
+        margin="dense"
+        inputProps={inputProps}
         type={field.type}
-        min={field.minValue}
-        max={field.maxValue}
-        onFocus={e => (!focusOnMe ? onFocus(e) : () => {})}
+        variant="outlined"
+        label={player.name + " (" + score + " pts)"}
+        onFocus={e => (focusOnMe ? () => {} : onFocus(e))}
         onKeyDown={onKeyDown}
         value={
           ((scores.scores.find(

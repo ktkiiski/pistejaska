@@ -5,6 +5,7 @@ import { CurrentUser } from "./CurrentUser";
 import firebase from "firebase";
 import { DatabaseList } from "./DatabaseList";
 import { InputScoresForm, MarsForm } from "./InputScoresForm";
+import { NavBar } from "./NavBar";
 
 var config = {
   apiKey: "AIzaSyDI_XDKW2vVftx7oUy1a_QTR5BE8j6S-Ds",
@@ -22,6 +23,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
+        <NavBar />
         <CurrentUser />
         {isSignedIn ? <DatabaseList /> : <></>}
         <MarsForm />
