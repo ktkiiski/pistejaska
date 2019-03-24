@@ -16,9 +16,7 @@ var config = {
 };
 firebase.initializeApp(config);
 
-console.log(firebase.auth().currentUser);
 const isSignedIn = firebase.auth().currentUser != null;
-console.log(isSignedIn);
 
 class App extends Component {
   render() {

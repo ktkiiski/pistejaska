@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import useKey from "use-key-hook";
+import SwipeableViews from "react-swipeable-views";
 
 type GameDefinition = {
   name: string;
@@ -10,7 +10,8 @@ type GameDefinition = {
 type GameFieldDefinition = {
   id: string;
   name: string;
-  type: "Number";
+  type: "number" | "date" | "text";
+  valuePerPlayer?: boolean; // defaults to true
   minValue?: number;
   maxValue?: number;
 };
@@ -24,10 +25,17 @@ const terraFormingMars: GameDefinition = {
   id: "1",
   icon: "",
   fields: [
-    { id: "1", name: "Terraforming rating", type: "Number", minValue: 0 },
-    { id: "2", name: "Awards", type: "Number", minValue: 0 },
-    { id: "3", name: "Milestones", type: "Number", minValue: 0 },
-    { id: "4", name: "Game board", type: "Number", minValue: 0 }
+    { id: "1", name: "Terraforming rating", type: "number", minValue: 0 },
+    { id: "2", name: "Awards", type: "number", minValue: 0 },
+    { id: "3", name: "Milestones", type: "number", minValue: 0 },
+    { id: "4", name: "Game board", type: "number", minValue: 0 },
+    {
+      id: "5",
+      name: "Generations",
+      type: "number",
+      minValue: 0,
+      valuePerPlayer: false
+    }
   ]
 };
 const players = [
@@ -58,9 +66,8 @@ export const InputScoresForm = (props: {
     gameId: props.game.id,
     scores: []
   });
-  const [focusOnField, setFocusOnField] = useState<string>("");
-  const [focusOnPlayerOfOrder, setFocusOnPlayerOfOrder] = useState<number>(0);
-  console.log(scores);
+  const [focusOnPlayerIndex, setFocusOnPlayerIndex] = useState<number>(0);
+
   const handleScoreChange = (
     event: React.FormEvent<HTMLInputElement>,
     field: GameFieldDefinition,
@@ -78,34 +85,20 @@ export const InputScoresForm = (props: {
 
     scoreSetter({ ...scores, ...{ scores: newScores } });
   };
-  const getNextFieldId = (field: GameFieldDefinition) => {
-    const indexOf = props.game.fields.indexOf(field);
-    return (
-      (props.game.fields[indexOf + 1] && props.game.fields[indexOf + 1].id) ||
-      ""
-    );
-  };
-  const getPreviousFieldId = (field: GameFieldDefinition) => {
-    const indexOf = props.game.fields.indexOf(field);
-    return (
-      (props.game.fields[indexOf - 1] && props.game.fields[indexOf - 1].id) ||
-      null
-    );
-  };
-  const onNextClick = (field: GameFieldDefinition) => {
-    setFocusOnPlayerOfOrder(0);
-    setFocusOnField(getNextFieldId(field));
-  };
+
   const onFocus = (player: Player, field: GameFieldDefinition) => {
-    setFocusOnPlayerOfOrder(props.players.indexOf(player));
-    setFocusOnField(field.id);
+    setFocusOnPlayerIndex(props.players.indexOf(player));
   };
-  const onSetFocusOnNext = (field: GameFieldDefinition) => {
-    if (focusOnPlayerOfOrder === props.players.length - 1) {
-      setFocusOnField(getNextFieldId(field));
-      setFocusOnPlayerOfOrder(0);
+  let setFocus = false;
+  const onSetFocusToNext = (field: GameFieldDefinition) => {
+    if (focusOnPlayerIndex === props.players.length - 1) {
+      setFocus = true;
+      setFocusOnPlayerIndex(0);
+      if (selectedFieldIndex < props.game.fields.length - 1) {
+        setSelectedFieldIndex(selectedFieldIndex + 1);
+      }
     } else {
-      setFocusOnPlayerOfOrder(focusOnPlayerOfOrder + 1);
+      setFocusOnPlayerIndex(focusOnPlayerIndex + 1);
     }
   };
 
@@ -117,43 +110,70 @@ export const InputScoresForm = (props: {
       e.keyCode == 9 || // android numpad enter/next button (tabulator in computer)
       e.keyCode == 13 // enter
     ) {
-      onSetFocusOnNext(field);
+      onSetFocusToNext(field);
     }
   };
+  const [selectedFieldIndex, setSelectedFieldIndex] = useState(0);
 
+  console.log(selectedFieldIndex);
   return (
     <div>
       <h2>{props.game.name}</h2>
 
-      {props.game.fields.map(field => (
-        <div key={field.name.replace(" ", "")}>
-          <h3 id={field.id}>{field.name}</h3>
-          {props.players.map(p => (
-            <InputPlayerScoresForField
-              player={p}
-              field={field}
-              scores={scores}
-              onFocus={() => onFocus(p, field)}
-              key={p.id}
-              onKeyDown={e => handleKeyDown(e, field)}
-              onHandleScoreChange={handleScoreChange}
-              focusOnMe={
-                focusOnField === field.id &&
-                players.length > focusOnPlayerOfOrder &&
-                p.id === players[focusOnPlayerOfOrder].id
+      <SwipeableViews
+        enableMouseEvents
+        index={selectedFieldIndex}
+        onChangeIndex={(newIndex, oldIndex) => {
+          setSelectedFieldIndex(newIndex);
+        }}
+      >
+        {props.game.fields.map((field, idx) => (
+          <div key={field.name.replace(" ", "")}>
+            <h3 id={field.id}>
+              {idx + 1}. {field.name}
+            </h3>
+
+            {props.players.map(p => (
+              <InputPlayerScoresForField
+                player={p}
+                field={field}
+                scores={scores}
+                onFocus={() => onFocus(p, field)}
+                key={p.id}
+                onKeyDown={e => handleKeyDown(e, field)}
+                onHandleScoreChange={handleScoreChange}
+                focusOnMe={
+                  setFocus &&
+                  players.length > focusOnPlayerIndex &&
+                  p.id === players[focusOnPlayerIndex].id
+                }
+              />
+            ))}
+
+            <button
+              onClick={() =>
+                setSelectedFieldIndex(
+                  selectedFieldIndex > 0 ? selectedFieldIndex - 1 : 0
+                )
               }
-            />
-          ))}
-          <a href={"#" + getPreviousFieldId(field)}>&lt; Previous</a>
-          <a onClick={() => onSetFocusOnNext(field)}>Next player</a>
-          <a
-            href={"#" + getNextFieldId(field)}
-            onClick={() => onNextClick(field)}
-          >
-            Next &gt;
-          </a>
-        </div>
-      ))}
+            >
+              &lt; Previous
+            </button>
+            <button
+              onClick={() =>
+                setSelectedFieldIndex(
+                  selectedFieldIndex < props.game.fields.length - 1
+                    ? selectedFieldIndex + 1
+                    : props.game.fields.length - 1
+                )
+              }
+            >
+              Next &gt;
+            </button>
+          </div>
+        ))}
+      </SwipeableViews>
+      <button>Save</button>
     </div>
   );
 };
@@ -181,12 +201,15 @@ const InputPlayerScoresForField = (props: {
     onFocus,
     onKeyDown
   } = props;
+
   useEffect(() => {
     if (focusOnMe) {
-      if (inputRef != null && inputRef.current != null)
+      if (inputRef != null && inputRef.current != null) {
         inputRef.current.focus();
+      }
     }
   }, [focusOnMe]);
+
   return (
     <div key={player.id}>
       <label htmlFor={field.name.replace(" ", "_").concat(player.id)}>
@@ -197,7 +220,7 @@ const InputPlayerScoresForField = (props: {
         type={field.type}
         min={field.minValue}
         max={field.maxValue}
-        onFocus={onFocus}
+        onFocus={e => (!focusOnMe ? onFocus(e) : () => {})}
         onKeyDown={onKeyDown}
         value={
           ((scores.scores.find(
