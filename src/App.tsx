@@ -1,21 +1,13 @@
 import React, { Component } from "react";
-import logo from "./logo.svg";
 import "./App.css";
 import { Login } from "./Login";
 import firebase from "firebase";
-import { DatabaseList } from "./DatabaseList";
-import { InputScoresForm, MarsForm } from "./InputScoresForm";
 import { NavBar } from "./NavBar";
-import {
-  BrowserRouter as Router,
-  Route,
-  Link,
-  RouteComponentProps,
-  Redirect
-} from "react-router-dom";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { ListGames } from "./ListGames";
 import { Admin } from "./Admin";
+import { SelectGame } from "./SelectGame";
 
 var config = {
   apiKey: "AIzaSyDI_XDKW2vVftx7oUy1a_QTR5BE8j6S-Ds",
@@ -35,7 +27,7 @@ const App = (props: any) => {
     <div>
       <Route path="/" component={NavBar} />
       <Route path="/" exact component={ListGames} />
-      <Route path="/new/" component={MarsForm} />
+      <Route path="/new/" component={SelectGame} />
       <Route path="/admin/" component={Admin} />
     </div>
   );
