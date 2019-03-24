@@ -1,3 +1,5 @@
+import { groupBy, sum, sortBy } from "lodash";
+
 export type GameDefinition = {
   name: string;
   // please use human-readable, slugified ids, like "terraforming-mars"
@@ -52,11 +54,48 @@ const eclipse: GameDefinition = {
 
 export const games = [terraFormingMars, eclipse];
 
-export type Scores = {
+export type PlayDTO = {
+  id: string;
+  date: Date;
   gameId: string;
   scores: {
     playerId: string;
     fieldId: string;
     score: number;
   }[];
+  players: Player[];
 };
+
+export class Play implements PlayDTO {
+  date: Date;
+  id: string;
+  gameId: string;
+  scores: { playerId: string; fieldId: string; score: number }[];
+  players: Player[];
+  constructor(play: PlayDTO) {
+    this.id = play.id;
+    this.gameId = play.gameId;
+    this.scores = play.scores;
+    this.players = play.players;
+    this.date = play.date;
+  }
+
+  public getPosition(player: Player) {
+    const playersByScores = groupBy(this.scores, s => s.playerId);
+    const playersByScore = Object.keys(playersByScores).map(p => {
+      return { id: p, score: sum(playersByScores[p].map(p => p.score)) };
+    });
+
+    const id = player.id;
+    const positions = sortBy(playersByScore, p => p.score)
+      .map(p => p.id)
+      .reverse();
+    return positions.indexOf(id) + 1;
+  }
+
+  public getTotal(player: Player) {
+    return sum(
+      this.scores.filter(s => s.playerId === player.id).map(s => s.score)
+    );
+  }
+}

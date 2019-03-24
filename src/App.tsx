@@ -9,6 +9,8 @@ import { ListGames } from "./ListGames";
 import { Admin } from "./Admin";
 import { SelectGame } from "./SelectGame";
 import { SelectPlayers } from "./SelectPlayers";
+import { PlayEdit } from "./PlayEdit";
+import { PlayShow } from "./PlayShow";
 
 var config = {
   apiKey: "AIzaSyDI_XDKW2vVftx7oUy1a_QTR5BE8j6S-Ds",
@@ -28,6 +30,8 @@ const App = () => {
     <div>
       <Route path="/" component={NavBar} />
       <Route path="/" exact component={ListGames} />
+      <Route path="/show/:playId" component={PlayShow} />
+      <Route path="/edit/:playId" component={PlayEdit} />
       <Route path="/new/:gameId" component={SelectPlayers} />
       <Route path="/new/" exact component={SelectGame} />
       <Route path="/admin/" component={Admin} />

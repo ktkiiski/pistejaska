@@ -6,26 +6,29 @@ import { Typography, TextField } from "@material-ui/core";
 import {
   GameDefinition,
   Player,
-  Scores,
+  Play,
   GameFieldDefinition
 } from "./domain/domain";
+import firebase from "firebase";
 
-export const InputScoresForm = (props: {
+export const PlayForm = (props: {
   game: GameDefinition;
-  players: Player[];
+  play: Play;
+  onSave: (id: string) => void;
 }) => {
-  const { players, game } = props;
+  const {
+    play: { players },
+    game
+  } = props;
 
-  const [scores, scoreSetter] = React.useState<Scores>({
-    gameId: game.id,
-    scores: []
-  });
+  const [play, setPlay] = React.useState<Play>(props.play);
+
   const [focusOnPlayerIndex, setFocusOnPlayerIndex] = useState<number>(0);
   const saveButton = useRef<HTMLDivElement>(null);
 
   const [selectedFieldIndex, setSelectedFieldIndex] = useState(0);
 
-  const done = scores.scores.length === players.length * game.fields.length;
+  const done = play.scores.length === players.length * game.fields.length;
 
   let isSwitchingHack = false;
 
@@ -37,7 +40,7 @@ export const InputScoresForm = (props: {
     player: Player
   ) => {
     const score = parseInt(event.currentTarget.value);
-    const oldScores = scores.scores.filter(
+    const oldScores = play.scores.filter(
       s => s.fieldId !== field.id || s.playerId !== player.id
     );
     const newScores = oldScores.concat({
@@ -46,7 +49,7 @@ export const InputScoresForm = (props: {
       score: score
     });
 
-    scoreSetter({ ...scores, ...{ scores: newScores } });
+    setPlay(new Play({ ...play, ...{ scores: newScores } }));
   };
 
   const onFocus = (player: Player) => {
@@ -81,8 +84,15 @@ export const InputScoresForm = (props: {
     }
   };
 
+  // TODO PANU: vie propseissa ylös?
   const onSave = () => {
-    console.log(scores);
+    const db = firebase.firestore();
+    const userRef = db
+      .collection("plays")
+      .doc(play.id)
+      .set({ data: JSON.stringify(play) });
+
+    props.onSave(play.id);
   };
   return (
     <div>
@@ -109,7 +119,7 @@ export const InputScoresForm = (props: {
               <InputPlayerScoresForField
                 player={p}
                 field={field}
-                scores={scores}
+                scores={play}
                 onFocus={() => onFocus(p)}
                 key={p.id}
                 onKeyDown={(e: any) => handleKeyDown(e, field)}
@@ -160,7 +170,7 @@ export const InputScoresForm = (props: {
 const InputPlayerScoresForField = (props: {
   player: Player;
   field: GameFieldDefinition;
-  scores: Scores;
+  scores: Play;
   onHandleScoreChange: (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement

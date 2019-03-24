@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import { games, GameDefinition, Player } from "./domain/domain";
+import { games, Player } from "./domain/domain";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import { RouteComponentProps } from "react-router";
 import { Button, TextField } from "@material-ui/core";
-import { InputScoresForm } from "./InputScoresForm";
 import uuid from "uuid";
+import { PlayNew } from "./PlayNew";
 
 export const SelectPlayers = (
   props: RouteComponentProps<{ gameId: string }>
@@ -35,13 +35,13 @@ export const SelectPlayers = (
         value={currentPlayer}
         onChange={e => setCurrentPlayer(e.currentTarget.value)}
       />
-      <Button color="primary" onClick={onAddPlayer}>
+      <Button color="default" onClick={onAddPlayer} variant="contained">
         Add
       </Button>
 
       <List component="nav">
         {players.map(player => (
-          <ListItem button>
+          <ListItem button key={player.id}>
             <ListItemIcon>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -56,15 +56,11 @@ export const SelectPlayers = (
           </ListItem>
         ))}
       </List>
-      <Button color="primary" onClick={onStartGame}>
+      <Button color="primary" onClick={onStartGame} variant="contained">
         Start
       </Button>
     </div>
   );
 
-  return !isStarted ? (
-    selectPlayers
-  ) : (
-    <InputScoresForm game={game} players={players} />
-  );
+  return !isStarted ? selectPlayers : <PlayNew game={game} players={players} />;
 };
