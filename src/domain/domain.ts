@@ -52,12 +52,6 @@ const eclipse: GameDefinition = {
 
 export const games = [terraFormingMars, eclipse];
 
-export const players = [
-  { name: "Panu", id: "1" },
-  { name: "Hanna", id: "2" },
-  { name: "Kimmo", id: "3" },
-  { name: "Hanna", id: "4" }
-];
 export type Scores = {
   gameId: string;
   scores: {

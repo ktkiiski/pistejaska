@@ -8,7 +8,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { ListGames } from "./ListGames";
 import { Admin } from "./Admin";
 import { SelectGame } from "./SelectGame";
-import { InputScoresForm } from "./InputScoresForm";
+import { SelectPlayers } from "./SelectPlayers";
 
 var config = {
   apiKey: "AIzaSyDI_XDKW2vVftx7oUy1a_QTR5BE8j6S-Ds",
@@ -28,7 +28,7 @@ const App = () => {
     <div>
       <Route path="/" component={NavBar} />
       <Route path="/" exact component={ListGames} />
-      <Route path="/new/:gameId" component={InputScoresForm} />
+      <Route path="/new/:gameId" component={SelectPlayers} />
       <Route path="/new/" exact component={SelectGame} />
       <Route path="/admin/" component={Admin} />
     </div>

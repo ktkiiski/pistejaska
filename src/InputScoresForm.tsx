@@ -1,30 +1,20 @@
 import React, { useEffect, useState, useRef } from "react";
 import SwipeableViews from "react-swipeable-views";
-import classNames from "classnames";
 
 import Button from "@material-ui/core/Button";
-import {
-  Typography,
-  Grid,
-  TextField,
-  Input,
-  InputBase
-} from "@material-ui/core";
+import { Typography, TextField } from "@material-ui/core";
 import {
   GameDefinition,
   Player,
   Scores,
-  GameFieldDefinition,
-  players,
-  games
+  GameFieldDefinition
 } from "./domain/domain";
-import { RouteComponentProps } from "react-router";
 
-export const InputScoresForm = (
-  props: RouteComponentProps<{ gameId: string }>
-) => {
-  const game = games.find(g => g.id === props.match.params["gameId"]);
-  if (game == null) throw new Error("unknown game");
+export const InputScoresForm = (props: {
+  game: GameDefinition;
+  players: Player[];
+}) => {
+  const { players, game } = props;
 
   const [scores, scoreSetter] = React.useState<Scores>({
     gameId: game.id,
@@ -59,11 +49,11 @@ export const InputScoresForm = (
     scoreSetter({ ...scores, ...{ scores: newScores } });
   };
 
-  const onFocus = (player: Player, field: GameFieldDefinition) => {
+  const onFocus = (player: Player) => {
     setFocusOnPlayerIndex(players.indexOf(player));
   };
 
-  const onSetFocusToNext = (field: GameFieldDefinition) => {
+  const onSetFocusToNext = () => {
     if (focusOnPlayerIndex === players.length - 1) {
       setFocusOnPlayerIndex(0);
       if (selectedFieldIndex < game.fields.length - 1) {
@@ -87,7 +77,7 @@ export const InputScoresForm = (
       e.keyCode == 9 || // android numpad enter/next button (tabulator in computer)
       e.keyCode == 13 // enter
     ) {
-      onSetFocusToNext(field);
+      onSetFocusToNext();
     }
   };
 
@@ -107,7 +97,7 @@ export const InputScoresForm = (
           if (isSwitchingHack) setSelectedFieldIndex(newIndex);
           else setSelectedFieldIndex(oldIndex);
         }}
-        onSwitching={idx => (isSwitchingHack = true)}
+        onSwitching={() => (isSwitchingHack = true)}
       >
         {game.fields.map((field, idx) => (
           <div key={field.name.replace(" ", "")}>
@@ -120,7 +110,7 @@ export const InputScoresForm = (
                 player={p}
                 field={field}
                 scores={scores}
-                onFocus={() => onFocus(p, field)}
+                onFocus={() => onFocus(p)}
                 key={p.id}
                 onKeyDown={(e: any) => handleKeyDown(e, field)}
                 onHandleScoreChange={handleScoreChange}
