@@ -17,11 +17,9 @@ export const Login = () => {
     // TODO PANU: change, this requires 3rd party cookies
     var provider = new firebase.auth.GoogleAuthProvider();
     try {
-      await firebase.auth().signInWithPopup(provider);
-    } catch {
-      alert(
-        "Cannot sign in. Please make sure that 3rd party cookies are enabled."
-      );
+      await firebase.auth().signInWithRedirect(provider);
+    } catch (error) {
+      alert(error);
     }
 
     return <div>Loading...</div>;

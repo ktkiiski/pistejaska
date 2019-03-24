@@ -12,6 +12,7 @@ import { SelectGame } from "./SelectGame";
 import { SelectPlayers } from "./SelectPlayers";
 import { PlayEdit } from "./PlayEdit";
 import { PlayShow } from "./PlayShow";
+import { CircularProgress } from "@material-ui/core";
 
 var config = {
   apiKey: "AIzaSyDI_XDKW2vVftx7oUy1a_QTR5BE8j6S-Ds",
@@ -23,8 +24,20 @@ var config = {
 };
 firebase.initializeApp(config);
 
+const center = {
+  position: "absolute" as any,
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)"
+};
 const App = () => {
   const { initialising, user } = useAuthState(firebase.auth());
+  if (initialising)
+    return (
+      <div style={center}>
+        <CircularProgress />
+      </div>
+    );
   const app = !user ? (
     <Login />
   ) : (
