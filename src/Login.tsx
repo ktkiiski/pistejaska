@@ -1,21 +1,9 @@
 import React from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
-import firebase from "firebase";
-import { Redirect } from "react-router";
+import * as firebase from "firebase/app";
+import "firebase/auth";
 import { Link } from "react-router-dom";
-import {
-  CssBaseline,
-  Paper,
-  Avatar,
-  Typography,
-  FormControl,
-  InputLabel,
-  Input,
-  FormControlLabel,
-  Checkbox,
-  Button
-} from "@material-ui/core";
-import classes from "*.module.css";
+import { Button } from "@material-ui/core";
 
 export const Login = () => {
   const center = {
@@ -25,9 +13,17 @@ export const Login = () => {
     transform: "translate(-50%, -50%)"
   };
   const { initialising, user } = useAuthState(firebase.auth());
-  const login = () => {
-    // TODO PANU: change to Google login
-    firebase.auth().signInWithEmailAndPassword("test@test.com", "password");
+  const login = async () => {
+    // TODO PANU: change, this requires 3rd party cookies
+    var provider = new firebase.auth.GoogleAuthProvider();
+    try {
+      await firebase.auth().signInWithPopup(provider);
+    } catch {
+      alert(
+        "Cannot sign in. Please make sure that 3rd party cookies are enabled."
+      );
+    }
+
     return <div>Loading...</div>;
   };
   const logout = () => {

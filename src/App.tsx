@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import "./App.css";
 import { Login } from "./Login";
-import firebase from "firebase";
+import * as firebase from "firebase/app";
+import "firebase/auth";
 import { NavBar } from "./NavBar";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";

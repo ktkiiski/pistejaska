@@ -1,12 +1,11 @@
 import { RouteComponentProps } from "react-router";
 import { useCollection } from "react-firebase-hooks/firestore";
-import React, { useState } from "react";
-import firebase from "firebase";
+import React from "react";
+import * as firebase from "firebase/app";
+import "firebase/firestore";
 import { Play, games, GameDefinition } from "./domain/domain";
-
 import {
   Button,
-  Paper,
   Table,
   TableHead,
   TableRow,
@@ -14,7 +13,6 @@ import {
   TableBody,
   TableFooter
 } from "@material-ui/core";
-import { withStyles } from "@material-ui/core/styles";
 
 export const PlayShow = (props: RouteComponentProps<any>) => {
   const playId = props.match.params["playId"];
@@ -22,6 +20,8 @@ export const PlayShow = (props: RouteComponentProps<any>) => {
   const { error, loading, value } = useCollection(
     firebase.firestore().collection("plays")
   );
+
+  if (error) return <>Error: {error}</>;
 
   if (loading) return <>Loading...</>;
 
@@ -71,7 +71,7 @@ const PlayTable = (props: { game: GameDefinition; play: Play }) => {
             <TableCell>Player</TableCell>
             {play.players.map(p => (
               <TableCell key={p.id}>
-                {p.name + " (" + play.getPosition(p) + ".)"}
+                {`${play.getPosition(p)}. ${p.name}`}
               </TableCell>
             ))}
           </TableRow>

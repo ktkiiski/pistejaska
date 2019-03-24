@@ -9,7 +9,8 @@ import React from "react";
 import MenuIcon from "@material-ui/icons/Menu";
 import { Login } from "./Login";
 import { Link, RouteComponentProps } from "react-router-dom";
-import firebase from "firebase";
+import * as firebase from "firebase/app";
+import "firebase/auth";
 
 const logout = () => {
   firebase.auth().signOut();

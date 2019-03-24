@@ -1,6 +1,7 @@
 import React from "react";
 import { useCollection } from "react-firebase-hooks/firestore";
-import firebase from "firebase";
+import * as firebase from "firebase/app";
+import "firebase/firestore";
 import { List, ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
 import { Play } from "./domain/domain";
 import { RouteComponentProps } from "react-router";

@@ -1,7 +1,8 @@
 import { RouteComponentProps } from "react-router";
 import { useCollection } from "react-firebase-hooks/firestore";
 import React, { useState } from "react";
-import firebase from "firebase";
+import * as firebase from "firebase/app";
+import "firebase/firestore";
 import { Play, games } from "./domain/domain";
 import { PlayForm } from "./PlayForm";
 

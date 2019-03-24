@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
-import firebase from "firebase";
+import * as firebase from "firebase/app";
+import "firebase/firestore";
 import { Player, GameDefinition, Play } from "./domain/domain";
-import { PlayForm } from "./PlayForm";
 import uuid from "uuid";
 import { Redirect } from "react-router";
 
-// TODO PANU: PlayFormContainer?
 export const PlayNew = (props: { game: GameDefinition; players: Player[] }) => {
   const { game, players } = props;
 

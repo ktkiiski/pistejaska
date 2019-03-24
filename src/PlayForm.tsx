@@ -9,7 +9,8 @@ import {
   Play,
   GameFieldDefinition
 } from "./domain/domain";
-import firebase from "firebase";
+import * as firebase from "firebase/app";
+import "firebase/firestore";
 
 export const PlayForm = (props: {
   game: GameDefinition;
@@ -87,8 +88,7 @@ export const PlayForm = (props: {
   // TODO PANU: vie propseissa ylös?
   const onSave = () => {
     const db = firebase.firestore();
-    const userRef = db
-      .collection("plays")
+    db.collection("plays")
       .doc(play.id)
       .set({ data: JSON.stringify(play) });
 
