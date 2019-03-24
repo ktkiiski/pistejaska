@@ -1,30 +1,27 @@
-import React, { useEffect, useState, useRef } from "react";
-import { games, GameDefinition, players } from "./domain/domain";
-import { InputScoresForm } from "./InputScoresForm";
+import React from "react";
+import { games, GameDefinition } from "./domain/domain";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
+import { RouteComponentProps } from "react-router";
 
-export const SelectGame = () => {
-  const [selectedGame, setSelectedGame] = useState<GameDefinition | null>(null);
-
-  const onSelectGame = (id: GameDefinition) => setSelectedGame(id);
-  // TODO PANU: fix awkward null checks?
-  const renderGame =
-    selectedGame != null ? (
-      <InputScoresForm game={selectedGame} players={players} />
-    ) : (
-      <></>
-    );
-  const gameSelector = (
+export const SelectGame = (props: RouteComponentProps<{}>) => {
+  const onSelectGame = (game: GameDefinition) =>
+    props.history.push("/new/" + game.id);
+  return (
     <div>
       <h2>Select game</h2>
-      <ul>
+      <List component="nav">
         {games.map(game => (
-          <li key={game.id} onClick={() => onSelectGame(game)}>
-            <a href="#">{game.name}</a>
-          </li>
+          <ListItem button onClick={() => onSelectGame(game)} key={game.id}>
+            <ListItemIcon>
+              <img width={30} height={30} src={game.icon} />
+            </ListItemIcon>
+            <ListItemText primary={game.name} />
+          </ListItem>
         ))}
-      </ul>
+      </List>
     </div>
   );
-  const renderMe = selectedGame ? renderGame : gameSelector;
-  return <div>{renderMe}</div>;
 };

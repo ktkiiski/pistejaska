@@ -15,19 +15,29 @@ import {
   Player,
   Scores,
   GameFieldDefinition,
-  players
+  players,
+  games
 } from "./domain/domain";
+import { RouteComponentProps } from "react-router";
 
-export const InputScoresForm = (props: {
-  game: GameDefinition;
-  players: Player[];
-}) => {
+export const InputScoresForm = (
+  props: RouteComponentProps<{ gameId: string }>
+) => {
+  const game = games.find(g => g.id === props.match.params["gameId"]);
+  if (game == null) throw new Error("unknown game");
+
   const [scores, scoreSetter] = React.useState<Scores>({
-    gameId: props.game.id,
+    gameId: game.id,
     scores: []
   });
   const [focusOnPlayerIndex, setFocusOnPlayerIndex] = useState<number>(0);
   const saveButton = useRef<HTMLDivElement>(null);
+
+  const [selectedFieldIndex, setSelectedFieldIndex] = useState(0);
+
+  const done = scores.scores.length === players.length * game.fields.length;
+
+  let isSwitchingHack = false;
 
   const handleScoreChange = (
     event: React.FormEvent<
@@ -50,13 +60,13 @@ export const InputScoresForm = (props: {
   };
 
   const onFocus = (player: Player, field: GameFieldDefinition) => {
-    setFocusOnPlayerIndex(props.players.indexOf(player));
+    setFocusOnPlayerIndex(players.indexOf(player));
   };
 
   const onSetFocusToNext = (field: GameFieldDefinition) => {
-    if (focusOnPlayerIndex === props.players.length - 1) {
+    if (focusOnPlayerIndex === players.length - 1) {
       setFocusOnPlayerIndex(0);
-      if (selectedFieldIndex < props.game.fields.length - 1) {
+      if (selectedFieldIndex < game.fields.length - 1) {
         setSelectedFieldIndex(selectedFieldIndex + 1);
       } else {
         if (saveButton && saveButton.current) {
@@ -80,17 +90,14 @@ export const InputScoresForm = (props: {
       onSetFocusToNext(field);
     }
   };
-  const [selectedFieldIndex, setSelectedFieldIndex] = useState(0);
 
-  const done =
-    scores.scores.length === props.players.length * props.game.fields.length;
-
-  let isSwitchingHack = false;
-
+  const onSave = () => {
+    console.log(scores);
+  };
   return (
     <div>
       <Typography variant="h6" gutterBottom>
-        {props.game.name}
+        {game.name}
       </Typography>
 
       <SwipeableViews
@@ -102,13 +109,13 @@ export const InputScoresForm = (props: {
         }}
         onSwitching={idx => (isSwitchingHack = true)}
       >
-        {props.game.fields.map((field, idx) => (
+        {game.fields.map((field, idx) => (
           <div key={field.name.replace(" ", "")}>
             <h3 id={field.id}>
               {idx + 1}. {field.name}
             </h3>
 
-            {props.players.map(p => (
+            {players.map(p => (
               <InputPlayerScoresForField
                 player={p}
                 field={field}
@@ -118,7 +125,7 @@ export const InputScoresForm = (props: {
                 onKeyDown={(e: any) => handleKeyDown(e, field)}
                 onHandleScoreChange={handleScoreChange}
                 focusOnMe={
-                  selectedFieldIndex === props.game.fields.indexOf(field) &&
+                  selectedFieldIndex === game.fields.indexOf(field) &&
                   focusOnPlayerIndex >= 0 &&
                   p.id === players[focusOnPlayerIndex].id
                 }
@@ -137,9 +144,9 @@ export const InputScoresForm = (props: {
             <button
               onClick={() =>
                 setSelectedFieldIndex(
-                  selectedFieldIndex < props.game.fields.length - 1
+                  selectedFieldIndex < game.fields.length - 1
                     ? selectedFieldIndex + 1
-                    : props.game.fields.length - 1
+                    : game.fields.length - 1
                 )
               }
             >
@@ -152,6 +159,7 @@ export const InputScoresForm = (props: {
         variant="contained"
         color={done ? "primary" : "default"}
         buttonRef={saveButton}
+        onClick={onSave}
       >
         Save
       </Button>
