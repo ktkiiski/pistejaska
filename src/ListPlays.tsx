@@ -6,7 +6,7 @@ import { List, ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
 import { Play } from "./domain/domain";
 import { RouteComponentProps } from "react-router";
 
-export const ListGames = (props: RouteComponentProps<{}>) => {
+export const ListPlays = (props: RouteComponentProps<{}>) => {
   const { error, loading, value } = useCollection(
     firebase.firestore().collection("plays")
   );
@@ -20,7 +20,7 @@ export const ListGames = (props: RouteComponentProps<{}>) => {
 
   return (
     <div>
-      <h3>Games</h3>
+      <h3>Plays</h3>
       <List component="nav">
         {plays.map(play => (
           <ListItem button onClick={() => onSelectPlay(play)} key={play.id}>

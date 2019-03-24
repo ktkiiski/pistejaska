@@ -6,7 +6,7 @@ import "firebase/auth";
 import { NavBar } from "./NavBar";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { ListGames } from "./ListGames";
+import { ListPlays } from "./ListPlays";
 import { Admin } from "./Admin";
 import { SelectGame } from "./SelectGame";
 import { SelectPlayers } from "./SelectPlayers";
@@ -43,7 +43,7 @@ const App = () => {
   ) : (
     <div>
       <Route path="/" component={NavBar} />
-      <Route path="/" exact component={ListGames} />
+      <Route path="/" exact component={ListPlays} />
       <Route path="/show/:playId" component={PlayShow} />
       <Route path="/edit/:playId" component={PlayEdit} />
       <Route path="/new/:gameId" component={SelectPlayers} />

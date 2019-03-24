@@ -23,7 +23,7 @@ export function NavBar(props: RouteComponentProps<{}>) {
       <AppBar position="static">
         <Toolbar variant="dense">
           <Button color="inherit" onClick={() => props.history.push("/")}>
-            List
+            Plays
           </Button>
 
           <Button color="inherit" onClick={() => props.history.push("/new")}>
