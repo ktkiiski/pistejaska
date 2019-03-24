@@ -1,11 +1,21 @@
 import React, { Component } from "react";
 import logo from "./logo.svg";
 import "./App.css";
-import { CurrentUser } from "./CurrentUser";
+import { Login } from "./Login";
 import firebase from "firebase";
 import { DatabaseList } from "./DatabaseList";
 import { InputScoresForm, MarsForm } from "./InputScoresForm";
 import { NavBar } from "./NavBar";
+import {
+  BrowserRouter as Router,
+  Route,
+  Link,
+  RouteComponentProps,
+  Redirect
+} from "react-router-dom";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { ListGames } from "./ListGames";
+import { Admin } from "./Admin";
 
 var config = {
   apiKey: "AIzaSyDI_XDKW2vVftx7oUy1a_QTR5BE8j6S-Ds",
@@ -17,19 +27,24 @@ var config = {
 };
 firebase.initializeApp(config);
 
-const isSignedIn = firebase.auth().currentUser != null;
+const App = (props: any) => {
+  const { initialising, user } = useAuthState(firebase.auth());
+  const app = !user ? (
+    <Login />
+  ) : (
+    <div>
+      <Route path="/" component={NavBar} />
+      <Route path="/" exact component={ListGames} />
+      <Route path="/new/" component={MarsForm} />
+      <Route path="/admin/" component={Admin} />
+    </div>
+  );
 
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <NavBar />
-        <CurrentUser />
-        {isSignedIn ? <DatabaseList /> : <></>}
-        <MarsForm />
-      </div>
-    );
-  }
-}
+  return (
+    <div className="App">
+      <Router>{app}</Router>
+    </div>
+  );
+};
 
 export default App;
