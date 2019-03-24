@@ -1,0 +1,3 @@
+# Netlify redirect rules
+
+/*    /index.html   200 # needed for history pushstate and single page apps
