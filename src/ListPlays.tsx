@@ -3,7 +3,7 @@ import { useCollection } from "react-firebase-hooks/firestore";
 import * as firebase from "firebase/app";
 import "firebase/firestore";
 import { List, ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
-import { Play } from "./domain/domain";
+import { Play } from "./domain/model";
 import { RouteComponentProps } from "react-router";
 
 export const ListPlays = (props: RouteComponentProps<{}>) => {

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { games, Player } from "./domain/domain";
+import { Player } from "./domain/model";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
@@ -8,6 +8,7 @@ import { RouteComponentProps } from "react-router";
 import { Button, TextField } from "@material-ui/core";
 import uuid from "uuid";
 import { PlayNew } from "./PlayNew";
+import { games } from "./domain/games";
 
 export const SelectPlayers = (
   props: RouteComponentProps<{ gameId: string }>
@@ -56,7 +57,12 @@ export const SelectPlayers = (
           </ListItem>
         ))}
       </List>
-      <Button color="primary" onClick={onStartGame} variant="contained">
+      <Button
+        color="primary"
+        onClick={onStartGame}
+        disabled={players.length === 0}
+        variant="contained"
+      >
         Start
       </Button>
     </div>

@@ -1,12 +1,12 @@
 import { RouteComponentProps } from "react-router";
 import { useCollection } from "react-firebase-hooks/firestore";
-import React, { useState } from "react";
+import React from "react";
 import * as firebase from "firebase/app";
 import "firebase/firestore";
-import { Play, games } from "./domain/domain";
+import { Play } from "./domain/model";
 import { PlayForm } from "./PlayForm";
+import { games } from "./domain/games";
 
-// TODO PANU: PlayFormContainer?
 export const PlayEdit = (props: RouteComponentProps<any>) => {
   const playId = props.match.params["playId"];
 
@@ -21,14 +21,17 @@ export const PlayEdit = (props: RouteComponentProps<any>) => {
   if (!existing) {
     return <>Play not found!</>;
   }
-  const play = JSON.parse(existing.data().data);
+  const play = new Play(JSON.parse(existing.data().data));
   const game = games.find(g => g.id === play.gameId);
   if (!game) return <>Game not found!</>;
-  return (
-    <PlayForm
-      game={game}
-      play={play}
-      onSave={playId => props.history.push("/show/" + playId)}
-    />
-  );
+
+  const onSave = async (play: Play) => {
+    const db = firebase.firestore();
+    await db
+      .collection("plays")
+      .doc(play.id)
+      .set({ data: JSON.stringify(play) });
+    props.history.push("/show/" + playId);
+  };
+  return <PlayForm game={game} play={play} onSave={play => onSave(play)} />;
 };

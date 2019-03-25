@@ -1,5 +1,5 @@
 import React from "react";
-import { games } from "./domain/domain";
+import { games } from "./domain/games";
 
 export const Admin = () => {
   return (

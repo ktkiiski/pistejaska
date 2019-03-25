@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import * as firebase from "firebase/app";
 import "firebase/firestore";
-import { Player, GameDefinition, Play } from "./domain/domain";
+import { Player, GameDefinition, Play } from "./domain/model";
 import uuid from "uuid";
 import { Redirect } from "react-router";
 
@@ -16,7 +16,8 @@ export const PlayNew = (props: { game: GameDefinition; players: Player[] }) => {
     id: playId,
     players: players,
     date: new Date(),
-    scores: []
+    scores: [],
+    misc: []
   };
 
   useEffect(() => {
