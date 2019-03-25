@@ -11,6 +11,13 @@ export const ListPlays = (props: RouteComponentProps<{}>) => {
     firebase.firestore().collection("plays")
   );
 
+  if (error)
+    return (
+      <div>
+        Permission denied. Ask permissions from panu.vuorinen@gmail.com.
+      </div>
+    );
+
   const plays: Play[] = loading
     ? []
     : (value && (value.docs.map(d => JSON.parse(d.data().data)) as Play[])) ||
