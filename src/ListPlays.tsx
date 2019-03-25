@@ -5,6 +5,7 @@ import "firebase/firestore";
 import { List, ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
 import { Play } from "./domain/model";
 import { RouteComponentProps } from "react-router";
+import { games } from "./domain/games";
 
 export const ListPlays = (props: RouteComponentProps<{}>) => {
   const { error, loading, value } = useCollection(
@@ -20,10 +21,11 @@ export const ListPlays = (props: RouteComponentProps<{}>) => {
 
   const plays: Play[] = loading
     ? []
-    : (value && (value.docs.map(d => JSON.parse(d.data().data)) as Play[])) ||
-      [];
+    : (value && value.docs.map(d => new Play(JSON.parse(d.data().data)))) || [];
 
   const onSelectPlay = (play: Play) => props.history.push("/show/" + play.id);
+  const getGameIcon = (play: Play) =>
+    (games.find(g => g.id === play.gameId) || ({} as any)).icon;
 
   return (
     <div>
@@ -32,15 +34,9 @@ export const ListPlays = (props: RouteComponentProps<{}>) => {
         {plays.map(play => (
           <ListItem button onClick={() => onSelectPlay(play)} key={play.id}>
             <ListItemIcon>
-              <img
-                width={30}
-                height={30}
-                src={
-                  "https://cf.geekdo-images.com/itemrep/img/Ng0wVwl4xSa-MeOpuMaq1f7EwDs=/fit-in/246x300/pic1974056.jpg"
-                }
-              />
+              <img width={30} height={30} src={getGameIcon(play)} />
             </ListItemIcon>
-            <ListItemText primary={play.gameId} />
+            <ListItemText primary={play.getName()} />
           </ListItem>
         ))}
       </List>

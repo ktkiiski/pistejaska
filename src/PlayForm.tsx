@@ -2,7 +2,13 @@ import React, { useEffect, useState, useRef } from "react";
 import SwipeableViews from "react-swipeable-views";
 import Button from "@material-ui/core/Button";
 import { Typography, TextField } from "@material-ui/core";
-import { Game, Player, Play, GameScoreFieldDefinition } from "./domain/model";
+import {
+  Game,
+  Player,
+  Play,
+  GameScoreFieldDefinition,
+  GameMiscFieldDefinition
+} from "./domain/model";
 import "firebase/firestore";
 
 export const PlayForm = (props: {
@@ -126,7 +132,7 @@ export const PlayForm = (props: {
 
             {type === "misc" ? (
               <MetadataTextField
-                field={field}
+                field={field as GameMiscFieldDefinition}
                 play={play}
                 onFocus={e => {}}
                 key={field.id}
@@ -263,7 +269,7 @@ const PlayerScoreTextField = (props: {
   );
 };
 const MetadataTextField = (props: {
-  field: GameScoreFieldDefinition;
+  field: GameMiscFieldDefinition;
   play: Play;
   onHandleMiscChange: (
     e: React.ChangeEvent<
@@ -309,7 +315,7 @@ const MetadataTextField = (props: {
       <TextField
         margin="dense"
         inputProps={inputProps}
-        type="number"
+        type={field.type}
         variant="outlined"
         label={field.name}
         onFocus={e => (focusOnMe ? () => {} : onFocus(e))}

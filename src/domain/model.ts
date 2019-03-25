@@ -1,4 +1,5 @@
 import { groupBy, sum, sortBy } from "lodash";
+import uuid from "uuid";
 
 export class Game implements GameDefinition {
   name: string;
@@ -23,6 +24,16 @@ export class Game implements GameDefinition {
         name: "Duration (in hours)",
         type: "number",
         step: "0.1"
+      },
+      {
+        id: "location",
+        name: "Location",
+        type: "text"
+      },
+      {
+        id: "name",
+        name: "Name",
+        type: "text"
       }
     ];
   }
@@ -126,5 +137,16 @@ export class Play implements PlayDTO {
     return sum(
       this.scores.filter(s => s.playerId === player.id).map(s => s.score)
     );
+  }
+
+  public getName(): string {
+    const nameField = this.misc.find(m => m.fieldId === "name");
+    const locationField = this.misc.find(m => m.fieldId === "location");
+    const name =
+      (nameField && nameField.data) ||
+      (locationField && locationField.data) ||
+      this.gameId;
+
+    return name;
   }
 }
