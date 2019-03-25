@@ -173,9 +173,9 @@ export const PlayForm = (props: {
             <button
               onClick={() =>
                 setSelectedFieldIndex(
-                  selectedFieldIndex < game.scoreFields.length - 1
+                  selectedFieldIndex < game.getFields().length - 1
                     ? selectedFieldIndex + 1
-                    : game.scoreFields.length - 1
+                    : game.getFields().length - 1
                 )
               }
             >
