@@ -48,8 +48,8 @@ export const PlayShow = (props: RouteComponentProps<any>) => {
   };
 
   const getFieldName = (fieldId: string): string => {
-    const field = game.fields.find(f => f.id === fieldId);
-    return (field && field.name) || "";
+    const field = game.getFields().find(f => f.field.id === fieldId);
+    return (field && field.field.name) || "";
   };
 
   return (
@@ -90,24 +90,22 @@ const PlayTable = (props: { game: GameDefinition; play: Play }) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {game.fields
-            .filter(f => f.valuePerPlayer)
-            .map(p => (
-              <TableRow key={p.id}>
-                <TableCell scope="row">{p.name}</TableCell>
-                {play.players.map(f => (
-                  <TableCell scope="row" key={f.id}>
-                    {
-                      (
-                        play.scores.find(
-                          s => s.fieldId === p.id && s.playerId == f.id
-                        ) || ({} as any)
-                      ).score
-                    }
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))}
+          {game.scoreFields.map(p => (
+            <TableRow key={p.id}>
+              <TableCell scope="row">{p.name}</TableCell>
+              {play.players.map(f => (
+                <TableCell scope="row" key={f.id}>
+                  {
+                    (
+                      play.scores.find(
+                        s => s.fieldId === p.id && s.playerId == f.id
+                      ) || ({} as any)
+                    ).score
+                  }
+                </TableCell>
+              ))}
+            </TableRow>
+          ))}
         </TableBody>
         <TableFooter>
           <TableRow>

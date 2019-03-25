@@ -16,7 +16,6 @@ import "firebase/auth";
 const logout = () => {
   firebase.auth().signOut();
 };
-// TODO PANU: add profile pic from google
 
 export function NavBar(props: RouteComponentProps<{}>) {
   return (

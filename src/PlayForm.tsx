@@ -2,16 +2,11 @@ import React, { useEffect, useState, useRef } from "react";
 import SwipeableViews from "react-swipeable-views";
 import Button from "@material-ui/core/Button";
 import { Typography, TextField } from "@material-ui/core";
-import {
-  GameDefinition,
-  Player,
-  Play,
-  GameFieldDefinition
-} from "./domain/model";
+import { Game, Player, Play, GameScoreFieldDefinition } from "./domain/model";
 import "firebase/firestore";
 
 export const PlayForm = (props: {
-  game: GameDefinition;
+  game: Game;
   play: Play;
   onSave: (play: Play) => void;
 }) => {
@@ -27,17 +22,17 @@ export const PlayForm = (props: {
 
   const [selectedFieldIndex, setSelectedFieldIndex] = useState(0);
 
-  const done =
-    play.scores.length ===
-    players.length * game.fields.filter(f => f.valuePerPlayer === true).length;
+  const done = play.scores.length === players.length * game.scoreFields.length;
 
   let isSwitchingHack = false;
+
+  const fields = game.getFields();
 
   const handleScoreChange = (
     event: React.FormEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >,
-    field: GameFieldDefinition,
+    field: GameScoreFieldDefinition,
     player: Player
   ) => {
     const score = parseInt(event.currentTarget.value);
@@ -57,7 +52,7 @@ export const PlayForm = (props: {
     event: React.FormEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >,
-    field: GameFieldDefinition
+    field: GameScoreFieldDefinition
   ) => {
     const misc = event.currentTarget.value;
     const oldMisc = play.misc.filter(s => s.fieldId !== field.id);
@@ -74,20 +69,17 @@ export const PlayForm = (props: {
   };
 
   const onSetFocusToNext = () => {
-    const field = game.fields[selectedFieldIndex];
-
-    if (
-      field.valuePerPlayer === false ||
-      focusOnPlayerIndex === players.length - 1
-    ) {
-      debugger;
+    const field = game.scoreFields[selectedFieldIndex];
+    const isMiscField = !field;
+    const focusAtLastPlayer = focusOnPlayerIndex === players.length - 1;
+    if (isMiscField || focusAtLastPlayer) {
       setFocusOnPlayerIndex(0);
-      if (selectedFieldIndex < game.fields.length - 1) {
+      if (selectedFieldIndex < fields.length - 1) {
         setSelectedFieldIndex(selectedFieldIndex + 1);
       } else {
         if (saveButton && saveButton.current) {
           setFocusOnPlayerIndex(-1);
-          saveButton.current.focus(); // TODO PANU: useEffect?
+          saveButton.current.focus();
         }
       }
     } else {
@@ -97,7 +89,7 @@ export const PlayForm = (props: {
 
   const handleKeyDown = (
     e: React.KeyboardEvent<HTMLInputElement | HTMLDivElement>,
-    field: GameFieldDefinition
+    field: GameScoreFieldDefinition
   ) => {
     if (
       e.keyCode == 9 || // android numpad enter/next button (tabulator in computer)
@@ -110,6 +102,7 @@ export const PlayForm = (props: {
   const onSave = () => {
     props.onSave(play);
   };
+
   return (
     <div>
       <Typography variant="h6" gutterBottom>
@@ -125,13 +118,13 @@ export const PlayForm = (props: {
         }}
         onSwitching={() => (isSwitchingHack = true)}
       >
-        {game.fields.map((field, idx) => (
+        {fields.map(({ field, type }, idx) => (
           <div key={field.name.replace(" ", "")}>
             <h3 id={field.id}>
               {idx + 1}. {field.name}
             </h3>
 
-            {field.valuePerPlayer === false ? (
+            {type === "misc" ? (
               <MetadataTextField
                 field={field}
                 play={play}
@@ -139,7 +132,9 @@ export const PlayForm = (props: {
                 key={field.id}
                 onKeyDown={e => handleKeyDown(e, field)}
                 onHandleMiscChange={handleMiscChange}
-                focusOnMe={selectedFieldIndex === game.fields.indexOf(field)}
+                focusOnMe={
+                  selectedFieldIndex === fields.map(f => f.field).indexOf(field)
+                }
               />
             ) : (
               players.map(p => (
@@ -152,7 +147,7 @@ export const PlayForm = (props: {
                   onKeyDown={e => handleKeyDown(e, field)}
                   onHandleScoreChange={handleScoreChange}
                   focusOnMe={
-                    selectedFieldIndex === game.fields.indexOf(field) &&
+                    selectedFieldIndex === game.scoreFields.indexOf(field) &&
                     focusOnPlayerIndex >= 0 &&
                     p.id === players[focusOnPlayerIndex].id
                   }
@@ -172,9 +167,9 @@ export const PlayForm = (props: {
             <button
               onClick={() =>
                 setSelectedFieldIndex(
-                  selectedFieldIndex < game.fields.length - 1
+                  selectedFieldIndex < game.scoreFields.length - 1
                     ? selectedFieldIndex + 1
-                    : game.fields.length - 1
+                    : game.scoreFields.length - 1
                 )
               }
             >
@@ -197,13 +192,13 @@ export const PlayForm = (props: {
 
 const PlayerScoreTextField = (props: {
   player: Player;
-  field: GameFieldDefinition;
+  field: GameScoreFieldDefinition;
   scores: Play;
   onHandleScoreChange: (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
     >,
-    field: GameFieldDefinition,
+    field: GameScoreFieldDefinition,
     player: Player
   ) => void;
   focusOnMe: boolean;
@@ -242,7 +237,8 @@ const PlayerScoreTextField = (props: {
   const inputProps = {
     ref: inputRef,
     min: field.minValue,
-    max: field.maxValue
+    max: field.maxValue,
+    step: field.step
   };
 
   return (
@@ -250,7 +246,7 @@ const PlayerScoreTextField = (props: {
       <TextField
         margin="dense"
         inputProps={inputProps}
-        type={field.type}
+        type="number"
         variant="outlined"
         label={player.name + " (" + score + " pts)"}
         onFocus={e => (focusOnMe ? () => {} : onFocus(e))}
@@ -267,13 +263,13 @@ const PlayerScoreTextField = (props: {
   );
 };
 const MetadataTextField = (props: {
-  field: GameFieldDefinition;
+  field: GameScoreFieldDefinition;
   play: Play;
   onHandleMiscChange: (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
     >,
-    field: GameFieldDefinition
+    field: GameScoreFieldDefinition
   ) => void;
   focusOnMe: boolean;
   onFocus: (
@@ -304,7 +300,8 @@ const MetadataTextField = (props: {
   const inputProps = {
     ref: inputRef,
     min: field.minValue,
-    max: field.maxValue
+    max: field.maxValue,
+    step: field.step
   };
 
   return (
@@ -312,7 +309,7 @@ const MetadataTextField = (props: {
       <TextField
         margin="dense"
         inputProps={inputProps}
-        type={field.type}
+        type="number"
         variant="outlined"
         label={field.name}
         onFocus={e => (focusOnMe ? () => {} : onFocus(e))}

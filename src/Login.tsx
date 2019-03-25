@@ -14,7 +14,7 @@ export const Login = () => {
   };
   const { initialising, user } = useAuthState(firebase.auth());
   const login = async () => {
-    // TODO PANU: change, this requires 3rd party cookies
+    // NOTE could change implementation, this requires 3rd party cookies
     var provider = new firebase.auth.GoogleAuthProvider();
     try {
       await firebase.auth().signInWithRedirect(provider);
