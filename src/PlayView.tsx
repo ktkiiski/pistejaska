@@ -15,7 +15,7 @@ import {
 } from "@material-ui/core";
 import { games } from "./domain/games";
 
-export const PlayShow = (props: RouteComponentProps<any>) => {
+export const PlayView = (props: RouteComponentProps<any>) => {
   const playId = props.match.params["playId"];
 
   const { error, loading, value } = useCollection(
@@ -36,6 +36,7 @@ export const PlayShow = (props: RouteComponentProps<any>) => {
   if (!game) return <>Game not found!</>;
 
   const onEditPlay = () => props.history.push("/edit/" + play.id);
+  const onBack = () => props.history.push("/");
 
   const onDelete = async () => {
     const db = firebase.firestore();
@@ -63,7 +64,11 @@ export const PlayShow = (props: RouteComponentProps<any>) => {
       ))}
       <PlayTable game={game} play={play} />
       <br />
-      <Button variant="contained" color="default" onClick={onEditPlay}>
+      <Button variant="contained" color="default" onClick={onBack}>
+        &lt;
+      </Button>
+      &nbsp;
+      <Button variant="contained" color="primary" onClick={onEditPlay}>
         Edit
       </Button>
       &nbsp;

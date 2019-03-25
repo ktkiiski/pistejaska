@@ -6,12 +6,12 @@ import "firebase/auth";
 import { NavBar } from "./NavBar";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { ListPlays } from "./ListPlays";
+import { PlayList } from "./PlayList";
 import { Admin } from "./Admin";
 import { SelectGame } from "./SelectGame";
 import { SelectPlayers } from "./SelectPlayers";
 import { PlayEdit } from "./PlayEdit";
-import { PlayShow } from "./PlayShow";
+import { PlayView } from "./PlayView";
 import { CircularProgress } from "@material-ui/core";
 
 var config = {
@@ -43,8 +43,8 @@ const App = () => {
   ) : (
     <div>
       <Route path="/" component={NavBar} />
-      <Route path="/" exact component={ListPlays} />
-      <Route path="/show/:playId" component={PlayShow} />
+      <Route path="/" exact component={PlayList} />
+      <Route path="/view/:playId" component={PlayView} />
       <Route path="/edit/:playId" component={PlayEdit} />
       <Route path="/new/:gameId" component={SelectPlayers} />
       <Route path="/new/" exact component={SelectGame} />

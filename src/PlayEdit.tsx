@@ -31,7 +31,7 @@ export const PlayEdit = (props: RouteComponentProps<any>) => {
       .collection("plays")
       .doc(play.id)
       .set({ data: JSON.stringify(play) });
-    props.history.push("/show/" + playId);
+    props.history.push("/view/" + playId);
   };
   return <PlayForm game={game} play={play} onSave={play => onSave(play)} />;
 };

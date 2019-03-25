@@ -7,7 +7,7 @@ import { Play } from "./domain/model";
 import { RouteComponentProps } from "react-router";
 import { games } from "./domain/games";
 
-export const ListPlays = (props: RouteComponentProps<{}>) => {
+export const PlayList = (props: RouteComponentProps<{}>) => {
   const { error, loading, value } = useCollection(
     firebase.firestore().collection("plays")
   );
@@ -23,7 +23,7 @@ export const ListPlays = (props: RouteComponentProps<{}>) => {
     ? []
     : (value && value.docs.map(d => new Play(JSON.parse(d.data().data)))) || [];
 
-  const onSelectPlay = (play: Play) => props.history.push("/show/" + play.id);
+  const onSelectPlay = (play: Play) => props.history.push("/view/" + play.id);
   const getGameIcon = (play: Play) =>
     (games.find(g => g.id === play.gameId) || ({} as any)).icon;
 
