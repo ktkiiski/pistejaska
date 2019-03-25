@@ -1,6 +1,6 @@
 # pistejaska
 
-With this web app you can easily input board game scores. The app provides support for adding different board game templates.
+With this web app you can easily track board game scores. The app provides support for adding different board game templates.
 
 Using the app requires Google login with whitelisted email. Emails are whitelisted on https://console.firebase.google.com/project/pistejaska-dev/database/firestore/rules
 
