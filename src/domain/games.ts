@@ -9,7 +9,8 @@ const terraFormingMars: GameDefinition = {
     { id: "terraforming-rating", name: "Terraforming rating", minValue: 0 },
     { id: "awards", name: "Awards", minValue: 0 },
     { id: "milestones", name: "Milestones", minValue: 0 },
-    { id: "game-board", name: "Game board", minValue: 0 }
+    { id: "game-board", name: "Game board", minValue: 0 },
+    { id: "cards", name: "Cards", minValue: 0 }
   ],
   miscFields: [
     { id: "generations", name: "Generations", type: "number", minValue: 0 }
