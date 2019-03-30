@@ -17,6 +17,46 @@ const terraFormingMars: GameDefinition = {
   ]
 };
 
+const cavernaForgottenFolk: GameDefinition = {
+  name: "Caverna: Forgotten folk",
+  id: "caverna-forgotten-folk",
+  icon:
+    "https://cf.geekdo-images.com/itemrep/img/SaQK25k1xKaJxmNJlBmtwT1HrWo=/fit-in/246x300/pic4268584.jpg",
+  scoreFields: [
+    {
+      id: "farm-animal-and-dog",
+      name: "1p per farm animal and doge",
+      minValue: 0
+    },
+    {
+      id: "missing-farm-animal",
+      name: "-2p per missing type of farm animal (-2)",
+      maxValue: 0
+    },
+    { id: "per-grain", name: "1/2p per grain (rounded up)", minValue: 0 },
+    { id: "per-vegetable", name: "1p per vegetable", minValue: 0 },
+    { id: "per-ruby", name: "1p per ruby", minValue: 0 },
+    { id: "per-dwarf", name: "1p per dwarf", minValue: 0 },
+    { id: "per-unused-space", name: "-1p ver unused space", maxValue: 0 },
+    {
+      id: "game-board",
+      name: "Furnishing tiles, pastures, mines",
+      minValue: 0
+    },
+    {
+      id: "score-game-board",
+      name: "for parlors, storages and chambers",
+      minValue: 0
+    },
+    {
+      id: "gold-coins-and-begging-markers",
+      name: "gold coins and begging markers",
+      minValue: 0
+    }
+  ],
+  miscFields: [{ id: "race", name: "Race", type: "text", minValue: 0 }]
+};
+
 const eclipse: GameDefinition = {
   name: "Eclipse",
   id: "eclipse",
@@ -68,6 +108,11 @@ const feastForOdin: GameDefinition = {
     { id: "rounds", name: "Rounds", type: "number", minValue: 6, maxValue: 7 }
   ]
 };
-const gameDtos = [terraFormingMars, eclipse, feastForOdin];
+const gameDtos = [
+  terraFormingMars,
+  eclipse,
+  feastForOdin,
+  cavernaForgottenFolk
+];
 
 export const games = gameDtos.map(g => new Game(g));

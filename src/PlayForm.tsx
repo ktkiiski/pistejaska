@@ -242,8 +242,8 @@ const PlayerScoreTextField = (props: {
 
   const inputProps = {
     ref: inputRef,
-    min: field.minValue,
-    max: field.maxValue,
+    // min: field.minValue,
+    // max: field.maxValue,
     step: field.step
   };
 
@@ -305,8 +305,8 @@ const MetadataTextField = (props: {
 
   const inputProps = {
     ref: inputRef,
-    min: field.minValue,
-    max: field.maxValue,
+    // min: field.minValue,
+    // max: field.maxValue,
     step: field.step
   };
 
