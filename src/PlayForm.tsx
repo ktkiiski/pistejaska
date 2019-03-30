@@ -41,7 +41,11 @@ export const PlayForm = (props: {
     field: GameScoreFieldDefinition,
     player: Player
   ) => {
-    const score = parseInt(event.currentTarget.value);
+    let score = parseInt(event.currentTarget.value);
+    if (score === NaN) return;
+    if (field.maxValue === 0) score = -Math.abs(score);
+    if (field.minValue === 0) score = Math.abs(score);
+
     const oldScores = play.scores.filter(
       s => s.fieldId !== field.id || s.playerId !== player.id
     );
@@ -247,6 +251,11 @@ const PlayerScoreTextField = (props: {
     step: field.step
   };
 
+  const scoreItem = scores.scores.find(
+    s => s.fieldId === field.id && s.playerId === player.id
+  );
+  const scoreValue = scoreItem ? scoreItem.score : "";
+
   return (
     <div key={player.id}>
       <TextField
@@ -257,11 +266,7 @@ const PlayerScoreTextField = (props: {
         label={player.name + " (" + score + " pts)"}
         onFocus={e => (focusOnMe ? () => {} : onFocus(e))}
         onKeyDown={onKeyDown}
-        value={
-          ((scores.scores.find(
-            s => s.fieldId === field.id && s.playerId === player.id
-          ) || {}) as any).score || ""
-        }
+        value={scoreValue}
         onChange={e => onHandleScoreChange(e, field, player)}
         id={field.name.replace(" ", "_").concat(player.id)}
       />
