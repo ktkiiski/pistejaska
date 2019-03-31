@@ -60,7 +60,7 @@ export const PlayView = (props: RouteComponentProps<any>) => {
   return (
     <div>
       <h3>Play</h3>
-      <div>Played on {new Date(play.date).toLocaleDateString()}</div>
+      <div>Played on {play.getDate().toLocaleDateString()}</div>
       {play.misc.map((misc, idx) => (
         <div key={idx}>
           {getFieldName(misc.fieldId)}: {misc.data}

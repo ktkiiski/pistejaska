@@ -1,7 +1,5 @@
 import { GameDefinition, Game } from "./model";
 
-// TODO PANU: bind arrow keys to next/previous (?)
-// TODO PANU: voi startata ilman pelaajia
 // TODO PANU: jengit caverna 30.3.:  heikki trolls, panu dark elves, hanna pale ones, kimmo cave goblins
 const terraFormingMars: GameDefinition = {
   name: "Terraforming Mars",
@@ -57,7 +55,7 @@ const cavernaForgottenFolk: GameDefinition = {
       minValue: 0
     }
   ],
-  miscFields: [{ id: "race", name: "Race", type: "text", minValue: 0 }] // TODO PANU: value per player
+  miscFields: [{ id: "race", name: "Race", type: "text", valuePerPlayer: true }]
 };
 
 const eclipse: GameDefinition = {

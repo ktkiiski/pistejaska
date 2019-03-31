@@ -9,10 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## 2019-03-31
 
+### Added
+
+- Allow play date editing
+- Confirm before deleting game
+
 ### Changed
 
 - Better UI design on play list
-- Confirm before deleting game
 
 ### Fixed
 

@@ -28,12 +28,11 @@ export const PlayList = (props: RouteComponentProps<{}>) => {
   const getGame = (play: Play) =>
     games.find(g => g.id === play.gameId) || ({} as any);
 
-  console.log(plays.sort(p => -p.date.getTime()).map(p => p.date.getTime()));
   return (
     <div>
       <h3>Plays</h3>
       <List component="nav">
-        {orderBy(plays, p => -p.date.getTime()).map(play => (
+        {orderBy(plays, p => -p.getDate().getTime()).map(play => (
           <ListItem button onClick={() => onSelectPlay(play)} key={play.id}>
             <ListItemIcon>
               <img width={30} height={30} src={getGame(play).icon} />

@@ -1,5 +1,4 @@
 import { groupBy, sum, sortBy } from "lodash";
-import uuid from "uuid";
 
 export class Game implements GameDefinition {
   name: string;
@@ -17,7 +16,7 @@ export class Game implements GameDefinition {
     this.name = game.name;
   }
 
-  private getDefaultMiscFields() {
+  private getDefaultMiscFields(): GameMiscFieldDefinition[] {
     return [
       {
         id: "duration",
@@ -34,6 +33,12 @@ export class Game implements GameDefinition {
         id: "name",
         name: "Name",
         type: "text"
+      },
+      {
+        id: "date",
+        name: "Date",
+        type: "date",
+        getDefaultValue: () => new Date().toISOString().substring(0, 10)
       }
     ];
   }
@@ -84,6 +89,8 @@ export type GameMiscFieldDefinition = {
   minValue?: number;
   maxValue?: number;
   step?: string;
+  valuePerPlayer?: boolean; // defaults to false
+  getDefaultValue?: () => number | string;
 };
 export type Player = {
   name: string;
@@ -92,7 +99,6 @@ export type Player = {
 
 export type PlayDTO = {
   id: string;
-  date: Date;
   gameId: string;
   scores: {
     playerId: string;
@@ -105,7 +111,6 @@ export type PlayDTO = {
 
 export class Play implements PlayDTO {
   misc: { fieldId: string; data: string }[];
-  date: Date;
   id: string;
   gameId: string;
   scores: { playerId: string; fieldId: string; score: number }[];
@@ -116,7 +121,6 @@ export class Play implements PlayDTO {
     this.gameId = play.gameId;
     this.scores = play.scores || [];
     this.players = play.players || [];
-    this.date = new Date(play.date) || new Date();
     this.misc = play.misc || [];
   }
 
@@ -139,15 +143,19 @@ export class Play implements PlayDTO {
     );
   }
 
+  public getDate(): Date {
+    const dateField = this.misc.find(m => m.fieldId === "date");
+    return (dateField && new Date(dateField.data)) || new Date("1900/01/01");
+  }
+
   public getName(): string {
     const nameField = this.misc.find(m => m.fieldId === "name");
     const locationField = this.misc.find(m => m.fieldId === "location");
-    const dateField = this.misc.find(m => m.fieldId === "date");
     const name =
       (nameField && nameField.data) ||
       (locationField && locationField.data) ||
       "";
 
-    return `${this.date && this.date.toLocaleDateString()} ${name}`;
+    return `${this.getDate().toLocaleDateString()} ${name}`;
   }
 }

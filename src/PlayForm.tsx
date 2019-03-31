@@ -246,8 +246,8 @@ const PlayerScoreTextField = (props: {
 
   const inputProps = {
     ref: inputRef,
-    // min: field.minValue,
-    // max: field.maxValue,
+    min: field.minValue,
+    max: field.maxValue,
     step: field.step
   };
 
@@ -310,8 +310,8 @@ const MetadataTextField = (props: {
 
   const inputProps = {
     ref: inputRef,
-    // min: field.minValue,
-    // max: field.maxValue,
+    min: field.minValue,
+    max: field.maxValue,
     step: field.step
   };
 
@@ -327,6 +327,7 @@ const MetadataTextField = (props: {
         onKeyDown={onKeyDown}
         value={
           (play.misc.find(m => m.fieldId === field.id) || ({} as any)).data ||
+          (field.getDefaultValue && field.getDefaultValue()) ||
           ""
         }
         onChange={e => onHandleMiscChange(e, field)}
