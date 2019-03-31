@@ -35,4 +35,9 @@ Master branch of this project is automatically built & hosted in Netlify (https:
 
 ## TODO
 
-- Better authorization (see https://blog.jimmycai.com/p/firebase-limit-access-to-certain-domains/)
+- better authorization (see https://blog.jimmycai.com/p/firebase-limit-access-to-certain-domains/)
+- show CHANGELOG.MD on UI
+- allow game field definitions editing on UI
+- migrate old game scores
+- fix data model in Firestore
+- make reports based on score data
