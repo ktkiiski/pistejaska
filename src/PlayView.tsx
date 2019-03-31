@@ -39,6 +39,10 @@ export const PlayView = (props: RouteComponentProps<any>) => {
   const onBack = () => props.history.push("/");
 
   const onDelete = async () => {
+    const reallyDelete = await confirm(
+      `Do you really want to delete play ${play.getName()}?`
+    );
+    if (!reallyDelete) return;
     const db = firebase.firestore();
     await db
       .collection("plays")

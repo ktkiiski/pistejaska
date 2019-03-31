@@ -116,7 +116,7 @@ export class Play implements PlayDTO {
     this.gameId = play.gameId;
     this.scores = play.scores || [];
     this.players = play.players || [];
-    this.date = play.date || new Date();
+    this.date = new Date(play.date) || new Date();
     this.misc = play.misc || [];
   }
 
@@ -142,11 +142,12 @@ export class Play implements PlayDTO {
   public getName(): string {
     const nameField = this.misc.find(m => m.fieldId === "name");
     const locationField = this.misc.find(m => m.fieldId === "location");
+    const dateField = this.misc.find(m => m.fieldId === "date");
     const name =
       (nameField && nameField.data) ||
       (locationField && locationField.data) ||
-      this.gameId;
+      "";
 
-    return name;
+    return `${this.date && this.date.toLocaleDateString()} ${name}`;
   }
 }
