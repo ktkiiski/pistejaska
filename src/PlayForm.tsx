@@ -2,14 +2,13 @@ import React, { useEffect, useState, useRef } from "react";
 import SwipeableViews from "react-swipeable-views";
 import Button from "@material-ui/core/Button";
 import { Typography, TextField } from "@material-ui/core";
-import {
-  Game,
-  Player,
-  Play,
-  GameScoreFieldDefinition,
-  GameMiscFieldDefinition
-} from "./domain/model";
+import { Player, Play } from "./domain/play";
 import "firebase/firestore";
+import {
+  GameMiscFieldDefinition,
+  GameScoreFieldDefinition,
+  Game
+} from "./domain/game";
 
 export const PlayForm = (props: {
   game: Game;
@@ -129,7 +128,7 @@ export const PlayForm = (props: {
         onSwitching={() => (isSwitchingHack = true)}
       >
         {fields.map(({ field, type }, idx) => (
-          <div key={field.name.replace(" ", "")}>
+          <div key={field.id}>
             <h3 id={field.id}>
               {idx + 1}. {field.name}
             </h3>

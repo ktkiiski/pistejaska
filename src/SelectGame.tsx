@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { GameDefinition } from "./domain/model";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
@@ -7,6 +6,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import { RouteComponentProps } from "react-router";
 import { TextField } from "@material-ui/core";
 import { games } from "./domain/games";
+import { GameDefinition } from "./domain/game";
 
 export const SelectGame = (props: RouteComponentProps<{}>) => {
   const onSelectGame = (game: GameDefinition) =>

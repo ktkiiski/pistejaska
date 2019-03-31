@@ -3,7 +3,7 @@ import { useCollection } from "react-firebase-hooks/firestore";
 import React from "react";
 import * as firebase from "firebase/app";
 import "firebase/firestore";
-import { Play, GameDefinition } from "./domain/model";
+import { Play } from "./domain/play";
 import {
   Button,
   Table,
@@ -14,6 +14,7 @@ import {
   TableFooter
 } from "@material-ui/core";
 import { games } from "./domain/games";
+import { GameDefinition } from "./domain/game";
 
 export const PlayView = (props: RouteComponentProps<any>) => {
   const playId = props.match.params["playId"];

@@ -1,4 +1,4 @@
-import { GameDefinition, Game } from "./model";
+import { GameDefinition, Game } from "./game";
 
 // TODO PANU: jengit caverna 30.3.:  heikki trolls, panu dark elves, hanna pale ones, kimmo cave goblins
 const terraFormingMars: GameDefinition = {

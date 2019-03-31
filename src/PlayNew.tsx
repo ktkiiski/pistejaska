@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import * as firebase from "firebase/app";
 import "firebase/firestore";
-import { Player, GameDefinition, Play } from "./domain/model";
+import { Player } from "./domain/play";
 import uuid from "uuid";
 import { Redirect } from "react-router";
+import { GameDefinition } from "./domain/game";
 
 export const PlayNew = (props: { game: GameDefinition; players: Player[] }) => {
   const { game, players } = props;

@@ -3,7 +3,7 @@ import { useCollection } from "react-firebase-hooks/firestore";
 import React from "react";
 import * as firebase from "firebase/app";
 import "firebase/firestore";
-import { Play } from "./domain/model";
+import { Play } from "./domain/play";
 import { PlayForm } from "./PlayForm";
 import { games } from "./domain/games";
 

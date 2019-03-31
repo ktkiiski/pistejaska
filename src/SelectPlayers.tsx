@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Player } from "./domain/model";
+import { Player } from "./domain/play";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
