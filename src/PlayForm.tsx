@@ -61,13 +61,17 @@ export const PlayForm = (props: {
     event: React.FormEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >,
-    field: GameScoreFieldDefinition
+    field: GameScoreFieldDefinition,
+    playerId: string | undefined
   ) => {
     const misc = event.currentTarget.value;
-    const oldMisc = play.misc.filter(s => s.fieldId !== field.id);
+    const oldMisc = play.misc.filter(
+      s => s.fieldId !== field.id || s.playerId !== playerId
+    );
     const newMisc = oldMisc.concat({
       fieldId: field.id,
-      data: misc
+      data: misc,
+      playerId: playerId
     });
 
     setPlay(new Play({ ...play, ...{ misc: newMisc } }));
@@ -78,10 +82,13 @@ export const PlayForm = (props: {
   };
 
   const onSetFocusToNext = () => {
-    const field = game.scoreFields[selectedFieldIndex];
-    const isMiscField = !field;
+    const field = game.getFields()[selectedFieldIndex];
+
+    const fieldPerPlayer =
+      field.type === "score" ||
+      (field.field as GameMiscFieldDefinition).valuePerPlayer === true;
     const focusAtLastPlayer = focusOnPlayerIndex === players.length - 1;
-    if (isMiscField || focusAtLastPlayer) {
+    if (!fieldPerPlayer || focusAtLastPlayer) {
       setFocusOnPlayerIndex(0);
       if (selectedFieldIndex < fields.length - 1) {
         setSelectedFieldIndex(selectedFieldIndex + 1);
@@ -112,6 +119,60 @@ export const PlayForm = (props: {
     props.onSave(play);
   };
 
+  const renderMiscField = (field: GameMiscFieldDefinition) => {
+    if (field.valuePerPlayer === true) {
+      return players.map(p => (
+        <MetadataTextField
+          key={p.id}
+          field={field as GameMiscFieldDefinition}
+          player={p}
+          play={play}
+          onFocus={() => onFocus(p)}
+          onKeyDown={e => handleKeyDown(e, field)}
+          onHandleMiscChange={handleMiscChange}
+          focusOnMe={
+            selectedFieldIndex === fields.map(f => f.field).indexOf(field) &&
+            focusOnPlayerIndex >= 0 &&
+            p.id === players[focusOnPlayerIndex].id
+          }
+        />
+      ));
+    } else {
+      return (
+        <MetadataTextField
+          field={field as GameMiscFieldDefinition}
+          play={play}
+          onFocus={e => {}}
+          player={undefined}
+          key={field.id}
+          onKeyDown={e => handleKeyDown(e, field)}
+          onHandleMiscChange={handleMiscChange}
+          focusOnMe={
+            selectedFieldIndex === fields.map(f => f.field).indexOf(field)
+          }
+        />
+      );
+    }
+  };
+
+  const renderScoreField = (field: GameScoreFieldDefinition) => {
+    return players.map(p => (
+      <PlayerScoreTextField
+        player={p}
+        field={field}
+        scores={play}
+        onFocus={() => onFocus(p)}
+        key={p.id}
+        onKeyDown={e => handleKeyDown(e, field)}
+        onHandleScoreChange={handleScoreChange}
+        focusOnMe={
+          selectedFieldIndex === game.scoreFields.indexOf(field) &&
+          focusOnPlayerIndex >= 0 &&
+          p.id === players[focusOnPlayerIndex].id
+        }
+      />
+    ));
+  };
   return (
     <div>
       <Typography variant="h6" gutterBottom>
@@ -133,36 +194,9 @@ export const PlayForm = (props: {
               {idx + 1}. {field.name}
             </h3>
 
-            {type === "misc" ? (
-              <MetadataTextField
-                field={field as GameMiscFieldDefinition}
-                play={play}
-                onFocus={e => {}}
-                key={field.id}
-                onKeyDown={e => handleKeyDown(e, field)}
-                onHandleMiscChange={handleMiscChange}
-                focusOnMe={
-                  selectedFieldIndex === fields.map(f => f.field).indexOf(field)
-                }
-              />
-            ) : (
-              players.map(p => (
-                <PlayerScoreTextField
-                  player={p}
-                  field={field}
-                  scores={play}
-                  onFocus={() => onFocus(p)}
-                  key={p.id}
-                  onKeyDown={e => handleKeyDown(e, field)}
-                  onHandleScoreChange={handleScoreChange}
-                  focusOnMe={
-                    selectedFieldIndex === game.scoreFields.indexOf(field) &&
-                    focusOnPlayerIndex >= 0 &&
-                    p.id === players[focusOnPlayerIndex].id
-                  }
-                />
-              ))
-            )}
+            {type === "misc"
+              ? renderMiscField(field as GameMiscFieldDefinition)
+              : renderScoreField(field)}
 
             <button
               onClick={() =>
@@ -279,7 +313,8 @@ const MetadataTextField = (props: {
     e: React.ChangeEvent<
       HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
     >,
-    field: GameScoreFieldDefinition
+    field: GameScoreFieldDefinition,
+    playerId: string | undefined
   ) => void;
   focusOnMe: boolean;
   onFocus: (
@@ -288,6 +323,7 @@ const MetadataTextField = (props: {
     >
   ) => void;
   onKeyDown: (e: React.KeyboardEvent<HTMLDivElement>) => void;
+  player: Player | undefined;
 }) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const {
@@ -296,8 +332,10 @@ const MetadataTextField = (props: {
     onHandleMiscChange,
     focusOnMe,
     onFocus,
-    onKeyDown
+    onKeyDown,
+    player
   } = props;
+  const playerId = player ? player.id : undefined;
 
   useEffect(() => {
     if (focusOnMe) {
@@ -321,15 +359,19 @@ const MetadataTextField = (props: {
         inputProps={inputProps}
         type={field.type}
         variant="outlined"
-        label={field.name}
+        label={player ? player.name : field.name}
         onFocus={e => (focusOnMe ? () => {} : onFocus(e))}
         onKeyDown={onKeyDown}
         value={
-          (play.misc.find(m => m.fieldId === field.id) || ({} as any)).data ||
+          (
+            play.misc.find(
+              m => m.fieldId === field.id && m.playerId === playerId
+            ) || ({} as any)
+          ).data ||
           (field.getDefaultValue && field.getDefaultValue()) ||
           ""
         }
-        onChange={e => onHandleMiscChange(e, field)}
+        onChange={e => onHandleMiscChange(e, field, playerId)}
       />
     </div>
   );

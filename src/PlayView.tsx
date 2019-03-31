@@ -3,7 +3,7 @@ import { useCollection } from "react-firebase-hooks/firestore";
 import React from "react";
 import * as firebase from "firebase/app";
 import "firebase/firestore";
-import { Play } from "./domain/play";
+import { Play, MiscDataDTO } from "./domain/play";
 import {
   Button,
   Table,
@@ -14,7 +14,7 @@ import {
   TableFooter
 } from "@material-ui/core";
 import { games } from "./domain/games";
-import { GameDefinition } from "./domain/game";
+import { GameDefinition, GameMiscFieldDefinition } from "./domain/game";
 
 export const PlayView = (props: RouteComponentProps<any>) => {
   const playId = props.match.params["playId"];
@@ -53,9 +53,16 @@ export const PlayView = (props: RouteComponentProps<any>) => {
     props.history.push("/");
   };
 
-  const getFieldName = (fieldId: string): string => {
-    const field = game.getFields().find(f => f.field.id === fieldId);
-    return (field && field.field.name) || "";
+  const getFieldName = (misc: MiscDataDTO): string => {
+    const field = game.getFields().find(f => f.field.id === misc.fieldId);
+    if (!field) return "";
+    if ((field.field as GameMiscFieldDefinition).valuePerPlayer === true) {
+      const playerName = (
+        play.players.find(p => p.id === misc.playerId) || ({} as any)
+      ).name;
+      return `${field.field.name} (${playerName}):`;
+    }
+    return field.field.name;
   };
 
   return (
@@ -64,7 +71,7 @@ export const PlayView = (props: RouteComponentProps<any>) => {
       <div>Played on {play.getDate().toLocaleDateString()}</div>
       {play.misc.map((misc, idx) => (
         <div key={idx}>
-          {getFieldName(misc.fieldId)}: {misc.data}
+          {getFieldName(misc)}: {misc.data}
         </div>
       ))}
       <PlayTable game={game} play={play} />

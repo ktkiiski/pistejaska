@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import * as firebase from "firebase/app";
 import "firebase/firestore";
-import { Player } from "./domain/play";
+import { Player, Play } from "./domain/play";
 import uuid from "uuid";
 import { Redirect } from "react-router";
-import { GameDefinition } from "./domain/game";
+import { GameDefinition, Game } from "./domain/game";
 
 export const PlayNew = (props: { game: GameDefinition; players: Player[] }) => {
   const { game, players } = props;
@@ -12,14 +12,13 @@ export const PlayNew = (props: { game: GameDefinition; players: Player[] }) => {
   const [playId, setPlayId] = useState(uuid());
   const [loading, setLoading] = useState(true);
 
-  const play = {
+  const play = new Play({
     gameId: game.id,
     id: playId,
     players: players,
-    date: new Date(),
     scores: [],
-    misc: []
-  };
+    misc: Game.getDefaultMiscFieldValues()
+  });
 
   useEffect(() => {
     const db = firebase.firestore();

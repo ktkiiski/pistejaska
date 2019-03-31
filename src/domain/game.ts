@@ -1,4 +1,6 @@
 import { groupBy, sum, sortBy } from "lodash";
+import { getTodayAsString } from "../common/dateUtils";
+import { MiscDataDTO } from "./play";
 
 export class Game implements GameDefinition {
   name: string;
@@ -16,7 +18,15 @@ export class Game implements GameDefinition {
     this.name = game.name;
   }
 
-  private getDefaultMiscFields(): GameMiscFieldDefinition[] {
+  public static getDefaultMiscFieldValues(): MiscDataDTO[] {
+    return this.getDefaultMiscFields().map(f => {
+      return {
+        fieldId: f.id,
+        data: f.getDefaultValue ? f.getDefaultValue() : ""
+      };
+    });
+  }
+  private static getDefaultMiscFields(): GameMiscFieldDefinition[] {
     return [
       {
         id: "duration",
@@ -38,7 +48,7 @@ export class Game implements GameDefinition {
         id: "date",
         name: "Date",
         type: "date",
-        getDefaultValue: () => new Date().toISOString().substring(0, 10)
+        getDefaultValue: () => getTodayAsString()
       }
     ];
   }
@@ -57,7 +67,7 @@ export class Game implements GameDefinition {
         })
       )
       .concat(
-        this.getDefaultMiscFields().map(f => {
+        Game.getDefaultMiscFields().map(f => {
           return { type: "misc", field: f };
         })
       );
@@ -90,5 +100,5 @@ export type GameMiscFieldDefinition = {
   maxValue?: number;
   step?: string;
   valuePerPlayer?: boolean; // defaults to false
-  getDefaultValue?: () => number | string;
+  getDefaultValue?: () => string;
 };

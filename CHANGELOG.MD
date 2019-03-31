@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Allow play date editing
 - Confirm before deleting game
+- Support for "value per player" type misc fields for games. Typically misc fields only have 1 value (like "Duration").
+  Value per player type is useful for example when storing player race in Caverna.
 
 ### Changed
 

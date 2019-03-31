@@ -13,11 +13,16 @@ export type PlayDTO = {
     score: number;
   }[];
   players: Player[];
-  misc: { fieldId: string; data: string }[];
+  misc: MiscDataDTO[];
 };
 
+export type MiscDataDTO = {
+  fieldId: string;
+  data: string;
+  playerId?: string | undefined;
+};
 export class Play implements PlayDTO {
-  misc: { fieldId: string; data: string }[];
+  misc: MiscDataDTO[];
   id: string;
   gameId: string;
   scores: { playerId: string; fieldId: string; score: number }[];
@@ -34,7 +39,10 @@ export class Play implements PlayDTO {
   public getPosition(player: Player) {
     const playersByScores = groupBy(this.scores, s => s.playerId);
     const playersByScore = Object.keys(playersByScores).map(p => {
-      return { id: p, score: sum(playersByScores[p].map(p => p.score)) };
+      return {
+        id: p,
+        score: sum(playersByScores[p].map(p => p.score))
+      };
     });
 
     const id = player.id;

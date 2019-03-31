@@ -1,6 +1,5 @@
 import { GameDefinition, Game } from "./game";
 
-// TODO PANU: jengit caverna 30.3.:  heikki trolls, panu dark elves, hanna pale ones, kimmo cave goblins
 const terraFormingMars: GameDefinition = {
   name: "Terraforming Mars",
   id: "terraforming-mars",
@@ -38,7 +37,7 @@ const cavernaForgottenFolk: GameDefinition = {
     { id: "per-vegetable", name: "1p per vegetable", minValue: 0 },
     { id: "per-ruby", name: "1p per ruby", minValue: 0 },
     { id: "per-dwarf", name: "1p per dwarf", minValue: 0 },
-    { id: "per-unused-space", name: "-1p ver unused space", maxValue: 0 },
+    { id: "per-unused-space", name: "-1p per unused space", maxValue: 0 },
     {
       id: "game-board",
       name: "Furnishing tiles, pastures, mines",

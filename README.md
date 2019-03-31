@@ -42,3 +42,4 @@ Master branch of this project is automatically built & hosted in Netlify (https:
 - fix data model in Firestore
 - make reports based on score data
 - dropbown type for GameMiscFieldDefinition
+- save every change to localstorage (or even to server?) to prevent accidental data loss
