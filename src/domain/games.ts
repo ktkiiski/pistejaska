@@ -108,11 +108,27 @@ const feastForOdin: GameDefinition = {
     { id: "rounds", name: "Rounds", type: "number", minValue: 6, maxValue: 7 }
   ]
 };
+
+const honshu: GameDefinition = {
+  name: "Honshu",
+  id: "honshu",
+  icon:
+    "https://cf.geekdo-images.com/itemrep/img/l_uH7Py0YPsBK3L4Ti3x6Jswj2g=/fit-in/246x300/pic3627583.jpg",
+  scoreFields: [
+    { id: "forests", name: "Forests", minValue: 0 },
+    { id: "city", name: "City", minValue: 0 },
+    { id: "factories", name: "Factories", minValue: 0 },
+    { id: "water", name: "Water", minValue: 0 },
+    { id: "bonus", name: "Bonus", minValue: 0 }
+  ],
+  miscFields: [{ id: "bonusType", name: "Type of bonus", type: "text" }]
+};
 const gameDtos = [
   terraFormingMars,
   eclipse,
   feastForOdin,
-  cavernaForgottenFolk
+  cavernaForgottenFolk,
+  honshu
 ];
 
 export const games = gameDtos.map(g => new Game(g));

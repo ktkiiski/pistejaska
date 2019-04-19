@@ -30,7 +30,7 @@ export const SelectPlayers = (
 
   const selectPlayers = (
     <div>
-      <h2>Select players</h2>
+      <h2>Add players</h2>
 
       <TextField
         value={currentPlayer}

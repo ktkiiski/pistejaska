@@ -43,3 +43,4 @@ Master branch of this project is automatically built & hosted in Netlify (https:
 - make reports based on score data
 - dropbown type for GameMiscFieldDefinition
 - save every change to localstorage (or even to server?) to prevent accidental data loss
+- celebration page on save to see the winner with konfetti animation
