@@ -123,12 +123,27 @@ const honshu: GameDefinition = {
   ],
   miscFields: [{ id: "bonusType", name: "Type of bonus", type: "text" }]
 };
+
+const terraMystica: GameDefinition = {
+  name: "Terra Mystica",
+  id: "terramystica",
+  icon:
+    "https://cf.geekdo-images.com/imagepage/img/JS90_q_U-h5Xe9Dn2jTTky-FqOs=/fit-in/900x600/filters:no_upscale()/pic1356616.jpg",
+  scoreFields: [
+    { id: "points", name: "Points", minValue: 0 },
+    { id: "largestArea", name: "Largest ares", minValue: 0 },
+    { id: "cultists", name: "Cultist tracks", minValue: 0 }
+  ],
+  miscFields: [{ id: "race", name: "Race", type: "text", valuePerPlayer: true }]
+};
+
 const gameDtos = [
   terraFormingMars,
   eclipse,
   feastForOdin,
   cavernaForgottenFolk,
-  honshu
+  honshu,
+  terraMystica
 ];
 
 export const games = gameDtos.map(g => new Game(g));
