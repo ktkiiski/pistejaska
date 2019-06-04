@@ -1,5 +1,18 @@
 import { GameDefinition, Game } from "./game";
 
+const azul: GameDefinition = {
+  name: "Azul",
+  id: "azul",
+  icon:
+    "",
+  scoreFields: [
+    { id: "score-tracker", name: "Score tracker", minValue: 0 },
+    { id: "horizontal-lines", name: "Horizontal lines", minValue: 0 },
+    { id: "vertical-lines", name: "Vertical lines", minValue: 0 },
+    { id: "full-colours", name: "Full colors", minValue: 0 }
+  ]
+};
+
 const terraFormingMars: GameDefinition = {
   name: "Terraforming Mars",
   id: "terraforming-mars",
@@ -143,7 +156,8 @@ const gameDtos = [
   feastForOdin,
   cavernaForgottenFolk,
   honshu,
-  terraMystica
+  terraMystica,
+  azul
 ];
 
 export const games = gameDtos.map(g => new Game(g));
