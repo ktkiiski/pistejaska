@@ -172,7 +172,21 @@ const welcomeTo: GameDefinition = {
   miscFields: [
     { id: "town-name", name: "Name of the town", type: "text", valuePerPlayer: true },
   ],
-}
+};
+
+const concordia: GameDefinition = {
+  name: "Concordia",
+  id: 'concordia',
+  icon: "https://cf.geekdo-images.com/imagepagezoom/img/irV1Ma7cZOkSHZLQvZqSXd75V5k=/fit-in/1200x900/filters:no_upscale()/pic3453267.jpg",
+  scoreFields: [
+    { id: "vesta", name: "Vesta (1VP / 10 sestertii, including goods)", minValue: 0 },
+    { id: "jupiter", name: "Jupiter (1VP / non-brick city)", minValue: 0 },
+    { id: "saturnus", name: "Saturnus (1VP / province with a house)", minValue: 0 },
+    { id: "mercurius", name: "Mercurius (2VP / type of goods)", minValue: 0 },
+    { id: "mars", name: "Mars (2VP / colonist)", minValue: 0 },
+    { id: "minerva", name: "Minerva (VP as in the specialist card)", minValue: 0 },
+  ],
+};
 
 const gameDtos = [
   terraFormingMars,
@@ -183,6 +197,7 @@ const gameDtos = [
   terraMystica,
   azul,
   welcomeTo,
+  concordia,
 ];
 
 export const games = gameDtos.map(g => new Game(g));
