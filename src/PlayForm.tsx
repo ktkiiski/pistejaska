@@ -173,6 +173,7 @@ export const PlayForm = (props: {
       />
     ));
   };
+  const gameFieldCount = game.getFields().length;
   return (
     <div>
       <Typography variant="h6" gutterBottom>
@@ -198,7 +199,10 @@ export const PlayForm = (props: {
               ? renderMiscField(field as GameMiscFieldDefinition)
               : renderScoreField(field)}
 
-            <button
+            <Button
+              variant="outlined"
+              color="default"
+              disabled={selectedFieldIndex <= 0}
               onClick={() =>
                 setSelectedFieldIndex(
                   selectedFieldIndex > 0 ? selectedFieldIndex - 1 : 0
@@ -206,18 +210,21 @@ export const PlayForm = (props: {
               }
             >
               &lt; Previous
-            </button>
-            <button
+            </Button>
+            <Button
+              variant="outlined"
+              color="default"
+              disabled={selectedFieldIndex >= gameFieldCount - 1}
               onClick={() =>
                 setSelectedFieldIndex(
-                  selectedFieldIndex < game.getFields().length - 1
+                  selectedFieldIndex < gameFieldCount - 1
                     ? selectedFieldIndex + 1
-                    : game.getFields().length - 1
+                    : gameFieldCount - 1
                 )
               }
             >
               Next &gt;
-            </button>
+            </Button>
           </div>
         ))}
       </SwipeableViews>
