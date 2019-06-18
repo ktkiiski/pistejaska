@@ -150,6 +150,30 @@ const terraMystica: GameDefinition = {
   miscFields: [{ id: "race", name: "Race", type: "text", valuePerPlayer: true }]
 };
 
+const welcome: GameDefinition = {
+  name: "Welcome To…",
+  id: 'welcome',
+  icon: "https://cf.geekdo-images.com/imagepage/img/yNrp9LGw_S1mt8ggsQx0OHn_4MA=/fit-in/900x600/filters:no_upscale()/pic3761012.jpg",
+  scoreFields: [
+    { id: "plans", name: "City Plans", minValue: 0 },
+    { id: "parks", name: "Parks", minValue: 0 },
+    { id: "pools", name: "Pools", minValue: 0 },
+    { id: "temp-agency", name: "Temp agency", minValue: 0 },
+    { id: "housing-estates-1", name: "1-sized housing estates", minValue: 0 },
+    { id: "housing-estates-2", name: "2-sized housing estates", minValue: 0 },
+    { id: "housing-estates-3", name: "3-sized housing estates", minValue: 0 },
+    { id: "housing-estates-4", name: "4-sized housing estates", minValue: 0 },
+    { id: "housing-estates-5", name: "5-sized housing estates", minValue: 0 },
+    { id: "housing-estates-6", name: "6-sized housing estates", minValue: 0 },
+    { id: "bis", name: "Bis (negative)", maxValue: 0 },
+    { id: "roundabout", name: "Roundabouts (negative)", maxValue: 0 },
+    { id: "building-permit-refusal", name: "Building permit refusal (negative)", maxValue: 0 },
+  ],
+  miscFields: [
+    { id: "town-name", name: "Name of the town", type: "text", valuePerPlayer: true },
+  ],
+}
+
 const gameDtos = [
   terraFormingMars,
   eclipse,
@@ -157,7 +181,8 @@ const gameDtos = [
   cavernaForgottenFolk,
   honshu,
   terraMystica,
-  azul
+  azul,
+  welcome,
 ];
 
 export const games = gameDtos.map(g => new Game(g));
