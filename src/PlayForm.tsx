@@ -213,6 +213,7 @@ export const PlayForm = (props: {
             <h3 id={field.id}>
               {idx + 1}. {field.name}
             </h3>
+            {field.description ? <p>{field.description}</p> : null}
 
             {type === "misc"
               ? renderMiscField(field as GameMiscFieldDefinition)

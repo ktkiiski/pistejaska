@@ -13,6 +13,12 @@ export const SelectGame = (props: RouteComponentProps<{}>) => {
     props.history.push("/new/" + game.id);
 
   const [searchTerm, setSearchTerm] = useState("");
+  const listedGames = games.map((game) => ({
+    ...game, lowercaseName: game.name.toLowerCase(),
+  }));
+  listedGames.sort(({ lowercaseName: name1 }, { lowercaseName: name2 }) => {
+    return name1 > name2 ? 1 : name1 < name2 ? -1 : 0;
+  });
   return (
     <div>
       <h2>Select game</h2>
@@ -23,8 +29,8 @@ export const SelectGame = (props: RouteComponentProps<{}>) => {
         onChange={e => setSearchTerm(e.currentTarget.value)}
       />
       <List component="nav">
-        {games
-          .filter(g => g.name.includes(searchTerm))
+        {listedGames
+          .filter(g => g.lowercaseName.includes(searchTerm.toLowerCase()))
           .map(game => (
             <ListItem button onClick={() => onSelectGame(game)} key={game.id}>
               <ListItemIcon>
