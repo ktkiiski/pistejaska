@@ -173,6 +173,25 @@ export const PlayForm = (props: {
       />
     ));
   };
+  const onPreviousClick = () => {
+    // Move to previous field
+    setSelectedFieldIndex(
+      selectedFieldIndex > 0 ? selectedFieldIndex - 1 : 0
+    );
+    // Reset focus to the first player
+    setFocusOnPlayerIndex(0);
+  };
+  const onNextClick = () => {
+    // Move to the next field
+    setSelectedFieldIndex(
+      selectedFieldIndex < gameFieldCount - 1
+        ? selectedFieldIndex + 1
+        : gameFieldCount - 1
+    );
+    // Reset focus to the first player
+    setFocusOnPlayerIndex(0);
+  };
+
   const gameFieldCount = game.getFields().length;
   return (
     <div>
@@ -203,11 +222,7 @@ export const PlayForm = (props: {
               variant="outlined"
               color="default"
               disabled={selectedFieldIndex <= 0}
-              onClick={() =>
-                setSelectedFieldIndex(
-                  selectedFieldIndex > 0 ? selectedFieldIndex - 1 : 0
-                )
-              }
+              onClick={onPreviousClick}
             >
               &lt; Previous
             </Button>
@@ -215,13 +230,7 @@ export const PlayForm = (props: {
               variant="outlined"
               color="default"
               disabled={selectedFieldIndex >= gameFieldCount - 1}
-              onClick={() =>
-                setSelectedFieldIndex(
-                  selectedFieldIndex < gameFieldCount - 1
-                    ? selectedFieldIndex + 1
-                    : gameFieldCount - 1
-                )
-              }
+              onClick={onNextClick}
             >
               Next &gt;
             </Button>
