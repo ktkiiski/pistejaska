@@ -82,19 +82,22 @@ export type GameDefinition = {
   miscFields?: GameMiscFieldDefinition[];
 };
 
-export type GameScoreFieldDefinition = {
+interface GameFieldDefinition {
   // please use human-readable, slugified ids, like "terraforming-rating". Do not change once created!
   id: string;
+  // A human-readable, short name for this field
   name: string;
+  // A description how the field value should be calculated and entered
+  description?: string;
+}
+
+export interface GameScoreFieldDefinition extends GameFieldDefinition {
   minValue?: number;
   maxValue?: number;
   step?: string;
 };
 
-export type GameMiscFieldDefinition = {
-  // please use human-readable, slugified ids, like "terraforming-rating". Do not change once created!
-  id: string;
-  name: string;
+export interface GameMiscFieldDefinition extends GameFieldDefinition {
   type: "number" | "date" | "text";
   minValue?: number;
   maxValue?: number;
