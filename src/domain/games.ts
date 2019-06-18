@@ -152,8 +152,9 @@ const terraMystica: GameDefinition = {
 
 const welcomeTo: GameDefinition = {
   name: "Welcome To…",
-  id: 'welcome',
-  icon: "https://cf.geekdo-images.com/imagepage/img/yNrp9LGw_S1mt8ggsQx0OHn_4MA=/fit-in/900x600/filters:no_upscale()/pic3761012.jpg",
+  id: "welcome",
+  icon:
+    "https://cf.geekdo-images.com/imagepage/img/yNrp9LGw_S1mt8ggsQx0OHn_4MA=/fit-in/900x600/filters:no_upscale()/pic3761012.jpg",
   scoreFields: [
     { id: "plans", name: "City Plans", minValue: 0 },
     { id: "parks", name: "Parks", minValue: 0 },
@@ -167,48 +168,85 @@ const welcomeTo: GameDefinition = {
     { id: "housing-estates-6", name: "6-sized housing estates", minValue: 0 },
     { id: "bis", name: "Bis (negative)", maxValue: 0 },
     { id: "roundabout", name: "Roundabouts (negative)", maxValue: 0 },
-    { id: "building-permit-refusal", name: "Building permit refusal (negative)", maxValue: 0 },
+    {
+      id: "building-permit-refusal",
+      name: "Building permit refusal (negative)",
+      maxValue: 0
+    }
   ],
   miscFields: [
-    { id: "town-name", name: "Name of the town", type: "text", valuePerPlayer: true },
-  ],
+    {
+      id: "town-name",
+      name: "Name of the town",
+      type: "text",
+      valuePerPlayer: true
+    }
+  ]
 };
 
 const concordia: GameDefinition = {
   name: "Concordia",
-  id: 'concordia',
-  icon: "https://cf.geekdo-images.com/imagepagezoom/img/irV1Ma7cZOkSHZLQvZqSXd75V5k=/fit-in/1200x900/filters:no_upscale()/pic3453267.jpg",
-  scoreFields: [{
-    id: "vesta",
-    name: "Vesta",
-    description: "1 VP per full 10 sestertii, including the value of all goods in the storehouse",
-    minValue: 0,
-  }, {
-    id: "jupiter",
-    name: "Jupiter",
-    description: "1 VP per card for each house inside a non-brick city",
-    minValue: 0,
-  }, {
-    id: "saturnus",
-    name: "Saturnus",
-    description: "1 VP per card for each province with at least one of the player's houses",
-    minValue: 0,
-  }, {
-    id: "mercurius",
-    name: "Mercurius",
-    description: "2 VP per card for each type of goods the player is producing",
-    minValue: 0,
-  }, {
-    id: "mars",
-    name: "Mars",
-    description: "2 VP per card for each colonist on the game board",
-    minValue: 0,
-  }, {
-    id: "minerva",
-    name: "Minerva",
-    description: "Certain number of VP per the specialist's card for each related city",
-    minValue: 0,
-  }],
+  id: "concordia",
+  icon:
+    "https://cf.geekdo-images.com/imagepagezoom/img/irV1Ma7cZOkSHZLQvZqSXd75V5k=/fit-in/1200x900/filters:no_upscale()/pic3453267.jpg",
+  scoreFields: [
+    {
+      id: "vesta",
+      name: "Vesta",
+      description:
+        "1 VP per full 10 sestertii, including the value of all goods in the storehouse",
+      minValue: 0
+    },
+    {
+      id: "jupiter",
+      name: "Jupiter",
+      description: "1 VP per card for each house inside a non-brick city",
+      minValue: 0
+    },
+    {
+      id: "saturnus",
+      name: "Saturnus",
+      description:
+        "1 VP per card for each province with at least one of the player's houses",
+      minValue: 0
+    },
+    {
+      id: "mercurius",
+      name: "Mercurius",
+      description:
+        "2 VP per card for each type of goods the player is producing",
+      minValue: 0
+    },
+    {
+      id: "mars",
+      name: "Mars",
+      description: "2 VP per card for each colonist on the game board",
+      minValue: 0
+    },
+    {
+      id: "minerva",
+      name: "Minerva",
+      description:
+        "Certain number of VP per the specialist's card for each related city",
+      minValue: 0
+    },
+    {
+      id: "concordia",
+      name: "Concordia",
+      description: "Awarded to the player that ends the game",
+      minValue: 0,
+      maxValue: 7
+    }
+  ],
+  miscFields: [
+    {
+      id: "map",
+      name: "Map",
+      type: "text",
+      valuePerPlayer: false,
+      description: "Italy || Mediterranean"
+    }
+  ]
 };
 
 const gameDtos = [
@@ -220,7 +258,7 @@ const gameDtos = [
   terraMystica,
   azul,
   welcomeTo,
-  concordia,
+  concordia
 ];
 
 export const games = gameDtos.map(g => new Game(g));

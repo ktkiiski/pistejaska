@@ -95,7 +95,7 @@ export interface GameScoreFieldDefinition extends GameFieldDefinition {
   minValue?: number;
   maxValue?: number;
   step?: string;
-};
+}
 
 export interface GameMiscFieldDefinition extends GameFieldDefinition {
   type: "number" | "date" | "text";
@@ -104,4 +104,5 @@ export interface GameMiscFieldDefinition extends GameFieldDefinition {
   step?: string;
   valuePerPlayer?: boolean; // defaults to false
   getDefaultValue?: () => string;
-};
+  // TODO PANU: add affectsScoring
+}
