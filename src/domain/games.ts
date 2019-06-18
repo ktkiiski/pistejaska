@@ -4,7 +4,7 @@ const azul: GameDefinition = {
   name: "Azul",
   id: "azul",
   icon:
-    "",
+    "https://cf.geekdo-images.com/itemrep/img/ql-0-t271LVGqbmWA1gdkIH7WvM=/fit-in/246x300/pic3718275.jpg",
   scoreFields: [
     { id: "score-tracker", name: "Score tracker", minValue: 0 },
     { id: "horizontal-lines", name: "Horizontal lines", minValue: 0 },
@@ -150,7 +150,7 @@ const terraMystica: GameDefinition = {
   miscFields: [{ id: "race", name: "Race", type: "text", valuePerPlayer: true }]
 };
 
-const welcome: GameDefinition = {
+const welcomeTo: GameDefinition = {
   name: "Welcome To…",
   id: 'welcome',
   icon: "https://cf.geekdo-images.com/imagepage/img/yNrp9LGw_S1mt8ggsQx0OHn_4MA=/fit-in/900x600/filters:no_upscale()/pic3761012.jpg",
@@ -182,7 +182,7 @@ const gameDtos = [
   honshu,
   terraMystica,
   azul,
-  welcome,
+  welcomeTo,
 ];
 
 export const games = gameDtos.map(g => new Game(g));
