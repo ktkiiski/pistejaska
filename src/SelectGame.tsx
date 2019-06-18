@@ -30,7 +30,7 @@ export const SelectGame = (props: RouteComponentProps<{}>) => {
       />
       <List component="nav">
         {listedGames
-          .filter(g => g.name.includes(searchTerm))
+          .filter(g => g.lowercaseName.includes(searchTerm.toLowerCase()))
           .map(game => (
             <ListItem button onClick={() => onSelectGame(game)} key={game.id}>
               <ListItemIcon>
