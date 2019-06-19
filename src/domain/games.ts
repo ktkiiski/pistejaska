@@ -234,8 +234,13 @@ const concordia: GameDefinition = {
       id: "concordia",
       name: "Concordia",
       description: "Awarded to the player that ends the game",
-      minValue: 0,
-      maxValue: 7
+      options: [{
+        value: 0,
+        label: "Did not end the game (0 VP)",
+      }, {
+        value: 7,
+        label: "Ended the game (7 VP)",
+      }],
     }
   ],
   miscFields: [

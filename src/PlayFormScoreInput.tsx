@@ -1,19 +1,13 @@
 import React, { useRef, useEffect } from "react";
 import { Player, Play } from "./domain/play";
 import { GameScoreFieldDefinition } from "./domain/game";
-import { TextField } from "@material-ui/core";
+import { TextField, FormControl, InputLabel, Select, OutlinedInput } from "@material-ui/core";
 
 interface PlayFormScoreInputProps {
   player: Player;
   field: GameScoreFieldDefinition;
   scores: Play;
-  onChange: (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-    >,
-    field: GameScoreFieldDefinition,
-    player: Player
-  ) => void;
+  onChange: (score: number | null, field: GameScoreFieldDefinition, player: Player) => void;
   focusOnMe: boolean;
   onFocus: (
     e: React.FocusEvent<
@@ -58,21 +52,59 @@ export const PlayFormScoreInput = (props: PlayFormScoreInputProps) => {
     s => s.fieldId === field.id && s.playerId === player.id
   );
   const scoreValue = scoreItem ? scoreItem.score : "";
+  const labelText = `${player.name} (${playerTotalScore} pts)`;
+  const onValueChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+    let value = event.currentTarget.value as number | string | null;
+    if (value === '') {
+      // Chose a blank option
+      value = null;
+    } else if (typeof value === 'string') {
+      value = parseInt(value, 10);
+    }
+    const score = value == null || Number.isNaN(value) ? null : value;
+    onChange(score, field, player);
+  };
+
+  const { options } = field;
+  if (options) {
+    // Only allow choosing from pre-defined options.
+    // If 0 is one of the allowed options, then let the zero option be seem
+    // to be selected by default. Otherwise a blank option is selected by default.
+    const hasZeroOption = options.some(({value}) => value === 0);
+    const selectedScore = !scoreValue && hasZeroOption ? 0 : scoreValue;
+    const hasSelectedValidOption = options.some(({value}) => value === selectedScore);
+    return (
+      <TextField
+        select
+        label={labelText}
+        value={selectedScore}
+        onChange={onValueChange}
+        SelectProps={{ native: true }}
+        margin="dense"
+        variant="outlined"
+      >
+        {hasSelectedValidOption ? null : <option value=''></option>}
+        {
+          options.map(({value, label}) => (
+            <option value={value} key={value}>{label}</option>
+          ))
+        }
+      </TextField>
+    );
+  }
 
   return (
-    <div>
-      <TextField
-        margin="dense"
-        inputProps={inputProps}
-        type="number"
-        variant="outlined"
-        label={`${player.name} (${playerTotalScore} pts)`}
-        onFocus={e => (focusOnMe ? () => {} : onFocus(e))}
-        onKeyDown={onKeyDown}
-        value={scoreValue}
-        onChange={e => onChange(e, field, player)}
-        id={field.name.replace(" ", "_").concat(player.id)}
-      />
-    </div>
+    <TextField
+      margin="dense"
+      inputProps={inputProps}
+      type="number"
+      variant="outlined"
+      label={labelText}
+      onFocus={e => (focusOnMe ? () => {} : onFocus(e))}
+      onKeyDown={onKeyDown}
+      value={scoreValue}
+      onChange={onValueChange}
+      id={field.name.replace(" ", "_").concat(player.id)}
+    />
   );
 };

@@ -35,14 +35,14 @@ export const PlayForm = (props: {
   const fields = game.getFields();
 
   const handleScoreChange = (
-    event: React.FormEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >,
+    score: number | null,
     field: GameScoreFieldDefinition,
     player: Player
   ) => {
-    let score = parseInt(event.currentTarget.value);
-    if (score === NaN) return;
+    if (score == null) {
+      // TODO: Should remove the score?
+      return;
+    }
     if (field.maxValue === 0) score = -Math.abs(score);
     if (field.minValue === 0) score = Math.abs(score);
 
@@ -157,13 +157,12 @@ export const PlayForm = (props: {
   };
 
   const renderScoreField = (field: GameScoreFieldDefinition) => {
-    return players.map(p => (
+    return players.map(p => (<div key={p.id}>
       <PlayFormScoreInput
         player={p}
         field={field}
         scores={play}
         onFocus={() => onFocus(p)}
-        key={p.id}
         onKeyDown={e => handleKeyDown(e, field)}
         onChange={handleScoreChange}
         focusOnMe={
@@ -172,7 +171,7 @@ export const PlayForm = (props: {
           p.id === players[focusOnPlayerIndex].id
         }
       />
-    ));
+    </div>));
   };
   const onPreviousClick = () => {
     // Move to previous field

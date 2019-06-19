@@ -95,6 +95,8 @@ export interface GameScoreFieldDefinition extends GameFieldDefinition {
   minValue?: number;
   maxValue?: number;
   step?: string;
+  // If defined, then only allow choosing one of these values
+  options?: Array<{ value: number, label: string }>;
 }
 
 export interface GameMiscFieldDefinition extends GameFieldDefinition {
