@@ -7,7 +7,7 @@ interface PlayFormScoreInputProps {
   player: Player;
   field: GameScoreFieldDefinition;
   scores: Play;
-  onHandleScoreChange: (
+  onChange: (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
     >,
@@ -29,21 +29,19 @@ export const PlayFormScoreInput = (props: PlayFormScoreInputProps) => {
     player,
     field,
     scores,
-    onHandleScoreChange,
+    onChange,
     focusOnMe,
     onFocus,
     onKeyDown
   } = props;
 
   useEffect(() => {
-    if (focusOnMe) {
-      if (inputRef != null && inputRef.current != null) {
-        inputRef.current.focus();
-      }
+    if (focusOnMe && inputRef.current != null) {
+      inputRef.current.focus();
     }
   }, [focusOnMe]);
 
-  const score =
+  const playerTotalScore =
     scores.scores
       .filter(s => s.playerId === player.id)
       .map(s => s.score)
@@ -68,11 +66,11 @@ export const PlayFormScoreInput = (props: PlayFormScoreInputProps) => {
         inputProps={inputProps}
         type="number"
         variant="outlined"
-        label={player.name + " (" + score + " pts)"}
+        label={`${player.name} (${playerTotalScore} pts)`}
         onFocus={e => (focusOnMe ? () => {} : onFocus(e))}
         onKeyDown={onKeyDown}
         value={scoreValue}
-        onChange={e => onHandleScoreChange(e, field, player)}
+        onChange={e => onChange(e, field, player)}
         id={field.name.replace(" ", "_").concat(player.id)}
       />
     </div>

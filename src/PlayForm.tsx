@@ -165,7 +165,7 @@ export const PlayForm = (props: {
         onFocus={() => onFocus(p)}
         key={p.id}
         onKeyDown={e => handleKeyDown(e, field)}
-        onHandleScoreChange={handleScoreChange}
+        onChange={handleScoreChange}
         focusOnMe={
           selectedFieldIndex === game.scoreFields.indexOf(field) &&
           focusOnPlayerIndex >= 0 &&
