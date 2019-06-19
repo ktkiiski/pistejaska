@@ -9,6 +9,7 @@ import {
   GameScoreFieldDefinition,
   Game
 } from "./domain/game";
+import { PlayFormScoreInput } from "./PlayFormScoreInput";
 
 export const PlayForm = (props: {
   game: Game;
@@ -157,7 +158,7 @@ export const PlayForm = (props: {
 
   const renderScoreField = (field: GameScoreFieldDefinition) => {
     return players.map(p => (
-      <PlayerScoreTextField
+      <PlayFormScoreInput
         player={p}
         field={field}
         scores={play}
@@ -250,79 +251,6 @@ export const PlayForm = (props: {
   );
 };
 
-const PlayerScoreTextField = (props: {
-  player: Player;
-  field: GameScoreFieldDefinition;
-  scores: Play;
-  onHandleScoreChange: (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-    >,
-    field: GameScoreFieldDefinition,
-    player: Player
-  ) => void;
-  focusOnMe: boolean;
-  onFocus: (
-    e: React.FocusEvent<
-      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-    >
-  ) => void;
-  onKeyDown: (e: React.KeyboardEvent<HTMLDivElement>) => void;
-}) => {
-  const inputRef = useRef<HTMLInputElement>(null);
-  const {
-    player,
-    field,
-    scores,
-    onHandleScoreChange,
-    focusOnMe,
-    onFocus,
-    onKeyDown
-  } = props;
-
-  useEffect(() => {
-    if (focusOnMe) {
-      if (inputRef != null && inputRef.current != null) {
-        inputRef.current.focus();
-      }
-    }
-  }, [focusOnMe]);
-
-  const score =
-    scores.scores
-      .filter(s => s.playerId === player.id)
-      .map(s => s.score)
-      .reduce((s, memo) => s + memo, 0) || 0;
-
-  const inputProps = {
-    ref: inputRef,
-    min: field.minValue,
-    max: field.maxValue,
-    step: field.step
-  };
-
-  const scoreItem = scores.scores.find(
-    s => s.fieldId === field.id && s.playerId === player.id
-  );
-  const scoreValue = scoreItem ? scoreItem.score : "";
-
-  return (
-    <div key={player.id}>
-      <TextField
-        margin="dense"
-        inputProps={inputProps}
-        type="number"
-        variant="outlined"
-        label={player.name + " (" + score + " pts)"}
-        onFocus={e => (focusOnMe ? () => {} : onFocus(e))}
-        onKeyDown={onKeyDown}
-        value={scoreValue}
-        onChange={e => onHandleScoreChange(e, field, player)}
-        id={field.name.replace(" ", "_").concat(player.id)}
-      />
-    </div>
-  );
-};
 const MetadataTextField = (props: {
   field: GameMiscFieldDefinition;
   play: Play;
