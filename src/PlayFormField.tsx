@@ -77,6 +77,9 @@ export function PlayFormField<T extends string | number, F extends GameFieldDefi
         label={label}
         value={selectedValue}
         onChange={onValueChange}
+        onFocus={e => (focusOnMe ? () => {} : onFocus(e))}
+        onKeyDown={onKeyDown}
+        inputProps={{ ref: inputRef }}
         SelectProps={{ native: true }}
         margin="dense"
         variant="outlined"
