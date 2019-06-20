@@ -1,7 +1,7 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useState, useRef } from "react";
 import SwipeableViews from "react-swipeable-views";
 import Button from "@material-ui/core/Button";
-import { Typography, TextField } from "@material-ui/core";
+import { Typography } from "@material-ui/core";
 import { Player, Play } from "./domain/play";
 import "firebase/firestore";
 import {
@@ -9,7 +9,8 @@ import {
   GameScoreFieldDefinition,
   Game
 } from "./domain/game";
-import { PlayFormScoreInput } from "./PlayFormScoreInput";
+import { PlayFormScoreField } from "./PlayFormScoreField";
+import { PlayFormMiscField } from "./PlayFormMiscField";
 
 export const PlayForm = (props: {
   game: Game;
@@ -59,13 +60,11 @@ export const PlayForm = (props: {
   };
 
   const handleMiscChange = (
-    event: React.FormEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >,
-    field: GameScoreFieldDefinition,
-    playerId: string | undefined
+    misc: string,
+    field: GameMiscFieldDefinition,
+    player: Player | undefined
   ) => {
-    const misc = event.currentTarget.value;
+    const playerId = player && player.id;
     const oldMisc = play.misc.filter(
       s => s.fieldId !== field.id || s.playerId !== playerId
     );
@@ -104,10 +103,7 @@ export const PlayForm = (props: {
     }
   };
 
-  const handleKeyDown = (
-    e: React.KeyboardEvent<HTMLInputElement | HTMLDivElement>,
-    field: GameScoreFieldDefinition
-  ) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement | HTMLDivElement>) => {
     if (
       e.keyCode == 9 || // android numpad enter/next button (tabulator in computer)
       e.keyCode == 13 // enter
@@ -123,14 +119,14 @@ export const PlayForm = (props: {
   const renderMiscField = (field: GameMiscFieldDefinition) => {
     if (field.valuePerPlayer === true) {
       return players.map(p => (
-        <MetadataTextField
+        <PlayFormMiscField
           key={p.id}
-          field={field as GameMiscFieldDefinition}
+          field={field}
           player={p}
           play={play}
           onFocus={() => onFocus(p)}
-          onKeyDown={e => handleKeyDown(e, field)}
-          onHandleMiscChange={handleMiscChange}
+          onKeyDown={handleKeyDown}
+          onChange={handleMiscChange}
           focusOnMe={
             selectedFieldIndex === fields.map(f => f.field).indexOf(field) &&
             focusOnPlayerIndex >= 0 &&
@@ -140,14 +136,14 @@ export const PlayForm = (props: {
       ));
     } else {
       return (
-        <MetadataTextField
-          field={field as GameMiscFieldDefinition}
+        <PlayFormMiscField
+          field={field}
           play={play}
           onFocus={e => {}}
           player={undefined}
           key={field.id}
-          onKeyDown={e => handleKeyDown(e, field)}
-          onHandleMiscChange={handleMiscChange}
+          onKeyDown={handleKeyDown}
+          onChange={handleMiscChange}
           focusOnMe={
             selectedFieldIndex === fields.map(f => f.field).indexOf(field)
           }
@@ -157,13 +153,14 @@ export const PlayForm = (props: {
   };
 
   const renderScoreField = (field: GameScoreFieldDefinition) => {
-    return players.map(p => (<div key={p.id}>
-      <PlayFormScoreInput
+    return players.map(p => (
+      <PlayFormScoreField
         player={p}
         field={field}
-        scores={play}
+        play={play}
+        key={p.id}
         onFocus={() => onFocus(p)}
-        onKeyDown={e => handleKeyDown(e, field)}
+        onKeyDown={handleKeyDown}
         onChange={handleScoreChange}
         focusOnMe={
           selectedFieldIndex === game.scoreFields.indexOf(field) &&
@@ -171,7 +168,7 @@ export const PlayForm = (props: {
           p.id === players[focusOnPlayerIndex].id
         }
       />
-    </div>));
+    ));
   };
   const onPreviousClick = () => {
     // Move to previous field
@@ -217,7 +214,7 @@ export const PlayForm = (props: {
 
             {type === "misc"
               ? renderMiscField(field as GameMiscFieldDefinition)
-              : renderScoreField(field)}
+              : renderScoreField(field as GameScoreFieldDefinition)}
 
             <Button
               variant="outlined"
@@ -246,77 +243,6 @@ export const PlayForm = (props: {
       >
         Save
       </Button>
-    </div>
-  );
-};
-
-const MetadataTextField = (props: {
-  field: GameMiscFieldDefinition;
-  play: Play;
-  onHandleMiscChange: (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-    >,
-    field: GameScoreFieldDefinition,
-    playerId: string | undefined
-  ) => void;
-  focusOnMe: boolean;
-  onFocus: (
-    e: React.FocusEvent<
-      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-    >
-  ) => void;
-  onKeyDown: (e: React.KeyboardEvent<HTMLDivElement>) => void;
-  player: Player | undefined;
-}) => {
-  const inputRef = useRef<HTMLInputElement>(null);
-  const {
-    field,
-    play,
-    onHandleMiscChange,
-    focusOnMe,
-    onFocus,
-    onKeyDown,
-    player
-  } = props;
-  const playerId = player ? player.id : undefined;
-
-  useEffect(() => {
-    if (focusOnMe) {
-      if (inputRef != null && inputRef.current != null) {
-        inputRef.current.focus();
-      }
-    }
-  }, [focusOnMe]);
-
-  const inputProps = {
-    ref: inputRef,
-    min: field.minValue,
-    max: field.maxValue,
-    step: field.step
-  };
-
-  return (
-    <div key={field.id}>
-      <TextField
-        margin="dense"
-        inputProps={inputProps}
-        type={field.type}
-        variant="outlined"
-        label={player ? player.name : field.name}
-        onFocus={e => (focusOnMe ? () => {} : onFocus(e))}
-        onKeyDown={onKeyDown}
-        value={
-          (
-            play.misc.find(
-              m => m.fieldId === field.id && m.playerId === playerId
-            ) || ({} as any)
-          ).data ||
-          (field.getDefaultValue && field.getDefaultValue()) ||
-          ""
-        }
-        onChange={e => onHandleMiscChange(e, field, playerId)}
-      />
     </div>
   );
 };

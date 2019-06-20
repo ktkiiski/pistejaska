@@ -1,13 +1,12 @@
 import React, { useRef, useEffect } from "react";
-import { Player, Play } from "./domain/play";
-import { GameScoreFieldDefinition } from "./domain/game";
-import { TextField, FormControl, InputLabel, Select, OutlinedInput } from "@material-ui/core";
+import { GameFieldDefinition, GameFieldOption } from "./domain/game";
+import { TextField } from "@material-ui/core";
 
-interface PlayFormScoreInputProps {
-  player: Player;
-  field: GameScoreFieldDefinition;
-  scores: Play;
-  onChange: (score: number | null, field: GameScoreFieldDefinition, player: Player) => void;
+interface PlayFormFieldProps<T, F extends GameFieldDefinition<T>> {
+  value: T | null,
+  field: F;
+  label: string;
+  onChange: (score: T | null, field: F) => void;
   focusOnMe: boolean;
   onFocus: (
     e: React.FocusEvent<
@@ -15,18 +14,22 @@ interface PlayFormScoreInputProps {
     >
   ) => void;
   onKeyDown: (e: React.KeyboardEvent<HTMLDivElement>) => void;
+  id?: string;
 }
 
-export const PlayFormScoreInput = (props: PlayFormScoreInputProps) => {
+export function PlayFormField<T extends string | number, F extends GameFieldDefinition<T>>(
+  props: PlayFormFieldProps<T, F>,
+) {
   const inputRef = useRef<HTMLInputElement>(null);
   const {
-    player,
+    value,
     field,
-    scores,
+    label,
     onChange,
     focusOnMe,
     onFocus,
-    onKeyDown
+    onKeyDown,
+    id,
   } = props;
 
   useEffect(() => {
@@ -35,49 +38,44 @@ export const PlayFormScoreInput = (props: PlayFormScoreInputProps) => {
     }
   }, [focusOnMe]);
 
-  const playerTotalScore =
-    scores.scores
-      .filter(s => s.playerId === player.id)
-      .map(s => s.score)
-      .reduce((s, memo) => s + memo, 0) || 0;
-
-  const inputProps = {
+  const inputProps = field.type === 'number' ? {
     ref: inputRef,
     min: field.minValue,
     max: field.maxValue,
-    step: field.step
+    step: field.step,
+  } : {
+    ref: inputRef,
   };
 
-  const scoreItem = scores.scores.find(
-    s => s.fieldId === field.id && s.playerId === player.id
-  );
-  const scoreValue = scoreItem ? scoreItem.score : "";
-  const labelText = `${player.name} (${playerTotalScore} pts)`;
   const onValueChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     let value = event.currentTarget.value as number | string | null;
-    if (value === '') {
+    if (value === '' || value == null) {
       // Chose a blank option
       value = null;
-    } else if (typeof value === 'string') {
-      value = parseInt(value, 10);
+    } else if (field.type === 'number') {
+      value = typeof value === 'string' ? parseInt(value, 10) : value;
+      if (Number.isNaN(value)) {
+        value = null;
+      }
+    } else {
+      value = String(value);
     }
-    const score = value == null || Number.isNaN(value) ? null : value;
-    onChange(score, field, player);
+    onChange(value as T | null, field);
   };
 
-  const { options } = field;
+  const options = field.options as Array<GameFieldOption<string | number>> | undefined;
   if (options) {
     // Only allow choosing from pre-defined options.
     // If 0 is one of the allowed options, then let the zero option be seem
     // to be selected by default. Otherwise a blank option is selected by default.
-    const hasZeroOption = options.some(({value}) => value === 0);
-    const selectedScore = !scoreValue && hasZeroOption ? 0 : scoreValue;
-    const hasSelectedValidOption = options.some(({value}) => value === selectedScore);
-    return (
+    const hasZeroOption = options.some(option => option.value === 0);
+    const selectedValue = !value && hasZeroOption ? 0 : value || '';
+    const hasSelectedValidOption = options.some(option => option.value === selectedValue);
+    return (<div>
       <TextField
         select
-        label={labelText}
-        value={selectedScore}
+        label={label}
+        value={selectedValue}
         onChange={onValueChange}
         SelectProps={{ native: true }}
         margin="dense"
@@ -90,21 +88,21 @@ export const PlayFormScoreInput = (props: PlayFormScoreInputProps) => {
           ))
         }
       </TextField>
-    );
+    </div>);
   }
 
-  return (
+  return (<div>
     <TextField
       margin="dense"
       inputProps={inputProps}
-      type="number"
+      type={field.type === "number" ? "number" : "text"}
       variant="outlined"
-      label={labelText}
+      label={label}
       onFocus={e => (focusOnMe ? () => {} : onFocus(e))}
       onKeyDown={onKeyDown}
-      value={scoreValue}
+      value={value == null ? '' : value}
       onChange={onValueChange}
-      id={field.name.replace(" ", "_").concat(player.id)}
+      id={id}
     />
-  );
+  </div>);
 };
