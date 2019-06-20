@@ -53,7 +53,7 @@ export function PlayFormField<T extends string | number, F extends GameFieldDefi
       // Chose a blank option
       value = null;
     } else if (field.type === 'number') {
-      value = typeof value === 'string' ? parseInt(value, 10) : value;
+      value = typeof value === 'string' ? parseFloat(value) : value;
       if (Number.isNaN(value)) {
         value = null;
       }
@@ -77,6 +77,9 @@ export function PlayFormField<T extends string | number, F extends GameFieldDefi
         label={label}
         value={selectedValue}
         onChange={onValueChange}
+        onFocus={e => (focusOnMe ? () => {} : onFocus(e))}
+        onKeyDown={onKeyDown}
+        inputProps={{ ref: inputRef }}
         SelectProps={{ native: true }}
         margin="dense"
         variant="outlined"
