@@ -45,3 +45,8 @@ Master branch of this project is automatically built & hosted in Netlify (https:
 - save every change to localstorage (or even to server?) to prevent accidental data loss
 - celebration page on save to see the winner with konfetti animation
 - support for determining winner on tie situations (tie breaker)
+
+## Known issues
+
+- automatic focus does not work on option field (the questions cannot be traversed with tabulator)
+- cannot set decimals as game duration, only integers allowed (should allow stepping by 0.1)
