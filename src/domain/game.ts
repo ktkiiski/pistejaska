@@ -32,7 +32,7 @@ export class Game implements GameDefinition {
         id: "duration",
         name: "Duration (in hours)",
         type: "number",
-        step: "any"
+        step: 0.1,
       },
       {
         id: "location",
@@ -101,7 +101,7 @@ export interface GameFieldDefinition<T> {
   // The min, max and step values for the value. Only meaninful for numerif fields
   minValue?: T;
   maxValue?: T;
-  step?: string;
+  step?: number;
 }
 
 export type GameScoreFieldDefinition = GameFieldDefinition<number>;
