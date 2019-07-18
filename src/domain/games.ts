@@ -269,8 +269,51 @@ const concordia: GameDefinition = {
       description: "Which side of the board was used?",
       options: [
         { value: "Italy", label: "Italy" },
-        { value: "Mediterranean", label: "Mediterranean" },
-      ],
+        { value: "Mediterranean", label: "Mediterranean" }
+      ]
+    }
+  ]
+};
+
+const dominantSpecies: GameDefinition = {
+  name: "Dominant Species",
+  id: "dominantSpecies",
+  icon:
+    "https://cf.geekdo-images.com/itemrep/img/4hl4RAfGaZTrQ3EkB9isK2RTHPo=/fit-in/246x300/pic784193.jpg",
+  scoreFields: [
+    {
+      id: "score",
+      name: "Scores",
+      type: "number",
+      minValue: 0
+    },
+    {
+      id: "iceAge",
+      name: "Ice age",
+      type: "number",
+      minValue: 0
+    },
+    {
+      id: "endScoring",
+      name: "End scoring",
+      type: "number",
+      minValue: 0
+    }
+  ],
+  miscFields: [
+    {
+      id: "animal",
+      name: "Animal",
+      type: "text",
+      valuePerPlayer: true,
+      options: [
+        { value: "Mammals", label: "Mammals" },
+        { value: "Reptiles", label: "Reptiles" },
+        { value: "Birds", label: "Birds" },
+        { value: "Amphibians", label: "Amphibians" },
+        { value: "Arachnids", label: "Arachnids" },
+        { value: "Insects", label: "Insects" }
+      ]
     }
   ]
 };
@@ -284,7 +327,8 @@ const gameDtos = [
   terraMystica,
   azul,
   welcomeTo,
-  concordia
+  concordia,
+  dominantSpecies
 ];
 
 export const games = gameDtos.map(g => new Game(g));
