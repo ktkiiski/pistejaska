@@ -40,23 +40,24 @@ export const PlayForm = (props: {
     field: GameScoreFieldDefinition,
     player: Player
   ) => {
-    if (score == null) {
-      // TODO: Should remove the score?
-      return;
-    }
-    if (field.maxValue === 0) score = -Math.abs(score);
-    if (field.minValue === 0) score = Math.abs(score);
-
     const oldScores = play.scores.filter(
       s => s.fieldId !== field.id || s.playerId !== player.id
     );
-    const newScores = oldScores.concat({
-      playerId: player.id,
-      fieldId: field.id,
-      score: score
-    });
 
-    setPlay(new Play({ ...play, ...{ scores: newScores } }));
+    if (score == null) {
+      setPlay(new Play({ ...play, ...{ scores: oldScores } }));
+    } else {
+      if (field.maxValue === 0) score = -Math.abs(score);
+      if (field.minValue === 0) score = Math.abs(score);
+
+      const newScores = oldScores.concat({
+        playerId: player.id,
+        fieldId: field.id,
+        score: score
+      });
+
+      setPlay(new Play({ ...play, ...{ scores: newScores } }));
+    }
   };
 
   const handleMiscChange = (
@@ -103,7 +104,9 @@ export const PlayForm = (props: {
     }
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement | HTMLDivElement>) => {
+  const handleKeyDown = (
+    e: React.KeyboardEvent<HTMLInputElement | HTMLDivElement>
+  ) => {
     if (
       e.keyCode == 9 || // android numpad enter/next button (tabulator in computer)
       e.keyCode == 13 // enter
@@ -172,9 +175,7 @@ export const PlayForm = (props: {
   };
   const onPreviousClick = () => {
     // Move to previous field
-    setSelectedFieldIndex(
-      selectedFieldIndex > 0 ? selectedFieldIndex - 1 : 0
-    );
+    setSelectedFieldIndex(selectedFieldIndex > 0 ? selectedFieldIndex - 1 : 0);
     // Reset focus to the first player
     setFocusOnPlayerIndex(0);
   };
