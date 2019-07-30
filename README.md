@@ -2,11 +2,17 @@
 
 With this web app you can easily track board game scores. The app provides support for adding different board game templates.
 
-Using the app requires Google login with whitelisted email. Emails are whitelisted on https://console.firebase.google.com/project/pistejaska-dev/database/firestore/rules
+Using the app requires Google login with whitelisted email. Emails are whitelisted on https://console.firebase.google.com/project/pistejaska-dev/database/firestore/rules. Ask panu.vuorinen@gmail.com for permissions.
+
+## Contributing
+
+- Manually test that Pistejaska still works
+- Update changelog
+- Make PR to https://bitbucket.org/panula/pistejaska-react/
 
 ## Requirements
 
-1. node.js
+1. node.js (7.6 or newer)
 
 ## Technology
 
@@ -44,7 +50,6 @@ Master branch of this project is automatically built & hosted in Netlify (https:
 - dropbown type for GameMiscFieldDefinition
 - save every change to localstorage (or even to server?) to prevent accidental data loss
 - celebration page on save to see the winner with konfetti animation
-- support for determining winner on tie situations (tie breaker)
 
 ## Known issues
 
