@@ -39,6 +39,16 @@ The major libraries used in this project: React.js, Firebase, Material UI.
 
 Master branch of this project is automatically built & hosted in Netlify (https://pistejaska.panu.dev)
 
+## Backups
+
+Are done manually by exporting data. Should automate this.
+
+1. Install gcloud (or use cloud shell https://console.cloud.google.com/?cloudshell=true)
+1. `gcloud config set project pistejaska-dev`
+1. `gcloud components install beta`
+1. `gcloud beta firestore export gs://pistejaska-dev-firestore-backups`
+1. Copy backups to Panu's dropbox (~\dev\pistejaska\backups) (optional)
+
 ## TODO
 
 - better authorization (see https://blog.jimmycai.com/p/firebase-limit-access-to-certain-domains/)
@@ -50,6 +60,7 @@ Master branch of this project is automatically built & hosted in Netlify (https:
 - dropbown type for GameMiscFieldDefinition
 - save every change to localstorage (or even to server?) to prevent accidental data loss
 - celebration page on save to see the winner with konfetti animation
+- better backups
 
 ## Known issues
 
