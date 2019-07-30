@@ -60,7 +60,7 @@ export const PlayView = (props: RouteComponentProps<any>) => {
       const playerName = (
         play.players.find(p => p.id === misc.playerId) || ({} as any)
       ).name;
-      return `${field.field.name} (${playerName}):`;
+      return `${field.field.name} (${playerName})`;
     }
     return field.field.name;
   };

@@ -32,7 +32,7 @@ export class Game implements GameDefinition {
         id: "duration",
         name: "Duration (in hours)",
         type: "number",
-        step: 0.1,
+        step: 0.1
       },
       {
         id: "location",
@@ -53,10 +53,28 @@ export class Game implements GameDefinition {
     ];
   }
 
+  private static getDefaultScoreFields(): GameScoreFieldDefinition[] {
+    return [
+      {
+        id: "tie-breaker",
+        name: "Tie breaker",
+        type: "number",
+        description:
+          "Give decimal scores (0.01) to tie-winning players to resolve ties",
+        step: 0.01,
+        maxValue: 0.1,
+        minValue: 0
+      }
+    ];
+  }
+
   public getFields(): GameFieldItem[] {
     const { scoreFields, miscFields = [] } = this;
     return [
       ...scoreFields.map(f => {
+        return { type: "score", field: f } as const;
+      }),
+      ...Game.getDefaultScoreFields().map(f => {
         return { type: "score", field: f } as const;
       }),
       ...miscFields.map(f => {
@@ -64,7 +82,7 @@ export class Game implements GameDefinition {
       }),
       ...Game.getDefaultMiscFields().map(f => {
         return { type: "misc", field: f } as const;
-      }),
+      })
     ];
   }
 }
@@ -77,11 +95,15 @@ export type GameDefinition = {
   miscFields?: GameMiscFieldDefinition[];
 };
 
-type GameFieldItem = {
-  type: "score", field: GameScoreFieldDefinition
-} | {
-  type: "misc", field: GameMiscFieldDefinition
-};
+type GameFieldItem =
+  | {
+      type: "score";
+      field: GameScoreFieldDefinition;
+    }
+  | {
+      type: "misc";
+      field: GameMiscFieldDefinition;
+    };
 
 export interface GameFieldOption<T> {
   value: T;
@@ -106,8 +128,10 @@ export interface GameFieldDefinition<T> {
 
 export type GameScoreFieldDefinition = GameFieldDefinition<number>;
 
-export type GameMiscFieldDefinition = (GameFieldDefinition<string> | GameFieldDefinition<number>) & {
+export type GameMiscFieldDefinition = (
+  | GameFieldDefinition<string>
+  | GameFieldDefinition<number>) & {
   valuePerPlayer?: boolean; // defaults to false
   getDefaultValue?: () => string;
   // TODO PANU: add affectsScoring
-}
+};

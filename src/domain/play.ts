@@ -53,8 +53,8 @@ export class Play implements PlayDTO {
   }
 
   public getTotal(player: Player) {
-    return sum(
-      this.scores.filter(s => s.playerId === player.id).map(s => s.score)
+    return Math.floor(
+      sum(this.scores.filter(s => s.playerId === player.id).map(s => s.score))
     );
   }
 
