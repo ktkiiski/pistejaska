@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## 2019-07-30
+
+### Added
+
+- Added support for resolving tie breakers
+
+### Changed
+
+- Allow inputting empty values
+
+### Fixed
+
+- Minor UI layout fix on play view
+
 ## 2019-06-20
 
 ### Added
@@ -18,6 +32,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Added Honshu game definition
+
+### Fixed
+
 - Minor UX fix: "Select players" => "Add players"
 
 ## 2019-03-31
