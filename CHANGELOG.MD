@@ -21,6 +21,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Minor UI layout fix on play view
 
+## 2019-07-18
+
+### Added
+
+- Added support for Dominant Species
+
 ## 2019-06-20
 
 ### Added
