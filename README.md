@@ -61,6 +61,7 @@ Are done manually by exporting data. Should automate this.
 - save every change to localstorage (or even to server?) to prevent accidental data loss
 - celebration page on save to see the winner with konfetti animation
 - better backups
+- generic variation support for games (e.g. different maps or different rules result in different scores that should be taken into account in reporting)
 
 ## Known issues
 

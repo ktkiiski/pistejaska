@@ -12,7 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Added support for resolving ties
-- Order games played on the same date correctly
+- Order plays played on the same date correctly on the play list
 - Show CHANGELOG.MD on UI
 
 ### Fixed
