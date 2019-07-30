@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Added support for resolving ties
 - Order games played on the same date correctly
+- Show CHANGELOG.MD on UI
 
 ### Fixed
 
@@ -23,7 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Added support for Dominant Species
+- Support for Dominant Species game
 
 ## 2019-06-20
 
@@ -35,7 +36,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Added Honshu game definition
+- Support for Honshu game
 
 ### Fixed
 

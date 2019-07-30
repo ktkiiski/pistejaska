@@ -13,6 +13,10 @@ import { SelectPlayers } from "./SelectPlayers";
 import { PlayEdit } from "./PlayEdit";
 import { PlayView } from "./PlayView";
 import { CircularProgress } from "@material-ui/core";
+import { MarkdownViewer } from "./MarkdownViewer";
+// TODO PANU: export theme to its own file
+import { ThemeProvider } from "@material-ui/styles";
+import { createMuiTheme } from "@material-ui/core/styles";
 
 var config = {
   apiKey: "AIzaSyDI_XDKW2vVftx7oUy1a_QTR5BE8j6S-Ds",
@@ -41,7 +45,7 @@ const App = () => {
   const app = !user ? (
     <Login />
   ) : (
-    <div>
+    <>
       <Route path="/" component={NavBar} />
       <Route path="/" exact component={PlayList} />
       <Route path="/view/:playId" component={PlayView} />
@@ -49,13 +53,23 @@ const App = () => {
       <Route path="/new/:gameId" component={SelectPlayers} />
       <Route path="/new/" exact component={SelectGame} />
       <Route path="/admin/" component={Admin} />
-    </div>
+      <Route
+        path="/whatsnew/"
+        render={props => <MarkdownViewer {...props} fileName="CHANGELOG" />}
+      />
+    </>
   );
 
+  const theme = createMuiTheme({
+    spacing: 0
+  });
+
   return (
-    <div className="App">
-      <Router>{app}</Router>
-    </div>
+    <ThemeProvider theme={theme}>
+      <div className="App">
+        <Router>{app}</Router>
+      </div>
+    </ThemeProvider>
   );
 };
 

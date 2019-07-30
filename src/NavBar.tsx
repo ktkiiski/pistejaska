@@ -53,11 +53,17 @@ export function NavBar(props: RouteComponentProps<{}>) {
               >
                 New
               </Button>
-              <Button
+              {/* <Button
                 color="inherit"
                 onClick={() => props.history.push("/admin")}
               >
                 Admin
+              </Button> */}
+              <Button
+                color="inherit"
+                onClick={() => props.history.push("/whatsnew")}
+              >
+                Changelog
               </Button>
               <Button color="inherit" onClick={() => logout()}>
                 Logout
