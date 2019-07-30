@@ -17,7 +17,8 @@ export const PlayNew = (props: { game: GameDefinition; players: Player[] }) => {
     id: playId,
     players: players,
     scores: [],
-    misc: Game.getDefaultMiscFieldValues()
+    misc: Game.getDefaultMiscFieldValues(),
+    created: new Date().toISOString()
   });
 
   useEffect(() => {

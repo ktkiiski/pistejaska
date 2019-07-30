@@ -12,13 +12,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Added support for resolving ties
-
-### Changed
-
-- Allow inputting empty values
+- Order games played on the same date correctly
 
 ### Fixed
 
+- Allow inputting empty values
 - Minor UI layout fix on play view
 
 ## 2019-07-18

@@ -32,7 +32,7 @@ export const PlayList = (props: RouteComponentProps<{}>) => {
     <div>
       <h3>Plays</h3>
       <List component="nav">
-        {orderBy(plays, p => -p.getDate().getTime()).map(play => (
+        {orderBy(plays, ["date", "created"], ["desc", "desc"]).map(play => (
           <ListItem button onClick={() => onSelectPlay(play)} key={play.id}>
             <ListItemIcon>
               <img width={30} height={30} src={getGame(play).icon} />
