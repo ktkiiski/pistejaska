@@ -62,8 +62,7 @@ export class Game implements GameDefinition {
         description:
           "Give decimal scores (0.01) to tie-winning players to resolve ties",
         step: 0.01,
-        maxValue: 0.1,
-        minValue: 0
+        maxValue: 0.1
       }
     ];
   }
