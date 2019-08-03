@@ -51,6 +51,7 @@ Are done manually by exporting data. Should automate this.
 
 ## TODO
 
+- read support for everyone, write support for whitelisted emails
 - better authorization (see https://blog.jimmycai.com/p/firebase-limit-access-to-certain-domains/)
 - allow game field definitions editing on UI
 - migrate old game scores from Google docs
@@ -59,6 +60,7 @@ Are done manually by exporting data. Should automate this.
 - celebration page on save to see the winner with konfetti animation
 - better backups
 - generic variation support for games (e.g. different maps or different rules result in different scores that should be taken into account in reporting)
+- automatic tests
 
 ## Known issues
 

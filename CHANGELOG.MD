@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## 2019-08-03
 
+### Added
+
+- Variants (like map, ruleset and add-ons) game fields to Terraforming Mars & to Dominant Species
+- Support for "boolean" type game fields
+- Support for "affects scoring" property of game fields
+
 ### Changed
 
 - Combined Welcome to game's Housing estate 1-6 fields to single Housing estate field

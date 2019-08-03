@@ -109,7 +109,7 @@ export interface GameFieldOption<T> {
 }
 
 export interface GameFieldDefinition<T> {
-  type: T extends number ? "number" : "date" | "text";
+  type: T extends number ? "number" : "date" | "text" | "boolean";
   // please use human-readable, slugified ids, like "terraforming-rating". Do not change once created!
   id: string;
   // A human-readable, short name for this field
@@ -118,7 +118,7 @@ export interface GameFieldDefinition<T> {
   description?: string;
   // If defined, then only allow choosing one of these values
   options?: Array<GameFieldOption<T>>;
-  // The min, max and step values for the value. Only meaninful for numerif fields
+  // The min, max and step values for the value. Only meaninful for numeric fields
   minValue?: T;
   maxValue?: T;
   step?: number;
@@ -131,5 +131,5 @@ export type GameMiscFieldDefinition = (
   | GameFieldDefinition<number>) & {
   valuePerPlayer?: boolean; // defaults to false
   getDefaultValue?: () => string;
-  // TODO PANU: add affectsScoring
+  affectsScoring?: boolean; // defaults to false, used in reporting to define if scores should be be filterable by this field. e.g play location does not affect scoring, but used add-ons will affect
 };

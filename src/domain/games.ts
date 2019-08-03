@@ -41,7 +41,30 @@ const terraFormingMars: GameDefinition = {
     { id: "cards", name: "Cards", type: "number", minValue: 0 }
   ],
   miscFields: [
-    { id: "generations", name: "Generations", type: "number", minValue: 0 }
+    { id: "generations", name: "Generations", type: "number", minValue: 0 },
+    {
+      id: "variant-advanced-cards",
+      name: "Variant: used advanced cards",
+      type: "boolean",
+      affectsScoring: true
+    },
+    {
+      id: "variant-map",
+      name: "Map",
+      type: "text",
+      affectsScoring: true,
+      options: [
+        { value: "Default", label: "Default" },
+        { value: "Hellas", label: "Hellas" },
+        { value: "Elysium", label: "Elysium" }
+      ]
+    },
+    {
+      id: "variant-venus-next",
+      name: "Variant: used Venus next",
+      type: "boolean",
+      affectsScoring: true
+    }
   ]
 };
 
@@ -371,6 +394,18 @@ const dominantSpecies: GameDefinition = {
         { value: "Amphibians", label: "Amphibians" },
         { value: "Arachnids", label: "Arachnids" },
         { value: "Insects", label: "Insects" }
+      ]
+    },
+    {
+      id: "variant-rules",
+      name: "Variant",
+      type: "text",
+      affectsScoring: true,
+      options: [
+        {
+          value: "Short game w/o all dominant cards",
+          label: "Short game w/o all dominant cards"
+        }
       ]
     }
   ]
