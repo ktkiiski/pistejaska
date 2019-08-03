@@ -66,7 +66,7 @@ export const PlayView = (props: RouteComponentProps<any>) => {
   };
 
   return (
-    <div>
+    <div style={{ paddingBottom: "1em" }}>
       <h3>Play</h3>
       <div>Played on {play.getDate().toLocaleDateString()}</div>
       {play.misc.map((misc, idx) => (

@@ -37,8 +37,14 @@ export function NavBar(props: RouteComponentProps<{}>) {
               */}
               <Typography
                 variant="h6"
-                style={{ flexGrow: 1, fontSize: "1em", paddingTop: "5px" }}
+                style={{
+                  flexGrow: 1,
+                  fontSize: "1em",
+                  paddingTop: "5px",
+                  cursor: "pointer"
+                }}
                 color="inherit"
+                onClick={() => props.history.push("/")}
               >
                 Pistejaska
               </Typography>
@@ -63,7 +69,7 @@ export function NavBar(props: RouteComponentProps<{}>) {
                 color="inherit"
                 onClick={() => props.history.push("/whatsnew")}
               >
-                Changelog
+                Changes
               </Button>
               <Button color="inherit" onClick={() => logout()}>
                 Logout

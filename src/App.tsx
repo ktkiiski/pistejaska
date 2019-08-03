@@ -36,12 +36,13 @@ const center = {
 };
 const App = () => {
   const { initialising, user } = useAuthState(firebase.auth());
-  if (initialising)
+  if (initialising) {
     return (
       <div style={center}>
         <CircularProgress />
       </div>
     );
+  }
   const app = !user ? (
     <Login />
   ) : (
@@ -61,7 +62,7 @@ const App = () => {
   );
 
   const theme = createMuiTheme({
-    spacing: 0
+    spacing: 2
   });
 
   return (
