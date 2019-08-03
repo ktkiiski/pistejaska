@@ -7,7 +7,11 @@ interface PlayFormScoreFieldProps {
   player: Player;
   field: GameScoreFieldDefinition;
   play: Play;
-  onChange: (score: number | null, field: GameScoreFieldDefinition, player: Player) => void;
+  onChange: (
+    score: number | null,
+    field: GameScoreFieldDefinition,
+    player: Player
+  ) => void;
   focusOnMe: boolean;
   onFocus: (
     e: React.FocusEvent<
@@ -18,19 +22,9 @@ interface PlayFormScoreFieldProps {
 }
 
 export const PlayFormScoreField = (props: PlayFormScoreFieldProps) => {
-  const {
-    player,
-    field,
-    play,
-    onChange,
-    ...fieldProps
-  } = props;
+  const { player, field, play, onChange, ...fieldProps } = props;
 
-  const playerTotalScore =
-    play.scores
-      .filter(s => s.playerId === player.id)
-      .map(s => s.score)
-      .reduce((s, memo) => s + memo, 0) || 0;
+  const playerTotalScore = play.getTotal(player);
 
   const scoreItem = play.scores.find(
     s => s.fieldId === field.id && s.playerId === player.id
@@ -39,12 +33,12 @@ export const PlayFormScoreField = (props: PlayFormScoreFieldProps) => {
   const labelText = `${player.name} (${playerTotalScore} pts)`;
   return (
     <PlayFormField
-        label={labelText}
-        field={field}
-        value={scoreValue}
-        id={field.name.replace(" ", "_").concat(player.id)}
-        onChange={(value, field) => onChange(value, field, player)}
-        {...fieldProps}
+      label={labelText}
+      field={field}
+      value={scoreValue}
+      id={field.name.replace(" ", "_").concat(player.id)}
+      onChange={(value, field) => onChange(value, field, player)}
+      {...fieldProps}
     />
   );
 };

@@ -11,8 +11,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Updated libraries
+- Combined Welcome to game's Housing estate 1-6 fields to single Housing estate field
 - Minor UI fixes
+
+### Technical
+
+- Updated libraries
+- Refactored persisted data model from custom to Firestore's native model
+- Renamed game ids to be consistently kebab-cased
 
 ## 2019-07-30
 

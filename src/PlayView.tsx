@@ -3,7 +3,7 @@ import { useCollection } from "react-firebase-hooks/firestore";
 import React from "react";
 import * as firebase from "firebase/app";
 import "firebase/firestore";
-import { Play, MiscDataDTO } from "./domain/play";
+import { Play, MiscDataDTO, PlayDTO } from "./domain/play";
 import {
   Button,
   Table,
@@ -20,7 +20,7 @@ export const PlayView = (props: RouteComponentProps<any>) => {
   const playId = props.match.params["playId"];
 
   const { error, loading, value } = useCollection(
-    firebase.firestore().collection("plays")
+    firebase.firestore().collection("plays-v1")
   );
 
   if (error) return <>Error: {error}</>;
@@ -32,7 +32,7 @@ export const PlayView = (props: RouteComponentProps<any>) => {
   if (!existing) {
     return <>Play not found!</>;
   }
-  const play = new Play(JSON.parse(existing.data().data));
+  const play = new Play(existing.data() as PlayDTO);
   const game = games.find(g => g.id === play.gameId);
   if (!game) return <>Game not found!</>;
 
@@ -46,7 +46,7 @@ export const PlayView = (props: RouteComponentProps<any>) => {
     if (!reallyDelete) return;
     const db = firebase.firestore();
     await db
-      .collection("plays")
+      .collection("plays-v1")
       .doc(playId)
       .delete();
 

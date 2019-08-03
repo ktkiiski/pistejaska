@@ -9,7 +9,7 @@ import { GameDefinition, Game } from "./domain/game";
 export const PlayNew = (props: { game: GameDefinition; players: Player[] }) => {
   const { game, players } = props;
 
-  const [playId, setPlayId] = useState(uuid());
+  const [playId, setPlayId] = useState(game.id + "-" + uuid());
   const [loading, setLoading] = useState(true);
 
   const play = new Play({
@@ -23,11 +23,9 @@ export const PlayNew = (props: { game: GameDefinition; players: Player[] }) => {
 
   useEffect(() => {
     const db = firebase.firestore();
-    db.collection("plays")
+    db.collection("plays-v1")
       .doc(playId)
-      .set({
-        data: JSON.stringify(play)
-      });
+      .set(play.toDTO());
     setLoading(false);
   }, [playId]);
 

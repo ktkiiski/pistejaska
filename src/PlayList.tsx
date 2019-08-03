@@ -10,7 +10,7 @@ import { orderBy } from "lodash";
 
 export const PlayList = (props: RouteComponentProps<{}>) => {
   const { error, loading, value } = useCollection(
-    firebase.firestore().collection("plays")
+    firebase.firestore().collection("plays-v1")
   );
 
   if (error)
@@ -22,7 +22,7 @@ export const PlayList = (props: RouteComponentProps<{}>) => {
 
   const plays: Play[] = loading
     ? []
-    : (value && value.docs.map(d => new Play(JSON.parse(d.data().data)))) || [];
+    : (value && value.docs.map(d => new Play(d.data() as any))) || [];
 
   const onSelectPlay = (play: Play) => props.history.push("/view/" + play.id);
   const getGame = (play: Play) =>

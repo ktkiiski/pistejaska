@@ -3,7 +3,7 @@ import { useCollection } from "react-firebase-hooks/firestore";
 import React from "react";
 import * as firebase from "firebase/app";
 import "firebase/firestore";
-import { Play } from "./domain/play";
+import { Play, PlayDTO } from "./domain/play";
 import { PlayForm } from "./PlayForm";
 import { games } from "./domain/games";
 
@@ -11,7 +11,7 @@ export const PlayEdit = (props: RouteComponentProps<any>) => {
   const playId = props.match.params["playId"];
 
   const { error, loading, value } = useCollection(
-    firebase.firestore().collection("plays")
+    firebase.firestore().collection("plays-v1")
   );
 
   if (loading) return <>Loading...</>;
@@ -21,16 +21,16 @@ export const PlayEdit = (props: RouteComponentProps<any>) => {
   if (!existing) {
     return <>Play not found!</>;
   }
-  const play = new Play(JSON.parse(existing.data().data));
+  const play = new Play(existing.data() as PlayDTO);
   const game = games.find(g => g.id === play.gameId);
   if (!game) return <>Game not found!</>;
 
   const onSave = async (play: Play) => {
     const db = firebase.firestore();
     await db
-      .collection("plays")
+      .collection("plays-v1")
       .doc(play.id)
-      .set({ data: JSON.stringify(play) });
+      .set(play.toDTO());
     props.history.push("/view/" + playId);
   };
   return <PlayForm game={game} play={play} onSave={play => onSave(play)} />;

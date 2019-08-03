@@ -22,7 +22,14 @@ export type MiscDataDTO = {
   data: string;
   playerId?: string | undefined;
 };
-export class Play implements PlayDTO {
+
+// describes class that can be persisted
+export abstract class Entity {
+  public toDTO() {
+    return JSON.parse(JSON.stringify(this));
+  }
+}
+export class Play extends Entity implements PlayDTO {
   misc: MiscDataDTO[];
   id: string;
   gameId: string;
@@ -32,6 +39,7 @@ export class Play implements PlayDTO {
   date: string;
 
   constructor(play: PlayDTO) {
+    super();
     this.id = play.id;
     this.gameId = play.gameId;
     this.scores = play.scores || [];

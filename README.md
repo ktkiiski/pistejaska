@@ -52,12 +52,9 @@ Are done manually by exporting data. Should automate this.
 ## TODO
 
 - better authorization (see https://blog.jimmycai.com/p/firebase-limit-access-to-certain-domains/)
-- show CHANGELOG.MD on UI
 - allow game field definitions editing on UI
-- migrate old game scores
-- fix data model in Firestore
+- migrate old game scores from Google docs
 - make reports based on score data
-- dropbown type for GameMiscFieldDefinition
 - save every change to localstorage (or even to server?) to prevent accidental data loss
 - celebration page on save to see the winner with konfetti animation
 - better backups
@@ -67,3 +64,4 @@ Are done manually by exporting data. Should automate this.
 
 - automatic focus does not work on option field (the questions cannot be traversed with tabulator)
 - cannot set decimals as game duration, only integers allowed (should allow stepping by 0.1)
+- PWA does not work

@@ -7,8 +7,18 @@ const azul: GameDefinition = {
     "https://cf.geekdo-images.com/itemrep/img/ql-0-t271LVGqbmWA1gdkIH7WvM=/fit-in/246x300/pic3718275.jpg",
   scoreFields: [
     { id: "score-tracker", name: "Score tracker", type: "number", minValue: 0 },
-    { id: "horizontal-lines", name: "Horizontal lines", type: "number", minValue: 0 },
-    { id: "vertical-lines", name: "Vertical lines", type: "number", minValue: 0 },
+    {
+      id: "horizontal-lines",
+      name: "Horizontal lines",
+      type: "number",
+      minValue: 0
+    },
+    {
+      id: "vertical-lines",
+      name: "Vertical lines",
+      type: "number",
+      minValue: 0
+    },
     { id: "full-colours", name: "Full colors", type: "number", minValue: 0 }
   ]
 };
@@ -19,7 +29,12 @@ const terraFormingMars: GameDefinition = {
   icon:
     "https://cf.geekdo-images.com/imagepage/img/sgZLoyg3KKeHvyHel8tZ2TIkXRw=/fit-in/900x600/filters:no_upscale()/pic3536616.jpg",
   scoreFields: [
-    { id: "terraforming-rating", name: "Terraforming rating", type: "number", minValue: 0 },
+    {
+      id: "terraforming-rating",
+      name: "Terraforming rating",
+      type: "number",
+      minValue: 0
+    },
     { id: "awards", name: "Awards", type: "number", minValue: 0 },
     { id: "milestones", name: "Milestones", type: "number", minValue: 0 },
     { id: "game-board", name: "Game board", type: "number", minValue: 0 },
@@ -48,11 +63,26 @@ const cavernaForgottenFolk: GameDefinition = {
       type: "number",
       maxValue: 0
     },
-    { id: "per-grain", name: "1/2p per grain (rounded up)", type: "number", minValue: 0 },
-    { id: "per-vegetable", name: "1p per vegetable", type: "number", minValue: 0 },
+    {
+      id: "per-grain",
+      name: "1/2p per grain (rounded up)",
+      type: "number",
+      minValue: 0
+    },
+    {
+      id: "per-vegetable",
+      name: "1p per vegetable",
+      type: "number",
+      minValue: 0
+    },
     { id: "per-ruby", name: "1p per ruby", type: "number", minValue: 0 },
     { id: "per-dwarf", name: "1p per dwarf", type: "number", minValue: 0 },
-    { id: "per-unused-space", name: "-1p per unused space", type: "number", maxValue: 0 },
+    {
+      id: "per-unused-space",
+      name: "-1p per unused space",
+      type: "number",
+      maxValue: 0
+    },
     {
       id: "game-board",
       name: "Furnishing tiles, pastures, mines",
@@ -104,14 +134,34 @@ const feastForOdin: GameDefinition = {
   scoreFields: [
     { id: "ships", name: "Ships", type: "number", minValue: 0 },
     { id: "emigrations", name: "Emigrations", type: "number", minValue: 0 },
-    { id: "exploration-boards", name: "Exploration boards", type: "number", minValue: 0 },
-    { id: "sheds-and-houses", name: "Sheds and houses", type: "number", minValue: 0 },
-    { id: "sheep-and-cattle", name: "Sheep and cattle", type: "number", minValue: 0 },
+    {
+      id: "exploration-boards",
+      name: "Exploration boards",
+      type: "number",
+      minValue: 0
+    },
+    {
+      id: "sheds-and-houses",
+      name: "Sheds and houses",
+      type: "number",
+      minValue: 0
+    },
+    {
+      id: "sheep-and-cattle",
+      name: "Sheep and cattle",
+      type: "number",
+      minValue: 0
+    },
     { id: "occupations", name: "Occupations", type: "number", minValue: 0 },
     { id: "silver", name: "Silver", type: "number", minValue: 0 },
     { id: "final-income", name: "Final income", type: "number", minValue: 0 },
     { id: "english-crown", name: "English crown", type: "number", minValue: 0 },
-    { id: "home-board", name: "Home board (negatives)", type: "number", maxValue: 0 },
+    {
+      id: "home-board",
+      name: "Home board (negatives)",
+      type: "number",
+      maxValue: 0
+    },
     {
       id: "exploration-boards",
       name: "Exploration boards (negatives)",
@@ -148,7 +198,7 @@ const honshu: GameDefinition = {
 
 const terraMystica: GameDefinition = {
   name: "Terra Mystica",
-  id: "terramystica",
+  id: "terra-mystica",
   icon:
     "https://cf.geekdo-images.com/imagepage/img/JS90_q_U-h5Xe9Dn2jTTky-FqOs=/fit-in/900x600/filters:no_upscale()/pic1356616.jpg",
   scoreFields: [
@@ -161,7 +211,7 @@ const terraMystica: GameDefinition = {
 
 const welcomeTo: GameDefinition = {
   name: "Welcome To…",
-  id: "welcome",
+  id: "welcome-to",
   icon:
     "https://cf.geekdo-images.com/imagepage/img/yNrp9LGw_S1mt8ggsQx0OHn_4MA=/fit-in/900x600/filters:no_upscale()/pic3761012.jpg",
   scoreFields: [
@@ -169,14 +219,19 @@ const welcomeTo: GameDefinition = {
     { id: "parks", name: "Parks", type: "number", minValue: 0 },
     { id: "pools", name: "Pools", type: "number", minValue: 0 },
     { id: "temp-agency", name: "Temp agency", type: "number", minValue: 0 },
-    { id: "housing-estates-1", name: "1-sized housing estates", type: "number", minValue: 0 },
-    { id: "housing-estates-2", name: "2-sized housing estates", type: "number", minValue: 0 },
-    { id: "housing-estates-3", name: "3-sized housing estates", type: "number", minValue: 0 },
-    { id: "housing-estates-4", name: "4-sized housing estates", type: "number", minValue: 0 },
-    { id: "housing-estates-5", name: "5-sized housing estates", type: "number", minValue: 0 },
-    { id: "housing-estates-6", name: "6-sized housing estates", type: "number", minValue: 0 },
+    {
+      id: "housing-estates",
+      name: "Housing estates (any size)",
+      type: "number",
+      minValue: 0
+    },
     { id: "bis", name: "Bis (negative)", type: "number", maxValue: 0 },
-    { id: "roundabout", name: "Roundabouts (negative)", type: "number", maxValue: 0 },
+    {
+      id: "roundabout",
+      name: "Roundabouts (negative)",
+      type: "number",
+      maxValue: 0
+    },
     {
       id: "building-permit-refusal",
       name: "Building permit refusal (negative)",
@@ -212,8 +267,8 @@ const concordia: GameDefinition = {
       id: "jupiter",
       name: "Jupiter",
       description: "1 VP per card for each house inside a non-brick city",
-    type: "number",
-    minValue: 0
+      type: "number",
+      minValue: 0
     },
     {
       id: "saturnus",
@@ -235,8 +290,8 @@ const concordia: GameDefinition = {
       id: "mars",
       name: "Mars",
       description: "2 VP per card for each colonist on the game board",
-    type: "number",
-    minValue: 0
+      type: "number",
+      minValue: 0
     },
     {
       id: "minerva",
@@ -251,13 +306,16 @@ const concordia: GameDefinition = {
       name: "Concordia",
       description: "Awarded to the player that ends the game",
       type: "number",
-      options: [{
-        value: 0,
-        label: "Did not end the game (0 VP)",
-      }, {
-        value: 7,
-        label: "Ended the game (7 VP)",
-      }],
+      options: [
+        {
+          value: 0,
+          label: "Did not end the game (0 VP)"
+        },
+        {
+          value: 7,
+          label: "Ended the game (7 VP)"
+        }
+      ]
     }
   ],
   miscFields: [
@@ -277,7 +335,7 @@ const concordia: GameDefinition = {
 
 const dominantSpecies: GameDefinition = {
   name: "Dominant Species",
-  id: "dominantSpecies",
+  id: "dominant-species",
   icon:
     "https://cf.geekdo-images.com/itemrep/img/4hl4RAfGaZTrQ3EkB9isK2RTHPo=/fit-in/246x300/pic784193.jpg",
   scoreFields: [
@@ -288,13 +346,13 @@ const dominantSpecies: GameDefinition = {
       minValue: 0
     },
     {
-      id: "iceAge",
+      id: "ice-age",
       name: "Ice age",
       type: "number",
       minValue: 0
     },
     {
-      id: "endScoring",
+      id: "end-scoring",
       name: "End scoring",
       type: "number",
       minValue: 0
