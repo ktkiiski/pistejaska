@@ -6,7 +6,7 @@ import "firebase/auth";
 import { NavBar } from "./NavBar";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { PlayList } from "./PlayList";
+import { PlayListContainer } from "./PlayListContainer";
 import { Admin } from "./Admin";
 import { SelectGame } from "./SelectGame";
 import { SelectPlayers } from "./SelectPlayers";
@@ -17,6 +17,7 @@ import { MarkdownViewer } from "./MarkdownViewer";
 // TODO PANU: export theme to its own file
 import { ThemeProvider } from "@material-ui/styles";
 import { createMuiTheme } from "@material-ui/core/styles";
+import { GameReportView } from "./GameReportView";
 
 var config = {
   apiKey: "AIzaSyDI_XDKW2vVftx7oUy1a_QTR5BE8j6S-Ds",
@@ -48,8 +49,9 @@ const App = () => {
   ) : (
     <>
       <Route path="/" component={NavBar} />
-      <Route path="/" exact component={PlayList} />
+      <Route path="/" exact component={PlayListContainer} />
       <Route path="/view/:playId" component={PlayView} />
+      <Route path="/reports/:gameId" component={GameReportView} />
       <Route path="/edit/:playId" component={PlayEdit} />
       <Route path="/new/:gameId" component={SelectPlayers} />
       <Route path="/new/" exact component={SelectGame} />

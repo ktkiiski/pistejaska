@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## 2019-08-12
 
+### Added
+
+- Simple game reports (min,avg&max winning scores)
+
 ### Changed
 
 - Changed PlayView table to be condensed & mobile-friendly
