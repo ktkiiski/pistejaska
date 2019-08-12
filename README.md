@@ -61,6 +61,7 @@ Are done manually by exporting data. Should automate this.
 - better backups
 - generic variation support for games (e.g. different maps or different rules result in different scores that should be taken into account in reporting)
 - automatic tests
+- consider refactoring components to presentational & container components
 
 ## Known issues
 

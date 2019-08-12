@@ -11,7 +11,10 @@ import {
   TableRow,
   TableCell,
   TableBody,
-  TableFooter
+  TableFooter,
+  makeStyles,
+  Paper,
+  withStyles
 } from "@material-ui/core";
 import { games } from "./domain/games";
 import { GameDefinition, GameMiscFieldDefinition } from "./domain/game";
@@ -92,47 +95,91 @@ export const PlayView = (props: RouteComponentProps<any>) => {
 };
 
 const PlayTable = (props: { game: GameDefinition; play: Play }) => {
+  const useStyles = makeStyles(theme => ({
+    root: {
+      width: "100%"
+    },
+    paper: {
+      marginTop: theme.spacing(3),
+      width: "100%",
+      overflowX: "auto",
+      marginBottom: theme.spacing(2),
+      paddingLeft: "4px"
+    },
+    table: {
+      maxWidth: "100%"
+    },
+    "@global": {
+      ".MuiTableCell-root": {
+        padding: "0",
+        fontSize: "0.8em"
+      }
+    }
+  }));
+
+  const classes = useStyles();
+  const highlightColor = "#f5f5f5";
   const { game, play } = props;
   return (
-    <div style={{ width: "auto", overflowX: "scroll" }}>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>Player</TableCell>
-            {play.players.map(p => (
-              <TableCell key={p.id}>
-                {`${play.getPosition(p)}. ${p.name}`}
-              </TableCell>
-            ))}
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {game.scoreFields.map(p => (
-            <TableRow key={p.id}>
-              <TableCell scope="row">{p.name}</TableCell>
-              {play.players.map(f => (
-                <TableCell scope="row" key={f.id}>
-                  {
-                    (
-                      play.scores.find(
-                        s => s.fieldId === p.id && s.playerId == f.id
-                      ) || ({} as any)
-                    ).score
-                  }
+    <div className={classes.root}>
+      <Paper className={classes.paper}>
+        <Table className={classes.table}>
+          <TableHead>
+            <TableRow>
+              <TableCell>Category</TableCell>
+              {play.players.map((p, idx) => (
+                <TableCell
+                  key={p.id}
+                  style={{
+                    backgroundColor: idx % 2 === 0 ? highlightColor : ""
+                  }}
+                >
+                  {`${play.getPosition(p)}. ${p.name}`}
                 </TableCell>
               ))}
             </TableRow>
-          ))}
-        </TableBody>
-        <TableFooter>
-          <TableRow>
-            <TableCell>Total</TableCell>
-            {play.players.map(f => (
-              <TableCell key={f.id}>{play.getTotal(f)}</TableCell>
+          </TableHead>
+          <TableBody>
+            {game.scoreFields.map(p => (
+              <TableRow key={p.id}>
+                <TableCell scope="row">{p.name}</TableCell>
+                {play.players.map((f, idx) => (
+                  <TableCell
+                    scope="row"
+                    key={f.id}
+                    style={{
+                      backgroundColor: idx % 2 === 0 ? highlightColor : ""
+                    }}
+                  >
+                    {
+                      (
+                        play.scores.find(
+                          s => s.fieldId === p.id && s.playerId == f.id
+                        ) || ({} as any)
+                      ).score
+                    }
+                  </TableCell>
+                ))}
+              </TableRow>
             ))}
-          </TableRow>
-        </TableFooter>
-      </Table>
+          </TableBody>
+          <TableFooter>
+            <TableRow>
+              <TableCell>Total</TableCell>
+              {play.players.map((f, idx) => (
+                <TableCell
+                  key={f.id}
+                  style={{
+                    backgroundColor: idx % 2 === 0 ? highlightColor : ""
+                  }}
+                >
+                  {play.getTotal(f)}
+                </TableCell>
+              ))}
+            </TableRow>
+          </TableFooter>
+        </Table>
+      </Paper>
     </div>
   );
 };

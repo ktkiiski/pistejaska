@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## 2019-08-12
+
+### Changed
+
+- Changed PlayView table to be condensed & mobile-friendly
+
 ## 2019-08-03
 
 ### Added

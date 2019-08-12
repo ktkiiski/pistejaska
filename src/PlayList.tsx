@@ -13,12 +13,13 @@ export const PlayList = (props: RouteComponentProps<{}>) => {
     firebase.firestore().collection("plays-v1")
   );
 
-  if (error)
+  if (error) {
     return (
       <div>
         Permission denied. Ask permissions from panu.vuorinen@gmail.com.
       </div>
     );
+  }
 
   const plays: Play[] = loading
     ? []
