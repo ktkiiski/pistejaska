@@ -14,7 +14,7 @@ export const SelectPlayers = (
   props: RouteComponentProps<{ gameId: string }>
 ) => {
   const game = games.find(g => g.id === props.match.params["gameId"]);
-  if (game == null) throw new Error("unknown game");
+  if (game === undefined) throw new Error("unknown game");
 
   const [players, setPlayers] = useState<Player[]>([]);
   const [isStarted, setIsStarted] = useState<boolean>(false);

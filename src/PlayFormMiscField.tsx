@@ -1,9 +1,9 @@
-import React from 'react';
+import React from "react";
 import { PlayFormField } from "./PlayFormField";
 import { Player, Play } from "./domain/play";
 import { GameMiscFieldDefinition } from "./domain/game";
 
-interface PlayFormMiscFieldProps {
+type PlayFormMiscFieldProps = {
   field: GameMiscFieldDefinition;
   play: Play;
   onChange: (
@@ -19,25 +19,18 @@ interface PlayFormMiscFieldProps {
   ) => void;
   onKeyDown: (e: React.KeyboardEvent<HTMLDivElement>) => void;
   player?: Player;
-}
+};
 
 export const PlayFormMiscField = (props: PlayFormMiscFieldProps) => {
-  const {
-    field,
-    play,
-    onChange,
-    player,
-    ...fieldProps
-  } = props;
+  const { field, play, onChange, player, ...fieldProps } = props;
   const playerId = player && player.id;
-  const value = (
-      play.misc.find(
-        m => m.fieldId === field.id && m.playerId === playerId
-      ) || ({} as any)
+  const value =
+    (
+      play.misc.find(m => m.fieldId === field.id && m.playerId === playerId) ||
+      ({} as any)
     ).data ||
     (field.getDefaultValue && field.getDefaultValue()) ||
-    null
-  ;
+    null;
   return (
     <PlayFormField
       value={value}

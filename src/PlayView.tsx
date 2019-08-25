@@ -13,8 +13,7 @@ import {
   TableBody,
   TableFooter,
   makeStyles,
-  Paper,
-  withStyles
+  Paper
 } from "@material-ui/core";
 import { games } from "./domain/games";
 import { GameDefinition, GameMiscFieldDefinition } from "./domain/game";
@@ -43,7 +42,7 @@ export const PlayView = (props: RouteComponentProps<any>) => {
   const onBack = () => props.history.push("/");
 
   const onDelete = async () => {
-    const reallyDelete = await confirm(
+    const reallyDelete = await window.confirm(
       `Do you really want to delete play ${play.getName()}?`
     );
     if (!reallyDelete) return;
@@ -154,7 +153,7 @@ const PlayTable = (props: { game: GameDefinition; play: Play }) => {
                     {
                       (
                         play.scores.find(
-                          s => s.fieldId === p.id && s.playerId == f.id
+                          s => s.fieldId === p.id && s.playerId === f.id
                         ) || ({} as any)
                       ).score
                     }

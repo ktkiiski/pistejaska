@@ -17,7 +17,7 @@ export const GameReportList = (props: RouteComponentProps<{}>) => {
         {orderBy(games, g => g.name.toLowerCase()).map(game => (
           <ListItem button onClick={() => onSelectGame(game)} key={game.id}>
             <ListItemIcon>
-              <img width={30} height={30} src={game.icon} />
+              <img width={30} height={30} src={game.icon} alt={game.name} />
             </ListItemIcon>
             <ListItemText primary={game.name} />
           </ListItem>

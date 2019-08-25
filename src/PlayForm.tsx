@@ -44,7 +44,7 @@ export const PlayForm = (props: {
       s => s.fieldId !== field.id || s.playerId !== player.id
     );
 
-    if (score == null) {
+    if (score === null) {
       setPlay(new Play({ ...play, ...{ scores: oldScores } }));
     } else {
       if (field.maxValue === 0) score = -Math.abs(score);
@@ -108,8 +108,8 @@ export const PlayForm = (props: {
     e: React.KeyboardEvent<HTMLInputElement | HTMLDivElement>
   ) => {
     if (
-      e.keyCode == 9 || // android numpad enter/next button (tabulator in computer)
-      e.keyCode == 13 // enter
+      e.keyCode === 9 || // android numpad enter/next button (tabulator in computer)
+      e.keyCode === 13 // enter
     ) {
       onSetFocusToNext();
     }

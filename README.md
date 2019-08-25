@@ -23,8 +23,10 @@ The major libraries used in this project: React.js, Firebase, Material UI.
 ## Recommended editor experience
 
 1. VS Code
-1. Prettier (with format on save)
-1. TSLint
+1. [Prettier extension](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
+1. Prettier extension (with format on save enabled)
+1. [Eslint extension](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
+1. Format on save enabled: `"editor.formatOnSave": true`
 
 ## Developing
 
@@ -51,11 +53,12 @@ Are done manually by exporting data. Should automate this.
 
 ## TODO
 
+- support automatic game length detection
 - read support for everyone, write support for whitelisted emails
 - better authorization (see https://blog.jimmycai.com/p/firebase-limit-access-to-certain-domains/)
 - allow game field definitions editing on UI
 - migrate old game scores from Google docs
-- make reports based on score data
+- make better reports based on score data
 - save every change to localstorage (or even to server?) to prevent accidental data loss
 - celebration page on save to see the winner with konfetti animation
 - better backups

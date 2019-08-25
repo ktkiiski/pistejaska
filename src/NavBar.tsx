@@ -1,15 +1,6 @@
-import {
-  AppBar,
-  Toolbar,
-  IconButton,
-  Typography,
-  Button,
-  Grid
-} from "@material-ui/core";
+import { AppBar, Toolbar, Typography, Button, Grid } from "@material-ui/core";
 import React from "react";
-import MenuIcon from "@material-ui/icons/Menu";
-import { Login } from "./Login";
-import { Link, RouteComponentProps } from "react-router-dom";
+import { RouteComponentProps } from "react-router-dom";
 import * as firebase from "firebase/app";
 import "firebase/auth";
 

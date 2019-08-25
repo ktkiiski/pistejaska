@@ -8,9 +8,18 @@ import { PlayList } from "./PlayList";
 import { GameReportList } from "./GameReportList";
 
 export const PlayListContainer = (props: RouteComponentProps<{}>) => {
-  const { error, loading, value } = useCollection(
-    firebase.firestore().collection("plays-v1")
-  );
+  const { error } = useCollection(firebase.firestore().collection("plays-v1"));
+
+  const [selectedTab, setSelectedTab] = React.useState(0);
+
+  const useStyles = makeStyles(() => ({
+    root: {
+      flexGrow: 1
+      // backgroundColor: theme.palette.background.default
+    }
+  }));
+
+  const classes = useStyles();
 
   if (error) {
     return (
@@ -20,17 +29,8 @@ export const PlayListContainer = (props: RouteComponentProps<{}>) => {
     );
   }
 
-  const [selectedTab, setSelectedTab] = React.useState(0);
-
-  const useStyles = makeStyles(theme => ({
-    root: {
-      flexGrow: 1
-      // backgroundColor: theme.palette.background.default
-    }
-  }));
-
   return (
-    <div className={useStyles().root}>
+    <div className={classes.root}>
       {/* <AppBar position="static"> */}
       <Tabs
         value={selectedTab}

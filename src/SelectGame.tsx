@@ -13,8 +13,9 @@ export const SelectGame = (props: RouteComponentProps<{}>) => {
     props.history.push("/new/" + game.id);
 
   const [searchTerm, setSearchTerm] = useState("");
-  const listedGames = games.map((game) => ({
-    ...game, lowercaseName: game.name.toLowerCase(),
+  const listedGames = games.map(game => ({
+    ...game,
+    lowercaseName: game.name.toLowerCase()
   }));
   listedGames.sort(({ lowercaseName: name1 }, { lowercaseName: name2 }) => {
     return name1 > name2 ? 1 : name1 < name2 ? -1 : 0;
@@ -34,7 +35,7 @@ export const SelectGame = (props: RouteComponentProps<{}>) => {
           .map(game => (
             <ListItem button onClick={() => onSelectGame(game)} key={game.id}>
               <ListItemIcon>
-                <img width={30} height={30} src={game.icon} />
+                <img width={30} height={30} src={game.icon} alt={game.name} />
               </ListItemIcon>
               <ListItemText primary={game.name} />
             </ListItem>

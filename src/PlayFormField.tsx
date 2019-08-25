@@ -53,7 +53,7 @@ export function PlayFormField<
 
   const onValueChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     let value = event.currentTarget.value as number | string | null;
-    if (value === "" || value == null) {
+    if (value === "" || value === null) {
       // Chose a blank option
       value = null;
     } else if (field.type === "number") {
@@ -121,7 +121,7 @@ export function PlayFormField<
         label={label}
         onFocus={e => (focusOnMe ? () => {} : onFocus(e))}
         onKeyDown={onKeyDown}
-        value={value == null ? "" : value}
+        value={value === null ? "" : value}
         onChange={onValueChange}
         id={id}
       />

@@ -59,9 +59,6 @@ export const GameReportView = (props: RouteComponentProps<any>) => {
 
 const ReportTable = (props: { plays: Play[] }) => {
   const { plays } = props;
-  if (plays.length === 0) {
-    return <>No plays</>;
-  }
 
   const useStyles = makeStyles(theme => ({
     root: {
@@ -86,6 +83,10 @@ const ReportTable = (props: { plays: Play[] }) => {
   }));
 
   const classes = useStyles();
+
+  if (plays.length === 0) {
+    return <>No plays</>;
+  }
 
   const winnerScores = plays.map(p => p.getWinnerScores());
 
