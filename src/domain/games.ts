@@ -411,6 +411,28 @@ const dominantSpecies: GameDefinition = {
   ]
 };
 
+const splendor: GameDefinition = {
+  name: "Splendor",
+  id: "splendor",
+  icon:
+    "https://cf.geekdo-images.com/imagepage/img/pUmqbocA9S9-E37EkgCHMAL_HJ0=/fit-in/900x600/filters:no_upscale()/pic1904079.jpg",
+  scoreFields: [
+    {
+      id: "production",
+      name: "Production",
+      type: "number",
+      minValue: 0
+    },
+    {
+      id: "nobles",
+      name: "Nobles",
+      type: "number",
+      minValue: 0
+    }
+  ],
+  miscFields: []
+};
+
 const gameDtos = [
   terraFormingMars,
   eclipse,
@@ -421,7 +443,8 @@ const gameDtos = [
   azul,
   welcomeTo,
   concordia,
-  dominantSpecies
+  dominantSpecies,
+  splendor
 ];
 
 export const games = gameDtos.map(g => new Game(g));

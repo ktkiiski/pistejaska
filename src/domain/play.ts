@@ -1,4 +1,4 @@
-import { groupBy, sum, sortBy } from "lodash";
+import { groupBy, sum, sortBy, max } from "lodash";
 export type Player = {
   name: string;
   id: string;
@@ -70,6 +70,10 @@ export class Play extends Entity implements PlayDTO {
     return Math.floor(
       sum(this.scores.filter(s => s.playerId === player.id).map(s => s.score))
     );
+  }
+
+  public getWinnerScores() {
+    return max(this.players.map(p => this.getTotal(p)));
   }
 
   public getDate(): Date {

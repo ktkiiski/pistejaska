@@ -3,24 +3,18 @@ import { useCollection } from "react-firebase-hooks/firestore";
 import * as firebase from "firebase/app";
 import "firebase/firestore";
 import {
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
   makeStyles,
   Paper,
   Table,
   TableHead,
   TableRow,
   TableCell,
-  TableBody,
-  TableFooter
+  TableBody
 } from "@material-ui/core";
 import { Play } from "./domain/play";
 import { RouteComponentProps } from "react-router";
 import { games } from "./domain/games";
-import { orderBy, max, flatten } from "lodash";
-import { maxHeaderSize } from "http";
+import { max, min, mean } from "lodash";
 
 export const GameReportView = (props: RouteComponentProps<any>) => {
   const gameId = props.match.params["gameId"];
@@ -48,9 +42,7 @@ export const GameReportView = (props: RouteComponentProps<any>) => {
           .filter(p => p.gameId === gameId)) ||
       [];
 
-  const game = games.find(
-    g => g.id === (plays.length > 0 ? plays[0].gameId : "")
-  );
+  const game = games.find(g => g.id === gameId);
 
   if (!game) {
     return <>Error</>;
@@ -58,7 +50,8 @@ export const GameReportView = (props: RouteComponentProps<any>) => {
 
   return (
     <div>
-      <h3>{game.name}</h3>
+      <h3>Reports: {game.name}</h3>
+      <p>Based on {plays.length} plays.</p>
       <ReportTable plays={plays} />
     </div>
   );
@@ -94,10 +87,13 @@ const ReportTable = (props: { plays: Play[] }) => {
 
   const classes = useStyles();
 
+  const winnerScores = plays.map(p => p.getWinnerScores());
+
   const values = [
-    { name: "Max points", value: max(flatten(plays.map(p => p.scores))) }
+    { name: "Max winner score", value: max(winnerScores) },
+    { name: "Average winner score", value: mean(winnerScores) },
+    { name: "Min winner score", value: min(winnerScores) }
   ];
-  console.log(values);
 
   return (
     <div className={classes.root}>
@@ -106,7 +102,7 @@ const ReportTable = (props: { plays: Play[] }) => {
           <TableHead>
             <TableRow>
               <TableCell># of players</TableCell>
-              {["Any", "1", "2"].map((p, idx) => (
+              {["Any"].map(p => (
                 <TableCell key={p}>{p}</TableCell>
               ))}
             </TableRow>
