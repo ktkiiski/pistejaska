@@ -64,6 +64,12 @@ const terraFormingMars: GameDefinition = {
       name: "Variant: used Venus next",
       type: "boolean",
       affectsScoring: true
+    },
+    {
+      id: "variant-colonies",
+      name: "Variant: used Colonies",
+      type: "boolean",
+      affectsScoring: true
     }
   ]
 };
