@@ -89,6 +89,13 @@ export const PlayView = (props: RouteComponentProps<any>) => {
       <Button variant="contained" color="secondary" onClick={onDelete}>
         Delete
       </Button>
+      &nbsp;
+      <Button
+        variant="contained"
+        onClick={() => props.history.push("/reports/" + game.id)}
+      >
+        Show reports
+      </Button>
     </div>
   );
 };

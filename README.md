@@ -20,13 +20,16 @@ This project uses Firebase's authentication & Firestore as database. Admin is pa
 
 The major libraries used in this project: React.js, Firebase, Material UI.
 
-## Recommended editor experience
+## Developing
 
-1. VS Code
-1. [Prettier extension](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
-1. Prettier extension (with format on save enabled)
-1. [Eslint extension](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
-1. Format on save enabled: `"editor.formatOnSave": true`
+Please use eslint and prettier for code formatting & linting.
+
+Easiest way to achieve this is to
+
+- use VS Code
+- install [eslint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) extension
+- install [prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) extension
+- configure `"editor.formatOnSave": true` setting.
 
 ## Developing
 

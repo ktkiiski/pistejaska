@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## 2019-08-25
+
+### Added
+
+- Link to reports from play view
+
 ## 2019-08-18
 
 ### Added
