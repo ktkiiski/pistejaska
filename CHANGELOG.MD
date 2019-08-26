@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Link to reports from play view
+- "Colonies" variant to Terraforming Mars
 
 ## 2019-08-18
 
