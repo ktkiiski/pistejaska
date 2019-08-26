@@ -1,17 +1,13 @@
 import React from "react";
-import { useCollection } from "react-firebase-hooks/firestore";
-import * as firebase from "firebase/app";
-import "firebase/firestore";
 import { Tabs, Tab, makeStyles } from "@material-ui/core";
 import { RouteComponentProps } from "react-router";
 import { PlayList } from "./PlayList";
 import { GameReportList } from "./GameReportList";
+import { usePlays } from "./common/hooks/usePlays";
 
 export const PlayListContainer = (props: RouteComponentProps<{}>) => {
   // eslint-disable-next-line
-  const [value, loading, error] = useCollection(
-    firebase.firestore().collection("plays-v1")
-  );
+  const [value, loading, error] = usePlays();
 
   const [selectedTab, setSelectedTab] = React.useState(0);
 

@@ -1,7 +1,4 @@
 import React from "react";
-import { useCollection } from "react-firebase-hooks/firestore";
-import * as firebase from "firebase/app";
-import "firebase/firestore";
 import {
   makeStyles,
   Paper,
@@ -15,13 +12,12 @@ import { Play } from "./domain/play";
 import { RouteComponentProps } from "react-router";
 import { games } from "./domain/games";
 import { max, min, mean } from "lodash";
+import { usePlays } from "./common/hooks/usePlays";
 
 export const GameReportView = (props: RouteComponentProps<any>) => {
   const gameId = props.match.params["gameId"];
 
-  const [value, loading, error] = useCollection(
-    firebase.firestore().collection("plays-v1")
-  );
+  const [value, loading, error] = usePlays();
 
   if (error) {
     return (

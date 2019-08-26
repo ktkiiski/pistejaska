@@ -1,8 +1,5 @@
 import { RouteComponentProps } from "react-router";
-import { useCollection } from "react-firebase-hooks/firestore";
 import React from "react";
-import * as firebase from "firebase/app";
-import "firebase/firestore";
 import { Play, MiscDataDTO, PlayDTO } from "./domain/play";
 import {
   Button,
@@ -17,13 +14,13 @@ import {
 } from "@material-ui/core";
 import { games } from "./domain/games";
 import { GameDefinition, GameMiscFieldDefinition } from "./domain/game";
+import { usePlays } from "./common/hooks/usePlays";
+import firebase from "firebase";
 
 export const PlayView = (props: RouteComponentProps<any>) => {
   const playId = props.match.params["playId"];
 
-  const [value, loading, error] = useCollection(
-    firebase.firestore().collection("plays-v1")
-  );
+  const [value, loading, error] = usePlays();
 
   if (error) return <>Error: {error}</>;
 
