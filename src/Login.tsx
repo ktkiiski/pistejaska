@@ -12,7 +12,7 @@ export const Login = () => {
     left: "50%",
     transform: "translate(-50%, -50%)"
   };
-  const { initialising, user } = useAuthState(firebase.auth());
+  const [user, loading] = useAuthState(firebase.auth());
   const login = async () => {
     // NOTE: could change implementation, this requires 3rd party cookies
     var provider = new firebase.auth.GoogleAuthProvider();
@@ -24,7 +24,7 @@ export const Login = () => {
 
     return <div>Loading...</div>;
   };
-  if (initialising) {
+  if (loading) {
     return (
       <div>
         <p>Initialising User...</p>
@@ -40,8 +40,16 @@ export const Login = () => {
     );
   }
   return (
-    <Button style={center} onClick={login} variant="contained" color="primary">
-      Log in
-    </Button>
+    <>
+      <Button
+        style={center}
+        onClick={login}
+        variant="contained"
+        color="primary"
+      >
+        Log in
+      </Button>
+      3rd party cookies must be enabled
+    </>
   );
 };

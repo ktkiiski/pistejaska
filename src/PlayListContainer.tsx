@@ -8,7 +8,10 @@ import { PlayList } from "./PlayList";
 import { GameReportList } from "./GameReportList";
 
 export const PlayListContainer = (props: RouteComponentProps<{}>) => {
-  const { error } = useCollection(firebase.firestore().collection("plays-v1"));
+  // eslint-disable-next-line
+  const [value, loading, error] = useCollection(
+    firebase.firestore().collection("plays-v1")
+  );
 
   const [selectedTab, setSelectedTab] = React.useState(0);
 

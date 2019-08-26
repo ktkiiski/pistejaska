@@ -21,7 +21,7 @@ import { GameDefinition, GameMiscFieldDefinition } from "./domain/game";
 export const PlayView = (props: RouteComponentProps<any>) => {
   const playId = props.match.params["playId"];
 
-  const { error, loading, value } = useCollection(
+  const [value, loading, error] = useCollection(
     firebase.firestore().collection("plays-v1")
   );
 

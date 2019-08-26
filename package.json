@@ -5,7 +5,7 @@
   "dependencies": {
     "@material-ui/core": "^4.3.3",
     "@material-ui/icons": "^4.2.1",
-    "firebase": "^5.11.1",
+    "firebase": "^6.4.2",
     "github-markdown-css": "^2.10.0",
     "html-loader": "^0.5.5",
     "lodash": "^4.17.15",
@@ -14,7 +14,7 @@
     "marked": "^0.7.0",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
-    "react-firebase-hooks": "^1.2.1",
+    "react-firebase-hooks": "^2.1.0",
     "react-json-editor-ajrm": "^2.5.9",
     "react-router-dom": "^5.0.1",
     "react-scripts": "3.1.1",

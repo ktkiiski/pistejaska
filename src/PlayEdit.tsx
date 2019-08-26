@@ -10,7 +10,7 @@ import { games } from "./domain/games";
 export const PlayEdit = (props: RouteComponentProps<any>) => {
   const playId = props.match.params["playId"];
 
-  const { loading, value } = useCollection(
+  const [value, loading] = useCollection(
     firebase.firestore().collection("plays-v1")
   );
 

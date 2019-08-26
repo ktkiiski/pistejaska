@@ -19,7 +19,7 @@ import { max, min, mean } from "lodash";
 export const GameReportView = (props: RouteComponentProps<any>) => {
   const gameId = props.match.params["gameId"];
 
-  const { error, loading, value } = useCollection(
+  const [value, loading, error] = useCollection(
     firebase.firestore().collection("plays-v1")
   );
 

@@ -36,8 +36,8 @@ const center = {
   transform: "translate(-50%, -50%)"
 };
 const App = () => {
-  const { initialising, user } = useAuthState(firebase.auth());
-  if (initialising) {
+  const [user, loading] = useAuthState(firebase.auth());
+  if (loading) {
     return (
       <div style={center}>
         <CircularProgress />

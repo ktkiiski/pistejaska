@@ -9,7 +9,7 @@ import { games } from "./domain/games";
 import { orderBy } from "lodash";
 
 export const PlayList = (props: RouteComponentProps<{}>) => {
-  const { error, loading, value } = useCollection(
+  const [value, loading, error] = useCollection(
     firebase.firestore().collection("plays-v1")
   );
 
