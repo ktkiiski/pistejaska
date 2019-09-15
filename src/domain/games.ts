@@ -75,10 +75,10 @@ const terraFormingMars: GameDefinition = {
 };
 
 const cavernaForgottenFolk: GameDefinition = {
-  name: "Caverna: Forgotten folk",
-  id: "caverna-forgotten-folk",
+  name: "Caverna",
+  id: "caverna",
   icon:
-    "https://cf.geekdo-images.com/itemrep/img/SaQK25k1xKaJxmNJlBmtwT1HrWo=/fit-in/246x300/pic4268584.jpg",
+    "https://cf.geekdo-images.com/itemrep/img/QwBOuD-kVtDTkowpVQldIFv46m8=/fit-in/246x300/pic1790789.jpg",
   scoreFields: [
     {
       id: "farm-animal-and-dog",
@@ -131,7 +131,30 @@ const cavernaForgottenFolk: GameDefinition = {
       minValue: 0
     }
   ],
-  miscFields: [{ id: "race", name: "Race", type: "text", valuePerPlayer: true }]
+  miscFields: [
+    {
+      id: "variant-forgotten-folk",
+      name: "Variant: Forgotten folk",
+      type: "boolean",
+      affectsScoring: true
+    },
+    {
+      id: "race",
+      name: "Race (Only for Forgotten folk)",
+      type: "text",
+      valuePerPlayer: true,
+      options: [
+        { value: "Pale ones", label: "Pale ones" },
+        { value: "Humans", label: "Humans" },
+        { value: "Cave goblins", label: "Cave goblins" },
+        { value: "Dark elves", label: "Dark elves" },
+        { value: "Elves", label: "Elves" },
+        { value: "Mountain dwarves", label: "Mountain dwarves" },
+        { value: "Silicoids", label: "Silicoids" },
+        { value: "Trolls", label: "Trolls" }
+      ]
+    }
+  ]
 };
 
 const eclipse: GameDefinition = {

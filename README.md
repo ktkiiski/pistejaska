@@ -56,6 +56,9 @@ Are done manually by exporting data. Should automate this.
 
 ## TODO
 
+- estimate game outcomes when starting the game with SME (http://www.tckerrigan.com/Misc/Multiplayer_Elo/) (or similar) (https://www.npmjs.com/package/elo-rank)
+- reports (winrates, avg scores etc) for different races in asymmetrical games (like race in caverna or gameboard in wonders)
+- statistical analysis for strongest victory predictor (eg. number of dwarfs in caverna, player, race used)
 - support automatic game length detection
 - read support for everyone, write support for whitelisted emails
 - better authorization (see https://blog.jimmycai.com/p/firebase-limit-access-to-certain-domains/)
