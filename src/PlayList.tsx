@@ -7,7 +7,8 @@ import { orderBy } from "lodash";
 import { usePlays } from "./common/hooks/usePlays";
 
 export const PlayList = (props: RouteComponentProps<{}>) => {
-  const [value, loading, error] = usePlays();
+  // eslint-disable-next-line
+  const [plays, loading, error] = usePlays();
 
   if (error) {
     return (
@@ -16,10 +17,6 @@ export const PlayList = (props: RouteComponentProps<{}>) => {
       </div>
     );
   }
-
-  const plays: Play[] = loading
-    ? []
-    : (value && value.docs.map(d => new Play(d.data() as any))) || [];
 
   const onSelectPlay = (play: Play) => props.history.push("/view/" + play.id);
   const getGame = (play: Play) =>

@@ -1,6 +1,6 @@
 import { RouteComponentProps } from "react-router";
 import React from "react";
-import { Play, MiscDataDTO, PlayDTO } from "./domain/play";
+import { Play, MiscDataDTO } from "./domain/play";
 import {
   Button,
   Table,
@@ -20,18 +20,17 @@ import firebase from "firebase";
 export const PlayView = (props: RouteComponentProps<any>) => {
   const playId = props.match.params["playId"];
 
-  const [value, loading, error] = usePlays();
+  const [plays, loading, error] = usePlays();
 
   if (error) return <>Error: {error}</>;
 
   if (loading) return <>Loading...</>;
 
-  const existing = value && value.docs.find(d => d.id === playId);
+  const play = plays.find(d => d.id === playId);
 
-  if (!existing) {
+  if (!play) {
     return <>Play not found!</>;
   }
-  const play = new Play(existing.data() as PlayDTO);
   const game = games.find(g => g.id === play.gameId);
   if (!game) return <>Game not found!</>;
 

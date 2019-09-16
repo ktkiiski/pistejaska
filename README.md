@@ -46,6 +46,8 @@ Master branch of this project is automatically built & hosted in Netlify (https:
 
 ## Backups
 
+### Backup export
+
 Are done manually by exporting data. Should automate this.
 
 1. Install gcloud (or use cloud shell https://console.cloud.google.com/?cloudshell=true)
@@ -53,6 +55,14 @@ Are done manually by exporting data. Should automate this.
 1. `gcloud components install beta`
 1. `gcloud beta firestore export gs://pistejaska-dev-firestore-backups`
 1. Copy backups to Panu's dropbox (~\dev\pistejaska\backups) (optional)
+
+### Backup import
+
+1. Install gcloud (or use cloud shell https://console.cloud.google.com/?cloudshell=true)
+1. `gcloud config set project pistejaska-dev`
+1. `gcloud components install beta`
+1. Get backup name from https://console.cloud.google.com/storage/browser/pistejaska-dev-firestore-backups?project=pistejaska-dev
+1. `gcloud beta firestore import gs://pistejaska-dev-firestore-backups/{name}`
 
 ## TODO
 

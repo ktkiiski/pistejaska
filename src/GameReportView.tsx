@@ -17,7 +17,7 @@ import { usePlays } from "./common/hooks/usePlays";
 export const GameReportView = (props: RouteComponentProps<any>) => {
   const gameId = props.match.params["gameId"];
 
-  const [value, loading, error] = usePlays();
+  const [plays, loading, error] = usePlays();
 
   if (error) {
     return (
@@ -30,13 +30,7 @@ export const GameReportView = (props: RouteComponentProps<any>) => {
     return <>Loading...</>;
   }
 
-  const plays: Play[] = loading
-    ? []
-    : (value &&
-        value.docs
-          .map(d => new Play(d.data() as any))
-          .filter(p => p.gameId === gameId)) ||
-      [];
+  const gamePlays = plays.filter(p => p.gameId === gameId);
 
   const game = games.find(g => g.id === gameId);
 
@@ -47,8 +41,8 @@ export const GameReportView = (props: RouteComponentProps<any>) => {
   return (
     <div>
       <h3>Reports: {game.name}</h3>
-      <p>Based on {plays.length} plays.</p>
-      <ReportTable plays={plays} />
+      <p>Based on {gamePlays.length} plays.</p>
+      <ReportTable plays={gamePlays} />
     </div>
   );
 };

@@ -7,7 +7,7 @@ import { usePlays } from "./common/hooks/usePlays";
 
 export const PlayListContainer = (props: RouteComponentProps<{}>) => {
   // eslint-disable-next-line
-  const [value, loading, error] = usePlays();
+  const [plays, loading, error] = usePlays();
 
   const [selectedTab, setSelectedTab] = React.useState(0);
 
