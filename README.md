@@ -66,18 +66,15 @@ Are done manually by exporting data. Should automate this.
 
 ## TODO
 
-- estimate game outcomes when starting the game with SME (http://www.tckerrigan.com/Misc/Multiplayer_Elo/) (or similar) (https://www.npmjs.com/package/elo-rank)
-- reports (winrates, avg scores etc) for different races in asymmetrical games (like race in caverna or gameboard in wonders)
-- statistical analysis for strongest victory predictor (eg. number of dwarfs in caverna, player, race used)
+- reports (winrates, avg scores etc) for different races in asymmetrical games (like race in caverna or gameboard in 7 wonders)
+- statistical analysis for strongest victory predictor (eg. start order (is starting player more likely to win), number of dwarfs in caverna, player, race used)
+- generic reports: games by plays, longest/shortest games, best ELO rating for all games etc
 - support automatic game length detection
 - read support for everyone, write support for whitelisted emails
 - better authorization (see https://blog.jimmycai.com/p/firebase-limit-access-to-certain-domains/)
 - allow game field definitions editing on UI
-- migrate old game scores from Google docs
-- make better reports based on score data
 - save every change to localstorage (or even to server?) to prevent accidental data loss
 - celebration page on save to see the winner with konfetti animation
-- generic variation support for games (e.g. different maps or different rules result in different scores that should be taken into account in reporting)
 
 ### Technical debt
 
@@ -88,6 +85,4 @@ Are done manually by exporting data. Should automate this.
 
 ## Known issues
 
-- automatic focus does not work on option field (the questions cannot be traversed with tabulator)
-- cannot set decimals as game duration, only integers allowed (should allow stepping by 0.1)
 - PWA does not work

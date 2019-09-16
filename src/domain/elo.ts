@@ -35,6 +35,7 @@ export const calculateEloForPlayers = (plays: Play[]) => {
       const eloPlayer = allPlayers.find(p => p.id === player.id) || ({} as any);
 
       // TODO PANU: now most pairs are evaluated twice - is it good?
+      // TODO PANU: should change points AFTER all pairs are evaluated, not during evaluation?
       lostToPlayers.forEach(lostToPlayer => {
         const opponent =
           allPlayers.find(p => p.id === lostToPlayer.id) || ({} as any);

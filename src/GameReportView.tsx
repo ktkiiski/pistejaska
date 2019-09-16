@@ -39,9 +39,6 @@ export const GameReportView = (props: RouteComponentProps<any>) => {
     return <>Error</>;
   }
 
-  // TODO PANU: report if starting player affects the winner!
-  // TODO PANU: reports w/o game: ELO rating, duration => longest and shortest games (per player) :), games with the most plays
-
   return (
     <div>
       <h3>Reports: {game.name}</h3>

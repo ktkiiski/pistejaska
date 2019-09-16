@@ -74,6 +74,56 @@ const terraFormingMars: GameDefinition = {
   ]
 };
 
+const sevenWonders: GameDefinition = {
+  name: "7 Wonders",
+  id: "7-wonders",
+  icon:
+    "https://cf.geekdo-images.com/itemrep/img/fR5_q-7pMDmhLP8SPLOwPcUeLVo=/fit-in/246x300/pic860217.jpg",
+  scoreFields: [
+    {
+      id: "war",
+      name: "War",
+      type: "number"
+    },
+    { id: "money", name: "Money", type: "number" },
+    { id: "wonders", name: "Wonders", type: "number", minValue: 0 },
+    {
+      id: "civil-buildings",
+      name: "Civil buildings (blue)",
+      type: "number",
+      minValue: 0
+    },
+    {
+      id: "commercial-cards",
+      name: "Commercial buildings (yellow)",
+      type: "number",
+      minValue: 0
+    },
+    { id: "guilds", name: "Guilds (purple)", type: "number", minValue: 0 },
+    {
+      id: "science-buildings",
+      name: "Science buildings (green)",
+      type: "number",
+      minValue: 0
+    },
+    { id: "leaders", name: "Leaders", type: "number", minValue: 0 }
+  ],
+  miscFields: [
+    {
+      id: "variant-leaders",
+      name: "Variant: used Leaders",
+      type: "boolean",
+      affectsScoring: true
+    },
+    {
+      id: "variant-cities",
+      name: "Variant: used Cities",
+      type: "boolean",
+      affectsScoring: true
+    }
+  ]
+};
+
 const cavernaForgottenFolk: GameDefinition = {
   name: "Caverna",
   id: "caverna",
@@ -473,7 +523,8 @@ const gameDtos = [
   welcomeTo,
   concordia,
   dominantSpecies,
-  splendor
+  splendor,
+  sevenWonders
 ];
 
 export const games = gameDtos.map(g => new Game(g));
