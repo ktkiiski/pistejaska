@@ -5,6 +5,9 @@
   "dependencies": {
     "@material-ui/core": "^4.3.3",
     "@material-ui/icons": "^4.2.1",
+    "@types/elo-rank": "^1.0.0",
+    "elo-rank": "^1.0.3",
+    "elo-rating": "^1.0.1",
     "firebase": "^6.4.2",
     "github-markdown-css": "^2.10.0",
     "html-loader": "^0.5.5",

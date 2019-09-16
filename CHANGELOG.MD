@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Feature to select previously added players easily to new plays
+- ELO rating in reports view to find out the most skilled players (based on [SME](http://www.tckerrigan.com/Misc/Multiplayer_Elo/))
 
 ### Changed
 

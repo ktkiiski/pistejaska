@@ -45,6 +45,8 @@ export const SelectPlayers = (
 
   const onSelectPlayer = (player: Player) => {
     setPlayers([...players, player]);
+    setSearchTerm("");
+    setShowAllPlayers(false);
   };
 
   const onDeSelectPlayer = (player: Player) => {

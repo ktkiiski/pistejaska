@@ -2,6 +2,7 @@ import { groupBy, sum, sortBy, max } from "lodash";
 export type Player = {
   name: string;
   id: string;
+  elo?: number;
 };
 
 export type PlayDTO = {
@@ -50,7 +51,20 @@ export class Play extends Entity implements PlayDTO {
     this.date = dateField ? dateField.data : "";
   }
 
+  public getPlayersByPosition() {
+    const playerScores = sortBy(
+      this.players.map(p => {
+        return { player: p, scores: this.getTotal(p) };
+      }),
+      p => -p.scores
+    );
+
+    return playerScores.map(p => p.player);
+  }
+
   public getPosition(player: Player) {
+    // TODO PANU: if equal scores, give equal position! (unless tie breaker)
+    // TODO PANU: refactor to use getPlayersByPosition()
     const playersByScores = groupBy(this.scores, s => s.playerId);
     const playersByScore = Object.keys(playersByScores).map(p => {
       return {
@@ -60,9 +74,7 @@ export class Play extends Entity implements PlayDTO {
     });
 
     const id = player.id;
-    const positions = sortBy(playersByScore, p => p.score)
-      .map(p => p.id)
-      .reverse();
+    const positions = sortBy(playersByScore, p => -p.score).map(p => p.id);
     return positions.indexOf(id) + 1;
   }
 

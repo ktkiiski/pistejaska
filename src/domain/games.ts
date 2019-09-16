@@ -215,13 +215,13 @@ const feastForOdin: GameDefinition = {
       maxValue: 0
     },
     {
-      id: "exploration-boards",
+      id: "exploration-boards-negative",
       name: "Exploration boards (negatives)",
       type: "number",
       maxValue: 0
     },
     {
-      id: "sheds-and-houses",
+      id: "sheds-and-houses-negative",
       name: "Sheds and houses (negatives)",
       type: "number",
       maxValue: 0

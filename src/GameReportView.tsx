@@ -13,6 +13,7 @@ import { RouteComponentProps } from "react-router";
 import { games } from "./domain/games";
 import { max, min, mean } from "lodash";
 import { usePlays } from "./common/hooks/usePlays";
+import { calculateEloForPlayers } from "./domain/elo";
 
 export const GameReportView = (props: RouteComponentProps<any>) => {
   const gameId = props.match.params["gameId"];
@@ -38,11 +39,22 @@ export const GameReportView = (props: RouteComponentProps<any>) => {
     return <>Error</>;
   }
 
+  // TODO PANU: report if starting player affects the winner!
+  // TODO PANU: reports w/o game: ELO rating, duration => longest and shortest games (per player) :), games with the most plays
+
   return (
     <div>
       <h3>Reports: {game.name}</h3>
       <p>Based on {gamePlays.length} plays.</p>
       <ReportTable plays={gamePlays} />
+
+      <h4>Best players</h4>
+      <ReportPlayers plays={gamePlays}></ReportPlayers>
+
+      <p>
+        Calculated with{" "}
+        <a href="http://www.tckerrigan.com/Misc/Multiplayer_Elo/">SME</a>.
+      </p>
     </div>
   );
 };
@@ -103,6 +115,63 @@ const ReportTable = (props: { plays: Play[] }) => {
               <TableRow key={p.name}>
                 <TableCell scope="row">{p.name}</TableCell>
                 <TableCell scope="row">{p.value}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </Paper>
+    </div>
+  );
+};
+
+const ReportPlayers = (props: { plays: Play[] }) => {
+  const { plays } = props;
+
+  const useStyles = makeStyles(theme => ({
+    root: {
+      width: "100%"
+    },
+    paper: {
+      marginTop: theme.spacing(3),
+      width: "100%",
+      overflowX: "auto",
+      marginBottom: theme.spacing(2),
+      paddingLeft: "4px"
+    },
+    table: {
+      maxWidth: "100%"
+    },
+    "@global": {
+      ".MuiTableCell-root": {
+        padding: "0",
+        fontSize: "0.8em"
+      }
+    }
+  }));
+
+  const classes = useStyles();
+
+  if (plays.length === 0) {
+    return <>No plays</>;
+  }
+
+  const elo = calculateEloForPlayers(plays);
+
+  return (
+    <div className={classes.root}>
+      <Paper className={classes.paper}>
+        <Table className={classes.table}>
+          <TableHead>
+            <TableRow>
+              <TableCell>Name</TableCell>
+              <TableCell>ELO</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {elo.slice(0, 5).map(p => (
+              <TableRow key={p.name}>
+                <TableCell scope="row">{p.name}</TableCell>
+                <TableCell scope="row">{p.elo}</TableCell>
               </TableRow>
             ))}
           </TableBody>
