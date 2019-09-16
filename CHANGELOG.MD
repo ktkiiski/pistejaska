@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## 2019-09-16
+
+### Added
+
+- Feature to select previously added players easily to new plays
+
+### Changed
+
+- Migrated all existing players by removing duplicates and setting same Id for same person
+
 ## 2019-09-15
 
 ### Changed

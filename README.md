@@ -77,10 +77,14 @@ Are done manually by exporting data. Should automate this.
 - make better reports based on score data
 - save every change to localstorage (or even to server?) to prevent accidental data loss
 - celebration page on save to see the winner with konfetti animation
-- better backups
 - generic variation support for games (e.g. different maps or different rules result in different scores that should be taken into account in reporting)
-- automatic tests
+
+### Technical debt
+
+- denormalize players to their own root entity
 - consider refactoring components to presentational & container components
+- better backups
+- automatic tests
 
 ## Known issues
 
