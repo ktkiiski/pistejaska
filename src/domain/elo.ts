@@ -23,33 +23,33 @@ export const calculateEloForPlayers = (plays: Play[]) => {
   }
 
   const evaluatePlay = (play: Play) => {
-    const playersByPosition = play.getPlayersByPosition();
     orderBy(play.players, p => play.getPosition(p)).forEach(player => {
       // ELO is designed for 1v1 games so simulate 1v1 matches by making each
       // player play two games: winning player below and losing to player above.
-      const position = play.getPosition(player) - 1;
-      const lostToPlayer =
-        position > 0 ? playersByPosition[position - 1] : null;
-      const wonPlayer =
-        position < playersByPosition.length - 1
-          ? playersByPosition[position + 1]
-          : null;
+      // in case of ties all players one position up (or down) are evaluated
+      const position = play.getPosition(player);
+
+      const lostToPlayers = play.getPlayerOnePositionUpFrom(position);
+      const wonPlayers = play.getPlayerOnePositionDownFrom(position);
 
       const eloPlayer = allPlayers.find(p => p.id === player.id) || ({} as any);
-      if (lostToPlayer) {
+
+      // TODO PANU: now most pairs are evaluated twice - is it good?
+      lostToPlayers.forEach(lostToPlayer => {
         const opponent =
           allPlayers.find(p => p.id === lostToPlayer.id) || ({} as any);
         evaluate1v1(eloPlayer, opponent, false);
-      }
-      if (wonPlayer) {
+      });
+
+      wonPlayers.forEach(wonPlayer => {
         const opponent =
           allPlayers.find(p => p.id === wonPlayer.id) || ({} as any);
         evaluate1v1(eloPlayer, opponent, true);
-      }
+      });
     });
   };
 
-  orderBy(orderBy(plays, p => p.created), p => p.date).forEach(play => {
+  orderBy(plays, ["date", "created"], ["asc", "asc"]).forEach(play => {
     console.log("Evaluating play " + play.getName());
 
     evaluatePlay(play);

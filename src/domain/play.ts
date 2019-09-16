@@ -1,4 +1,4 @@
-import { groupBy, sum, sortBy, max } from "lodash";
+import { groupBy, sum, sortBy, max, uniq, values } from "lodash";
 export type Player = {
   name: string;
   id: string;
@@ -51,15 +51,30 @@ export class Play extends Entity implements PlayDTO {
     this.date = dateField ? dateField.data : "";
   }
 
-  public getPlayersByPosition() {
-    const playerScores = sortBy(
-      this.players.map(p => {
-        return { player: p, scores: this.getTotal(p) };
-      }),
-      p => -p.scores
-    );
+  private getPlayerByPosition(position: number): Player[] {
+    return this.players.filter(p => this.getPosition(p) === position);
+  }
 
-    return playerScores.map(p => p.player);
+  public getPlayerOnePositionUpFrom(position: number): Player[] {
+    if (position === 1) return [];
+
+    const allPositions = values(
+      uniq(this.players.map(p => this.getPosition(p)).sort())
+    );
+    const currentIdx = allPositions.indexOf(position);
+
+    return this.getPlayerByPosition(allPositions[currentIdx - 1]);
+  }
+
+  public getPlayerOnePositionDownFrom(position: number): Player[] {
+    if (position === this.players.length) return [];
+
+    const allPositions = values(
+      uniq(this.players.map(p => this.getPosition(p)).sort())
+    );
+    const currentIdx = allPositions.indexOf(position);
+
+    return this.getPlayerByPosition(allPositions[currentIdx + 1]);
   }
 
   // get position. Gives equal position to equal scores.
