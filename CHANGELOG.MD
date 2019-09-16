@@ -18,6 +18,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Migrated all existing players by removing duplicates and setting same Id for same person
 
+### Fixed
+
+- Equal scores now have equal position
+
 ## 2019-09-15
 
 ### Changed

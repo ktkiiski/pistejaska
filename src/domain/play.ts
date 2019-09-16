@@ -62,20 +62,31 @@ export class Play extends Entity implements PlayDTO {
     return playerScores.map(p => p.player);
   }
 
+  // get position. Gives equal position to equal scores.
   public getPosition(player: Player) {
-    // TODO PANU: if equal scores, give equal position! (unless tie breaker)
-    // TODO PANU: refactor to use getPlayersByPosition()
-    const playersByScores = groupBy(this.scores, s => s.playerId);
-    const playersByScore = Object.keys(playersByScores).map(p => {
-      return {
-        id: p,
-        score: sum(playersByScores[p].map(p => p.score))
-      };
+    const players = sortBy(
+      this.players.map(p => {
+        return { player: p, scores: this.getTotal(p) };
+      }),
+      p => -p.scores
+    );
+
+    let position = 0;
+    let calculatedPosition = 0;
+    let oldPlayerScores = -1;
+
+    players.some(p => {
+      calculatedPosition++;
+      if (oldPlayerScores !== p.scores) {
+        position = calculatedPosition;
+      }
+      oldPlayerScores = p.scores;
+
+      // short-circuit, i.e. return from loop as soon as we find the player
+      return p.player.id === player.id;
     });
 
-    const id = player.id;
-    const positions = sortBy(playersByScore, p => -p.score).map(p => p.id);
-    return positions.indexOf(id) + 1;
+    return position;
   }
 
   public getTotal(player: Player) {
