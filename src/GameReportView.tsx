@@ -13,7 +13,7 @@ import { RouteComponentProps } from "react-router";
 import { games } from "./domain/games";
 import { max, min, mean } from "lodash";
 import { usePlays } from "./common/hooks/usePlays";
-import { calculateEloForPlayers } from "./domain/elo";
+import { calculateEloForPlayers } from "./domain/ratings";
 
 export const GameReportView = (props: RouteComponentProps<any>) => {
   const gameId = props.match.params["gameId"];
@@ -50,7 +50,10 @@ export const GameReportView = (props: RouteComponentProps<any>) => {
 
       <p>
         Calculated with{" "}
-        <a href="http://www.tckerrigan.com/Misc/Multiplayer_Elo/">SME</a>.
+        <a href="https://www.microsoft.com/en-us/research/project/trueskill-ranking-system/">
+          TrueSkill
+        </a>
+        .
       </p>
     </div>
   );
@@ -161,14 +164,16 @@ const ReportPlayers = (props: { plays: Play[] }) => {
           <TableHead>
             <TableRow>
               <TableCell>Name</TableCell>
-              <TableCell>ELO</TableCell>
+              <TableCell>Trueskill</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {elo.slice(0, 5).map(p => (
+            {elo.slice(0, 3).map(p => (
               <TableRow key={p.name}>
                 <TableCell scope="row">{p.name}</TableCell>
-                <TableCell scope="row">{p.elo}</TableCell>
+                <TableCell scope="row">
+                  {Math.round(p.rating.mu)} (± {Math.round(3 * p.rating.sigma)})
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

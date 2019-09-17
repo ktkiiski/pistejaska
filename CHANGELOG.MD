@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## 2019-09-1
+
+### Changed
+
+- Switched from ELO rating to TrueSkill to get better player strength estimations
+
 ## 2019-09-16
 
 ### Added
