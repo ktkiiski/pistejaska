@@ -7,7 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## 2019-09-1
+## 2019-09-21
+
+### Added
+
+- Support for Brass, Imperial & Bohnanza
+
+## 2019-09-18
 
 ### Changed
 

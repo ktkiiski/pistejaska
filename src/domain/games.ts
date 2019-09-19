@@ -23,6 +23,35 @@ const azul: GameDefinition = {
   ]
 };
 
+const brass: GameDefinition = {
+  name: "Brass",
+  id: "brass",
+  icon: " ",
+  scoreFields: [
+    { id: "score-tracker", name: "Score tracker", type: "number", minValue: 0 }
+  ]
+};
+
+const bohnanza: GameDefinition = {
+  name: "Bohnanza",
+  id: "bohnanza",
+  icon:
+    "https://cf.geekdo-images.com/itemrep/img/_KP8uVds-gbz3-R08Y_JCO1Ovwg=/fit-in/246x300/pic69366.jpg",
+  scoreFields: [
+    { id: "score-tracker", name: "Score tracker", type: "number", minValue: 0 }
+  ]
+};
+
+const imperial: GameDefinition = {
+  name: "Imperial",
+  id: "imperial",
+  icon:
+    "https://cf.geekdo-images.com/itemrep/img/JOFogK5y-tNJRGLMS-NlRYbm864=/fit-in/246x300/pic840712.jpg",
+  scoreFields: [
+    { id: "score-tracker", name: "Score tracker", type: "number", minValue: 0 }
+  ]
+};
+
 const terraFormingMars: GameDefinition = {
   name: "Terraforming Mars",
   id: "terraforming-mars",
@@ -524,7 +553,10 @@ const gameDtos = [
   concordia,
   dominantSpecies,
   splendor,
-  sevenWonders
+  sevenWonders,
+  brass,
+  imperial,
+  bohnanza
 ];
 
 export const games = gameDtos.map(g => new Game(g));
