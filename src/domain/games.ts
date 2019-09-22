@@ -70,6 +70,36 @@ const terraFormingMars: GameDefinition = {
     { id: "cards", name: "Cards", type: "number", minValue: 0 }
   ],
   miscFields: [
+    {
+      id: "corporation",
+      name: "Corporation",
+      type: "text",
+      valuePerPlayer: true,
+      options: [
+        { value: "Aridor", label: "Aridor" },
+        { value: "Arklight", label: "Arklight" },
+        { value: "Beginner", label: "Beginner" },
+        { value: "Credicor", label: "Credicor" },
+        { value: "Ecoline", label: "Ecoline" },
+        { value: "Helion", label: "Helion" },
+        { value: "Inventrix", label: "Inventrix" },
+        { value: "Manutech", label: "Manutech" },
+        { value: "Mining guild", label: "Mining guild" },
+        { value: "Phoblog", label: "Phoblog" },
+        { value: "Polyphemos", label: "Polyphemos" },
+        { value: "Poseidon", label: "Poseidon" },
+        { value: "Saturn systems", label: "Saturn systems" },
+        { value: "Stormcraft", label: "Stormcraft" },
+        { value: "Teractor", label: "Teractor" },
+        { value: "Tharsis Republic", label: "Tharsis republic" },
+        { value: "Thorgate", label: "Thorgate" },
+        {
+          value: "United nations Mars initiative",
+          label: "United nations Mars initiative"
+        },
+        { value: "Viron", label: "Viron" }
+      ]
+    },
     { id: "generations", name: "Generations", type: "number", minValue: 0 },
     {
       id: "variant-advanced-cards",
@@ -147,6 +177,12 @@ const sevenWonders: GameDefinition = {
     {
       id: "variant-cities",
       name: "Variant: used Cities",
+      type: "boolean",
+      affectsScoring: true
+    },
+    {
+      id: "variant-armada",
+      name: "Variant: used Armada",
       type: "boolean",
       affectsScoring: true
     }

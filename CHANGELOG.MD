@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## 2019-09-22
+
+### Added
+
+- Support for 7 Wonders Armada
+- Corporations dimension to Terraforming Mars
+- Support for "misc" score fields (e.g. when playing with unsupported expansion)
+
 ## 2019-09-21
 
 ### Added

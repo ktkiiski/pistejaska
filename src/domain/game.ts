@@ -62,6 +62,15 @@ export class Game implements GameDefinition {
           "Give decimal scores (0.01) to tie-winning players to resolve ties",
         step: 0.01,
         maxValue: 0.1
+      },
+      {
+        id: "misc",
+        name: "Misc (unknown category)",
+        type: "number",
+        description:
+          "Give scores that don't belong to any other category, eg. when playing new expansion",
+        step: 0.01,
+        maxValue: 0.1
       }
     ];
   }
