@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Support winner scores by # of players in report view
 - Support for 7 Wonders Armada
 - Corporations dimension to Terraforming Mars
 - Support for "misc" score fields (e.g. when playing with unsupported expansion)

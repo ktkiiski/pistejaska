@@ -71,6 +71,7 @@ Are done manually by exporting data. Should automate this.
 - generic reports: games by plays, longest/shortest games, best ELO rating for all games etc
 - support automatic game length detection
 - read support for everyone, write support for whitelisted emails
+- normalize player names (firstname and first letter of surname)
 - better authorization (see https://blog.jimmycai.com/p/firebase-limit-access-to-certain-domains/)
 - allow game field definitions editing on UI
 - save every change to localstorage (or even to server?) to prevent accidental data loss

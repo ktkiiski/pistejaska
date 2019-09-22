@@ -11,7 +11,7 @@ import {
 import { Play } from "./domain/play";
 import { RouteComponentProps } from "react-router";
 import { games } from "./domain/games";
-import { max, min, mean } from "lodash";
+import { max, min, mean, groupBy, union } from "lodash";
 import { usePlays } from "./common/hooks/usePlays";
 import { calculateEloForPlayers } from "./domain/ratings";
 
@@ -90,13 +90,30 @@ const ReportTable = (props: { plays: Play[] }) => {
     return <>No plays</>;
   }
 
-  const winnerScores = plays.map(p => p.getWinnerScores());
+  const playsByNumberOfPlayers = groupBy(plays, p => p.players.length);
 
-  const values = [
-    { name: "Max winner score", value: max(winnerScores) },
-    { name: "Average winner score", value: mean(winnerScores) },
-    { name: "Min winner score", value: min(winnerScores) }
-  ];
+  // TODO: should refactor this hacky hack
+  const numberOfPlayers = union(["Any"], Object.keys(playsByNumberOfPlayers));
+  let report: any = {};
+  numberOfPlayers.map(p => {
+    const plays2 = p === "Any" ? plays : playsByNumberOfPlayers[p];
+
+    const winnerScores = plays2.map(p => p.getWinnerScores());
+
+    const values = [
+      { name: "Max winner score", value: Math.round(max(winnerScores) || 0) },
+      {
+        name: "Average winner score",
+        value: Math.round(mean(winnerScores) || 0)
+      },
+      { name: "Min winner score", value: Math.round(min(winnerScores) || 0) }
+    ];
+
+    report[p] = values;
+    return values;
+  });
+
+  debugger;
 
   return (
     <div className={classes.root}>
@@ -105,18 +122,36 @@ const ReportTable = (props: { plays: Play[] }) => {
           <TableHead>
             <TableRow>
               <TableCell># of players</TableCell>
-              {["Any"].map(p => (
+              {numberOfPlayers.map(p => (
                 <TableCell key={p}>{p}</TableCell>
               ))}
             </TableRow>
           </TableHead>
           <TableBody>
-            {values.map(p => (
-              <TableRow key={p.name}>
-                <TableCell scope="row">{p.name}</TableCell>
-                <TableCell scope="row">{p.value}</TableCell>
-              </TableRow>
-            ))}
+            <TableRow key="max">
+              <TableCell scope="row">Max winner score</TableCell>
+              {numberOfPlayers.map(numOfPlayers => (
+                <TableCell scope="row">
+                  {report[numOfPlayers][0].value}
+                </TableCell>
+              ))}
+            </TableRow>
+            <TableRow key="average">
+              <TableCell scope="row">Average winner score</TableCell>
+              {numberOfPlayers.map(numOfPlayers => (
+                <TableCell scope="row">
+                  {report[numOfPlayers][1].value}
+                </TableCell>
+              ))}
+            </TableRow>
+            <TableRow key="min">
+              <TableCell scope="row">Min winner score</TableCell>
+              {numberOfPlayers.map(numOfPlayers => (
+                <TableCell scope="row">
+                  {report[numOfPlayers][2].value}
+                </TableCell>
+              ))}
+            </TableRow>
           </TableBody>
         </Table>
       </Paper>
