@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## 2019-09-29
+
+### Added
+
+- Support for Dominion
+
 ## 2019-09-22
 
 ### Added

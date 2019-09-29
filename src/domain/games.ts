@@ -26,10 +26,19 @@ const azul: GameDefinition = {
 const brass: GameDefinition = {
   name: "Brass",
   id: "brass",
-  icon: " ",
+  icon:
+    "https://cf.geekdo-images.com/itemrep/img/_U34-eDDAf5K8Ftc9JDAi9vr-dE=/fit-in/246x300/pic3490053.jpg",
   scoreFields: [
     { id: "score-tracker", name: "Score tracker", type: "number", minValue: 0 }
   ]
+};
+
+const dominion: GameDefinition = {
+  name: "Dominion",
+  id: "dominion",
+  icon:
+    "https://cf.geekdo-images.com/itemrep/img/7mkW_JrUx0PSa4Ame3zzsLE0BVY=/fit-in/246x300/pic394356.jpg",
+  scoreFields: [{ id: "scores", name: "Scores", type: "number", minValue: 0 }]
 };
 
 const bohnanza: GameDefinition = {
@@ -592,7 +601,8 @@ const gameDtos = [
   sevenWonders,
   brass,
   imperial,
-  bohnanza
+  bohnanza,
+  dominion
 ];
 
 export const games = gameDtos.map(g => new Game(g));
