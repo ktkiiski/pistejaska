@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## 2019-10-03
+
+## Added
+
+- Support for Coup
+
 ## 2019-09-29
 
 ### Added

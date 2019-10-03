@@ -23,6 +23,22 @@ const azul: GameDefinition = {
   ]
 };
 
+const coup: GameDefinition = {
+  name: "Coup",
+  id: "Coup",
+  icon:
+    "https://cf.geekdo-images.com/itemrep/img/iwjc_79Aqz3lMb6orn7XhDplgKc=/fit-in/246x300/pic2016054.jpg",
+  scoreFields: [
+    {
+      id: "is-winner",
+      name: "Is winner",
+      type: "number",
+      minValue: 0,
+      description: "1 for winner; 0 for the rest"
+    }
+  ]
+};
+
 const brass: GameDefinition = {
   name: "Brass",
   id: "brass",
@@ -602,7 +618,8 @@ const gameDtos = [
   brass,
   imperial,
   bohnanza,
-  dominion
+  dominion,
+  coup
 ];
 
 export const games = gameDtos.map(g => new Game(g));
