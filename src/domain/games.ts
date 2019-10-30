@@ -118,6 +118,7 @@ const terraFormingMars: GameDefinition = {
         { value: "Teractor", label: "Teractor" },
         { value: "Tharsis Republic", label: "Tharsis republic" },
         { value: "Thorgate", label: "Thorgate" },
+        { value: "Morning Star inc", label: "Morning Star inc" },
         {
           value: "United nations Mars initiative",
           label: "United nations Mars initiative"
