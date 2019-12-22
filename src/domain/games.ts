@@ -603,6 +603,28 @@ const splendor: GameDefinition = {
   miscFields: []
 };
 
+const catan: GameDefinition = {
+  name: "Catan",
+  id: "catan",
+  icon:
+    "https://cf.geekdo-images.com/itemrep/img/aozRplCSOpRucLxSuClX2odEUBQ=/fit-in/246x300/pic2419375.jpg",
+  scoreFields: [
+    { id: "game-board", name: "Game board", type: "number", minValue: 0 },
+    {
+      id: "longest-road",
+      name: "Longest road",
+      type: "number",
+      minValue: 0
+    },
+    {
+      id: "largest-army",
+      name: "Largest army",
+      type: "number",
+      minValue: 0
+    }
+  ]
+};
+
 const gameDtos = [
   terraFormingMars,
   eclipse,
@@ -620,7 +642,8 @@ const gameDtos = [
   imperial,
   bohnanza,
   dominion,
-  coup
+  coup,
+  catan
 ];
 
 export const games = gameDtos.map(g => new Game(g));
