@@ -621,6 +621,12 @@ const catan: GameDefinition = {
       name: "Largest army",
       type: "number",
       minValue: 0
+    },
+    {
+      id: "development-cards",
+      name: "Development card victory points",
+      type: "number",
+      minValue: 0
     }
   ]
 };

@@ -9,6 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## 2019-12-22
 
+## Changed
+
+- Updated npm libraries
+
+## Fixed
+
+- Catan support
+
+## 2019-12-22
+
 ## Added
 
 - Support for Catan
