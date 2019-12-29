@@ -59,32 +59,32 @@ export const GameReportView = (props: RouteComponentProps<any>) => {
   );
 };
 
+const useReportTableStyles = makeStyles(theme => ({
+  root: {
+    width: "100%"
+  },
+  paper: {
+    marginTop: theme.spacing(3),
+    width: "100%",
+    overflowX: "auto",
+    marginBottom: theme.spacing(2),
+    paddingLeft: "4px"
+  },
+  table: {
+    maxWidth: "100%"
+  },
+  "@global": {
+    ".MuiTableCell-root": {
+      padding: "0",
+      fontSize: "0.8em"
+    }
+  }
+}));
+
 const ReportTable = (props: { plays: Play[] }) => {
   const { plays } = props;
 
-  const useStyles = makeStyles(theme => ({
-    root: {
-      width: "100%"
-    },
-    paper: {
-      marginTop: theme.spacing(3),
-      width: "100%",
-      overflowX: "auto",
-      marginBottom: theme.spacing(2),
-      paddingLeft: "4px"
-    },
-    table: {
-      maxWidth: "100%"
-    },
-    "@global": {
-      ".MuiTableCell-root": {
-        padding: "0",
-        fontSize: "0.8em"
-      }
-    }
-  }));
-
-  const classes = useStyles();
+  const classes = useReportTableStyles();
 
   if (plays.length === 0) {
     return <>No plays</>;
@@ -113,8 +113,6 @@ const ReportTable = (props: { plays: Play[] }) => {
     return values;
   });
 
-  debugger;
-
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
@@ -131,7 +129,7 @@ const ReportTable = (props: { plays: Play[] }) => {
             <TableRow key="max">
               <TableCell scope="row">Max winner score</TableCell>
               {numberOfPlayers.map(numOfPlayers => (
-                <TableCell scope="row">
+                <TableCell scope="row" key={numOfPlayers}>
                   {report[numOfPlayers][0].value}
                 </TableCell>
               ))}
@@ -139,7 +137,7 @@ const ReportTable = (props: { plays: Play[] }) => {
             <TableRow key="average">
               <TableCell scope="row">Average winner score</TableCell>
               {numberOfPlayers.map(numOfPlayers => (
-                <TableCell scope="row">
+                <TableCell scope="row" key={numOfPlayers}>
                   {report[numOfPlayers][1].value}
                 </TableCell>
               ))}
@@ -147,7 +145,7 @@ const ReportTable = (props: { plays: Play[] }) => {
             <TableRow key="min">
               <TableCell scope="row">Min winner score</TableCell>
               {numberOfPlayers.map(numOfPlayers => (
-                <TableCell scope="row">
+                <TableCell scope="row" key={numOfPlayers}>
                   {report[numOfPlayers][2].value}
                 </TableCell>
               ))}
@@ -159,38 +157,38 @@ const ReportTable = (props: { plays: Play[] }) => {
   );
 };
 
+const useReportPlayersStyles = makeStyles(theme => ({
+  root: {
+    width: "100%"
+  },
+  paper: {
+    marginTop: theme.spacing(3),
+    width: "100%",
+    overflowX: "auto",
+    marginBottom: theme.spacing(2),
+    paddingLeft: "4px"
+  },
+  table: {
+    maxWidth: "100%"
+  },
+  "@global": {
+    ".MuiTableCell-root": {
+      padding: "0",
+      fontSize: "0.8em"
+    }
+  }
+}));
+
 const ReportPlayers = (props: { plays: Play[] }) => {
   const { plays } = props;
 
-  const useStyles = makeStyles(theme => ({
-    root: {
-      width: "100%"
-    },
-    paper: {
-      marginTop: theme.spacing(3),
-      width: "100%",
-      overflowX: "auto",
-      marginBottom: theme.spacing(2),
-      paddingLeft: "4px"
-    },
-    table: {
-      maxWidth: "100%"
-    },
-    "@global": {
-      ".MuiTableCell-root": {
-        padding: "0",
-        fontSize: "0.8em"
-      }
-    }
-  }));
-
-  const classes = useStyles();
+  const classes = useReportPlayersStyles();
 
   if (plays.length === 0) {
     return <>No plays</>;
   }
 
-  const elo = calculateEloForPlayers(plays);
+  const elo = calculateEloForPlayers(plays, 3);
 
   return (
     <div className={classes.root}>
@@ -203,7 +201,7 @@ const ReportPlayers = (props: { plays: Play[] }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {elo.slice(0, 3).map(p => (
+            {elo.slice(0, 5).map(p => (
               <TableRow key={p.name}>
                 <TableCell scope="row">{p.name}</TableCell>
                 <TableCell scope="row">
