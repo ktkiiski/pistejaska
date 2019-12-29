@@ -7,31 +7,38 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## 2019-12-29
+
+### Changed
+
+- Top players list shows 5 players
+- Qualification for the top players list requires 3 plays (unless no one has played that many times)
+
 ## 2019-12-22
 
-## Changed
+### Changed
 
 - Updated npm libraries
 
-## Fixed
+### Fixed
 
 - Catan support
 
 ## 2019-12-22
 
-## Added
+### Added
 
 - Support for Catan
 
 ## 2019-10-07
 
-## Removed
+### Removed
 
 - Support for PWA due to caching issues
 
 ## 2019-10-03
 
-## Added
+### Added
 
 - Support for Coup
 
