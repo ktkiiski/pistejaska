@@ -188,7 +188,7 @@ const ReportPlayers = (props: { plays: Play[] }) => {
     return <>No plays</>;
   }
 
-  const elo = calculateEloForPlayers(plays);
+  const elo = calculateEloForPlayers(plays, 3);
 
   return (
     <div className={classes.root}>

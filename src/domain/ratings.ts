@@ -2,13 +2,24 @@ import { Play } from "./play";
 import { map, groupBy, sortBy, orderBy } from "lodash";
 import { rate, Rating } from "ts-trueskill";
 
-export const calculateEloForPlayers = (plays: Play[]) => {
+function countPlaysForPlayerId(playerId: string, plays: Play[]) {
+  return plays.reduce((count, play) => (
+    play.players.some(p => p.id === playerId) ? count + 1 : count
+  ), 0);
+}
+
+export const calculateEloForPlayers = (plays: Play[], minPlays: number) => {
   const allPlayers = map(
     groupBy(plays.flatMap(v => v.players), p => p.id),
     p => p[0]
-  ).map(p => {
-    return { ...p, ...{ rating: new Rating() } };
-  });
+  ).map(player => ({
+    ...player,
+    playCount: countPlaysForPlayerId(player.id, plays),
+    rating: new Rating(),
+  }));
+  // Ensure that minPlays is not larger than the number of games anyone has played
+  const maxPlayCount = Math.max(0, ...allPlayers.map(p => p.playCount));
+  minPlays = Math.min(minPlays, maxPlayCount);
 
   const evaluatePlay = (play: Play) => {
     const players = orderBy(
@@ -44,13 +55,16 @@ export const calculateEloForPlayers = (plays: Play[]) => {
     evaluatePlay(play);
 
     console.log("\nNew ratings:\n");
-    sortBy(allPlayers, p => -p.rating.mu).map(p =>
+    sortBy(allPlayers, p => -p.rating.mu).forEach(p =>
       console.log(
-        p.name + ": " + p.rating.mu + " (±" + 3 * p.rating.sigma + ")"
+        `${p.name}: ${p.rating.mu} (±${3 * p.rating.sigma}, ${p.playCount} plays)`
       )
     );
     console.log("\n\n");
   });
 
-  return sortBy(allPlayers, p => -p.rating.mu);
+  return sortBy(
+    allPlayers.filter(player => player.playCount >= minPlays),
+    p => -p.rating.mu
+  );
 };
