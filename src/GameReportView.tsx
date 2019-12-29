@@ -201,7 +201,7 @@ const ReportPlayers = (props: { plays: Play[] }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {elo.slice(0, 3).map(p => (
+            {elo.slice(0, 5).map(p => (
               <TableRow key={p.name}>
                 <TableCell scope="row">{p.name}</TableCell>
                 <TableCell scope="row">
