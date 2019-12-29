@@ -129,7 +129,7 @@ const ReportTable = (props: { plays: Play[] }) => {
             <TableRow key="max">
               <TableCell scope="row">Max winner score</TableCell>
               {numberOfPlayers.map(numOfPlayers => (
-                <TableCell scope="row">
+                <TableCell scope="row" key={numOfPlayers}>
                   {report[numOfPlayers][0].value}
                 </TableCell>
               ))}
@@ -137,7 +137,7 @@ const ReportTable = (props: { plays: Play[] }) => {
             <TableRow key="average">
               <TableCell scope="row">Average winner score</TableCell>
               {numberOfPlayers.map(numOfPlayers => (
-                <TableCell scope="row">
+                <TableCell scope="row" key={numOfPlayers}>
                   {report[numOfPlayers][1].value}
                 </TableCell>
               ))}
@@ -145,7 +145,7 @@ const ReportTable = (props: { plays: Play[] }) => {
             <TableRow key="min">
               <TableCell scope="row">Min winner score</TableCell>
               {numberOfPlayers.map(numOfPlayers => (
-                <TableCell scope="row">
+                <TableCell scope="row" key={numOfPlayers}>
                   {report[numOfPlayers][2].value}
                 </TableCell>
               ))}
