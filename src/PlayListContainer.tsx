@@ -5,18 +5,17 @@ import { PlayList } from "./PlayList";
 import { GameReportList } from "./GameReportList";
 import { usePlays } from "./common/hooks/usePlays";
 
+const useStyles = makeStyles(() => ({
+  root: {
+    flexGrow: 1
+  }
+}));
+
 export const PlayListContainer = (props: RouteComponentProps<{}>) => {
   // eslint-disable-next-line
   const [plays, loading, error] = usePlays();
 
   const [selectedTab, setSelectedTab] = React.useState(0);
-
-  const useStyles = makeStyles(() => ({
-    root: {
-      flexGrow: 1
-      // backgroundColor: theme.palette.background.default
-    }
-  }));
 
   const classes = useStyles();
 

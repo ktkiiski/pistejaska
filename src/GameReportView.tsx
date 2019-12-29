@@ -59,32 +59,32 @@ export const GameReportView = (props: RouteComponentProps<any>) => {
   );
 };
 
+const useReportTableStyles = makeStyles(theme => ({
+  root: {
+    width: "100%"
+  },
+  paper: {
+    marginTop: theme.spacing(3),
+    width: "100%",
+    overflowX: "auto",
+    marginBottom: theme.spacing(2),
+    paddingLeft: "4px"
+  },
+  table: {
+    maxWidth: "100%"
+  },
+  "@global": {
+    ".MuiTableCell-root": {
+      padding: "0",
+      fontSize: "0.8em"
+    }
+  }
+}));
+
 const ReportTable = (props: { plays: Play[] }) => {
   const { plays } = props;
 
-  const useStyles = makeStyles(theme => ({
-    root: {
-      width: "100%"
-    },
-    paper: {
-      marginTop: theme.spacing(3),
-      width: "100%",
-      overflowX: "auto",
-      marginBottom: theme.spacing(2),
-      paddingLeft: "4px"
-    },
-    table: {
-      maxWidth: "100%"
-    },
-    "@global": {
-      ".MuiTableCell-root": {
-        padding: "0",
-        fontSize: "0.8em"
-      }
-    }
-  }));
-
-  const classes = useStyles();
+  const classes = useReportTableStyles();
 
   if (plays.length === 0) {
     return <>No plays</>;
@@ -159,32 +159,32 @@ const ReportTable = (props: { plays: Play[] }) => {
   );
 };
 
+const useReportPlayersStyles = makeStyles(theme => ({
+  root: {
+    width: "100%"
+  },
+  paper: {
+    marginTop: theme.spacing(3),
+    width: "100%",
+    overflowX: "auto",
+    marginBottom: theme.spacing(2),
+    paddingLeft: "4px"
+  },
+  table: {
+    maxWidth: "100%"
+  },
+  "@global": {
+    ".MuiTableCell-root": {
+      padding: "0",
+      fontSize: "0.8em"
+    }
+  }
+}));
+
 const ReportPlayers = (props: { plays: Play[] }) => {
   const { plays } = props;
 
-  const useStyles = makeStyles(theme => ({
-    root: {
-      width: "100%"
-    },
-    paper: {
-      marginTop: theme.spacing(3),
-      width: "100%",
-      overflowX: "auto",
-      marginBottom: theme.spacing(2),
-      paddingLeft: "4px"
-    },
-    table: {
-      maxWidth: "100%"
-    },
-    "@global": {
-      ".MuiTableCell-root": {
-        padding: "0",
-        fontSize: "0.8em"
-      }
-    }
-  }));
-
-  const classes = useStyles();
+  const classes = useReportPlayersStyles();
 
   if (plays.length === 0) {
     return <>No plays</>;
