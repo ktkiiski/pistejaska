@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Support for generic game
 - Support for Lords of Waterdeep
+- Pagination for play list
 
 ### Fixed
 

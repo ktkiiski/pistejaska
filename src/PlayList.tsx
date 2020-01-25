@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { List, ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
+import Paginator from "react-hooks-paginator";
+
 import { Play } from "./domain/play";
 import { RouteComponentProps } from "react-router";
 import { games } from "./domain/games";
@@ -9,6 +11,22 @@ import { usePlays } from "./common/hooks/usePlays";
 export const PlayList = (props: RouteComponentProps<{}>) => {
   // eslint-disable-next-line
   const [plays, loading, error] = usePlays();
+
+  useEffect(() => {
+    setData(orderBy(plays, ["date", "created"], ["desc", "desc"]));
+    // eslint-disable-next-line
+  }, [plays.length]);
+
+  const pageLimit = 15;
+  const [offset, setOffset] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [data, setData] = useState<any[]>([]);
+
+  const [currentData, setCurrentData] = useState<any[]>([]);
+
+  useEffect(() => {
+    setCurrentData(data.slice(offset, offset + pageLimit));
+  }, [offset, data]);
 
   if (error) {
     return (
@@ -26,7 +44,7 @@ export const PlayList = (props: RouteComponentProps<{}>) => {
     <div>
       <h3>Plays</h3>
       <List component="nav">
-        {orderBy(plays, ["date", "created"], ["desc", "desc"]).map(play => (
+        {currentData.map(play => (
           <ListItem button onClick={() => onSelectPlay(play)} key={play.id}>
             <ListItemIcon>
               <img
@@ -43,6 +61,14 @@ export const PlayList = (props: RouteComponentProps<{}>) => {
           </ListItem>
         ))}
       </List>
+      <Paginator
+        totalRecords={data.length}
+        pageLimit={pageLimit}
+        pageNeighbours={1}
+        setOffset={setOffset}
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+      />
     </div>
   );
 };

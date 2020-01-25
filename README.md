@@ -76,7 +76,6 @@ Are done manually by exporting data. Should automate this.
 - allow game field definitions editing on UI
 - save every change to localstorage (or even to server?) to prevent accidental data loss
 - celebration page on save to see the winner with konfetti animation
-- paging support for play list
 
 ### Technical debt
 
