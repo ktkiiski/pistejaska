@@ -13,7 +13,7 @@ import {
   Paper
 } from "@material-ui/core";
 import { games } from "./domain/games";
-import { GameDefinition, GameMiscFieldDefinition } from "./domain/game";
+import { GameDefinition, GameMiscFieldDefinition, Game } from "./domain/game";
 import { usePlays } from "./common/hooks/usePlays";
 import firebase from "firebase";
 
@@ -122,6 +122,18 @@ const PlayTable = (props: { game: GameDefinition; play: Play }) => {
   const classes = useStyles();
   const highlightColor = "#f5f5f5";
   const { game, play } = props;
+  const hasTieBreaker =
+    play.scores.filter(x => x.fieldId === "tie-breaker" && x.score).length > 0;
+  const hasMiscScores =
+    play.scores.filter(x => x.fieldId === "misc" && x.score).length > 0;
+
+  const scoreFields = new Game(game)
+    .getFields()
+    .filter(x => x.type === "score")
+    .map(x => x.field)
+    .filter(x => (x.id === "misc" ? hasMiscScores : true))
+    .filter(x => (x.id === "tie-breaker" ? hasTieBreaker : true));
+
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
@@ -142,7 +154,7 @@ const PlayTable = (props: { game: GameDefinition; play: Play }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {game.scoreFields.map(p => (
+            {scoreFields.map(p => (
               <TableRow key={p.id}>
                 <TableCell scope="row">{p.name}</TableCell>
                 {play.players.map((f, idx) => (

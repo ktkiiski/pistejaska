@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## 2020-1-25
+
+### Added
+
+- Support for generic game
+- Support for Lords of Waterdeep
+
+### Fixed
+
+- Misc scores were not shown on play view
+- Tie breaker was not shown on play view
+
 ## 2019-12-29
 
 ### Changed

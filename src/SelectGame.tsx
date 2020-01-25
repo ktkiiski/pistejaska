@@ -18,7 +18,15 @@ export const SelectGame = (props: RouteComponentProps<{}>) => {
     lowercaseName: game.name.toLowerCase()
   }));
   listedGames.sort(({ lowercaseName: name1 }, { lowercaseName: name2 }) => {
-    return name1 > name2 ? 1 : name1 < name2 ? -1 : 0;
+    return name1 === "generic game"
+      ? -1
+      : name2 === "generic game"
+      ? 1
+      : name1 > name2
+      ? 1
+      : name1 < name2
+      ? -1
+      : 0;
   });
   return (
     <div>

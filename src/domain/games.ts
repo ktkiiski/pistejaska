@@ -631,6 +631,101 @@ const catan: GameDefinition = {
   ]
 };
 
+const lordsOfWaterdeep: GameDefinition = {
+  name: "Lords of Waterdeep",
+  id: "lords-of-waterdeep",
+  icon:
+    "https://cf.geekdo-images.com/itemrep/img/VYYUbyIZHFJSUCS9Os2ndcV041k=/fit-in/246x300/pic1116080.jpg",
+  scoreFields: [
+    { id: "scores", name: "Scores", type: "number", minValue: 0 },
+    {
+      id: "lord",
+      name: "Lord",
+      type: "number",
+      minValue: 0
+    },
+    {
+      id: "leftover-resources",
+      name: "Leftover resources",
+      type: "number",
+      minValue: 0
+    },
+    {
+      id: "corruption",
+      name: "Corruption",
+      type: "number",
+      maxValue: 0
+    }
+  ],
+  miscFields: [
+    {
+      id: "variant-scoundrels-of-skullport",
+      name: "Variant: used Scoundrels of Skullport",
+      type: "boolean",
+      affectsScoring: true
+    }
+  ]
+};
+
+const generic: GameDefinition = {
+  name: "Generic game",
+  id: "generic",
+  icon: "https://image.flaticon.com/icons/svg/906/906794.svg",
+  scoreFields: [
+    { id: "category-1", name: "Category 1", type: "number", minValue: 0 },
+    { id: "category-2", name: "Category 2", type: "number", minValue: 0 },
+    { id: "category-3", name: "Category 3", type: "number", minValue: 0 },
+    { id: "category-4", name: "Category 4", type: "number", minValue: 0 },
+    { id: "category-5", name: "Category 5", type: "number", minValue: 0 },
+    { id: "category-6", name: "Category 6", type: "number", minValue: 0 }
+  ],
+  miscFields: [
+    { id: "game-name", name: "Game name", type: "text", valuePerPlayer: false },
+    {
+      id: "category-1-name",
+      name: "Category 1 name",
+      type: "text",
+      valuePerPlayer: false
+    },
+    {
+      id: "category-2-name",
+      name: "Category 2 name",
+      type: "text",
+      valuePerPlayer: false
+    },
+    {
+      id: "category-3-name",
+      name: "Category 3 name",
+      type: "text",
+      valuePerPlayer: false
+    },
+    {
+      id: "category-4-name",
+      name: "Category 4 name",
+      type: "text",
+      valuePerPlayer: false
+    },
+    {
+      id: "category-5-name",
+      name: "Category 5 name",
+      type: "text",
+      valuePerPlayer: false
+    },
+    {
+      id: "category-6-name",
+      name: "Category 6 name",
+      type: "text",
+      valuePerPlayer: false
+    },
+    {
+      id: "variants",
+      name: "Used variants",
+      type: "text",
+      valuePerPlayer: false
+    }
+  ]
+};
+
 const gameDtos = [
   terraFormingMars,
   eclipse,
@@ -649,7 +744,9 @@ const gameDtos = [
   bohnanza,
   dominion,
   coup,
-  catan
+  catan,
+  generic,
+  lordsOfWaterdeep
 ];
 
 export const games = gameDtos.map(g => new Game(g));
