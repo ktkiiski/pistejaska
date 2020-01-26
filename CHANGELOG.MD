@@ -7,13 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## 2020-1-26
+
+### Fixed
+
+- Play list pagination
+
 ## 2020-1-25
 
 ### Added
 
 - Support for generic game
 - Support for Lords of Waterdeep
-- Pagination for play list
+- Play list pagination
 
 ### Fixed
 

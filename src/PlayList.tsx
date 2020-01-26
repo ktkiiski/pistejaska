@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { List, ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
-import Paginator from "react-hooks-paginator";
+import { TablePagination } from "@material-ui/core";
 
 import { Play } from "./domain/play";
 import { RouteComponentProps } from "react-router";
@@ -17,16 +17,16 @@ export const PlayList = (props: RouteComponentProps<{}>) => {
     // eslint-disable-next-line
   }, [plays.length]);
 
-  const pageLimit = 15;
-  const [offset, setOffset] = useState(0);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [currentPage, setCurrentPage] = useState(0);
   const [data, setData] = useState<any[]>([]);
 
   const [currentData, setCurrentData] = useState<any[]>([]);
 
   useEffect(() => {
-    setCurrentData(data.slice(offset, offset + pageLimit));
-  }, [offset, data]);
+    const offset = currentPage * itemsPerPage;
+    setCurrentData(data.slice(offset, offset + itemsPerPage));
+  }, [currentPage, data, itemsPerPage]);
 
   if (error) {
     return (
@@ -61,13 +61,26 @@ export const PlayList = (props: RouteComponentProps<{}>) => {
           </ListItem>
         ))}
       </List>
-      <Paginator
-        totalRecords={data.length}
-        pageLimit={pageLimit}
-        pageNeighbours={1}
-        setOffset={setOffset}
-        currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
+
+      <TablePagination
+        component="div"
+        count={data.length}
+        rowsPerPage={itemsPerPage}
+        page={currentPage}
+        backIconButtonProps={{
+          "aria-label": "Previous Page"
+        }}
+        nextIconButtonProps={{
+          "aria-label": "Next Page"
+        }}
+        onChangePage={(e, page) => {
+          setCurrentPage(page);
+        }}
+        onChangeRowsPerPage={e => {
+          setCurrentPage(0);
+          setItemsPerPage((e as any).target.value);
+        }}
+        rowsPerPageOptions={[10, 25, 50, 100, 1000]}
       />
     </div>
   );
