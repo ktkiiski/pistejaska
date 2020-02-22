@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Support for Terraforming Mars: Prelude
 - Support for Terraforming Mars: Turmoil
+- Link from report view to max/min score plays
 
 ## 2020-1-26
 

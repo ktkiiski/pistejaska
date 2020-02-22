@@ -11,7 +11,7 @@ import {
 import { Play } from "./domain/play";
 import { RouteComponentProps } from "react-router";
 import { games } from "./domain/games";
-import { max, min, mean, groupBy, union } from "lodash";
+import { mean, groupBy, union, sortBy, last, first } from "lodash";
 import { usePlays } from "./common/hooks/usePlays";
 import { calculateEloForPlayers } from "./domain/ratings";
 
@@ -92,21 +92,40 @@ const ReportTable = (props: { plays: Play[] }) => {
 
   const playsByNumberOfPlayers = groupBy(plays, p => p.players.length);
 
-  // TODO: should refactor this hacky hack
   const numberOfPlayers = union(["Any"], Object.keys(playsByNumberOfPlayers));
   let report: any = {};
+  const columns = [
+    "Max winner score",
+    "Average winner score",
+    "Min winner score"
+  ];
   numberOfPlayers.map(p => {
-    const plays2 = p === "Any" ? plays : playsByNumberOfPlayers[p];
+    const playsOfNumberOfPlayers =
+      p === "Any" ? plays : playsByNumberOfPlayers[p];
+    const playsOrderedByWinnerScore = sortBy(
+      playsOfNumberOfPlayers,
+      x => x.getWinnerScores() || 0
+    );
+    const maxScores = last(playsOrderedByWinnerScore);
+    const minScores = first(playsOrderedByWinnerScore);
 
-    const winnerScores = plays2.map(p => p.getWinnerScores());
+    const winnerScores = playsOfNumberOfPlayers.map(p => p.getWinnerScores());
 
     const values = [
-      { name: "Max winner score", value: Math.round(max(winnerScores) || 0) },
+      {
+        name: "Max winner score",
+        value: Math.round(maxScores?.getWinnerScores() || 0),
+        link: `/view/${maxScores?.id}`
+      },
       {
         name: "Average winner score",
         value: Math.round(mean(winnerScores) || 0)
       },
-      { name: "Min winner score", value: Math.round(min(winnerScores) || 0) }
+      {
+        name: "Min winner score",
+        value: Math.round(minScores?.getWinnerScores() || 0),
+        link: `/view/${minScores?.id}`
+      }
     ];
 
     report[p] = values;
@@ -126,30 +145,18 @@ const ReportTable = (props: { plays: Play[] }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            <TableRow key="max">
-              <TableCell scope="row">Max winner score</TableCell>
-              {numberOfPlayers.map(numOfPlayers => (
-                <TableCell scope="row" key={numOfPlayers}>
-                  {report[numOfPlayers][0].value}
-                </TableCell>
-              ))}
-            </TableRow>
-            <TableRow key="average">
-              <TableCell scope="row">Average winner score</TableCell>
-              {numberOfPlayers.map(numOfPlayers => (
-                <TableCell scope="row" key={numOfPlayers}>
-                  {report[numOfPlayers][1].value}
-                </TableCell>
-              ))}
-            </TableRow>
-            <TableRow key="min">
-              <TableCell scope="row">Min winner score</TableCell>
-              {numberOfPlayers.map(numOfPlayers => (
-                <TableCell scope="row" key={numOfPlayers}>
-                  {report[numOfPlayers][2].value}
-                </TableCell>
-              ))}
-            </TableRow>
+            {columns.map((column, idx) => (
+              <TableRow key={column}>
+                <TableCell scope="row">{column}</TableCell>
+                {numberOfPlayers.map(numOfPlayers => (
+                  <TableCell scope="row" key={numOfPlayers}>
+                    <a href={report[numOfPlayers][idx].link}>
+                      {report[numOfPlayers][idx].value}
+                    </a>
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </Paper>

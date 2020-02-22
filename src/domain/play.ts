@@ -84,8 +84,8 @@ export class Play extends Entity implements PlayDTO {
     );
   }
 
-  public getWinnerScores() {
-    return max(this.players.map(p => this.getTotal(p)));
+  public getWinnerScores(): number {
+    return max(this.players.map(p => this.getTotal(p))) || 0;
   }
 
   public getDate(): Date {
