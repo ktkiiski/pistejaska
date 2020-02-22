@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## 2020-2-22
+
+### Added
+
+- Support for Terraforming Mars: Prelude
+- Support for Terraforming Mars: Turmoil
+
 ## 2020-1-26
 
 ### Fixed

@@ -92,7 +92,13 @@ const terraFormingMars: GameDefinition = {
     { id: "awards", name: "Awards", type: "number", minValue: 0 },
     { id: "milestones", name: "Milestones", type: "number", minValue: 0 },
     { id: "game-board", name: "Game board", type: "number", minValue: 0 },
-    { id: "cards", name: "Cards", type: "number", minValue: 0 }
+    { id: "cards", name: "Cards", type: "number", minValue: 0 },
+    {
+      id: "politicians",
+      name: "Politicians (Turmoil)",
+      type: "number",
+      minValue: 0
+    }
   ],
   miscFields: [
     {
@@ -104,26 +110,37 @@ const terraFormingMars: GameDefinition = {
         { value: "Aridor", label: "Aridor" },
         { value: "Arklight", label: "Arklight" },
         { value: "Beginner", label: "Beginner" },
+        { value: "Cheung Shing Mars", label: "Cheung Shing Mars" },
         { value: "Credicor", label: "Credicor" },
         { value: "Ecoline", label: "Ecoline" },
         { value: "Helion", label: "Helion" },
         { value: "Inventrix", label: "Inventrix" },
+        { value: "Lakefront Resorts", label: "Lakefront Resorts" },
         { value: "Manutech", label: "Manutech" },
         { value: "Mining guild", label: "Mining guild" },
+        { value: "Morning Star inc", label: "Morning Star inc" },
         { value: "Phoblog", label: "Phoblog" },
+        { value: "Point Luna", label: "Point Luna" },
         { value: "Polyphemos", label: "Polyphemos" },
         { value: "Poseidon", label: "Poseidon" },
+        { value: "Pristar", label: "Pristar" },
+        { value: "Pristar", label: "Pristar" },
+        { value: "Robinson Industries", label: "Robinson Industries" },
         { value: "Saturn systems", label: "Saturn systems" },
+        { value: "Septem Tribus", label: "Septem Tribus" },
         { value: "Stormcraft", label: "Stormcraft" },
         { value: "Teractor", label: "Teractor" },
+        { value: "Terralabs Research", label: "Terralabs Research" },
         { value: "Tharsis Republic", label: "Tharsis republic" },
         { value: "Thorgate", label: "Thorgate" },
-        { value: "Morning Star inc", label: "Morning Star inc" },
         {
           value: "United nations Mars initiative",
           label: "United nations Mars initiative"
         },
-        { value: "Viron", label: "Viron" }
+        { value: "Utopia Invest", label: "Utopia Invest" },
+        { value: "Valley Trust", label: "Valley Trust" },
+        { value: "Viron", label: "Viron" },
+        { value: "Vitor", label: "Vitor" }
       ]
     },
     { id: "generations", name: "Generations", type: "number", minValue: 0 },
@@ -153,6 +170,18 @@ const terraFormingMars: GameDefinition = {
     {
       id: "variant-colonies",
       name: "Variant: used Colonies",
+      type: "boolean",
+      affectsScoring: true
+    },
+    {
+      id: "variant-prelude",
+      name: "Variant: used Prelude",
+      type: "boolean",
+      affectsScoring: true
+    },
+    {
+      id: "variant-turmoil",
+      name: "Variant: used Turmoil",
       type: "boolean",
       affectsScoring: true
     }
