@@ -118,6 +118,7 @@ const terraFormingMars: GameDefinition = {
         { value: "Lakefront Resorts", label: "Lakefront Resorts" },
         { value: "Manutech", label: "Manutech" },
         { value: "Mining guild", label: "Mining guild" },
+        { value: "Mons Insurance", label: "Mons Insurance" },
         { value: "Morning Star inc", label: "Morning Star inc" },
         { value: "Phoblog", label: "Phoblog" },
         { value: "Point Luna", label: "Point Luna" },
