@@ -6,7 +6,7 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import { RouteComponentProps } from "react-router";
 import { Button, TextField } from "@material-ui/core";
-import uuid from "uuid";
+import { v5 as uuid } from "uuid";
 import { PlayNew } from "./PlayNew";
 import { games } from "./domain/games";
 import { usePlayers } from "./common/hooks/usePlayers";
@@ -39,7 +39,7 @@ export const SelectPlayers = (
   };
 
   const onAddPlayer = () => {
-    setPlayers([...players, { name: currentPlayer, id: uuid() }]);
+    setPlayers([...players, { name: currentPlayer, id: uuid.URL }]);
     setCurrentPlayer("");
   };
 
