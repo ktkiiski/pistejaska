@@ -6,7 +6,7 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import { RouteComponentProps } from "react-router";
 import { Button, TextField } from "@material-ui/core";
-import { v5 as uuid } from "uuid";
+import { v4 as uuid } from "uuid";
 import { PlayNew } from "./PlayNew";
 import { games } from "./domain/games";
 import { usePlayers } from "./common/hooks/usePlayers";
@@ -14,7 +14,7 @@ import { usePlayers } from "./common/hooks/usePlayers";
 export const SelectPlayers = (
   props: RouteComponentProps<{ gameId: string }>
 ) => {
-  const game = games.find(g => g.id === props.match.params["gameId"]);
+  const game = games.find((g) => g.id === props.match.params["gameId"]);
   if (game === undefined) throw new Error("unknown game");
 
   const [allPlayers] = usePlayers();
@@ -27,9 +27,10 @@ export const SelectPlayers = (
 
   const selectablePlayers = allPlayers
     .filter(
-      p => players.find(selectPlayer => selectPlayer.id === p.id) === undefined
+      (p) =>
+        players.find((selectPlayer) => selectPlayer.id === p.id) === undefined
     )
-    .filter(p => p.name.toLowerCase().includes(searchTerm.toLowerCase()));
+    .filter((p) => p.name.toLowerCase().includes(searchTerm.toLowerCase()));
   const visiblePlayers = showAllPlayers
     ? selectablePlayers
     : selectablePlayers.slice(0, 6);
@@ -39,7 +40,7 @@ export const SelectPlayers = (
   };
 
   const onAddPlayer = () => {
-    setPlayers([...players, { name: currentPlayer, id: uuid.URL }]);
+    setPlayers([...players, { name: currentPlayer, id: uuid() }]);
     setCurrentPlayer("");
   };
 
@@ -50,7 +51,7 @@ export const SelectPlayers = (
   };
 
   const onDeSelectPlayer = (player: Player) => {
-    setPlayers(players.filter(p => p.id !== player.id));
+    setPlayers(players.filter((p) => p.id !== player.id));
   };
 
   const onSearch = (searchTerm: string) => {
@@ -68,10 +69,10 @@ export const SelectPlayers = (
           label="Search..."
           value={searchTerm}
           autoFocus
-          onChange={e => onSearch(e.currentTarget.value)}
+          onChange={(e) => onSearch(e.currentTarget.value)}
         />
         <List component="nav">
-          {visiblePlayers.map(player => (
+          {visiblePlayers.map((player) => (
             <ListItem
               dense={true}
               button
@@ -117,7 +118,7 @@ export const SelectPlayers = (
             <TextField
               value={currentPlayer}
               placeholder="New player"
-              onChange={e => setCurrentPlayer(e.currentTarget.value)}
+              onChange={(e) => setCurrentPlayer(e.currentTarget.value)}
             />
             <Button color="default" onClick={onAddPlayer} variant="contained">
               Add
@@ -127,7 +128,7 @@ export const SelectPlayers = (
       </div>
 
       <List component="nav">
-        {players.map(player => (
+        {players.map((player) => (
           <ListItem button key={player.id}>
             <ListItemIcon>
               <svg

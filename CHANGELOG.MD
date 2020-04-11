@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## 2020-4-11
+
+### Fixed
+
+- Issue where all new plays since 4.4. were replacing the older play resulting in data loss
+
 ## 2020-4-4
 
 ### Changed
