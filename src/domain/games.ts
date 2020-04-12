@@ -11,16 +11,16 @@ const azul: GameDefinition = {
       id: "horizontal-lines",
       name: "Horizontal lines",
       type: "number",
-      minValue: 0
+      minValue: 0,
     },
     {
       id: "vertical-lines",
       name: "Vertical lines",
       type: "number",
-      minValue: 0
+      minValue: 0,
     },
-    { id: "full-colours", name: "Full colors", type: "number", minValue: 0 }
-  ]
+    { id: "full-colours", name: "Full colors", type: "number", minValue: 0 },
+  ],
 };
 
 const coup: GameDefinition = {
@@ -34,9 +34,9 @@ const coup: GameDefinition = {
       name: "Is winner",
       type: "number",
       minValue: 0,
-      description: "1 for winner; 0 for the rest"
-    }
-  ]
+      description: "1 for winner; 0 for the rest",
+    },
+  ],
 };
 
 const brass: GameDefinition = {
@@ -45,8 +45,8 @@ const brass: GameDefinition = {
   icon:
     "https://cf.geekdo-images.com/itemrep/img/_U34-eDDAf5K8Ftc9JDAi9vr-dE=/fit-in/246x300/pic3490053.jpg",
   scoreFields: [
-    { id: "score-tracker", name: "Score tracker", type: "number", minValue: 0 }
-  ]
+    { id: "score-tracker", name: "Score tracker", type: "number", minValue: 0 },
+  ],
 };
 
 const dominion: GameDefinition = {
@@ -54,7 +54,7 @@ const dominion: GameDefinition = {
   id: "dominion",
   icon:
     "https://cf.geekdo-images.com/itemrep/img/7mkW_JrUx0PSa4Ame3zzsLE0BVY=/fit-in/246x300/pic394356.jpg",
-  scoreFields: [{ id: "scores", name: "Scores", type: "number", minValue: 0 }]
+  scoreFields: [{ id: "scores", name: "Scores", type: "number", minValue: 0 }],
 };
 
 const bohnanza: GameDefinition = {
@@ -63,8 +63,8 @@ const bohnanza: GameDefinition = {
   icon:
     "https://cf.geekdo-images.com/itemrep/img/_KP8uVds-gbz3-R08Y_JCO1Ovwg=/fit-in/246x300/pic69366.jpg",
   scoreFields: [
-    { id: "score-tracker", name: "Score tracker", type: "number", minValue: 0 }
-  ]
+    { id: "score-tracker", name: "Score tracker", type: "number", minValue: 0 },
+  ],
 };
 
 const imperial: GameDefinition = {
@@ -73,8 +73,8 @@ const imperial: GameDefinition = {
   icon:
     "https://cf.geekdo-images.com/itemrep/img/JOFogK5y-tNJRGLMS-NlRYbm864=/fit-in/246x300/pic840712.jpg",
   scoreFields: [
-    { id: "score-tracker", name: "Score tracker", type: "number", minValue: 0 }
-  ]
+    { id: "score-tracker", name: "Score tracker", type: "number", minValue: 0 },
+  ],
 };
 
 const terraFormingMars: GameDefinition = {
@@ -87,7 +87,7 @@ const terraFormingMars: GameDefinition = {
       id: "terraforming-rating",
       name: "Terraforming rating",
       type: "number",
-      minValue: 0
+      minValue: 0,
     },
     { id: "awards", name: "Awards", type: "number", minValue: 0 },
     { id: "milestones", name: "Milestones", type: "number", minValue: 0 },
@@ -97,8 +97,8 @@ const terraFormingMars: GameDefinition = {
       id: "politicians",
       name: "Politicians (Turmoil)",
       type: "number",
-      minValue: 0
-    }
+      minValue: 0,
+    },
   ],
   miscFields: [
     {
@@ -106,6 +106,7 @@ const terraFormingMars: GameDefinition = {
       name: "Corporation",
       type: "text",
       valuePerPlayer: true,
+      isRelevantReportDimension: true,
       options: [
         { value: "Aridor", label: "Aridor" },
         { value: "Arklight", label: "Arklight" },
@@ -125,7 +126,6 @@ const terraFormingMars: GameDefinition = {
         { value: "Polyphemos", label: "Polyphemos" },
         { value: "Poseidon", label: "Poseidon" },
         { value: "Pristar", label: "Pristar" },
-        { value: "Pristar", label: "Pristar" },
         { value: "Robinson Industries", label: "Robinson Industries" },
         { value: "Saturn systems", label: "Saturn systems" },
         { value: "Septem Tribus", label: "Septem Tribus" },
@@ -136,20 +136,20 @@ const terraFormingMars: GameDefinition = {
         { value: "Thorgate", label: "Thorgate" },
         {
           value: "United nations Mars initiative",
-          label: "United nations Mars initiative"
+          label: "United nations Mars initiative",
         },
         { value: "Utopia Invest", label: "Utopia Invest" },
         { value: "Valley Trust", label: "Valley Trust" },
         { value: "Viron", label: "Viron" },
-        { value: "Vitor", label: "Vitor" }
-      ]
+        { value: "Vitor", label: "Vitor" },
+      ],
     },
     { id: "generations", name: "Generations", type: "number", minValue: 0 },
     {
       id: "variant-advanced-cards",
       name: "Variant: used advanced cards",
       type: "boolean",
-      affectsScoring: true
+      affectsScoring: true,
     },
     {
       id: "variant-map",
@@ -159,34 +159,34 @@ const terraFormingMars: GameDefinition = {
       options: [
         { value: "Default", label: "Default" },
         { value: "Hellas", label: "Hellas" },
-        { value: "Elysium", label: "Elysium" }
-      ]
+        { value: "Elysium", label: "Elysium" },
+      ],
     },
     {
       id: "variant-venus-next",
       name: "Variant: used Venus next",
       type: "boolean",
-      affectsScoring: true
+      affectsScoring: true,
     },
     {
       id: "variant-colonies",
       name: "Variant: used Colonies",
       type: "boolean",
-      affectsScoring: true
+      affectsScoring: true,
     },
     {
       id: "variant-prelude",
       name: "Variant: used Prelude",
       type: "boolean",
-      affectsScoring: true
+      affectsScoring: true,
     },
     {
       id: "variant-turmoil",
       name: "Variant: used Turmoil",
       type: "boolean",
-      affectsScoring: true
-    }
-  ]
+      affectsScoring: true,
+    },
+  ],
 };
 
 const sevenWonders: GameDefinition = {
@@ -198,7 +198,7 @@ const sevenWonders: GameDefinition = {
     {
       id: "war",
       name: "War",
-      type: "number"
+      type: "number",
     },
     { id: "money", name: "Money", type: "number" },
     { id: "wonders", name: "Wonders", type: "number", minValue: 0 },
@@ -206,43 +206,43 @@ const sevenWonders: GameDefinition = {
       id: "civil-buildings",
       name: "Civil buildings (blue)",
       type: "number",
-      minValue: 0
+      minValue: 0,
     },
     {
       id: "commercial-cards",
       name: "Commercial buildings (yellow)",
       type: "number",
-      minValue: 0
+      minValue: 0,
     },
     { id: "guilds", name: "Guilds (purple)", type: "number", minValue: 0 },
     {
       id: "science-buildings",
       name: "Science buildings (green)",
       type: "number",
-      minValue: 0
+      minValue: 0,
     },
-    { id: "leaders", name: "Leaders", type: "number", minValue: 0 }
+    { id: "leaders", name: "Leaders", type: "number", minValue: 0 },
   ],
   miscFields: [
     {
       id: "variant-leaders",
       name: "Variant: used Leaders",
       type: "boolean",
-      affectsScoring: true
+      affectsScoring: true,
     },
     {
       id: "variant-cities",
       name: "Variant: used Cities",
       type: "boolean",
-      affectsScoring: true
+      affectsScoring: true,
     },
     {
       id: "variant-armada",
       name: "Variant: used Armada",
       type: "boolean",
-      affectsScoring: true
-    }
-  ]
+      affectsScoring: true,
+    },
+  ],
 };
 
 const cavernaForgottenFolk: GameDefinition = {
@@ -255,25 +255,25 @@ const cavernaForgottenFolk: GameDefinition = {
       id: "farm-animal-and-dog",
       name: "1p per farm animal and doge",
       type: "number",
-      minValue: 0
+      minValue: 0,
     },
     {
       id: "missing-farm-animal",
       name: "-2p per missing type of farm animal (-2)",
       type: "number",
-      maxValue: 0
+      maxValue: 0,
     },
     {
       id: "per-grain",
       name: "1/2p per grain (rounded up)",
       type: "number",
-      minValue: 0
+      minValue: 0,
     },
     {
       id: "per-vegetable",
       name: "1p per vegetable",
       type: "number",
-      minValue: 0
+      minValue: 0,
     },
     { id: "per-ruby", name: "1p per ruby", type: "number", minValue: 0 },
     { id: "per-dwarf", name: "1p per dwarf", type: "number", minValue: 0 },
@@ -281,37 +281,38 @@ const cavernaForgottenFolk: GameDefinition = {
       id: "per-unused-space",
       name: "-1p per unused space",
       type: "number",
-      maxValue: 0
+      maxValue: 0,
     },
     {
       id: "game-board",
       name: "Furnishing tiles, pastures, mines",
       type: "number",
-      minValue: 0
+      minValue: 0,
     },
     {
       id: "score-game-board",
       name: "for parlors, storages and chambers",
       type: "number",
-      minValue: 0
+      minValue: 0,
     },
     {
       id: "gold-coins-and-begging-markers",
       name: "gold coins and begging markers",
       type: "number",
-      minValue: 0
-    }
+      minValue: 0,
+    },
   ],
   miscFields: [
     {
       id: "variant-forgotten-folk",
       name: "Variant: Forgotten folk",
       type: "boolean",
-      affectsScoring: true
+      affectsScoring: true,
     },
     {
       id: "race",
       name: "Race (Only for Forgotten folk)",
+      isRelevantReportDimension: true,
       type: "text",
       valuePerPlayer: true,
       options: [
@@ -322,10 +323,10 @@ const cavernaForgottenFolk: GameDefinition = {
         { value: "Elves", label: "Elves" },
         { value: "Mountain dwarves", label: "Mountain dwarves" },
         { value: "Silicoids", label: "Silicoids" },
-        { value: "Trolls", label: "Trolls" }
-      ]
-    }
-  ]
+        { value: "Trolls", label: "Trolls" },
+      ],
+    },
+  ],
 };
 
 const eclipse: GameDefinition = {
@@ -338,15 +339,15 @@ const eclipse: GameDefinition = {
       id: "karkit",
       name: "Discovery tiles",
       type: "number",
-      minValue: 0
+      minValue: 0,
     },
     {
       id: "game-board",
       name: "Game board",
       type: "number",
-      minValue: 0
-    }
-  ]
+      minValue: 0,
+    },
+  ],
 };
 
 const feastForOdin: GameDefinition = {
@@ -361,19 +362,19 @@ const feastForOdin: GameDefinition = {
       id: "exploration-boards",
       name: "Exploration boards",
       type: "number",
-      minValue: 0
+      minValue: 0,
     },
     {
       id: "sheds-and-houses",
       name: "Sheds and houses",
       type: "number",
-      minValue: 0
+      minValue: 0,
     },
     {
       id: "sheep-and-cattle",
       name: "Sheep and cattle",
       type: "number",
-      minValue: 0
+      minValue: 0,
     },
     { id: "occupations", name: "Occupations", type: "number", minValue: 0 },
     { id: "silver", name: "Silver", type: "number", minValue: 0 },
@@ -383,25 +384,25 @@ const feastForOdin: GameDefinition = {
       id: "home-board",
       name: "Home board (negatives)",
       type: "number",
-      maxValue: 0
+      maxValue: 0,
     },
     {
       id: "exploration-boards-negative",
       name: "Exploration boards (negatives)",
       type: "number",
-      maxValue: 0
+      maxValue: 0,
     },
     {
       id: "sheds-and-houses-negative",
       name: "Sheds and houses (negatives)",
       type: "number",
-      maxValue: 0
+      maxValue: 0,
     },
-    { id: "thing-penalty", name: "Thing Penalty", type: "number", maxValue: 0 }
+    { id: "thing-penalty", name: "Thing Penalty", type: "number", maxValue: 0 },
   ],
   miscFields: [
-    { id: "rounds", name: "Rounds", type: "number", minValue: 6, maxValue: 7 }
-  ]
+    { id: "rounds", name: "Rounds", type: "number", minValue: 6, maxValue: 7 },
+  ],
 };
 
 const honshu: GameDefinition = {
@@ -414,9 +415,9 @@ const honshu: GameDefinition = {
     { id: "city", name: "City", type: "number", minValue: 0 },
     { id: "factories", name: "Factories", type: "number", minValue: 0 },
     { id: "water", name: "Water", type: "number", minValue: 0 },
-    { id: "bonus", name: "Bonus", type: "number", minValue: 0 }
+    { id: "bonus", name: "Bonus", type: "number", minValue: 0 },
   ],
-  miscFields: [{ id: "bonusType", name: "Type of bonus", type: "text" }]
+  miscFields: [{ id: "bonusType", name: "Type of bonus", type: "text" }],
 };
 
 const terraMystica: GameDefinition = {
@@ -427,9 +428,17 @@ const terraMystica: GameDefinition = {
   scoreFields: [
     { id: "points", name: "Points", type: "number", minValue: 0 },
     { id: "largestArea", name: "Largest ares", type: "number", minValue: 0 },
-    { id: "cultists", name: "Cultist tracks", type: "number", minValue: 0 }
+    { id: "cultists", name: "Cultist tracks", type: "number", minValue: 0 },
   ],
-  miscFields: [{ id: "race", name: "Race", type: "text", valuePerPlayer: true }]
+  miscFields: [
+    {
+      id: "race",
+      name: "Race",
+      type: "text",
+      valuePerPlayer: true,
+      isRelevantReportDimension: true,
+    },
+  ],
 };
 
 const welcomeTo: GameDefinition = {
@@ -446,30 +455,30 @@ const welcomeTo: GameDefinition = {
       id: "housing-estates",
       name: "Housing estates (any size)",
       type: "number",
-      minValue: 0
+      minValue: 0,
     },
     { id: "bis", name: "Bis (negative)", type: "number", maxValue: 0 },
     {
       id: "roundabout",
       name: "Roundabouts (negative)",
       type: "number",
-      maxValue: 0
+      maxValue: 0,
     },
     {
       id: "building-permit-refusal",
       name: "Building permit refusal (negative)",
       type: "number",
-      maxValue: 0
-    }
+      maxValue: 0,
+    },
   ],
   miscFields: [
     {
       id: "town-name",
       name: "Name of the town",
       type: "text",
-      valuePerPlayer: true
-    }
-  ]
+      valuePerPlayer: true,
+    },
+  ],
 };
 
 const concordia: GameDefinition = {
@@ -484,14 +493,14 @@ const concordia: GameDefinition = {
       description:
         "1 VP per full 10 sestertii, including the value of all goods in the storehouse",
       type: "number",
-      minValue: 0
+      minValue: 0,
     },
     {
       id: "jupiter",
       name: "Jupiter",
       description: "1 VP per card for each house inside a non-brick city",
       type: "number",
-      minValue: 0
+      minValue: 0,
     },
     {
       id: "saturnus",
@@ -499,7 +508,7 @@ const concordia: GameDefinition = {
       description:
         "1 VP per card for each province with at least one of the player's houses",
       type: "number",
-      minValue: 0
+      minValue: 0,
     },
     {
       id: "mercurius",
@@ -507,14 +516,14 @@ const concordia: GameDefinition = {
       description:
         "2 VP per card for each type of goods the player is producing",
       type: "number",
-      minValue: 0
+      minValue: 0,
     },
     {
       id: "mars",
       name: "Mars",
       description: "2 VP per card for each colonist on the game board",
       type: "number",
-      minValue: 0
+      minValue: 0,
     },
     {
       id: "minerva",
@@ -522,7 +531,7 @@ const concordia: GameDefinition = {
       description:
         "Certain number of VP per the specialist's card for each related city",
       type: "number",
-      minValue: 0
+      minValue: 0,
     },
     {
       id: "concordia",
@@ -532,14 +541,14 @@ const concordia: GameDefinition = {
       options: [
         {
           value: 0,
-          label: "Did not end the game (0 VP)"
+          label: "Did not end the game (0 VP)",
         },
         {
           value: 7,
-          label: "Ended the game (7 VP)"
-        }
-      ]
-    }
+          label: "Ended the game (7 VP)",
+        },
+      ],
+    },
   ],
   miscFields: [
     {
@@ -550,10 +559,10 @@ const concordia: GameDefinition = {
       description: "Which side of the board was used?",
       options: [
         { value: "Italy", label: "Italy" },
-        { value: "Mediterranean", label: "Mediterranean" }
-      ]
-    }
-  ]
+        { value: "Mediterranean", label: "Mediterranean" },
+      ],
+    },
+  ],
 };
 
 const dominantSpecies: GameDefinition = {
@@ -566,26 +575,27 @@ const dominantSpecies: GameDefinition = {
       id: "score",
       name: "Scores",
       type: "number",
-      minValue: 0
+      minValue: 0,
     },
     {
       id: "ice-age",
       name: "Ice age",
       type: "number",
-      minValue: 0
+      minValue: 0,
     },
     {
       id: "end-scoring",
       name: "End scoring",
       type: "number",
-      minValue: 0
-    }
+      minValue: 0,
+    },
   ],
   miscFields: [
     {
       id: "animal",
       name: "Animal",
       type: "text",
+      isRelevantReportDimension: true,
       valuePerPlayer: true,
       options: [
         { value: "Mammals", label: "Mammals" },
@@ -593,8 +603,8 @@ const dominantSpecies: GameDefinition = {
         { value: "Birds", label: "Birds" },
         { value: "Amphibians", label: "Amphibians" },
         { value: "Arachnids", label: "Arachnids" },
-        { value: "Insects", label: "Insects" }
-      ]
+        { value: "Insects", label: "Insects" },
+      ],
     },
     {
       id: "variant-rules",
@@ -604,11 +614,11 @@ const dominantSpecies: GameDefinition = {
       options: [
         {
           value: "Short game w/o all dominant cards",
-          label: "Short game w/o all dominant cards"
-        }
-      ]
-    }
-  ]
+          label: "Short game w/o all dominant cards",
+        },
+      ],
+    },
+  ],
 };
 
 const splendor: GameDefinition = {
@@ -621,16 +631,16 @@ const splendor: GameDefinition = {
       id: "production",
       name: "Production",
       type: "number",
-      minValue: 0
+      minValue: 0,
     },
     {
       id: "nobles",
       name: "Nobles",
       type: "number",
-      minValue: 0
-    }
+      minValue: 0,
+    },
   ],
-  miscFields: []
+  miscFields: [],
 };
 
 const catan: GameDefinition = {
@@ -644,21 +654,21 @@ const catan: GameDefinition = {
       id: "longest-road",
       name: "Longest road",
       type: "number",
-      minValue: 0
+      minValue: 0,
     },
     {
       id: "largest-army",
       name: "Largest army",
       type: "number",
-      minValue: 0
+      minValue: 0,
     },
     {
       id: "development-cards",
       name: "Development card victory points",
       type: "number",
-      minValue: 0
-    }
-  ]
+      minValue: 0,
+    },
+  ],
 };
 
 const lordsOfWaterdeep: GameDefinition = {
@@ -672,29 +682,29 @@ const lordsOfWaterdeep: GameDefinition = {
       id: "lord",
       name: "Lord",
       type: "number",
-      minValue: 0
+      minValue: 0,
     },
     {
       id: "leftover-resources",
       name: "Leftover resources",
       type: "number",
-      minValue: 0
+      minValue: 0,
     },
     {
       id: "corruption",
       name: "Corruption",
       type: "number",
-      maxValue: 0
-    }
+      maxValue: 0,
+    },
   ],
   miscFields: [
     {
       id: "variant-scoundrels-of-skullport",
       name: "Variant: used Scoundrels of Skullport",
       type: "boolean",
-      affectsScoring: true
-    }
-  ]
+      affectsScoring: true,
+    },
+  ],
 };
 
 const generic: GameDefinition = {
@@ -707,7 +717,7 @@ const generic: GameDefinition = {
     { id: "category-3", name: "Category 3", type: "number", minValue: 0 },
     { id: "category-4", name: "Category 4", type: "number", minValue: 0 },
     { id: "category-5", name: "Category 5", type: "number", minValue: 0 },
-    { id: "category-6", name: "Category 6", type: "number", minValue: 0 }
+    { id: "category-6", name: "Category 6", type: "number", minValue: 0 },
   ],
   miscFields: [
     { id: "game-name", name: "Game name", type: "text", valuePerPlayer: false },
@@ -715,45 +725,45 @@ const generic: GameDefinition = {
       id: "category-1-name",
       name: "Category 1 name",
       type: "text",
-      valuePerPlayer: false
+      valuePerPlayer: false,
     },
     {
       id: "category-2-name",
       name: "Category 2 name",
       type: "text",
-      valuePerPlayer: false
+      valuePerPlayer: false,
     },
     {
       id: "category-3-name",
       name: "Category 3 name",
       type: "text",
-      valuePerPlayer: false
+      valuePerPlayer: false,
     },
     {
       id: "category-4-name",
       name: "Category 4 name",
       type: "text",
-      valuePerPlayer: false
+      valuePerPlayer: false,
     },
     {
       id: "category-5-name",
       name: "Category 5 name",
       type: "text",
-      valuePerPlayer: false
+      valuePerPlayer: false,
     },
     {
       id: "category-6-name",
       name: "Category 6 name",
       type: "text",
-      valuePerPlayer: false
+      valuePerPlayer: false,
     },
     {
       id: "variants",
       name: "Used variants",
       type: "text",
-      valuePerPlayer: false
-    }
-  ]
+      valuePerPlayer: false,
+    },
+  ],
 };
 
 const gameDtos = [
@@ -776,7 +786,7 @@ const gameDtos = [
   coup,
   catan,
   generic,
-  lordsOfWaterdeep
+  lordsOfWaterdeep,
 ];
 
-export const games = gameDtos.map(g => new Game(g));
+export const games = gameDtos.map((g) => new Game(g));

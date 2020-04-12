@@ -14,6 +14,7 @@ import { games } from "./domain/games";
 import { mean, groupBy, union, sortBy, last, first } from "lodash";
 import { usePlays } from "./common/hooks/usePlays";
 import { calculateEloForPlayers } from "./domain/ratings";
+import { GameMiscFieldDefinition, GameFieldOption } from "./domain/game";
 
 export const GameReportView = (props: RouteComponentProps<any>) => {
   const gameId = props.match.params["gameId"];
@@ -39,11 +40,24 @@ export const GameReportView = (props: RouteComponentProps<any>) => {
     return <>Error</>;
   }
 
+  const reportDimensions = game.miscFields?.filter(
+    (x) => x.isRelevantReportDimension === true
+  );
+
   return (
     <div>
       <h3>Reports: {game.name}</h3>
       <p>Based on {gamePlays.length} plays.</p>
       <HighScoresReportTable plays={gamePlays} />
+
+      {reportDimensions?.map((x) => {
+        return (
+          <>
+            <h4>{x.name}</h4>
+            <DimensionReportTable plays={gamePlays} dimension={x} />
+          </>
+        );
+      })}
 
       <h4>Best players</h4>
       <ReportPlayers plays={gamePlays}></ReportPlayers>
@@ -81,6 +95,56 @@ const useReportTableStyles = makeStyles((theme) => ({
   },
 }));
 
+const DimensionReportTable = (props: {
+  plays: Play[];
+  dimension: GameMiscFieldDefinition;
+}) => {
+  const { plays, dimension } = props;
+
+  const columns = union([
+    dimension.name,
+    "Win percentage",
+    "Use percentage",
+    "TODO: Average position",
+  ]);
+
+  const rows: GameFieldOption<string>[] =
+    (dimension as any).options?.map((x: any) => x) || [];
+
+  const allPlays = plays.length;
+
+  const reportRows = rows.map((row) => {
+    const playsWhereValueWasUsed = plays.filter((p) =>
+      p.misc.find((x) => x.fieldId === dimension.id && x.data === row.value)
+    ).length;
+
+    const playsWhereWinnerUsedValue = plays.filter(
+      (p) => p.getWinnersDimensionValue(dimension) === row.value
+    ).length;
+
+    return [
+      { value: row.label },
+      {
+        value: Math.round((playsWhereWinnerUsedValue / allPlays) * 100),
+      },
+      {
+        value: Math.round((playsWhereValueWasUsed / allPlays) * 100),
+      },
+    ];
+  });
+
+  const sortedReportRows = sortBy(reportRows, (x) => x[1].value).reverse();
+
+  const beautifiedReportRows = sortedReportRows.map((x) =>
+    x.map((y, idx) =>
+      idx === 0 ? { value: y.value.toString() } : { value: y.value + " %" }
+    )
+  );
+
+  return (
+    <ReportTable rows={beautifiedReportRows} columns={columns}></ReportTable>
+  );
+};
 const HighScoresReportTable = (props: { plays: Play[] }) => {
   const { plays } = props;
 
@@ -95,11 +159,11 @@ const HighScoresReportTable = (props: { plays: Play[] }) => {
   columns.map((p, idx) => {
     if (idx === 0) {
       rows[0] = [];
-      rows[0][0] = "Max winner score";
+      rows[0][0] = { value: "Max winner score" };
       rows[1] = [];
-      rows[1][0] = "Average winner score";
+      rows[1][0] = { value: "Average winner score" };
       rows[2] = [];
-      rows[2][0] = "Min winner score";
+      rows[2][0] = { value: "Min winner score" };
       return null;
     }
     const playsOfNumberOfPlayers =
@@ -138,8 +202,12 @@ const HighScoresReportTable = (props: { plays: Play[] }) => {
 };
 
 type ReportTableProps = {
-  rows: any[][];
+  rows: ReportTableRow[][];
   columns: string[];
+};
+type ReportTableRow = {
+  value: string;
+  link?: string;
 };
 const ReportTable = ({ rows, columns }: ReportTableProps) => {
   const classes = useReportTableStyles();
@@ -160,10 +228,10 @@ const ReportTable = ({ rows, columns }: ReportTableProps) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row, rowIdx) => (
-              <TableRow key={row[0]}>
+            {rows.map((row) => (
+              <TableRow key={row[0].value}>
                 {columns.map((column, columnIdx) => (
-                  <TableCell scope="row" key={column}>
+                  <TableCell scope="row" key={row[0].value + column}>
                     <a href={row[columnIdx]?.link}>{row[columnIdx]?.value}</a>
                   </TableCell>
                 ))}
