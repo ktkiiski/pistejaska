@@ -51,10 +51,14 @@ export const GameReportView = (props: RouteComponentProps<any>) => {
       <HighScoresReportTable plays={gamePlays} />
 
       {reportDimensions?.map((x) => {
+        const playsWithDimension = gamePlays.filter((p) =>
+          p.misc.some((m) => m.fieldId === x.id)
+        );
         return (
           <>
             <h4>{x.name}</h4>
-            <DimensionReportTable plays={gamePlays} dimension={x} />
+            <p>Based on {playsWithDimension.length} plays.</p>
+            <DimensionReportTable plays={playsWithDimension} dimension={x} />
           </>
         );
       })}
