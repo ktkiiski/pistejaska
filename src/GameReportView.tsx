@@ -6,7 +6,7 @@ import {
   TableHead,
   TableRow,
   TableCell,
-  TableBody
+  TableBody,
 } from "@material-ui/core";
 import { Play } from "./domain/play";
 import { RouteComponentProps } from "react-router";
@@ -31,9 +31,9 @@ export const GameReportView = (props: RouteComponentProps<any>) => {
     return <>Loading...</>;
   }
 
-  const gamePlays = plays.filter(p => p.gameId === gameId);
+  const gamePlays = plays.filter((p) => p.gameId === gameId);
 
-  const game = games.find(g => g.id === gameId);
+  const game = games.find((g) => g.id === gameId);
 
   if (!game) {
     return <>Error</>;
@@ -43,7 +43,7 @@ export const GameReportView = (props: RouteComponentProps<any>) => {
     <div>
       <h3>Reports: {game.name}</h3>
       <p>Based on {gamePlays.length} plays.</p>
-      <ReportTable plays={gamePlays} />
+      <HighScoresReportTable plays={gamePlays} />
 
       <h4>Best players</h4>
       <ReportPlayers plays={gamePlays}></ReportPlayers>
@@ -59,78 +59,94 @@ export const GameReportView = (props: RouteComponentProps<any>) => {
   );
 };
 
-const useReportTableStyles = makeStyles(theme => ({
+const useReportTableStyles = makeStyles((theme) => ({
   root: {
-    width: "100%"
+    width: "100%",
   },
   paper: {
     marginTop: theme.spacing(3),
     width: "100%",
     overflowX: "auto",
     marginBottom: theme.spacing(2),
-    paddingLeft: "4px"
+    paddingLeft: "4px",
   },
   table: {
-    maxWidth: "100%"
+    maxWidth: "100%",
   },
   "@global": {
     ".MuiTableCell-root": {
       padding: "0",
-      fontSize: "0.8em"
-    }
-  }
+      fontSize: "0.8em",
+    },
+  },
 }));
 
-const ReportTable = (props: { plays: Play[] }) => {
+const HighScoresReportTable = (props: { plays: Play[] }) => {
   const { plays } = props;
 
-  const classes = useReportTableStyles();
+  const playsByNumberOfPlayers = groupBy(plays, (p) => p.players.length);
 
-  if (plays.length === 0) {
-    return <>No plays</>;
-  }
+  const columns = union(
+    ["# of players", "Any"],
+    Object.keys(playsByNumberOfPlayers)
+  );
 
-  const playsByNumberOfPlayers = groupBy(plays, p => p.players.length);
-
-  const numberOfPlayers = union(["Any"], Object.keys(playsByNumberOfPlayers));
-  let report: any = {};
-  const columns = [
-    "Max winner score",
-    "Average winner score",
-    "Min winner score"
-  ];
-  numberOfPlayers.map(p => {
+  let rows: any = [];
+  columns.map((p, idx) => {
+    if (idx === 0) {
+      rows[0] = [];
+      rows[0][0] = "Max winner score";
+      rows[1] = [];
+      rows[1][0] = "Average winner score";
+      rows[2] = [];
+      rows[2][0] = "Min winner score";
+      return null;
+    }
     const playsOfNumberOfPlayers =
       p === "Any" ? plays : playsByNumberOfPlayers[p];
     const playsOrderedByWinnerScore = sortBy(
       playsOfNumberOfPlayers,
-      x => x.getWinnerScores() || 0
+      (x) => x.getWinnerScores() || 0
     );
     const maxScores = last(playsOrderedByWinnerScore);
     const minScores = first(playsOrderedByWinnerScore);
 
-    const winnerScores = playsOfNumberOfPlayers.map(p => p.getWinnerScores());
+    const winnerScores = playsOfNumberOfPlayers.map((p) => p.getWinnerScores());
 
-    const values = [
-      {
-        name: "Max winner score",
-        value: Math.round(maxScores?.getWinnerScores() || 0),
-        link: `/view/${maxScores?.id}`
-      },
-      {
-        name: "Average winner score",
-        value: Math.round(mean(winnerScores) || 0)
-      },
-      {
-        name: "Min winner score",
-        value: Math.round(minScores?.getWinnerScores() || 0),
-        link: `/view/${minScores?.id}`
-      }
-    ];
+    rows[0][idx] = {
+      value: Math.round(maxScores?.getWinnerScores() || 0),
+      link: `/view/${maxScores?.id}`,
+    };
 
-    report[p] = values;
-    return values;
+    rows[1][idx] = {
+      value: Math.round(mean(winnerScores) || 0),
+    };
+
+    rows[2][idx] = {
+      value: Math.round(minScores?.getWinnerScores() || 0),
+      link: `/view/${minScores?.id}`,
+    };
+
+    return null;
   });
+
+  if (plays.length === 0) {
+    rows = [];
+  }
+
+  return <ReportTable rows={rows} columns={columns}></ReportTable>;
+};
+
+type ReportTableProps = {
+  rows: any[][];
+  columns: string[];
+};
+const ReportTable = ({ rows, columns }: ReportTableProps) => {
+  const classes = useReportTableStyles();
+
+  if (rows.length === 0) {
+    return <>No plays</>;
+  }
 
   return (
     <div className={classes.root}>
@@ -138,21 +154,17 @@ const ReportTable = (props: { plays: Play[] }) => {
         <Table className={classes.table}>
           <TableHead>
             <TableRow>
-              <TableCell># of players</TableCell>
-              {numberOfPlayers.map(p => (
-                <TableCell key={p}>{p}</TableCell>
+              {columns.map((c) => (
+                <TableCell key={c}>{c}</TableCell>
               ))}
             </TableRow>
           </TableHead>
           <TableBody>
-            {columns.map((column, idx) => (
-              <TableRow key={column}>
-                <TableCell scope="row">{column}</TableCell>
-                {numberOfPlayers.map(numOfPlayers => (
-                  <TableCell scope="row" key={numOfPlayers}>
-                    <a href={report[numOfPlayers][idx].link}>
-                      {report[numOfPlayers][idx].value}
-                    </a>
+            {rows.map((row, rowIdx) => (
+              <TableRow key={row[0]}>
+                {columns.map((column, columnIdx) => (
+                  <TableCell scope="row" key={column}>
+                    <a href={row[columnIdx]?.link}>{row[columnIdx]?.value}</a>
                   </TableCell>
                 ))}
               </TableRow>
@@ -164,26 +176,26 @@ const ReportTable = (props: { plays: Play[] }) => {
   );
 };
 
-const useReportPlayersStyles = makeStyles(theme => ({
+const useReportPlayersStyles = makeStyles((theme) => ({
   root: {
-    width: "100%"
+    width: "100%",
   },
   paper: {
     marginTop: theme.spacing(3),
     width: "100%",
     overflowX: "auto",
     marginBottom: theme.spacing(2),
-    paddingLeft: "4px"
+    paddingLeft: "4px",
   },
   table: {
-    maxWidth: "100%"
+    maxWidth: "100%",
   },
   "@global": {
     ".MuiTableCell-root": {
       padding: "0",
-      fontSize: "0.8em"
-    }
-  }
+      fontSize: "0.8em",
+    },
+  },
 }));
 
 const ReportPlayers = (props: { plays: Play[] }) => {
@@ -208,7 +220,7 @@ const ReportPlayers = (props: { plays: Play[] }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {elo.slice(0, 5).map(p => (
+            {elo.slice(0, 5).map((p) => (
               <TableRow key={p.name}>
                 <TableCell scope="row">{p.name}</TableCell>
                 <TableCell scope="row">

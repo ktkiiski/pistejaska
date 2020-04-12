@@ -18,10 +18,10 @@ export class Game implements GameDefinition {
   }
 
   public static getDefaultMiscFieldValues(): MiscDataDTO[] {
-    return this.getDefaultMiscFields().map(f => {
+    return this.getDefaultMiscFields().map((f) => {
       return {
         fieldId: f.id,
-        data: f.getDefaultValue ? f.getDefaultValue() : ""
+        data: f.getDefaultValue ? f.getDefaultValue() : "",
       };
     });
   }
@@ -31,24 +31,24 @@ export class Game implements GameDefinition {
         id: "duration",
         name: "Duration (in hours)",
         type: "number",
-        step: 0.1
+        step: 0.1,
       },
       {
         id: "location",
         name: "Location",
-        type: "text"
+        type: "text",
       },
       {
         id: "name",
         name: "Name",
-        type: "text"
+        type: "text",
       },
       {
         id: "date",
         name: "Date",
         type: "date",
-        getDefaultValue: () => getTodayAsString()
-      }
+        getDefaultValue: () => getTodayAsString(),
+      },
     ];
   }
 
@@ -61,7 +61,7 @@ export class Game implements GameDefinition {
         description:
           "Give decimal scores (0.01) to tie-winning players to resolve ties",
         step: 0.01,
-        maxValue: 0.1
+        maxValue: 0.1,
       },
       {
         id: "misc",
@@ -70,26 +70,26 @@ export class Game implements GameDefinition {
         description:
           "Give scores that don't belong to any other category, eg. when playing new expansion",
         step: 0.01,
-        maxValue: 0.1
-      }
+        maxValue: 0.1,
+      },
     ];
   }
 
   public getFields(): GameFieldItem[] {
     const { scoreFields, miscFields = [] } = this;
     return [
-      ...scoreFields.map(f => {
+      ...scoreFields.map((f) => {
         return { type: "score", field: f } as const;
       }),
-      ...Game.getDefaultScoreFields().map(f => {
+      ...Game.getDefaultScoreFields().map((f) => {
         return { type: "score", field: f } as const;
       }),
-      ...miscFields.map(f => {
+      ...miscFields.map((f) => {
         return { type: "misc", field: f } as const;
       }),
-      ...Game.getDefaultMiscFields().map(f => {
+      ...Game.getDefaultMiscFields().map((f) => {
         return { type: "misc", field: f } as const;
-      })
+      }),
     ];
   }
 }
@@ -137,8 +137,10 @@ export type GameScoreFieldDefinition = GameFieldDefinition<number>;
 
 export type GameMiscFieldDefinition = (
   | GameFieldDefinition<string>
-  | GameFieldDefinition<number>) & {
+  | GameFieldDefinition<number>
+) & {
   valuePerPlayer?: boolean; // defaults to false
   getDefaultValue?: () => string;
   affectsScoring?: boolean; // defaults to false, used in reporting to define if scores should be be filterable by this field. e.g play location does not affect scoring, but used add-ons will affect
+  isRelevantReportDimension?: boolean; // defaults to false, used in reporting to define if scores are grouped by this dimension, e.g. player race/class/corporation
 };
