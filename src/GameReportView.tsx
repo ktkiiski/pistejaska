@@ -129,7 +129,9 @@ const DimensionReportTable = (props: {
     return [
       { value: row.label },
       {
-        value: Math.round((playsWhereWinnerUsedValue / allPlays) * 100),
+        value: Math.round(
+          (playsWhereWinnerUsedValue / playsWhereValueWasUsed) * 100 || 0
+        ),
       },
       {
         value: Math.round((playsWhereValueWasUsed / allPlays) * 100),
