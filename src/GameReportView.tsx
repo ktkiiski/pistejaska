@@ -112,12 +112,12 @@ const DimensionReportTable = (props: {
     dimension.name,
     "Win percentage",
     "Use percentage",
-    "TODO: Average position",
+    "Average normalized rank",
   ];
 
   const rows = sortBy(
     getDimensionStatistics(plays, dimension),
-    stat => stat.count > 0 ? -stat.winCount / stat.count : 1
+    stat => stat.averageNormalizedPosition ?? Number.POSITIVE_INFINITY
   );
   const playCount = plays.length;
 
@@ -126,6 +126,7 @@ const DimensionReportTable = (props: {
       { value: row.option.label },
       { value: Math.round((row.winCount / row.count) * 100) },
       { value: Math.round((row.count / playCount) * 100) },
+      { value: row.averageNormalizedPosition == null ? null : Math.round(100 - row.averageNormalizedPosition * 100) },
     ];
   });
 
@@ -134,7 +135,7 @@ const DimensionReportTable = (props: {
       if (typeof y.value === 'string') {
         return { value: y.value };
       }
-      if (Number.isNaN(y.value)) {
+      if (y.value == null || Number.isNaN(y.value)) {
         return { value: '—' };
       }
       return { value: `${y.value} %` };
