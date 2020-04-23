@@ -11,6 +11,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Feature to report average normalized rank for certain game dimensions, e.g. corporation in Terraforming Mars
+
+## 2020-4-12
+
+### Added
+
 - Feature to report win and use percentages for certain game dimensions, e.g. corporation in Terraforming Mars
 
 ## 2020-4-11

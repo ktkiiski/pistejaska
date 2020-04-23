@@ -1,4 +1,6 @@
 import React from "react";
+import ReactTooltip from "react-tooltip";
+
 import {
   makeStyles,
   Paper,
@@ -17,8 +19,10 @@ import { calculateEloForPlayers } from "./domain/ratings";
 import { GameMiscFieldDefinition } from "./domain/game";
 import { getDimensionStatistics } from "./domain/statistics";
 
-function isRelevantReportField(field: GameMiscFieldDefinition): field is GameMiscFieldDefinition<string> {
-  return (field.isRelevantReportDimension ?? false) && field.type !== 'number';
+function isRelevantReportField(
+  field: GameMiscFieldDefinition
+): field is GameMiscFieldDefinition<string> {
+  return (field.isRelevantReportDimension ?? false) && field.type !== "number";
 }
 
 export const GameReportView = (props: RouteComponentProps<any>) => {
@@ -109,15 +113,19 @@ const DimensionReportTable = (props: {
   const { plays, dimension } = props;
 
   const columns = [
-    dimension.name,
-    "Win percentage",
-    "Use percentage",
-    "Average normalized rank",
+    { name: dimension.name },
+    { name: "Win percentage" },
+    { name: "Use percentage" },
+    {
+      name: "Average normalized rank",
+      tooltip:
+        '100% = only wins, 0% = only losses, 50% =  "middle" position (e.g. 2nd in 3-player play)',
+    },
   ];
 
   const rows = sortBy(
     getDimensionStatistics(plays, dimension),
-    stat => stat.averageNormalizedPosition ?? Number.POSITIVE_INFINITY
+    (stat) => stat.averageNormalizedPosition ?? Number.POSITIVE_INFINITY
   );
   const playCount = plays.length;
 
@@ -126,17 +134,22 @@ const DimensionReportTable = (props: {
       { value: row.option.label },
       { value: Math.round((row.winCount / row.count) * 100) },
       { value: Math.round((row.count / playCount) * 100) },
-      { value: row.averageNormalizedPosition == null ? null : Math.round(100 - row.averageNormalizedPosition * 100) },
+      {
+        value:
+          row.averageNormalizedPosition == null
+            ? null
+            : Math.round(100 - row.averageNormalizedPosition * 100),
+      },
     ];
   });
 
   const beautifiedReportRows = reportRows.map((x) =>
     x.map((y) => {
-      if (typeof y.value === 'string') {
+      if (typeof y.value === "string") {
         return { value: y.value };
       }
       if (y.value == null || Number.isNaN(y.value)) {
-        return { value: '—' };
+        return { value: "—" };
       }
       return { value: `${y.value} %` };
     })
@@ -152,8 +165,10 @@ const HighScoresReportTable = (props: { plays: Play[] }) => {
   const playsByNumberOfPlayers = groupBy(plays, (p) => p.players.length);
 
   const columns = union(
-    ["# of players", "Any"],
-    Object.keys(playsByNumberOfPlayers)
+    [{ name: "# of players" }, { name: "Any" }],
+    Object.keys(playsByNumberOfPlayers).map((x) => {
+      return { name: x };
+    })
   );
 
   let rows: any = [];
@@ -168,7 +183,7 @@ const HighScoresReportTable = (props: { plays: Play[] }) => {
       return null;
     }
     const playsOfNumberOfPlayers =
-      p === "Any" ? plays : playsByNumberOfPlayers[p];
+      p.name === "Any" ? plays : playsByNumberOfPlayers[p.name];
     const playsOrderedByWinnerScore = sortBy(
       playsOfNumberOfPlayers,
       (x) => x.getWinnerScores() || 0
@@ -204,7 +219,7 @@ const HighScoresReportTable = (props: { plays: Play[] }) => {
 
 type ReportTableProps = {
   rows: ReportTableRow[][];
-  columns: string[];
+  columns: { name: string; tooltip?: string }[];
 };
 type ReportTableRow = {
   value: string;
@@ -219,12 +234,31 @@ const ReportTable = ({ rows, columns }: ReportTableProps) => {
 
   return (
     <div className={classes.root}>
+      <ReactTooltip />
       <Paper className={classes.paper}>
         <Table className={classes.table}>
           <TableHead>
             <TableRow>
               {columns.map((c) => (
-                <TableCell key={c}>{c}</TableCell>
+                <TableCell key={c.name}>
+                  {c.name}
+                  {c.tooltip ? (
+                    <span
+                      style={{
+                        borderRadius: "10px",
+                        padding: "0 5px",
+                        backgroundColor: "#ccc",
+                        color: "#fff",
+                        marginLeft: "5px",
+                      }}
+                      data-tip={c.tooltip}
+                    >
+                      ?
+                    </span>
+                  ) : (
+                    <></>
+                  )}
+                </TableCell>
               ))}
             </TableRow>
           </TableHead>
