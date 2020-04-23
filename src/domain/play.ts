@@ -25,6 +25,31 @@ export type MiscDataDTO = {
   playerId?: string | undefined;
 };
 
+export interface PlayRanking {
+  /**
+   * A player in Play
+   */
+  player: Player;
+  /**
+   * Total score of the player
+   */
+  score: number;
+  /**
+   * Starting order position of the player, starting from 0.
+   */
+  index: number;
+  /**
+   * Position of the player in the final score, starting from 1 (winner).
+   * May be equal to other positons if there are ties.
+   */
+  position: number;
+  /**
+   * Position of the player in the play normalized between 0 (winner) and 1 (loser).
+   * Value is null if position cannot be determined (e.g. when tied)
+   */
+  normalizedPosition: number | null;
+}
+
 // describes class that can be persisted
 export abstract class Entity {
   public toDTO() {
@@ -39,6 +64,7 @@ export class Play extends Entity implements PlayDTO {
   players: Player[];
   created: string;
   date: string;
+  rankings: PlayRanking[];
 
   constructor(play: PlayDTO) {
     super();
@@ -50,33 +76,48 @@ export class Play extends Entity implements PlayDTO {
     this.created = play.created || new Date().toISOString();
     const dateField = this.misc.find((m) => m.fieldId === "date");
     this.date = dateField ? dateField.data : "";
+    // Pre-sort players to the winning order, winner first
+    const scoredPlayers = sortBy(
+      this.players.map((player, index) => ({ player, index, score: this.getTotal(player) })),
+      (p) => -p.score,
+    );
+    // Determine positions for each player, giving equal positions to equal scores.
+    let latestPosition = 0;
+    let latestScore = NaN;
+    const rankings = scoredPlayers.map((ranking, index) => {
+      const { score } = ranking;
+      let position;
+      if (score === latestScore) {
+        // Tied with the previous player(s)
+        position = latestPosition;
+      } else {
+        position = index + 1;
+        latestScore = score;
+        latestPosition = position;
+      }
+      return { ...ranking, position };
+    });
+    // Finally, calculate normalized positions for each player
+    this.rankings = rankings.map(({ position, ...ranking }) => ({
+      ...ranking,
+      position,
+      // Normalize between 0...1, unless everyone are tied
+      normalizedPosition: latestPosition < 2 ? null : (position - 1) / (latestPosition - 1),
+    }));
+  }
+
+  public getRanking(playerId: string): PlayRanking {
+    const ranking = this.rankings.find(ranking => ranking.player.id === playerId);
+    if (!ranking) {
+      throw new Error(`Player with ID ${playerId} was not in this play`);
+    }
+    return ranking;
   }
 
   // get position. Gives equal position to equal scores.
   public getPosition(player: Player) {
-    const players = sortBy(
-      this.players.map((p) => {
-        return { player: p, scores: this.getTotal(p) };
-      }),
-      (p) => -p.scores
-    );
-
-    let position = 0;
-    let calculatedPosition = 0;
-    let oldPlayerScores = -1;
-
-    players.some((p) => {
-      calculatedPosition++;
-      if (oldPlayerScores !== p.scores) {
-        position = calculatedPosition;
-      }
-      oldPlayerScores = p.scores;
-
-      // short-circuit, i.e. return from loop as soon as we find the player
-      return p.player.id === player.id;
-    });
-
-    return position;
+    const ranking = this.rankings.find(ranking => ranking.player.id === player.id);
+    return ranking ? ranking.position : NaN;
   }
 
   public getTotal(player: Player) {
@@ -89,21 +130,6 @@ export class Play extends Entity implements PlayDTO {
 
   public getWinnerScores(): number {
     return max(this.players.map((p) => this.getTotal(p))) || 0;
-  }
-
-  public getWinnersDimensionValue(dimension: GameMiscFieldDefinition): string {
-    const winner = sortBy(
-      this.players.map((p) => {
-        return { scores: this.getTotal(p), p: p };
-      }),
-      (x) => x.scores
-    ).reverse()[0];
-
-    return (
-      this.misc.find(
-        (x) => x.fieldId === dimension.id && x.playerId === winner.p.id
-      )?.data || ""
-    );
   }
 
   public getDate(): Date {

@@ -14,7 +14,12 @@ import { games } from "./domain/games";
 import { mean, groupBy, union, sortBy, last, first } from "lodash";
 import { usePlays } from "./common/hooks/usePlays";
 import { calculateEloForPlayers } from "./domain/ratings";
-import { GameMiscFieldDefinition, GameFieldOption } from "./domain/game";
+import { GameMiscFieldDefinition } from "./domain/game";
+import { getDimensionStatistics } from "./domain/statistics";
+
+function isRelevantReportField(field: GameMiscFieldDefinition): field is GameMiscFieldDefinition<string> {
+  return (field.isRelevantReportDimension ?? false) && field.type !== 'number';
+}
 
 export const GameReportView = (props: RouteComponentProps<any>) => {
   const gameId = props.match.params["gameId"];
@@ -40,9 +45,7 @@ export const GameReportView = (props: RouteComponentProps<any>) => {
     return <>Error</>;
   }
 
-  const reportDimensions = game.miscFields?.filter(
-    (x) => x.isRelevantReportDimension === true
-  );
+  const reportDimensions = game.miscFields?.filter(isRelevantReportField);
 
   return (
     <div>
@@ -101,50 +104,42 @@ const useReportTableStyles = makeStyles((theme) => ({
 
 const DimensionReportTable = (props: {
   plays: Play[];
-  dimension: GameMiscFieldDefinition;
+  dimension: GameMiscFieldDefinition<string>;
 }) => {
   const { plays, dimension } = props;
 
-  const columns = union([
+  const columns = [
     dimension.name,
     "Win percentage",
     "Use percentage",
-    "TODO: Average position",
-  ]);
+    "Average normalized rank",
+  ];
 
-  const rows: GameFieldOption<string>[] =
-    (dimension as any).options?.map((x: any) => x) || [];
-
-  const allPlays = plays.length;
+  const rows = sortBy(
+    getDimensionStatistics(plays, dimension),
+    stat => stat.averageNormalizedPosition ?? Number.POSITIVE_INFINITY
+  );
+  const playCount = plays.length;
 
   const reportRows = rows.map((row) => {
-    const playsWhereValueWasUsed = plays.filter((p) =>
-      p.misc.find((x) => x.fieldId === dimension.id && x.data === row.value)
-    ).length;
-
-    const playsWhereWinnerUsedValue = plays.filter(
-      (p) => p.getWinnersDimensionValue(dimension) === row.value
-    ).length;
-
     return [
-      { value: row.label },
-      {
-        value: Math.round(
-          (playsWhereWinnerUsedValue / playsWhereValueWasUsed) * 100 || 0
-        ),
-      },
-      {
-        value: Math.round((playsWhereValueWasUsed / allPlays) * 100),
-      },
+      { value: row.option.label },
+      { value: Math.round((row.winCount / row.count) * 100) },
+      { value: Math.round((row.count / playCount) * 100) },
+      { value: row.averageNormalizedPosition == null ? null : Math.round(100 - row.averageNormalizedPosition * 100) },
     ];
   });
 
-  const sortedReportRows = sortBy(reportRows, (x) => x[1].value).reverse();
-
-  const beautifiedReportRows = sortedReportRows.map((x) =>
-    x.map((y, idx) =>
-      idx === 0 ? { value: y.value.toString() } : { value: y.value + " %" }
-    )
+  const beautifiedReportRows = reportRows.map((x) =>
+    x.map((y) => {
+      if (typeof y.value === 'string') {
+        return { value: y.value };
+      }
+      if (y.value == null || Number.isNaN(y.value)) {
+        return { value: '—' };
+      }
+      return { value: `${y.value} %` };
+    })
   );
 
   return (

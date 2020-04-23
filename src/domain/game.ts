@@ -135,10 +135,7 @@ export interface GameFieldDefinition<T> {
 
 export type GameScoreFieldDefinition = GameFieldDefinition<number>;
 
-export type GameMiscFieldDefinition = (
-  | GameFieldDefinition<string>
-  | GameFieldDefinition<number>
-) & {
+export interface GameMiscFieldDefinition<T = string | number> extends GameFieldDefinition<T> {
   valuePerPlayer?: boolean; // defaults to false
   getDefaultValue?: () => string;
   affectsScoring?: boolean; // defaults to false, used in reporting to define if scores should be be filterable by this field. e.g play location does not affect scoring, but used add-ons will affect
