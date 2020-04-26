@@ -437,6 +437,22 @@ const terraMystica: GameDefinition = {
       type: "text",
       valuePerPlayer: true,
       isRelevantReportDimension: true,
+      options: [
+        { value: "Alchemists", label: "Alchemists" },
+        { value: "Auren", label: "Auren" },
+        { value: "Chaos Magicians", label: "Chaos Magicians" },
+        { value: "Cultists", label: "Cultists" },
+        { value: "Darklings", label: "Darklings" },
+        { value: "Dwarves", label: "Dwarves" },
+        { value: "Engineers", label: "Engineers" },
+        { value: "Fakirs", label: "Fakirs" },
+        { value: "Giants", label: "Giants" },
+        { value: "Halflings", label: "Halflings" },
+        { value: "Mermaids", label: "Mermaids" },
+        { value: "Nomads", label: "Nomads" },
+        { value: "Swarmlings", label: "Swarmlings" },
+        { value: "Witches", label: "Witches" },
+      ]
     },
   ],
 };
