@@ -106,13 +106,8 @@ export class Play extends Entity implements PlayDTO {
     }));
   }
 
-  public getRanking(playerId: string): PlayRanking {
-    const ranking = this.rankings.find(ranking => ranking.player.id === playerId);
-    if (!ranking) {
-      console.warn(`Player with ID ${playerId} was not in this play`);
-      return {} as any;
-    }
-    return ranking;
+  public getRanking(playerId: string): PlayRanking | undefined {
+    return this.rankings.find(ranking => ranking.player.id === playerId);
   }
 
   // get position. Gives equal position to equal scores.

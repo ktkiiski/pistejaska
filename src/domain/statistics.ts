@@ -49,13 +49,17 @@ export function getDimensionStatistics(
                     if (playerId != null) {
                         // Check if used by a winner
                         const playerRanking = play.getRanking(playerId);
-                        if (playerRanking.position === 1) {
-                            winCount += 1;
-                        }
-                        // Average normalized position
-                        if (playerRanking.normalizedPosition != null) {
-                            normalizedPositionSum += playerRanking.normalizedPosition;
-                            normalizedPositionCount += 1;
+                        if (playerRanking) {
+                            if (playerRanking.position === 1) {
+                                winCount += 1;
+                            }
+                            // Average normalized position
+                            if (playerRanking.normalizedPosition != null) {
+                                normalizedPositionSum += playerRanking.normalizedPosition;
+                                normalizedPositionCount += 1;
+                            }
+                        } else {
+                            console.warn(`Play ${play.id} probably corrupt: player with ID ${playerId} was not in this play`);
                         }
                     }
                 }
