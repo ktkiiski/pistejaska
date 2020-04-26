@@ -109,7 +109,8 @@ export class Play extends Entity implements PlayDTO {
   public getRanking(playerId: string): PlayRanking {
     const ranking = this.rankings.find(ranking => ranking.player.id === playerId);
     if (!ranking) {
-      throw new Error(`Player with ID ${playerId} was not in this play`);
+      console.warn(`Player with ID ${playerId} was not in this play`);
+      return {} as any;
     }
     return ranking;
   }
