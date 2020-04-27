@@ -62,11 +62,11 @@ export const GameReportView = (props: RouteComponentProps<any>) => {
           p.misc.some((m) => m.fieldId === x.id)
         );
         return (
-          <>
+          <React.Fragment key={x.id}>
             <h4>{x.name}</h4>
             <p>Based on {playsWithDimension.length} plays.</p>
             <DimensionReportTable plays={playsWithDimension} dimension={x} />
-          </>
+          </React.Fragment>
         );
       })}
 
@@ -123,9 +123,9 @@ const DimensionReportTable = (props: {
     },
   ];
 
+  const stats = Array.from(getDimensionStatistics(plays, dimension).values());
   const rows = sortBy(
-    getDimensionStatistics(plays, dimension),
-    (stat) => stat.averageNormalizedPosition ?? Number.POSITIVE_INFINITY
+    stats, (stat) => stat.averageNormalizedPosition ?? Number.POSITIVE_INFINITY,
   );
   const playCount = plays.length;
 
@@ -266,7 +266,7 @@ const ReportTable = ({ rows, columns }: ReportTableProps) => {
             {rows.map((row) => (
               <TableRow key={row[0].value}>
                 {columns.map((column, columnIdx) => (
-                  <TableCell scope="row" key={row[0].value + column}>
+                  <TableCell scope="row" key={`${row[0].value}:${column.name}`}>
                     <a href={row[columnIdx]?.link}>{row[columnIdx]?.value}</a>
                   </TableCell>
                 ))}
