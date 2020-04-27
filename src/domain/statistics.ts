@@ -1,5 +1,142 @@
 import { Play } from "./play";
-import { GameMiscFieldDefinition, GameFieldOption } from "./game";
+import { GameMiscFieldDefinition, GameFieldOption, Game } from "./game";
+
+export interface GameStatistics {
+    /**
+     * The game for which these statistics are for.
+     */
+    game: Game;
+    /**
+     * For how many players this statistics are for.
+     * Value `null` means "any number".
+     */
+    playerCount: number | null;
+    /**
+     * The total number of plays for this many players.
+     */
+    playCount: number;
+    /**
+     * The maximum winning score for this many players,
+     * or null if information not available.
+     */
+    maxWinningScore: number | null;
+    /**
+     * The minimum winning score for this many players,
+     * or null if information not available.
+     */
+    minWinningScore: number | null;
+    /**
+     * The average winning score for this many players,
+     * or null if information not available.
+     */
+    averageWinningScore: number | null;
+    /**
+     * The sum of all winning scores for this many players.
+     * Used to calculate the average winning score by dividing
+     * this by `playCount`.
+     */
+    winningScoreSum: number;
+    /**
+     * The first game in which the winner got the `maxWinningScore`.
+     */
+    maxWinningScorePlay: Play | null;
+    /**
+     * The first game in which the winner got the `minWinningScore`.
+     */
+    minWinningScorePlay: Play | null;
+    /**
+     * Average duration of the game with this many players,
+     * or null if information not available.
+     */
+    averageDuration: number | null;
+    /**
+     * Average duration of the game per player,
+     * or null if information not available.
+     */
+    averageDurationPerPlayer: number | null;
+    /**
+     * The total number of playing minutes for this many players.
+     * For average play duration: durationSum / durationCount
+     * For average duration / player: durationSum / durationPlayerCount
+     */
+    durationSum: number;
+    /**
+     * The number of plays that had a duration information available,
+     * for this many players.
+     */
+    durationCount: number;
+    /**
+     * The total number of players for duration information. Use this to
+     * calculate the average duration per player.
+     */
+    durationPlayerCount: number;
+}
+
+/**
+ * Analyses the general statistics for a game for different number of players.
+ * The index 0 in the returned array means "any number of players", and after
+ * that each index corresponds the number of players attending the game.
+ * @param game the game to analyze
+ * @param plays all the plays for the game
+ */
+export function getGameStatistics(game: Game, plays: Play[]): GameStatistics[] {
+    const initStats = (playerCount: number | null): GameStatistics => ({
+        game,
+        playerCount,
+        playCount: 0,
+        maxWinningScore: null,
+        minWinningScore: null,
+        averageWinningScore: null,
+        winningScoreSum: 0,
+        maxWinningScorePlay: null,
+        minWinningScorePlay: null,
+        averageDuration: null,
+        averageDurationPerPlayer: null,
+        durationSum: 0,
+        durationCount: 0,
+        durationPlayerCount: 0,
+    });
+
+    function aggregateWinningScore(stats: GameStatistics, winningScore: number, play: Play) {
+        stats.playCount += 1;
+        if (stats.maxWinningScore == null || winningScore > stats.maxWinningScore) {
+            stats.maxWinningScore = winningScore;
+            stats.maxWinningScorePlay = play;
+        }
+        if (stats.minWinningScore == null || winningScore < stats.minWinningScore) {
+            stats.minWinningScore = winningScore;
+            stats.minWinningScorePlay = play;
+        }
+        stats.winningScoreSum += winningScore;
+        stats.averageWinningScore = stats.winningScoreSum / stats.playCount;
+    }
+
+    function aggregateDuration(stats: GameStatistics, playerCount: number, duration: number) {
+        stats.durationSum += duration;
+        stats.durationCount += 1;
+        stats.durationPlayerCount += playerCount;
+        stats.averageDuration = stats.durationSum / stats.durationCount;
+        stats.averageDurationPerPlayer = stats.durationSum / stats.durationPlayerCount;
+    }
+
+    const anyPlayerStats = initStats(null);
+    const statsByPlayerCount: GameStatistics[] = [anyPlayerStats];
+    plays.forEach((play) => {
+        const playerCount = play.rankings.length;
+        let playerCountStats = statsByPlayerCount[playerCount] || initStats(playerCount);
+        statsByPlayerCount[playerCount] = playerCountStats;
+        const [ win ] = play.rankings;
+        aggregateWinningScore(anyPlayerStats, win.score, play);
+        aggregateWinningScore(playerCountStats, win.score, play);
+
+        const duration = play.getDuration();
+        if (duration != null) {
+            aggregateDuration(anyPlayerStats, playerCount, duration);
+            aggregateDuration(playerCountStats, playerCount, duration);
+        }
+    });
+    return statsByPlayerCount.filter(stats => stats != null);
+}
 
 export interface DimensionValueStatistics<T> {
     /**

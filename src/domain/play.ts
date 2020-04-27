@@ -143,4 +143,15 @@ export class Play extends Entity implements PlayDTO {
 
     return `${this.getDate().toLocaleDateString()} ${name}`;
   }
+
+  /**
+   * Returns the duration of this game IN HOURS, if known.
+   */
+  public getDuration(): number | null {
+    const field = this.misc.find(m => m.fieldId === 'duration');
+    if (field && typeof field.data === 'number') {
+      return field.data;
+    }
+    return null;
+  }
 }
