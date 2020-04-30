@@ -18,6 +18,7 @@ import { usePlays } from "./common/hooks/usePlays";
 import { calculateEloForPlayers } from "./domain/ratings";
 import { GameMiscFieldDefinition, Game } from "./domain/game";
 import { getDimensionStatistics, getGameStatistics } from "./domain/statistics";
+import WinOrderCorrelationChart from "./WinOrderCorrelationChart";
 
 function isRelevantReportField(
   field: GameMiscFieldDefinition
@@ -80,6 +81,8 @@ export const GameReportView = (props: RouteComponentProps<any>) => {
         </a>
         .
       </p>
+      <h4>Ranking vs. starting order</h4>
+      <WinOrderCorrelationChart plays={plays} />
     </div>
   );
 };

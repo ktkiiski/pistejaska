@@ -1,5 +1,5 @@
 import { sum, sortBy, max } from "lodash";
-import { GameMiscFieldDefinition } from "./game";
+
 export type Player = {
   name: string;
   id: string;
@@ -39,6 +39,11 @@ export interface PlayRanking {
    */
   index: number;
   /**
+   * Starting order position of the player, normalized between 0 (started first)
+   * and 1 (started last). Value is null for single-player games.
+   */
+  normalizedIndex: number | null;
+  /**
    * Position of the player in the final score, starting from 1 (winner).
    * May be equal to other positons if there are ties.
    */
@@ -77,8 +82,14 @@ export class Play extends Entity implements PlayDTO {
     const dateField = this.misc.find((m) => m.fieldId === "date");
     this.date = dateField ? dateField.data : "";
     // Pre-sort players to the winning order, winner first
+    const playerCount = this.players.length;
     const scoredPlayers = sortBy(
-      this.players.map((player, index) => ({ player, index, score: this.getTotal(player) })),
+      this.players.map((player, index) => ({
+        player,
+        index,
+        normalizedIndex: playerCount > 1 ? index / (playerCount - 1) : null,
+        score: this.getTotal(player),
+      })),
       (p) => -p.score,
     );
     // Determine positions for each player, giving equal positions to equal scores.
