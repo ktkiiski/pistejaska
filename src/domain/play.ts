@@ -1,5 +1,5 @@
 import { sum, sortBy, max } from "lodash";
-import { GameMiscFieldDefinition } from "./game";
+
 export type Player = {
   name: string;
   id: string;
@@ -39,6 +39,16 @@ export interface PlayRanking {
    */
   index: number;
   /**
+   * Starting order position of the player, normalized between 0 (started first)
+   * and 1 (started last). Value is null for single-player games.
+   */
+  normalizedIndex: number | null;
+  /**
+   * Normalized score of this ranking, scaled between 0 (loser's score)
+   * and 1 (winner's score). Value is null for single-player games.
+   */
+  normalizedScore: number | null;
+  /**
    * Position of the player in the final score, starting from 1 (winner).
    * May be equal to other positons if there are ties.
    */
@@ -77,10 +87,19 @@ export class Play extends Entity implements PlayDTO {
     const dateField = this.misc.find((m) => m.fieldId === "date");
     this.date = dateField ? dateField.data : "";
     // Pre-sort players to the winning order, winner first
+    const playerCount = this.players.length;
     const scoredPlayers = sortBy(
-      this.players.map((player, index) => ({ player, index, score: this.getTotal(player) })),
+      this.players.map((player, index) => ({
+        player,
+        index,
+        normalizedIndex: playerCount > 1 ? index / (playerCount - 1) : null,
+        score: this.getTotal(player),
+      })),
       (p) => -p.score,
     );
+    const maxScore = scoredPlayers[0]?.score;
+    const minScore = scoredPlayers[scoredPlayers.length - 1]?.score;
+    const scoreDiff = maxScore - minScore;
     // Determine positions for each player, giving equal positions to equal scores.
     let latestPosition = 0;
     let latestScore = NaN;
@@ -98,11 +117,14 @@ export class Play extends Entity implements PlayDTO {
       return { ...ranking, position };
     });
     // Finally, calculate normalized positions for each player
-    this.rankings = rankings.map(({ position, ...ranking }) => ({
+    this.rankings = rankings.map(({ position, score, ...ranking }) => ({
       ...ranking,
+      score,
       position,
-      // Normalize between 0...1, unless everyone are tied
+      // Normalize position between 0...1, unless everyone are tied
       normalizedPosition: latestPosition < 2 ? null : (position - 1) / (latestPosition - 1),
+      // Normalize score between 0...1, unless everyone are tied
+      normalizedScore: scoreDiff > 0 ? (score - minScore) / scoreDiff : null,
     }));
   }
 
@@ -142,5 +164,16 @@ export class Play extends Entity implements PlayDTO {
       "";
 
     return `${this.getDate().toLocaleDateString()} ${name}`;
+  }
+
+  /**
+   * Returns the duration of this game IN HOURS, if known.
+   */
+  public getDuration(): number | null {
+    const field = this.misc.find(m => m.fieldId === 'duration');
+    if (field && typeof field.data === 'number') {
+      return field.data;
+    }
+    return null;
   }
 }

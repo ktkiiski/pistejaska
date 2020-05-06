@@ -5,6 +5,7 @@ const azul: GameDefinition = {
   id: "azul",
   icon:
     "https://cf.geekdo-images.com/itemrep/img/ql-0-t271LVGqbmWA1gdkIH7WvM=/fit-in/246x300/pic3718275.jpg",
+  simultaneousTurns: false,
   scoreFields: [
     { id: "score-tracker", name: "Score tracker", type: "number", minValue: 0 },
     {
@@ -28,6 +29,7 @@ const coup: GameDefinition = {
   id: "Coup",
   icon:
     "https://cf.geekdo-images.com/itemrep/img/iwjc_79Aqz3lMb6orn7XhDplgKc=/fit-in/246x300/pic2016054.jpg",
+  simultaneousTurns: false,
   scoreFields: [
     {
       id: "is-winner",
@@ -44,6 +46,7 @@ const brass: GameDefinition = {
   id: "brass",
   icon:
     "https://cf.geekdo-images.com/itemrep/img/_U34-eDDAf5K8Ftc9JDAi9vr-dE=/fit-in/246x300/pic3490053.jpg",
+  simultaneousTurns: false,
   scoreFields: [
     { id: "score-tracker", name: "Score tracker", type: "number", minValue: 0 },
   ],
@@ -54,6 +57,7 @@ const dominion: GameDefinition = {
   id: "dominion",
   icon:
     "https://cf.geekdo-images.com/itemrep/img/7mkW_JrUx0PSa4Ame3zzsLE0BVY=/fit-in/246x300/pic394356.jpg",
+  simultaneousTurns: false,
   scoreFields: [{ id: "scores", name: "Scores", type: "number", minValue: 0 }],
 };
 
@@ -62,6 +66,7 @@ const bohnanza: GameDefinition = {
   id: "bohnanza",
   icon:
     "https://cf.geekdo-images.com/itemrep/img/_KP8uVds-gbz3-R08Y_JCO1Ovwg=/fit-in/246x300/pic69366.jpg",
+  simultaneousTurns: false,
   scoreFields: [
     { id: "score-tracker", name: "Score tracker", type: "number", minValue: 0 },
   ],
@@ -72,6 +77,7 @@ const imperial: GameDefinition = {
   id: "imperial",
   icon:
     "https://cf.geekdo-images.com/itemrep/img/JOFogK5y-tNJRGLMS-NlRYbm864=/fit-in/246x300/pic840712.jpg",
+  simultaneousTurns: false,
   scoreFields: [
     { id: "score-tracker", name: "Score tracker", type: "number", minValue: 0 },
   ],
@@ -82,6 +88,7 @@ const terraFormingMars: GameDefinition = {
   id: "terraforming-mars",
   icon:
     "https://cf.geekdo-images.com/imagepage/img/sgZLoyg3KKeHvyHel8tZ2TIkXRw=/fit-in/900x600/filters:no_upscale()/pic3536616.jpg",
+  simultaneousTurns: false,
   scoreFields: [
     {
       id: "terraforming-rating",
@@ -194,6 +201,7 @@ const sevenWonders: GameDefinition = {
   id: "7-wonders",
   icon:
     "https://cf.geekdo-images.com/itemrep/img/fR5_q-7pMDmhLP8SPLOwPcUeLVo=/fit-in/246x300/pic860217.jpg",
+  simultaneousTurns: true,
   scoreFields: [
     {
       id: "war",
@@ -250,6 +258,7 @@ const cavernaForgottenFolk: GameDefinition = {
   id: "caverna",
   icon:
     "https://cf.geekdo-images.com/itemrep/img/QwBOuD-kVtDTkowpVQldIFv46m8=/fit-in/246x300/pic1790789.jpg",
+  simultaneousTurns: false,
   scoreFields: [
     {
       id: "farm-animal-and-dog",
@@ -334,6 +343,7 @@ const eclipse: GameDefinition = {
   id: "eclipse",
   icon:
     "https://cf.geekdo-images.com/itemrep/img/Ng0wVwl4xSa-MeOpuMaq1f7EwDs=/fit-in/246x300/pic1974056.jpg",
+  simultaneousTurns: false,
   scoreFields: [
     {
       id: "karkit",
@@ -355,6 +365,7 @@ const feastForOdin: GameDefinition = {
   id: "feast-for-odin",
   icon:
     "https://cf.geekdo-images.com/itemrep/img/IAIxn2CB7l9cE5UPyXFx35bT5TA=/fit-in/246x300/pic3146943.png",
+  simultaneousTurns: false,
   scoreFields: [
     { id: "ships", name: "Ships", type: "number", minValue: 0 },
     { id: "emigrations", name: "Emigrations", type: "number", minValue: 0 },
@@ -410,6 +421,7 @@ const honshu: GameDefinition = {
   id: "honshu",
   icon:
     "https://cf.geekdo-images.com/itemrep/img/l_uH7Py0YPsBK3L4Ti3x6Jswj2g=/fit-in/246x300/pic3627583.jpg",
+  simultaneousTurns: false,
   scoreFields: [
     { id: "forests", name: "Forests", type: "number", minValue: 0 },
     { id: "city", name: "City", type: "number", minValue: 0 },
@@ -425,6 +437,7 @@ const terraMystica: GameDefinition = {
   id: "terra-mystica",
   icon:
     "https://cf.geekdo-images.com/imagepage/img/JS90_q_U-h5Xe9Dn2jTTky-FqOs=/fit-in/900x600/filters:no_upscale()/pic1356616.jpg",
+  simultaneousTurns: false,
   scoreFields: [
     { id: "points", name: "Points", type: "number", minValue: 0 },
     { id: "largestArea", name: "Largest ares", type: "number", minValue: 0 },
@@ -462,6 +475,7 @@ const welcomeTo: GameDefinition = {
   id: "welcome-to",
   icon:
     "https://cf.geekdo-images.com/imagepage/img/yNrp9LGw_S1mt8ggsQx0OHn_4MA=/fit-in/900x600/filters:no_upscale()/pic3761012.jpg",
+  simultaneousTurns: true,
   scoreFields: [
     { id: "plans", name: "City Plans", type: "number", minValue: 0 },
     { id: "parks", name: "Parks", type: "number", minValue: 0 },
@@ -502,6 +516,7 @@ const concordia: GameDefinition = {
   id: "concordia",
   icon:
     "https://cf.geekdo-images.com/imagepagezoom/img/irV1Ma7cZOkSHZLQvZqSXd75V5k=/fit-in/1200x900/filters:no_upscale()/pic3453267.jpg",
+  simultaneousTurns: false,
   scoreFields: [
     {
       id: "vesta",
@@ -586,6 +601,7 @@ const dominantSpecies: GameDefinition = {
   id: "dominant-species",
   icon:
     "https://cf.geekdo-images.com/itemrep/img/4hl4RAfGaZTrQ3EkB9isK2RTHPo=/fit-in/246x300/pic784193.jpg",
+  simultaneousTurns: false,
   scoreFields: [
     {
       id: "score",
@@ -642,6 +658,7 @@ const splendor: GameDefinition = {
   id: "splendor",
   icon:
     "https://cf.geekdo-images.com/imagepage/img/pUmqbocA9S9-E37EkgCHMAL_HJ0=/fit-in/900x600/filters:no_upscale()/pic1904079.jpg",
+  simultaneousTurns: false,
   scoreFields: [
     {
       id: "production",
@@ -664,6 +681,7 @@ const catan: GameDefinition = {
   id: "catan",
   icon:
     "https://cf.geekdo-images.com/itemrep/img/aozRplCSOpRucLxSuClX2odEUBQ=/fit-in/246x300/pic2419375.jpg",
+  simultaneousTurns: false,
   scoreFields: [
     { id: "game-board", name: "Game board", type: "number", minValue: 0 },
     {
@@ -692,6 +710,7 @@ const lordsOfWaterdeep: GameDefinition = {
   id: "lords-of-waterdeep",
   icon:
     "https://cf.geekdo-images.com/itemrep/img/VYYUbyIZHFJSUCS9Os2ndcV041k=/fit-in/246x300/pic1116080.jpg",
+  simultaneousTurns: false,
   scoreFields: [
     { id: "scores", name: "Scores", type: "number", minValue: 0 },
     {
@@ -727,6 +746,7 @@ const generic: GameDefinition = {
   name: "Generic game",
   id: "generic",
   icon: "https://image.flaticon.com/icons/svg/906/906794.svg",
+  simultaneousTurns: false,
   scoreFields: [
     { id: "category-1", name: "Category 1", type: "number", minValue: 0 },
     { id: "category-2", name: "Category 2", type: "number", minValue: 0 },

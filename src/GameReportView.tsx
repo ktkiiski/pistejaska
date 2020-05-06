@@ -13,11 +13,12 @@ import {
 import { Play } from "./domain/play";
 import { RouteComponentProps } from "react-router";
 import { games } from "./domain/games";
-import { mean, groupBy, union, sortBy, last, first } from "lodash";
+import { sortBy } from "lodash";
 import { usePlays } from "./common/hooks/usePlays";
 import { calculateEloForPlayers } from "./domain/ratings";
-import { GameMiscFieldDefinition } from "./domain/game";
-import { getDimensionStatistics } from "./domain/statistics";
+import { GameMiscFieldDefinition, Game } from "./domain/game";
+import { getDimensionStatistics, getGameStatistics } from "./domain/statistics";
+import WinOrderCorrelationChart from "./WinOrderCorrelationChart";
 
 function isRelevantReportField(
   field: GameMiscFieldDefinition
@@ -55,7 +56,7 @@ export const GameReportView = (props: RouteComponentProps<any>) => {
     <div>
       <h3>Reports: {game.name}</h3>
       <p>Based on {gamePlays.length} plays.</p>
-      <HighScoresReportTable plays={gamePlays} />
+      <HighScoresReportTable game={game} plays={gamePlays} />
 
       {reportDimensions?.map((x) => {
         const playsWithDimension = gamePlays.filter((p) =>
@@ -80,6 +81,12 @@ export const GameReportView = (props: RouteComponentProps<any>) => {
         </a>
         .
       </p>
+      {game.simultaneousTurns ? null : (
+        <>
+          <h4>Ranking vs. starting order</h4>
+          <WinOrderCorrelationChart plays={gamePlays} />
+        </>
+      )}
     </div>
   );
 };
@@ -159,60 +166,49 @@ const DimensionReportTable = (props: {
     <ReportTable rows={beautifiedReportRows} columns={columns}></ReportTable>
   );
 };
-const HighScoresReportTable = (props: { plays: Play[] }) => {
-  const { plays } = props;
 
-  const playsByNumberOfPlayers = groupBy(plays, (p) => p.players.length);
+const stringifyScore = (score: number | null) => (score == null ? '—' : String(Math.round(score)));
 
-  const columns = union(
-    [{ name: "# of players" }, { name: "Any" }],
-    Object.keys(playsByNumberOfPlayers).map((x) => {
-      return { name: x };
-    })
-  );
+const HighScoresReportTable = (props: { game: Game, plays: Play[] }) => {
+  const { game, plays } = props;
 
-  let rows: any = [];
-  columns.map((p, idx) => {
-    if (idx === 0) {
-      rows[0] = [];
-      rows[0][0] = { value: "Max winner score" };
-      rows[1] = [];
-      rows[1][0] = { value: "Average winner score" };
-      rows[2] = [];
-      rows[2][0] = { value: "Min winner score" };
-      return null;
-    }
-    const playsOfNumberOfPlayers =
-      p.name === "Any" ? plays : playsByNumberOfPlayers[p.name];
-    const playsOrderedByWinnerScore = sortBy(
-      playsOfNumberOfPlayers,
-      (x) => x.getWinnerScores() || 0
-    );
-    const maxScores = last(playsOrderedByWinnerScore);
-    const minScores = first(playsOrderedByWinnerScore);
-
-    const winnerScores = playsOfNumberOfPlayers.map((p) => p.getWinnerScores());
-
-    rows[0][idx] = {
-      value: Math.round(maxScores?.getWinnerScores() || 0),
-      link: `/view/${maxScores?.id}`,
-    };
-
-    rows[1][idx] = {
-      value: Math.round(mean(winnerScores) || 0),
-    };
-
-    rows[2][idx] = {
-      value: Math.round(minScores?.getWinnerScores() || 0),
-      link: `/view/${minScores?.id}`,
-    };
-
-    return null;
-  });
-
-  if (plays.length === 0) {
-    rows = [];
-  }
+  const statsByPlayerCount = getGameStatistics(game, plays);
+  const columns = [
+    { name: "# of players" },
+    ...statsByPlayerCount.map(
+      (s) => ({ name: s.playerCount == null ? 'Any' : String(s.playerCount) }),
+    ),
+  ];
+  const rows = [
+    [
+      { value: 'Max winning score' },
+      ...statsByPlayerCount.map((s) => ({
+        value: stringifyScore(s.maxWinningScore),
+        link: s.maxWinningScorePlay ? `/view/${s.maxWinningScorePlay.id}` : undefined,
+      })),
+    ],
+    [
+      { value: 'Average winning score' },
+      ...statsByPlayerCount.map((s) => ({
+        value: stringifyScore(s.averageWinningScore),
+      })),
+    ],
+    [
+      { value: 'Min winning score' },
+      ...statsByPlayerCount.map((s) => ({
+        value: stringifyScore(s.minWinningScore),
+        link: s.minWinningScorePlay ? `/view/${s.minWinningScorePlay.id}` : undefined,
+      })),
+    ],
+    [
+      { value: 'Average duration' },
+      ...statsByPlayerCount.map((s) => ({
+        value: s.playerCount == null
+          ? (s.averageDurationPerPlayer == null ? '—' : `${s.averageDurationPerPlayer.toFixed(1)}h / 👤`)
+          : (s.averageDuration == null ? '—' : `${s.averageDuration.toFixed(1)}h`),
+      })),
+    ],
+  ];
 
   return <ReportTable rows={rows} columns={columns}></ReportTable>;
 };
