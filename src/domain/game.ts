@@ -5,6 +5,7 @@ export class Game implements GameDefinition {
   name: string;
   id: string;
   icon: string;
+  simultaneousTurns: boolean;
   scoreFields: GameScoreFieldDefinition[];
   miscFields?: GameMiscFieldDefinition[] | undefined;
 
@@ -13,6 +14,7 @@ export class Game implements GameDefinition {
     this.id = game.id;
     this.icon = game.icon;
     this.scoreFields = game.scoreFields;
+    this.simultaneousTurns = game.simultaneousTurns;
     this.miscFields = game.miscFields;
     this.name = game.name;
   }
@@ -98,6 +100,7 @@ export type GameDefinition = {
   // please use human-readable, slugified ids, like "terraforming-mars". Do not change once created!
   id: string;
   icon: string;
+  simultaneousTurns: boolean;
   scoreFields: GameScoreFieldDefinition[];
   miscFields?: GameMiscFieldDefinition[];
 };

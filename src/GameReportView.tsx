@@ -81,8 +81,12 @@ export const GameReportView = (props: RouteComponentProps<any>) => {
         </a>
         .
       </p>
-      <h4>Ranking vs. starting order</h4>
-      <WinOrderCorrelationChart plays={plays} />
+      {game.simultaneousTurns ? null : (
+        <>
+          <h4>Ranking vs. starting order</h4>
+          <WinOrderCorrelationChart plays={gamePlays} />
+        </>
+      )}
     </div>
   );
 };
