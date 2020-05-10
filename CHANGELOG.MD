@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixed the tie breaker. It can now also be any number, not just a fraction, as it won't be added to the normal scores.
+
 ## 2020-4-12
 
 ### Added

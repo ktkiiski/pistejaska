@@ -1,4 +1,4 @@
-import { sum, sortBy, max } from "lodash";
+import { sortBy, max } from "lodash";
 
 export type Player = {
   name: string;
@@ -92,10 +92,14 @@ export class Play extends Entity implements PlayDTO {
       this.players.map((player, index) => ({
         player,
         index,
+        tieBreaker: this.getTieBreaker(player.id),
         normalizedIndex: playerCount > 1 ? index / (playerCount - 1) : null,
-        score: this.getTotal(player),
+        score: this.getTotal(player.id),
       })),
+      // Primarily sort by score
       (p) => -p.score,
+      // Secondarily sort by tie-breaker
+      (p) => -p.tieBreaker,
     );
     const maxScore = scoredPlayers[0]?.score;
     const minScore = scoredPlayers[scoredPlayers.length - 1]?.score;
@@ -103,16 +107,18 @@ export class Play extends Entity implements PlayDTO {
     // Determine positions for each player, giving equal positions to equal scores.
     let latestPosition = 0;
     let latestScore = NaN;
+    let latestTieBreaker = NaN;
     const rankings = scoredPlayers.map((ranking, index) => {
-      const { score } = ranking;
+      const { score, tieBreaker } = ranking;
       let position;
-      if (score === latestScore) {
+      if (score === latestScore && tieBreaker === latestTieBreaker) {
         // Tied with the previous player(s)
         position = latestPosition;
       } else {
         position = index + 1;
         latestScore = score;
         latestPosition = position;
+        latestTieBreaker = tieBreaker;
       }
       return { ...ranking, position };
     });
@@ -138,16 +144,21 @@ export class Play extends Entity implements PlayDTO {
     return ranking ? ranking.position : NaN;
   }
 
-  public getTotal(player: Player) {
-    return Math.floor(
-      sum(
-        this.scores.filter((s) => s.playerId === player.id).map((s) => s.score)
-      )
+  public getTieBreaker(playerId: string): number {
+    const score = this.scores.find(
+      score => score.fieldId === 'tie-breaker' && score.playerId === playerId
     );
+    return score?.score || 0;
+  }
+
+  public getTotal(playerId: string) {
+    return this.scores
+      .filter(s => s.playerId === playerId && s.fieldId !== 'tie-breaker')
+      .reduce((sum, s) => sum + (s.score || 0), 0);
   }
 
   public getWinnerScores(): number {
-    return max(this.players.map((p) => this.getTotal(p))) || 0;
+    return this.rankings[0]?.score || 0;
   }
 
   public getDate(): Date {
