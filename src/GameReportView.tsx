@@ -132,7 +132,9 @@ const DimensionReportTable = (props: {
 
   const stats = Array.from(getDimensionStatistics(plays, dimension).values());
   const rows = sortBy(
-    stats, (stat) => stat.averageNormalizedPosition ?? Number.POSITIVE_INFINITY,
+    stats,
+    (stat) => stat.averageNormalizedPosition ?? Number.POSITIVE_INFINITY,
+    (stat) => -stat.count,
   );
   const playCount = plays.length;
 
