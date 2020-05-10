@@ -187,7 +187,7 @@ const PlayTable = (props: { game: GameDefinition; play: Play }) => {
                     backgroundColor: idx % 2 === 0 ? highlightColor : ""
                   }}
                 >
-                  {play.getTotal(f)}
+                  {play.getTotal(f.id)}
                 </TableCell>
               ))}
             </TableRow>

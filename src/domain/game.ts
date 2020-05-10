@@ -61,9 +61,7 @@ export class Game implements GameDefinition {
         name: "Tie breaker",
         type: "number",
         description:
-          "Give decimal scores (0.01) to tie-winning players to resolve ties",
-        step: 0.01,
-        maxValue: 0.1,
+          "Give a number that determines the winner in case of a tie",
       },
       {
         id: "misc",
@@ -71,8 +69,6 @@ export class Game implements GameDefinition {
         type: "number",
         description:
           "Give scores that don't belong to any other category, eg. when playing new expansion",
-        step: 0.01,
-        maxValue: 0.1,
       },
     ];
   }

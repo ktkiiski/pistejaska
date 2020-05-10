@@ -24,7 +24,7 @@ interface PlayFormScoreFieldProps {
 export const PlayFormScoreField = (props: PlayFormScoreFieldProps) => {
   const { player, field, play, onChange, ...fieldProps } = props;
 
-  const playerTotalScore = play.getTotal(player);
+  const playerTotalScore = play.getTotal(player.id);
 
   const scoreItem = play.scores.find(
     s => s.fieldId === field.id && s.playerId === player.id
