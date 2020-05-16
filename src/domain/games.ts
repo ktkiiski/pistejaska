@@ -58,7 +58,7 @@ const dominion: GameDefinition = {
   icon:
     "https://cf.geekdo-images.com/itemrep/img/7mkW_JrUx0PSa4Ame3zzsLE0BVY=/fit-in/246x300/pic394356.jpg",
   simultaneousTurns: false,
-  scoreFields: [{ id: "scores", name: "Scores", type: "number", minValue: 0 }],
+  scoreFields: [{ id: "scores", name: "Scores", type: "number" }],
 };
 
 const bohnanza: GameDefinition = {
@@ -465,7 +465,7 @@ const terraMystica: GameDefinition = {
         { value: "Nomads", label: "Nomads" },
         { value: "Swarmlings", label: "Swarmlings" },
         { value: "Witches", label: "Witches" },
-      ]
+      ],
     },
   ],
 };

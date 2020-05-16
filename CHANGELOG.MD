@@ -7,20 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## 2020-5-26
+
+### Fixed
+
+- Issue where Dominion scores could not be negative
+
+## 2020-5-10
+
 ### Fixed
 
 - Fixed the tie breaker. It can now also be any number, not just a fraction, as it won't be added to the normal scores.
 
-## 2020-4-12
-
 ### Added
 
 - Feature to report average normalized rank for certain game dimensions, e.g. corporation in Terraforming Mars
-
-## 2020-4-12
-
-### Added
-
 - Feature to report win and use percentages for certain game dimensions, e.g. corporation in Terraforming Mars
 
 ## 2020-4-11
