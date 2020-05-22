@@ -123,6 +123,10 @@ const terraFormingMars: GameDefinition = {
         { value: "Ecoline", label: "Ecoline" },
         { value: "Helion", label: "Helion" },
         { value: "Inventrix", label: "Inventrix" },
+        {
+          value: "Interplanetary cinematics",
+          label: "Interplanetary cinematics",
+        },
         { value: "Lakefront Resorts", label: "Lakefront Resorts" },
         { value: "Manutech", label: "Manutech" },
         { value: "Mining guild", label: "Mining guild" },

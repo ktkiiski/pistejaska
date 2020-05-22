@@ -7,7 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## 2020-5-26
+## 2020-5-23
+
+### Fixed
+
+- Added Interplanetary cinematics corporation to Terraforming Mars
+
+## 2020-5-16
 
 ### Fixed
 
