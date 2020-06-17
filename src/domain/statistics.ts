@@ -200,7 +200,7 @@ export function getDimensionStatistics(
     // Go through all the games once and aggregate the stats for each value
     plays.forEach((play) => {
         play.misc.forEach(({ fieldId, playerId, data }) => {
-            if (fieldId === dimension.id) {
+            if (typeof data === 'string' && fieldId === dimension.id) {
                 let stats = statsByValue.get(data);
                 if (!stats) {
                     // Encountered a new value!

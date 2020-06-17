@@ -3,12 +3,12 @@ import { PlayFormField } from "./PlayFormField";
 import { Player, Play } from "./domain/play";
 import { GameMiscFieldDefinition } from "./domain/game";
 
-type PlayFormMiscFieldProps = {
-  field: GameMiscFieldDefinition;
+type PlayFormMiscFieldProps<T> = {
+  field: GameMiscFieldDefinition<T>;
   play: Play;
   onChange: (
     value: string,
-    field: GameMiscFieldDefinition,
+    field: GameMiscFieldDefinition<T>,
     player: Player | undefined
   ) => void;
   focusOnMe: boolean;
@@ -21,7 +21,7 @@ type PlayFormMiscFieldProps = {
   player?: Player;
 };
 
-export const PlayFormMiscField = (props: PlayFormMiscFieldProps) => {
+export function PlayFormMiscField<T>(props: PlayFormMiscFieldProps<T>) {
   const { field, play, onChange, player, ...fieldProps } = props;
   const playerId = player && player.id;
   const value =

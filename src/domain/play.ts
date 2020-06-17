@@ -1,4 +1,5 @@
-import { sortBy, max } from "lodash";
+import { sortBy } from "lodash";
+import { GameMiscFieldDefinition, nameField, locationField, dateField } from "./game";
 
 export type Player = {
   name: string;
@@ -21,7 +22,7 @@ export type PlayDTO = {
 
 export type MiscDataDTO = {
   fieldId: string;
-  data: string;
+  data: string | number;
   playerId?: string | undefined;
 };
 
@@ -73,7 +74,7 @@ export class Play extends Entity implements PlayDTO {
   scores: { playerId: string; fieldId: string; score: number }[];
   players: Player[];
   created: string;
-  date: string;
+  date?: string | null;
   rankings: PlayRanking[];
 
   constructor(play: PlayDTO) {
@@ -84,8 +85,7 @@ export class Play extends Entity implements PlayDTO {
     this.players = play.players || [];
     this.misc = play.misc || [];
     this.created = play.created || new Date().toISOString();
-    const dateField = this.misc.find((m) => m.fieldId === "date");
-    this.date = dateField ? dateField.data : "";
+    this.date = this.getMiscFieldValue(dateField);
     // Pre-sort players to the winning order, winner first
     const playerCount = this.players.length;
     const scoredPlayers = sortBy(
@@ -167,14 +167,23 @@ export class Play extends Entity implements PlayDTO {
   }
 
   public getName(): string {
-    const nameField = this.misc.find((m) => m.fieldId === "name");
-    const locationField = this.misc.find((m) => m.fieldId === "location");
-    const name =
-      (nameField && nameField.data) ||
-      (locationField && locationField.data) ||
-      "";
-
+    const nameValue = this.getMiscFieldValue(nameField);
+    const locationValue = this.getMiscFieldValue(locationField);
+    const name = nameValue || locationValue || "";
     return `${this.getDate().toLocaleDateString()} ${name}`;
+  }
+
+  public getMiscFieldValue<T extends string | number>(field: GameMiscFieldDefinition<T>, playerId?: string): T | null | undefined {
+    const item = this.misc.find(m => m.fieldId === field.id && m.playerId === playerId);
+    const value = item?.data;
+    if (value == null) {
+      return value;
+    }
+    if (field.type === 'number' && typeof value === 'string') {
+      const numberValue = parseFloat(value);
+      return Number.isFinite(numberValue) ? numberValue as T : null;
+    }
+    return String(value) as T;
   }
 
   /**
