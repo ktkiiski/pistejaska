@@ -36,6 +36,7 @@ export function PlayFormMiscField<T>(props: PlayFormMiscFieldProps<T>) {
       value={value}
       field={field}
       label={player ? player.name : field.name}
+      play={play}
       onChange={(value, field) => onChange(value, field, player)}
       {...fieldProps}
     />

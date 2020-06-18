@@ -4,7 +4,7 @@ import { MiscDataDTO } from "./play";
 export const durationField: GameMiscFieldDefinition<number> = {
   id: "duration",
   name: "Duration (in hours)",
-  type: "number",
+  type: "duration",
   step: 0.1,
 };
 export const locationField: GameMiscFieldDefinition<string> = {
@@ -122,7 +122,7 @@ export interface GameFieldOption<T> {
 }
 
 export interface GameFieldDefinition<T> {
-  type: T extends number ? "number" : "date" | "text" | "boolean";
+  type: T extends number ? "number" | "duration" : "date" | "text" | "boolean";
   // please use human-readable, slugified ids, like "terraforming-rating". Do not change once created!
   id: string;
   // A human-readable, short name for this field

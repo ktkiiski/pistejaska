@@ -166,6 +166,10 @@ export class Play extends Entity implements PlayDTO {
     return (dateField && new Date(dateField.data)) || new Date("1900/01/01");
   }
 
+  public getCreationDate(): Date {
+    return new Date(this.created);
+  }
+
   public getName(): string {
     const nameValue = this.getMiscFieldValue(nameField);
     const locationValue = this.getMiscFieldValue(locationField);
