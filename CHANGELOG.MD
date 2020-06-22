@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## 2020-6-22
+
+### Added
+
+- Set play duration from timer feature
+
 ## 2020-5-23
 
 ### Fixed
