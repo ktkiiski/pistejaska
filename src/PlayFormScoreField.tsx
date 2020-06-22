@@ -36,6 +36,7 @@ export const PlayFormScoreField = (props: PlayFormScoreFieldProps) => {
       label={labelText}
       field={field}
       value={scoreValue}
+      play={play}
       id={field.name.replace(" ", "_").concat(player.id)}
       onChange={(value, field) => onChange(value, field, player)}
       {...fieldProps}

@@ -1,6 +1,29 @@
 import { getTodayAsString } from "../common/dateUtils";
 import { MiscDataDTO } from "./play";
 
+export const durationField: GameMiscFieldDefinition<number> = {
+  id: "duration",
+  name: "Duration (in hours)",
+  type: "duration",
+  step: 0.1,
+};
+export const locationField: GameMiscFieldDefinition<string> = {
+  id: "location",
+  name: "Location",
+  type: "text",
+};
+export const nameField: GameMiscFieldDefinition<string> = {
+  id: "name",
+  name: "Name",
+  type: "text",
+};
+export const dateField: GameMiscFieldDefinition<string> = {
+  id: "date",
+  name: "Date",
+  type: "date",
+  getDefaultValue: () => getTodayAsString(),
+};
+
 export class Game implements GameDefinition {
   name: string;
   id: string;
@@ -29,28 +52,10 @@ export class Game implements GameDefinition {
   }
   private static getDefaultMiscFields(): GameMiscFieldDefinition[] {
     return [
-      {
-        id: "duration",
-        name: "Duration (in hours)",
-        type: "number",
-        step: 0.1,
-      },
-      {
-        id: "location",
-        name: "Location",
-        type: "text",
-      },
-      {
-        id: "name",
-        name: "Name",
-        type: "text",
-      },
-      {
-        id: "date",
-        name: "Date",
-        type: "date",
-        getDefaultValue: () => getTodayAsString(),
-      },
+      durationField,
+      locationField,
+      nameField,
+      dateField,
     ];
   }
 
@@ -117,7 +122,7 @@ export interface GameFieldOption<T> {
 }
 
 export interface GameFieldDefinition<T> {
-  type: T extends number ? "number" : "date" | "text" | "boolean";
+  type: T extends number ? "number" | "duration" : "date" | "text" | "boolean";
   // please use human-readable, slugified ids, like "terraforming-rating". Do not change once created!
   id: string;
   // A human-readable, short name for this field

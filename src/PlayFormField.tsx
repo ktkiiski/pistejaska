@@ -1,11 +1,15 @@
 import React, { useRef, useEffect } from "react";
 import { GameFieldDefinition, GameFieldOption } from "./domain/game";
-import { TextField } from "@material-ui/core";
+import { TextField, Button, Box } from "@material-ui/core";
+import DurationCounter from "./DurationCounter";
+import { Play } from "./domain/play";
+import { round } from 'lodash';
 
 interface PlayFormFieldProps<T, F extends GameFieldDefinition<T>> {
   value: T | null;
   field: F;
   label: string;
+  play: Play;
   onChange: (score: T | null, field: F) => void;
   focusOnMe: boolean;
   onFocus: (
@@ -26,6 +30,7 @@ export function PlayFormField<
     value,
     field,
     label,
+    play,
     onChange,
     focusOnMe,
     onFocus,
@@ -39,8 +44,11 @@ export function PlayFormField<
     }
   }, [focusOnMe]);
 
+  const isNumeric = field.type === 'number' || field.type === 'duration';
+  const createdAt = play.getCreationDate();
+  const createdToday = new Date().getTime() - createdAt.getTime() < 24 * 60 * 60 * 1000;
   const inputProps =
-    field.type === "number"
+    isNumeric
       ? {
           ref: inputRef,
           min: field.minValue,
@@ -56,7 +64,7 @@ export function PlayFormField<
     if (value === "" || value === null) {
       // Chose a blank option
       value = null;
-    } else if (field.type === "number") {
+    } else if (isNumeric) {
       value = typeof value === "string" ? parseFloat(value) : value;
       if (Number.isNaN(value)) {
         value = null;
@@ -65,6 +73,12 @@ export function PlayFormField<
       value = String(value);
     }
     onChange(value as T | null, field);
+  };
+
+  const onSetDurationFromStartClick = () => {
+    const duration = new Date().getTime() - createdAt.getTime();
+    const hours = duration / (1000 * 60 * 60);
+    onChange(round(hours, 1) as T, field);
   };
 
   let options = field.options as
@@ -112,19 +126,33 @@ export function PlayFormField<
   }
 
   return (
-    <div>
-      <TextField
-        margin="dense"
-        inputProps={inputProps}
-        type={field.type === "number" ? "number" : "text"}
-        variant="outlined"
-        label={label}
-        onFocus={e => (focusOnMe ? () => {} : onFocus(e))}
-        onKeyDown={onKeyDown}
-        value={value === null ? "" : value}
-        onChange={onValueChange}
-        id={id}
-      />
-    </div>
+    <>
+      <div>
+        <TextField
+          margin="dense"
+          inputProps={inputProps}
+          type={isNumeric ? "number" : "text"}
+          variant="outlined"
+          label={label}
+          onFocus={e => (focusOnMe ? () => {} : onFocus(e))}
+          onKeyDown={onKeyDown}
+          value={value === null ? "" : value}
+          onChange={onValueChange}
+          id={id}
+        />
+      </div>
+      {field.type !== 'duration' || !createdToday ? null : (
+        <Box my={2}>
+          <Button
+            onClick={onSetDurationFromStartClick}
+            variant="outlined"
+          >
+            <span>
+              Set from start (<DurationCounter startTime={createdAt} />)
+            </span>
+          </Button>
+        </Box>
+      )}
+    </>
   );
 }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useMemo } from "react";
 import { List, ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
 import { TablePagination } from "@material-ui/core";
 
@@ -9,23 +9,23 @@ import { orderBy } from "lodash";
 import { usePlays } from "./common/hooks/usePlays";
 
 export const PlayList = (props: RouteComponentProps<{}>) => {
-  // eslint-disable-next-line
-  const [plays, loading, error] = usePlays();
+  const [plays, , error] = usePlays();
 
-  useEffect(() => {
-    setData(orderBy(plays, ["date", "created"], ["desc", "desc"]));
-    // eslint-disable-next-line
-  }, [plays.length]);
+  const data = useMemo(
+    () => orderBy(
+      plays,
+      [play => play.getDate(), "created"],
+      ["desc", "desc"],
+    ),
+    [plays],
+  );
 
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(0);
-  const [data, setData] = useState<any[]>([]);
 
-  const [currentData, setCurrentData] = useState<any[]>([]);
-
-  useEffect(() => {
+  const currentData = useMemo(() => {
     const offset = currentPage * itemsPerPage;
-    setCurrentData(data.slice(offset, offset + itemsPerPage));
+    return data.slice(offset, offset + itemsPerPage);
   }, [currentPage, data, itemsPerPage]);
 
   if (error) {

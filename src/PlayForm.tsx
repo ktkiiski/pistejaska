@@ -206,16 +206,16 @@ export const PlayForm = (props: {
         }}
         onSwitching={() => (isSwitchingHack = true)}
       >
-        {fields.map(({ field, type }, idx) => (
-          <div key={field.id}>
-            <h3 id={field.id}>
-              {idx + 1}. {field.name}
+        {fields.map((item, idx) => (
+          <div key={item.field.id}>
+            <h3 id={item.field.id}>
+              {idx + 1}. {item.field.name}
             </h3>
-            {field.description ? <p>{field.description}</p> : null}
+            {item.field.description ? <p>{item.field.description}</p> : null}
 
-            {type === "misc"
-              ? renderMiscField(field as GameMiscFieldDefinition)
-              : renderScoreField(field as GameScoreFieldDefinition)}
+            {item.type === "misc"
+              ? renderMiscField(item.field)
+              : renderScoreField(item.field)}
 
             <Button
               variant="outlined"
