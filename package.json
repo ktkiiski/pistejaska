@@ -7,7 +7,7 @@
     "@material-ui/icons": "^4.9.1",
     "@types/elo-rank": "^1.0.0",
     "@types/react-tooltip": "^3.11.0",
-    "firebase": "^7.13.2",
+    "firebase": "^7.16.0",
     "github-markdown-css": "^4.0.0",
     "lodash": "^4.17.15",
     "markdown-loader": "^5.1.0",
