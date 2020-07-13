@@ -64,6 +64,17 @@ Are done manually by exporting data. Should automate this.
 1. Get backup name from https://console.cloud.google.com/storage/browser/pistejaska-dev-firestore-backups?project=pistejaska-dev
 1. `gcloud beta firestore import gs://pistejaska-dev-firestore-backups/{name}`
 
+## Migrations
+
+If you need to perform data migrations, do this:
+
+1. Take a backup of the current database :) 
+1. Acquire Google Cloud Service Account credentials JSON from one of the project admins.
+1. Set the GOOGLE_APPLICATION_CREDENTIALS environment variable to point to the credentials JSON
+(see https://cloud.google.com/firestore/docs/quickstart-servers#set_up_authentication for details).
+1. Write a migration script under migrations/, prefix the script name with the next free version number.
+See existing scripts for examples.
+
 ## TODO
 
 - reports (winrates, avg scores etc) for different races in asymmetrical games (like race in caverna or gameboard in 7 wonders)
