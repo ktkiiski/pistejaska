@@ -233,26 +233,31 @@ const sevenWonders: GameDefinition = {
       type: "number",
       minValue: 0,
     },
-    { id: "leaders", name: "Leaders", type: "number", minValue: 0 },
   ],
-  miscFields: [
+  expansions: [
     {
-      id: "variant-leaders",
-      name: "Variant: used Leaders",
-      type: "boolean",
-      affectsScoring: true,
+      id: "leaders",
+      name: "Leaders",
+      scoreFields: [
+        {id: "leaders", name: "Leaders", type: "number", minValue: 0},
+      ],
     },
     {
-      id: "variant-cities",
-      name: "Variant: used Cities",
-      type: "boolean",
-      affectsScoring: true,
+      id: "cities",
+      name: "Cities",
+      scoreFields: [
+        {id: "city-buildings", name: "City buildings (black)", type: "number", minValue: 0},
+        {id: "debt", name: "Debt tokens", type: "number", maxValue: 0},
+      ],
     },
     {
-      id: "variant-armada",
-      name: "Variant: used Armada",
-      type: "boolean",
-      affectsScoring: true,
+      id: "armada",
+      name: "Armada",
+      scoreFields: [
+        {id: "naval-war", name: "Naval war", type: "number"},
+        {id: "island-cards", name: "Island cards", type: "number", minValue: 0},
+        {id: "dockyard", name: "Dockyard board", type: "number", minValue: 0},
+      ],
     },
   ],
 };

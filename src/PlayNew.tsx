@@ -16,6 +16,7 @@ export const PlayNew = (props: { game: GameDefinition; players: Player[] }) => {
     gameId: game.id,
     id: playId,
     players: players,
+    expansions: [],
     scores: [],
     misc: Game.getDefaultMiscFieldValues(),
     created: new Date().toISOString(),

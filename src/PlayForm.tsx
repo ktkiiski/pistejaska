@@ -1,13 +1,14 @@
 import React, { useState, useRef } from "react";
 import SwipeableViews from "react-swipeable-views";
 import Button from "@material-ui/core/Button";
-import { Typography } from "@material-ui/core";
+import { Checkbox, Typography } from "@material-ui/core";
 import { Player, Play } from "./domain/play";
 import "firebase/firestore";
 import {
+  Game,
+  GameExpansionDefinition,
   GameMiscFieldDefinition,
   GameScoreFieldDefinition,
-  Game
 } from "./domain/game";
 import { PlayFormScoreField } from "./PlayFormScoreField";
 import { PlayFormMiscField } from "./PlayFormMiscField";
@@ -33,7 +34,26 @@ export const PlayForm = (props: {
 
   let isSwitchingHack = false;
 
-  const fields = game.getFields();
+  const fields = game.getFields(play.expansions);
+
+  const handleExpansionChange = (expansion: GameExpansionDefinition, selected: boolean) => {
+    if (selected && !play.expansions.includes(expansion.id)) {
+      setPlay(new Play({
+        ...play,
+        expansions: play.expansions.concat(expansion.id),
+      }));
+    } else if (!selected && play.expansions.includes(expansion.id)) {
+      const expansionScoreFieldIds = expansion.scoreFields.map(field => field.id);
+      const expansionMiscFieldIds = (expansion.miscFields || []).map(field => field.id);
+      setPlay(new Play({
+        ...play,
+        expansions: play.expansions.filter(id => id !== expansion.id),
+        // Omit score and misc fields from the removed expansion (in case they had already been filled)
+        scores: play.scores.filter(score => !expansionScoreFieldIds.includes(score.fieldId)),
+        misc: play.misc.filter(misc => !expansionMiscFieldIds.includes(misc.fieldId)),
+      }));
+    }
+  };
 
   const handleScoreChange = (
     score: number | null,
@@ -119,6 +139,14 @@ export const PlayForm = (props: {
     props.onSave(play);
   };
 
+  const renderExpansionField = (expansion: GameExpansionDefinition) => (
+      <div key={expansion.id}>
+        <Checkbox checked={play.expansions.includes(expansion.id)}
+                  onChange={(_, checked) => handleExpansionChange(expansion, checked)} />
+        {expansion.name}
+      </div>
+  );
+
   const renderMiscField = (field: GameMiscFieldDefinition) => {
     if (field.valuePerPlayer === true) {
       return players.map(p => (
@@ -182,15 +210,53 @@ export const PlayForm = (props: {
   const onNextClick = () => {
     // Move to the next field
     setSelectedFieldIndex(
-      selectedFieldIndex < gameFieldCount - 1
+      selectedFieldIndex < fields.length - 1
         ? selectedFieldIndex + 1
-        : gameFieldCount - 1
+        : fields.length - 1
     );
     // Reset focus to the first player
     setFocusOnPlayerIndex(0);
   };
 
-  const gameFieldCount = game.getFields().length;
+  const views = [
+    game.hasExpansions() && (
+      <div>
+        <h3>Used expansions</h3>
+        {(game.expansions || []).map(expansion => (renderExpansionField(expansion)))}
+        <Button variant="outlined" color="default" onClick={onNextClick}>Next &gt;</Button>
+      </div>
+    ),
+    ...fields.map((item, idx) => (
+      <div key={item.field.id}>
+        <h3 id={item.field.id}>
+          {idx + 1}. {item.field.name}
+        </h3>
+        {item.field.description ? <p>{item.field.description}</p> : null}
+
+        {item.type === "misc"
+            ? renderMiscField(item.field)
+            : renderScoreField(item.field)}
+
+        <Button
+            variant="outlined"
+            color="default"
+            disabled={selectedFieldIndex <= 0}
+            onClick={onPreviousClick}
+        >
+          &lt; Previous
+        </Button>
+        <Button
+            variant="outlined"
+            color="default"
+            disabled={selectedFieldIndex >= fields.length - 1}
+            onClick={onNextClick}
+        >
+          Next &gt;
+        </Button>
+      </div>
+    )),
+  ].filter(Boolean);
+
   return (
     <div>
       <Typography variant="h6" gutterBottom>
@@ -206,35 +272,7 @@ export const PlayForm = (props: {
         }}
         onSwitching={() => (isSwitchingHack = true)}
       >
-        {fields.map((item, idx) => (
-          <div key={item.field.id}>
-            <h3 id={item.field.id}>
-              {idx + 1}. {item.field.name}
-            </h3>
-            {item.field.description ? <p>{item.field.description}</p> : null}
-
-            {item.type === "misc"
-              ? renderMiscField(item.field)
-              : renderScoreField(item.field)}
-
-            <Button
-              variant="outlined"
-              color="default"
-              disabled={selectedFieldIndex <= 0}
-              onClick={onPreviousClick}
-            >
-              &lt; Previous
-            </Button>
-            <Button
-              variant="outlined"
-              color="default"
-              disabled={selectedFieldIndex >= gameFieldCount - 1}
-              onClick={onNextClick}
-            >
-              Next &gt;
-            </Button>
-          </div>
-        ))}
+        {views}
       </SwipeableViews>
       <Button
         variant="contained"
