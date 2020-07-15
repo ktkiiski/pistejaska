@@ -28,13 +28,16 @@ export const PlayForm = (props: {
   const [focusOnPlayerIndex, setFocusOnPlayerIndex] = useState<number>(0);
   const saveButton = useRef<HTMLDivElement>(null);
 
-  const [selectedFieldIndex, setSelectedFieldIndex] = useState(0);
+  const [activeViewIndex, setActiveViewIndex] = useState(0);
+  const selectedFieldIndex = game.hasExpansions() ? activeViewIndex - 1 : activeViewIndex;
 
-  const done = play.scores.length === players.length * game.scoreFields.length;
+  const scoreFields = game.getScoreFields(play.expansions).map(f => f.field);
+  const done = play.scores.length === players.length * scoreFields.length;
 
   let isSwitchingHack = false;
 
   const fields = game.getFields(play.expansions);
+  const viewCount = game.hasExpansions() ? fields.length + 1 : fields.length;
 
   const handleExpansionChange = (expansion: GameExpansionDefinition, selected: boolean) => {
     if (selected && !play.expansions.includes(expansion.id)) {
@@ -111,8 +114,8 @@ export const PlayForm = (props: {
     const focusAtLastPlayer = focusOnPlayerIndex === players.length - 1;
     if (!fieldPerPlayer || focusAtLastPlayer) {
       setFocusOnPlayerIndex(0);
-      if (selectedFieldIndex < fields.length - 1) {
-        setSelectedFieldIndex(selectedFieldIndex + 1);
+      if (activeViewIndex < viewCount - 1) {
+        setActiveViewIndex(activeViewIndex + 1);
       } else {
         if (saveButton && saveButton.current) {
           setFocusOnPlayerIndex(-1);
@@ -194,7 +197,7 @@ export const PlayForm = (props: {
         onKeyDown={handleKeyDown}
         onChange={handleScoreChange}
         focusOnMe={
-          selectedFieldIndex === game.scoreFields.indexOf(field) &&
+          selectedFieldIndex === scoreFields.indexOf(field) &&
           focusOnPlayerIndex >= 0 &&
           p.id === players[focusOnPlayerIndex].id
         }
@@ -202,17 +205,17 @@ export const PlayForm = (props: {
     ));
   };
   const onPreviousClick = () => {
-    // Move to previous field
-    setSelectedFieldIndex(selectedFieldIndex > 0 ? selectedFieldIndex - 1 : 0);
+    // Move to previous view
+    setActiveViewIndex(activeViewIndex > 0 ? activeViewIndex - 1 : 0);
     // Reset focus to the first player
     setFocusOnPlayerIndex(0);
   };
   const onNextClick = () => {
-    // Move to the next field
-    setSelectedFieldIndex(
-      selectedFieldIndex < fields.length - 1
-        ? selectedFieldIndex + 1
-        : fields.length - 1
+    // Move to the next view
+    setActiveViewIndex(
+        activeViewIndex < viewCount - 1
+        ? activeViewIndex + 1
+        : viewCount - 1
     );
     // Reset focus to the first player
     setFocusOnPlayerIndex(0);
@@ -240,7 +243,7 @@ export const PlayForm = (props: {
         <Button
             variant="outlined"
             color="default"
-            disabled={selectedFieldIndex <= 0}
+            disabled={activeViewIndex <= 0}
             onClick={onPreviousClick}
         >
           &lt; Previous
@@ -248,7 +251,7 @@ export const PlayForm = (props: {
         <Button
             variant="outlined"
             color="default"
-            disabled={selectedFieldIndex >= fields.length - 1}
+            disabled={activeViewIndex >= viewCount - 1}
             onClick={onNextClick}
         >
           Next &gt;
@@ -265,10 +268,10 @@ export const PlayForm = (props: {
 
       <SwipeableViews
         enableMouseEvents
-        index={selectedFieldIndex}
+        index={activeViewIndex}
         onChangeIndex={(newIndex, oldIndex) => {
-          if (isSwitchingHack) setSelectedFieldIndex(newIndex);
-          else setSelectedFieldIndex(oldIndex);
+          if (isSwitchingHack) setActiveViewIndex(newIndex);
+          else setActiveViewIndex(oldIndex);
         }}
         onSwitching={() => (isSwitchingHack = true)}
       >
