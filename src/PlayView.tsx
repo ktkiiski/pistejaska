@@ -52,7 +52,7 @@ export const PlayView = (props: RouteComponentProps<any>) => {
   };
 
   const getFieldName = (misc: MiscDataDTO): string => {
-    const field = game.getFields().find(f => f.field.id === misc.fieldId);
+    const field = game.getFields(play.expansions).find(f => f.field.id === misc.fieldId);
     if (!field) return "";
     if ((field.field as GameMiscFieldDefinition).valuePerPlayer === true) {
       const playerName = (
