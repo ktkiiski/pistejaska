@@ -50,6 +50,13 @@ const brass: GameDefinition = {
   scoreFields: [
     { id: "score-tracker", name: "Score tracker", type: "number", minValue: 0 },
   ],
+  expansions: [
+    {
+      id: "birmingham",
+      name: "Birmingham",
+      scoreFields: [],
+    },
+  ],
 };
 
 const dominion: GameDefinition = {

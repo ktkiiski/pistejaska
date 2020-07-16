@@ -7,12 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## 2020-07-13
+## 2020-07-16
 
 ### Added
 
 - Support for game expansions. Expansions should no longer be defined as misc fields (with "Variant" in the name),
-but as separate entities that add scoring categories and misc fields to the base game.
+  but as separate entities that add scoring categories and misc fields to the base game.
+- Support for 7 Wonders expansions + Brass Birmingham (as an expansion to Brass)
 
 ## 2020-6-22
 
