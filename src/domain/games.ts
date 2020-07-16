@@ -24,6 +24,31 @@ const azul: GameDefinition = {
   ],
 };
 
+const everdell: GameDefinition = {
+  name: "Everdell",
+  id: "everdell",
+  icon:
+    "https://cf.geekdo-images.com/itemrep/img/WDbT-w4bNeIwxojLW92I_SO5GSU=/fit-in/246x300/pic3918905.png",
+  simultaneousTurns: false,
+  scoreFields: [
+    { id: "cards", name: "Cards", type: "number", minValue: 0 },
+    {
+      id: "tokens",
+      name: "Tokens",
+      type: "number",
+      minValue: 0,
+    },
+    {
+      id: "prosperity",
+      name: "Prosperity",
+      type: "number",
+      minValue: 0,
+    },
+    { id: "journey", name: "Journey", type: "number", minValue: 0 },
+    { id: "events", name: "Events", type: "number", minValue: 0 },
+  ],
+};
+
 const coup: GameDefinition = {
   name: "Coup",
   id: "Coup",
@@ -246,24 +271,34 @@ const sevenWonders: GameDefinition = {
       id: "leaders",
       name: "Leaders",
       scoreFields: [
-        {id: "leaders", name: "Leaders", type: "number", minValue: 0},
+        { id: "leaders", name: "Leaders", type: "number", minValue: 0 },
       ],
     },
     {
       id: "cities",
       name: "Cities",
       scoreFields: [
-        {id: "city-buildings", name: "City buildings (black)", type: "number", minValue: 0},
-        {id: "debt", name: "Debt tokens", type: "number", maxValue: 0},
+        {
+          id: "city-buildings",
+          name: "City buildings (black)",
+          type: "number",
+          minValue: 0,
+        },
+        { id: "debt", name: "Debt tokens", type: "number", maxValue: 0 },
       ],
     },
     {
       id: "armada",
       name: "Armada",
       scoreFields: [
-        {id: "naval-war", name: "Naval war", type: "number"},
-        {id: "island-cards", name: "Island cards", type: "number", minValue: 0},
-        {id: "dockyard", name: "Dockyard board", type: "number", minValue: 0},
+        { id: "naval-war", name: "Naval war", type: "number" },
+        {
+          id: "island-cards",
+          name: "Island cards",
+          type: "number",
+          minValue: 0,
+        },
+        { id: "dockyard", name: "Dockyard board", type: "number", minValue: 0 },
       ],
     },
   ],
@@ -839,6 +874,7 @@ const gameDtos = [
   catan,
   generic,
   lordsOfWaterdeep,
+  everdell,
 ];
 
 export const games = gameDtos.map((g) => new Game(g));
