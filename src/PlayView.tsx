@@ -13,7 +13,7 @@ import {
   Paper
 } from "@material-ui/core";
 import { games } from "./domain/games";
-import { GameDefinition, GameMiscFieldDefinition, Game } from "./domain/game";
+import { GameMiscFieldDefinition, Game } from "./domain/game";
 import { usePlays } from "./common/hooks/usePlays";
 import firebase from "firebase";
 
@@ -52,7 +52,7 @@ export const PlayView = (props: RouteComponentProps<any>) => {
   };
 
   const getFieldName = (misc: MiscDataDTO): string => {
-    const field = game.getFields().find(f => f.field.id === misc.fieldId);
+    const field = game.getFields(play.expansions).find(f => f.field.id === misc.fieldId);
     if (!field) return "";
     if ((field.field as GameMiscFieldDefinition).valuePerPlayer === true) {
       const playerName = (
@@ -67,6 +67,14 @@ export const PlayView = (props: RouteComponentProps<any>) => {
     <div style={{ paddingBottom: "1em" }}>
       <h3>Play: {game.name}</h3>
       <div>Played on {play.getDate().toLocaleDateString()}</div>
+      {game.hasExpansions() && (
+        <div>
+          Used expansions: {(game.expansions || [])
+            .filter(({id}) => play.expansions.includes(id))
+            .map(({name}) => name)
+            .join(', ') || 'None'}
+        </div>
+      )}
       {play.misc.map((misc, idx) => (
         <div key={idx}>
           {getFieldName(misc)}: {misc.data}
@@ -118,7 +126,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const PlayTable = (props: { game: GameDefinition; play: Play }) => {
+const PlayTable = (props: { game: Game; play: Play }) => {
   const classes = useStyles();
   const highlightColor = "#f5f5f5";
   const { game, play } = props;
@@ -127,9 +135,8 @@ const PlayTable = (props: { game: GameDefinition; play: Play }) => {
   const hasMiscScores =
     play.scores.filter(x => x.fieldId === "misc" && x.score).length > 0;
 
-  const scoreFields = new Game(game)
-    .getFields()
-    .filter(x => x.type === "score")
+  const scoreFields = game
+    .getScoreFields(play.expansions || [])
     .map(x => x.field)
     .filter(x => (x.id === "misc" ? hasMiscScores : true))
     .filter(x => (x.id === "tie-breaker" ? hasTieBreaker : true));

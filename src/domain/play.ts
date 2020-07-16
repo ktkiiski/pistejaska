@@ -10,6 +10,7 @@ export type Player = {
 export type PlayDTO = {
   id: string;
   gameId: string;
+  expansions: string[];
   scores: {
     playerId: string;
     fieldId: string;
@@ -71,6 +72,7 @@ export class Play extends Entity implements PlayDTO {
   misc: MiscDataDTO[];
   id: string;
   gameId: string;
+  expansions: string[];
   scores: { playerId: string; fieldId: string; score: number }[];
   players: Player[];
   created: string;
@@ -81,6 +83,7 @@ export class Play extends Entity implements PlayDTO {
     super();
     this.id = play.id;
     this.gameId = play.gameId;
+    this.expansions = play.expansions || [];
     this.scores = play.scores || [];
     this.players = play.players || [];
     this.misc = play.misc || [];

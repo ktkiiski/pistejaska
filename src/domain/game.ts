@@ -31,6 +31,7 @@ export class Game implements GameDefinition {
   simultaneousTurns: boolean;
   scoreFields: GameScoreFieldDefinition[];
   miscFields?: GameMiscFieldDefinition[] | undefined;
+  expansions?: GameExpansionDefinition[];
 
   constructor(game: GameDefinition) {
     this.name = game.name;
@@ -39,6 +40,7 @@ export class Game implements GameDefinition {
     this.scoreFields = game.scoreFields;
     this.simultaneousTurns = game.simultaneousTurns;
     this.miscFields = game.miscFields;
+    this.expansions = game.expansions;
     this.name = game.name;
   }
 
@@ -78,22 +80,36 @@ export class Game implements GameDefinition {
     ];
   }
 
-  public getFields(): GameFieldItem[] {
-    const { scoreFields, miscFields = [] } = this;
+  public getScoreFields(expansionIds: string[] = []): GameFieldItem[] {
+    const { scoreFields, expansions = [] } = this;
     return [
-      ...scoreFields.map((f) => {
-        return { type: "score", field: f } as const;
-      }),
-      ...Game.getDefaultScoreFields().map((f) => {
-        return { type: "score", field: f } as const;
-      }),
-      ...miscFields.map((f) => {
-        return { type: "misc", field: f } as const;
-      }),
-      ...Game.getDefaultMiscFields().map((f) => {
-        return { type: "misc", field: f } as const;
-      }),
+      ...scoreFields.map(field => ({ field, type: "score" } as const)),
+      ...expansions
+          .filter(({ id }) => expansionIds.includes(id))
+          .flatMap(expansion => expansion.scoreFields)
+          .map(field => ({ field, type: "score" } as const)),
+      ...Game.getDefaultScoreFields().map(field => ({ field, type: "score" } as const)),
     ];
+  }
+
+  public getMiscFields(expansionIds: string[] = []): GameFieldItem[] {
+    const { miscFields = [], expansions = [] } = this;
+    return [
+      ...miscFields.map(field => ({ field, type: "misc" } as const)),
+      ...expansions
+          .filter(({ id }) => expansionIds.includes(id))
+          .flatMap(expansion => expansion.miscFields || [])
+          .map(field => ({ field, type: "misc" } as const)),
+      ...Game.getDefaultMiscFields().map(field => ({ field, type: "misc" } as const))
+    ];
+  }
+
+  public getFields(expansionIds: string[] = []): GameFieldItem[] {
+    return this.getScoreFields(expansionIds).concat(this.getMiscFields(expansionIds));
+  }
+
+  public hasExpansions(): boolean {
+    return !!this.expansions && this.expansions.length > 0;
   }
 }
 export type GameDefinition = {
@@ -104,6 +120,7 @@ export type GameDefinition = {
   simultaneousTurns: boolean;
   scoreFields: GameScoreFieldDefinition[];
   miscFields?: GameMiscFieldDefinition[];
+  expansions?: GameExpansionDefinition[];
 };
 
 type GameFieldItem =
@@ -144,4 +161,12 @@ export interface GameMiscFieldDefinition<T = string | number> extends GameFieldD
   getDefaultValue?: () => string;
   affectsScoring?: boolean; // defaults to false, used in reporting to define if scores should be be filterable by this field. e.g play location does not affect scoring, but used add-ons will affect
   isRelevantReportDimension?: boolean; // defaults to false, used in reporting to define if scores are grouped by this dimension, e.g. player race/class/corporation
+}
+
+export type GameExpansionDefinition = {
+  name: string;
+  // please use human-readable, slugified ids, like "terraforming-mars". Do not change once created!
+  id: string;
+  scoreFields: GameScoreFieldDefinition[];
+  miscFields?: GameMiscFieldDefinition[];
 };
