@@ -111,7 +111,18 @@ const imperial: GameDefinition = {
     "https://cf.geekdo-images.com/itemrep/img/JOFogK5y-tNJRGLMS-NlRYbm864=/fit-in/246x300/pic840712.jpg",
   simultaneousTurns: false,
   scoreFields: [
-    { id: "score-tracker", name: "Score tracker", type: "number", minValue: 0 },
+    {
+      id: "austria-hungary",
+      name: "Austria-Hungary",
+      type: "number",
+      minValue: 0,
+    },
+    { id: "italy", name: "Italy", type: "number", minValue: 0 },
+    { id: "france", name: "France", type: "number", minValue: 0 },
+    { id: "great-britain", name: "Great Britain", type: "number", minValue: 0 },
+    { id: "germany", name: "Germany", type: "number", minValue: 0 },
+    { id: "russia", name: "Russia", type: "number", minValue: 0 },
+    { id: "money", name: "Money", type: "number", minValue: 0 },
   ],
 };
 
