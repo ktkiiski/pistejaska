@@ -87,12 +87,7 @@ function GameScoreCategoryReport(props: { game: Game, plays: Play[] }) {
   }, {
     value: rankingCorrelation == null ? '–' : rankingCorrelation.toFixed(2),
   }]);
-  return (
-    <>
-      <h4>Score categories</h4>
-      <ReportTable columns={columns} rows={rows} />
-    </>
-  );
+  return <ReportTable columns={columns} rows={rows} />;
 }
 
 export default GameScoreCategoryReport;

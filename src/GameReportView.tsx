@@ -20,6 +20,7 @@ import { getDimensionStatistics, getGameStatistics } from "./domain/statistics";
 import WinOrderCorrelationChart from "./WinOrderCorrelationChart";
 import GameScoreCategoryReport from "./GameScoreCategoryReport";
 import ReportTable from "./ReportTable";
+import GameCorrelationReport from "./GameCorrelationReport";
 
 function isRelevantReportField(
   field: GameMiscFieldDefinition
@@ -60,6 +61,7 @@ export const GameReportView = (props: RouteComponentProps<any>) => {
       <HighScoresReportTable game={game} plays={gamePlays} />
 
       <GameScoreCategoryReport game={game} plays={gamePlays} />
+      <GameCorrelationReport game={game} plays={gamePlays} />
 
       {reportDimensions?.map((x) => {
         const playsWithDimension = gamePlays.filter((p) =>
