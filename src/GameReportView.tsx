@@ -17,7 +17,6 @@ import { usePlays } from "./common/hooks/usePlays";
 import { calculateEloForPlayers } from "./domain/ratings";
 import { GameMiscFieldDefinition, Game } from "./domain/game";
 import { getDimensionStatistics, getGameStatistics } from "./domain/statistics";
-import WinOrderCorrelationChart from "./WinOrderCorrelationChart";
 import GameScoreCategoryReport from "./GameScoreCategoryReport";
 import ReportTable from "./ReportTable";
 import GameCorrelationReport from "./GameCorrelationReport";
@@ -86,12 +85,6 @@ export const GameReportView = (props: RouteComponentProps<any>) => {
         </a>
         .
       </p>
-      {game.simultaneousTurns ? null : (
-        <>
-          <h4>Ranking vs. starting order</h4>
-          <WinOrderCorrelationChart plays={gamePlays} />
-        </>
-      )}
     </div>
   );
 };

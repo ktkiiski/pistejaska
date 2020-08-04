@@ -83,7 +83,7 @@ function GameScoreCategoryReport(props: { game: Game, plays: Play[] }) {
   const rows = scoreFieldStats.map(({ field, winnerAverageScore, rankingCorrelation }) => [{
     value: field.name,
   }, {
-    value: winnerAverageScore == null ? '–' : winnerAverageScore.toFixed(1),
+    value: winnerAverageScore == null ? '–' : winnerAverageScore.toFixed(0),
   }, {
     value: rankingCorrelation == null ? '–' : rankingCorrelation.toFixed(2),
   }]);
