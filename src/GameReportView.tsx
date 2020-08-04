@@ -1,5 +1,4 @@
 import React from "react";
-import ReactTooltip from "react-tooltip";
 
 import {
   makeStyles,
@@ -19,6 +18,8 @@ import { calculateEloForPlayers } from "./domain/ratings";
 import { GameMiscFieldDefinition, Game } from "./domain/game";
 import { getDimensionStatistics, getGameStatistics } from "./domain/statistics";
 import WinOrderCorrelationChart from "./WinOrderCorrelationChart";
+import GameScoreCategoryReport from "./GameScoreCategoryReport";
+import ReportTable from "./ReportTable";
 
 function isRelevantReportField(
   field: GameMiscFieldDefinition
@@ -71,6 +72,8 @@ export const GameReportView = (props: RouteComponentProps<any>) => {
         );
       })}
 
+      <GameScoreCategoryReport game={game} plays={gamePlays} />
+
       <h4>Best players</h4>
       <ReportPlayers plays={gamePlays}></ReportPlayers>
 
@@ -90,28 +93,6 @@ export const GameReportView = (props: RouteComponentProps<any>) => {
     </div>
   );
 };
-
-const useReportTableStyles = makeStyles((theme) => ({
-  root: {
-    width: "100%",
-  },
-  paper: {
-    marginTop: theme.spacing(3),
-    width: "100%",
-    overflowX: "auto",
-    marginBottom: theme.spacing(2),
-    paddingLeft: "4px",
-  },
-  table: {
-    maxWidth: "100%",
-  },
-  "@global": {
-    ".MuiTableCell-root": {
-      padding: "0",
-      fontSize: "0.8em",
-    },
-  },
-}));
 
 const DimensionReportTable = (props: {
   plays: Play[];
@@ -213,68 +194,6 @@ const HighScoresReportTable = (props: { game: Game, plays: Play[] }) => {
   ];
 
   return <ReportTable rows={rows} columns={columns}></ReportTable>;
-};
-
-type ReportTableProps = {
-  rows: ReportTableRow[][];
-  columns: { name: string; tooltip?: string }[];
-};
-type ReportTableRow = {
-  value: string;
-  link?: string;
-};
-const ReportTable = ({ rows, columns }: ReportTableProps) => {
-  const classes = useReportTableStyles();
-
-  if (rows.length === 0) {
-    return <>No plays</>;
-  }
-
-  return (
-    <div className={classes.root}>
-      <ReactTooltip />
-      <Paper className={classes.paper}>
-        <Table className={classes.table}>
-          <TableHead>
-            <TableRow>
-              {columns.map((c) => (
-                <TableCell key={c.name}>
-                  {c.name}
-                  {c.tooltip ? (
-                    <span
-                      style={{
-                        borderRadius: "10px",
-                        padding: "0 5px",
-                        backgroundColor: "#ccc",
-                        color: "#fff",
-                        marginLeft: "5px",
-                      }}
-                      data-tip={c.tooltip}
-                    >
-                      ?
-                    </span>
-                  ) : (
-                    <></>
-                  )}
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.map((row) => (
-              <TableRow key={row[0].value}>
-                {columns.map((column, columnIdx) => (
-                  <TableCell scope="row" key={`${row[0].value}:${column.name}`}>
-                    <a href={row[columnIdx]?.link}>{row[columnIdx]?.value}</a>
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </Paper>
-    </div>
-  );
 };
 
 const useReportPlayersStyles = makeStyles((theme) => ({

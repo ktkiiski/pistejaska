@@ -194,6 +194,17 @@ export class Play extends Entity implements PlayDTO {
   }
 
   /**
+   * Returns the score value for the given player and score field ID.
+   * Note that undefined score is returned as 0 instead of nully!
+   * @param playerId ID of the player
+   * @param fieldId optional score field ID
+   */
+  public getScoreFieldValue(playerId: string, fieldId: string): number {
+    const score = this.scores.find(item => item.fieldId === fieldId && item.playerId === playerId);
+    return score?.score ?? 0;
+  }
+
+  /**
    * Returns the duration of this game IN HOURS, if known.
    */
   public getDuration(): number | null {
