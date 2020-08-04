@@ -59,6 +59,8 @@ export const GameReportView = (props: RouteComponentProps<any>) => {
       <p>Based on {gamePlays.length} plays.</p>
       <HighScoresReportTable game={game} plays={gamePlays} />
 
+      <GameScoreCategoryReport game={game} plays={gamePlays} />
+
       {reportDimensions?.map((x) => {
         const playsWithDimension = gamePlays.filter((p) =>
           p.misc.some((m) => m.fieldId === x.id)
@@ -71,8 +73,6 @@ export const GameReportView = (props: RouteComponentProps<any>) => {
           </React.Fragment>
         );
       })}
-
-      <GameScoreCategoryReport game={game} plays={gamePlays} />
 
       <h4>Best players</h4>
       <ReportPlayers plays={gamePlays}></ReportPlayers>
