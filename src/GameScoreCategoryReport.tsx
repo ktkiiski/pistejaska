@@ -12,8 +12,8 @@ interface ScoreFieldStatistics {
   winnerScoreSum: number;
   winnerScoreCount: number;
   rankingCorrelation: number | null;
-  scorePositions: number[];
-  rankingPositions: number[];
+  normalizedScorePositions: number[];
+  normalizedRankingPositions: number[];
 }
 
 function getScoreFieldStatistics(game: Game, plays: Play[]): Record<string, ScoreFieldStatistics> {
@@ -30,25 +30,34 @@ function getScoreFieldStatistics(game: Game, plays: Play[]): Record<string, Scor
         winnerScoreCount: 0,
         winnerScoreSum: 0,
         rankingCorrelation: null,
-        rankingPositions: [],
-        scorePositions: [],
+        normalizedRankingPositions: [],
+        normalizedScorePositions: [],
       };
       results[field.id] = fieldStats;
       // Iterate each ranking in this play
-      const scoreRankings = play.rankings.map(({ player, position }) => ({
-        rankingPosition: position,
+      const scoreRankings = play.rankings.map(({ player, normalizedPosition }) => ({
+        normalizedRankingPosition: normalizedPosition,
         score: play.getScoreFieldValue(player.id, field.id),
       }));
       let scorePosition = 1;
       let previousScore: number | null = null;
-      orderBy(scoreRankings, 'score', 'desc').forEach(({ rankingPosition, score }, index) => {
-        if (previousScore == null || score < previousScore) {
-          scorePosition = index + 1;
-          previousScore = score;
+      let maxScorePosition = 1;
+      const positionedScoreRankings = orderBy(scoreRankings, 'score', 'desc')
+        .map(({ normalizedRankingPosition, score }, index) => {
+          if (previousScore == null || score < previousScore) {
+            scorePosition = index + 1;
+            previousScore = score;
+            maxScorePosition = scorePosition;
+          }
+          return { score, scorePosition, normalizedRankingPosition };
+        });
+      positionedScoreRankings.forEach(({ score, normalizedRankingPosition, scorePosition }) => {
+        if (maxScorePosition > 1 && normalizedRankingPosition != null) {
+          const normalizedScorePosition = (scorePosition - 1) / (maxScorePosition - 1);
+          fieldStats.normalizedScorePositions.push(normalizedScorePosition);
+          fieldStats.normalizedRankingPositions.push(normalizedRankingPosition);
         }
-        fieldStats.scorePositions.push(scorePosition);
-        fieldStats.rankingPositions.push(rankingPosition);
-        if (rankingPosition === 1) {
+        if (normalizedRankingPosition === 0) {
           fieldStats.winnerScoreCount += 1;
           fieldStats.winnerScoreSum += score;
           fieldStats.winnerAverageScore = fieldStats.winnerScoreSum / fieldStats.winnerScoreCount;
@@ -58,7 +67,7 @@ function getScoreFieldStatistics(game: Game, plays: Play[]): Record<string, Scor
   });
   // Finally calculate correlation coefficients for the rankings
   Object.values(results).forEach((stats) => {
-    const coefficient = calculatePearsonCorrelation(stats.rankingPositions, stats.scorePositions);
+    const coefficient = calculatePearsonCorrelation(stats.normalizedRankingPositions, stats.normalizedScorePositions);
     if (!Number.isNaN(coefficient)) {
       stats.rankingCorrelation = coefficient;
     }
