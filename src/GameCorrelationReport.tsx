@@ -1,7 +1,7 @@
 import React from 'react';
 import { Play } from "./domain/play";
 import ReportTable from './ReportTable';
-import { calculatePearsonCorrelation } from './common/correlation';
+import { calculatePearsonCorrelation, renderCorrelation } from './common/correlation';
 import { Game } from './domain/game';
 
 const columns = [{
@@ -29,7 +29,7 @@ function GameCorrelationReport(props: { game: Game, plays: Play[] }) {
   const rows = [[{
     value: 'Starting order',
   }, {
-    value: Number.isNaN(correlation) ? '–' : correlation.toFixed(2),
+    value: renderCorrelation(correlation),
   }]];
   return <ReportTable columns={columns} rows={rows} />;
 }

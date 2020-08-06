@@ -2,7 +2,7 @@ import React from 'react';
 import { Game, GameFieldDefinition } from "./domain/game";
 import { Play } from "./domain/play";
 import ReportTable from './ReportTable';
-import { calculatePearsonCorrelation } from './common/correlation';
+import { calculatePearsonCorrelation, renderCorrelation } from './common/correlation';
 import orderBy from 'lodash/orderBy';
 
 interface ScoreFieldStatistics {
@@ -94,7 +94,7 @@ function GameScoreCategoryReport(props: { game: Game, plays: Play[] }) {
   }, {
     value: winnerAverageScore == null ? '–' : winnerAverageScore.toFixed(0),
   }, {
-    value: rankingCorrelation == null ? '–' : rankingCorrelation.toFixed(2),
+    value: renderCorrelation(rankingCorrelation),
   }]);
   return <ReportTable columns={columns} rows={rows} />;
 }

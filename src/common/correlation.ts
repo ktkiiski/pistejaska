@@ -47,3 +47,24 @@ export function calculatePearsonCorrelation(x: number[], y: number[]): number {
 
     return answer;
 }
+
+export function renderCorrelation(coefficent: number | null | undefined): string {
+    if (coefficent == null || Number.isNaN(coefficent)) {
+        return '–';
+    }
+    let str = coefficent.toFixed(2);
+    if (str[0] !== '-') {
+        str = `+${str}`;
+    }
+    const abs = Math.abs(coefficent);
+    if (abs >= 0.99) {
+        return `${str} (perfect)`;
+    }
+    if (abs >= 0.8) {
+        return `${str} (strong)`;
+    }
+    if (abs >= 0.6) {
+        return `${str} (moderate)`;
+    }
+    return `${str} (no relation)`;
+}
