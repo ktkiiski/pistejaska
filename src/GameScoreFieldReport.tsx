@@ -75,7 +75,7 @@ function getScoreFieldStatistics(game: Game, plays: Play[]): Record<string, Scor
   return results;
 }
 
-function GameScoreCategoryReport(props: { game: Game, plays: Play[] }) {
+function GameScoreFieldReport(props: { game: Game, plays: Play[] }) {
   const { game, plays } = props;
   const scoreFieldStatsById = getScoreFieldStatistics(game, plays);
   const scoreFieldStats = Object.values(scoreFieldStatsById);
@@ -99,4 +99,4 @@ function GameScoreCategoryReport(props: { game: Game, plays: Play[] }) {
   return <ReportTable columns={columns} rows={rows} />;
 }
 
-export default GameScoreCategoryReport;
+export default GameScoreFieldReport;

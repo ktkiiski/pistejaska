@@ -17,7 +17,7 @@ import { usePlays } from "./common/hooks/usePlays";
 import { calculateEloForPlayers } from "./domain/ratings";
 import { GameMiscFieldDefinition, Game } from "./domain/game";
 import { getDimensionStatistics, getGameStatistics } from "./domain/statistics";
-import GameScoreCategoryReport from "./GameScoreCategoryReport";
+import GameScoreFieldReport from "./GameScoreFieldReport";
 import ReportTable from "./ReportTable";
 import GameCorrelationReport from "./GameCorrelationReport";
 
@@ -59,7 +59,7 @@ export const GameReportView = (props: RouteComponentProps<any>) => {
       <p>Based on {gamePlays.length} plays.</p>
       <HighScoresReportTable game={game} plays={gamePlays} />
 
-      <GameScoreCategoryReport game={game} plays={gamePlays} />
+      <GameScoreFieldReport game={game} plays={gamePlays} />
       <GameCorrelationReport game={game} plays={gamePlays} />
 
       {reportDimensions?.map((x) => {
