@@ -1,5 +1,5 @@
-import { sortBy } from "lodash";
 import { GameMiscFieldDefinition, nameField, locationField, dateField } from "./game";
+import { rankScores } from "../common/rankings";
 
 export type Player = {
   name: string;
@@ -89,52 +89,12 @@ export class Play extends Entity implements PlayDTO {
     this.misc = play.misc || [];
     this.created = play.created || new Date().toISOString();
     this.date = this.getMiscFieldValue(dateField);
-    // Pre-sort players to the winning order, winner first
-    const playerCount = this.players.length;
-    const scoredPlayers = sortBy(
-      this.players.map((player, index) => ({
-        player,
-        index,
-        tieBreaker: this.getTieBreaker(player.id),
-        normalizedIndex: playerCount > 1 ? index / (playerCount - 1) : null,
-        score: this.getTotal(player.id),
-      })),
-      // Primarily sort by score
-      (p) => -p.score,
-      // Secondarily sort by tie-breaker
-      (p) => -p.tieBreaker,
-    );
-    const maxScore = scoredPlayers[0]?.score;
-    const minScore = scoredPlayers[scoredPlayers.length - 1]?.score;
-    const scoreDiff = maxScore - minScore;
-    // Determine positions for each player, giving equal positions to equal scores.
-    let latestPosition = 0;
-    let latestScore = NaN;
-    let latestTieBreaker = NaN;
-    const rankings = scoredPlayers.map((ranking, index) => {
-      const { score, tieBreaker } = ranking;
-      let position;
-      if (score === latestScore && tieBreaker === latestTieBreaker) {
-        // Tied with the previous player(s)
-        position = latestPosition;
-      } else {
-        position = index + 1;
-        latestScore = score;
-        latestPosition = position;
-        latestTieBreaker = tieBreaker;
-      }
-      return { ...ranking, position };
-    });
-    // Finally, calculate normalized positions for each player
-    this.rankings = rankings.map(({ position, score, ...ranking }) => ({
-      ...ranking,
-      score,
-      position,
-      // Normalize position between 0...1, unless everyone are tied
-      normalizedPosition: latestPosition < 2 ? null : (position - 1) / (latestPosition - 1),
-      // Normalize score between 0...1, unless everyone are tied
-      normalizedScore: scoreDiff > 0 ? (score - minScore) / scoreDiff : null,
-    }));
+    // Calculate normalized positions for each player
+    this.rankings = rankScores(this.players.map((player, index) => ({
+      player,
+      score: this.getTotal(player.id),
+      tieBreaker: this.getTieBreaker(player.id),
+    })));
   }
 
   public getRanking(playerId: string): PlayRanking | undefined {

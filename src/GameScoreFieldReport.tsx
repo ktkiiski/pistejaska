@@ -3,7 +3,7 @@ import { Game, GameFieldDefinition } from "./domain/game";
 import { Play } from "./domain/play";
 import ReportTable from './ReportTable';
 import { calculatePearsonCorrelation, renderCorrelation } from './common/correlation';
-import orderBy from 'lodash/orderBy';
+import { rankScores } from './common/rankings';
 
 interface ScoreFieldStatistics {
   field: GameFieldDefinition<number>;
@@ -35,29 +35,17 @@ function getScoreFieldStatistics(game: Game, plays: Play[]): Record<string, Scor
       };
       results[field.id] = fieldStats;
       // Iterate each ranking in this play
-      const scoreRankings = play.rankings.map(({ player, normalizedPosition }) => ({
-        normalizedRankingPosition: normalizedPosition,
-        score: play.getScoreFieldValue(player.id, field.id),
-      }));
-      let scorePosition = 1;
-      let previousScore: number | null = null;
-      let maxScorePosition = 1;
-      const positionedScoreRankings = orderBy(scoreRankings, 'score', 'desc')
-        .map(({ normalizedRankingPosition, score }, index) => {
-          if (previousScore == null || score < previousScore) {
-            scorePosition = index + 1;
-            previousScore = score;
-            maxScorePosition = scorePosition;
-          }
-          return { score, scorePosition, normalizedRankingPosition };
-        });
-      positionedScoreRankings.forEach(({ score, normalizedRankingPosition, scorePosition }) => {
-        if (maxScorePosition > 1 && normalizedRankingPosition != null) {
-          const normalizedScorePosition = (scorePosition - 1) / (maxScorePosition - 1);
-          fieldStats.normalizedScorePositions.push(normalizedScorePosition);
-          fieldStats.normalizedRankingPositions.push(normalizedRankingPosition);
+      const scoreRankings = rankScores(play.rankings.map((ranking) => ({
+        ranking,
+        score: play.getScoreFieldValue(ranking.player.id, field.id),
+      })));
+      scoreRankings.forEach((scoreRanking) => {
+        const { score, normalizedPosition, ranking } = scoreRanking;
+        if (normalizedPosition != null && ranking.normalizedPosition != null) {
+          fieldStats.normalizedScorePositions.push(normalizedPosition);
+          fieldStats.normalizedRankingPositions.push(ranking.normalizedPosition);
         }
-        if (normalizedRankingPosition === 0) {
+        if (ranking.position === 1) {
           fieldStats.winnerScoreCount += 1;
           fieldStats.winnerScoreSum += score;
           fieldStats.winnerAverageScore = fieldStats.winnerScoreSum / fieldStats.winnerScoreCount;
