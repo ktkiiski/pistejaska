@@ -89,6 +89,14 @@ export const GameReportView = (props: RouteComponentProps<any>) => {
   );
 };
 
+function renderPercentage(count: number, max: number) {
+  const percentage = Math.round((count / max) * 100);
+  if (Number.isNaN(percentage) || !Number.isFinite(percentage)) {
+    return '–';
+  }
+  return `${percentage}% (${count})`;
+}
+
 const DimensionReportTable = (props: {
   plays: Play[];
   dimension: GameMiscFieldDefinition<string>;
@@ -117,8 +125,8 @@ const DimensionReportTable = (props: {
   const reportRows = rows.map((row) => {
     return [
       { value: row.option.label },
-      { value: Math.round((row.winCount / row.count) * 100) },
-      { value: Math.round((row.count / playCount) * 100) },
+      { value: renderPercentage(row.winCount, row.count) },
+      { value: renderPercentage(row.count, playCount) },
       {
         value:
           row.averageNormalizedPosition == null

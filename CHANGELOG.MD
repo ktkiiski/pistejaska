@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Show statistics about each score category for the games:
   - Average scores for the winning players
   - Correlation with the ranking
+- In addition to win/usage percentage, also show the number of wins/usage in game dimension reports
 
 ### Changed
 
