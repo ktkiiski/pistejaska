@@ -11,7 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Show statistics about each score category for the games:
   - Average scores for the winning players
-  - Correlation with the ranking
+  - Correlation coefficient with the ranking
+- Show correlation coefficient with the ranking and the starting order
 - In addition to win/usage percentage, also show the number of wins/usage in game dimension reports
 
 ### Changed
@@ -19,6 +20,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Improved the app bar:
   - "Plays" and "Reports" are now separate top-level navigation pages
   - "Changelog" and "Log out" options can be found in the menu
+
+### Removed
+
+- Removed the ranking vs. winning order chart as it did not provide any statistically meaningful information
 
 ## 2020-07-16
 
