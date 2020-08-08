@@ -7,9 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Show statistics about each score category for the games:
+  - Average scores for the winning players
+  - Correlation with the ranking
+
 ### Changed
 
-- "Plays" and "Reports" are now separate top-level navigation pages
+- Improved the app bar:
+  - "Plays" and "Reports" are now separate top-level navigation pages
+  - "Changelog" and "Log out" options can be found in the menu
 
 ## 2020-07-16
 
