@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## 2020-08-9
+
 ### Added
 
 - Show statistics about each score category for the games:
