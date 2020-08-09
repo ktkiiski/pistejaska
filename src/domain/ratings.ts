@@ -47,13 +47,16 @@ export const calculateEloForPlayers = (plays: Play[], minPlays: number) => {
   };
 
   orderBy(plays, ["date", "created"], ["asc", "asc"]).forEach(play => {
+    /*
     console.log("Evaluating play " + play.getName());
     orderBy(play.players, p => play.getPosition(p)).forEach((p, idx) =>
       console.log(idx + 1 + ". " + p.name)
     );
     console.log("\n");
+    */
     evaluatePlay(play);
 
+    /*
     console.log("\nNew ratings:\n");
     sortBy(allPlayers, p => -p.rating.mu).forEach(p =>
       console.log(
@@ -61,6 +64,7 @@ export const calculateEloForPlayers = (plays: Play[], minPlays: number) => {
       )
     );
     console.log("\n\n");
+    */
   });
 
   return sortBy(

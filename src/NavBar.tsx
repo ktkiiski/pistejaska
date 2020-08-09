@@ -1,6 +1,7 @@
-import { AppBar, Toolbar, Typography, Button, Grid } from "@material-ui/core";
-import React from "react";
-import { RouteComponentProps } from "react-router-dom";
+import { AppBar, Toolbar, Typography, Button, IconButton, Menu, MenuItem, makeStyles } from "@material-ui/core";
+import React, { useMemo, useState } from "react";
+import { useHistory } from "react-router-dom";
+import AccountCircle from '@material-ui/icons/AccountCircle';
 import * as firebase from "firebase/app";
 import "firebase/auth";
 
@@ -8,65 +9,97 @@ const logout = () => {
   firebase.auth().signOut();
 };
 
-export function NavBar(props: RouteComponentProps<{}>) {
+const useStyles = makeStyles(() => ({
+  title: {
+    textAlign: 'left',
+    flexGrow: 1,
+    cursor: 'pointer',
+  },
+}));
+
+export function NavBar() {
+  const history = useHistory();
+  const styles = useStyles();
+  const [menuAnchorElement, setMenuAnchorElement] = useState<HTMLElement | null>(null);
+  const menuIcon = useMemo(() => (
+    <IconButton
+      aria-label="More options"
+      aria-controls="menu-appbar"
+      aria-haspopup="true"
+      onClick={(event) => {
+        setMenuAnchorElement(event.currentTarget);
+      }}
+      color="inherit"
+    >
+      <AccountCircle />
+    </IconButton>
+  ), []);
+  const menu = useMemo(() => {
+    const isMenuOpen = menuAnchorElement != null;
+    const closeMenu = () => setMenuAnchorElement(null);
+    return (
+      <Menu
+        id="menu-appbar"
+        anchorEl={menuAnchorElement}
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+        keepMounted
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+        open={isMenuOpen}
+        onClose={closeMenu}
+      >
+        <MenuItem
+          onClick={() => {
+            history.push("/whatsnew")
+            closeMenu();
+          }}
+        >
+          Changelog
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            closeMenu();
+            logout();
+          }}
+        >
+          Log out
+        </MenuItem>
+      </Menu>
+    );
+  }, [menuAnchorElement, history])
   return (
     <div>
       <AppBar position="static">
         <Toolbar variant="dense">
-          <Grid justify="space-between" container spacing={0}>
-            <Grid item>
-              {/* <IconButton color="inherit">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                >
-                  <path d="M15 7.5V2H9v5.5l3 3 3-3zM7.5 9H2v6h5.5l3-3-3-3zM9 16.5V22h6v-5.5l-3-3-3 3zM16.5 9l-3 3 3 3H22V9h-5.5z" />
-                </svg>
-              </IconButton>
-              */}
-              <Typography
-                variant="h6"
-                style={{
-                  flexGrow: 1,
-                  fontSize: "1em",
-                  paddingTop: "5px",
-                  cursor: "pointer"
-                }}
-                color="inherit"
-                onClick={() => props.history.push("/")}
-              >
-                Pistejaska
-              </Typography>
-            </Grid>
-            <Grid item>
-              <Button color="inherit" onClick={() => props.history.push("/")}>
-                Plays
-              </Button>
-              <Button
-                color="inherit"
-                onClick={() => props.history.push("/new")}
-              >
-                New
-              </Button>
-              {/* <Button
-                color="inherit"
-                onClick={() => props.history.push("/admin")}
-              >
-                Admin
-              </Button> */}
-              <Button
-                color="inherit"
-                onClick={() => props.history.push("/whatsnew")}
-              >
-                Changes
-              </Button>
-              <Button color="inherit" onClick={() => logout()}>
-                Logout
-              </Button>
-            </Grid>
-          </Grid>
+          <Typography
+            variant="h6"
+            className={styles.title}
+            color="inherit"
+            onClick={() => history.push("/")}
+          >
+            Pistejaska
+          </Typography>
+          <Button color="inherit" onClick={() => history.push("/")}>
+            Plays
+          </Button>
+          <Button
+            color="inherit"
+            onClick={() => history.push("/new")}
+          >
+            New
+          </Button>
+          <Button color="inherit" onClick={() => history.push("/reports")}>
+            Reports
+          </Button>
+          <div>
+            {menuIcon}
+            {menu}
+          </div>
         </Toolbar>
       </AppBar>
     </div>

@@ -1,5 +1,4 @@
 import React from "react";
-import ReactTooltip from "react-tooltip";
 
 import {
   makeStyles,
@@ -18,7 +17,9 @@ import { usePlays } from "./common/hooks/usePlays";
 import { calculateEloForPlayers } from "./domain/ratings";
 import { GameMiscFieldDefinition, Game } from "./domain/game";
 import { getDimensionStatistics, getGameStatistics } from "./domain/statistics";
-import WinOrderCorrelationChart from "./WinOrderCorrelationChart";
+import GameScoreFieldReport from "./GameScoreFieldReport";
+import ReportTable from "./ReportTable";
+import GameCorrelationReport from "./GameCorrelationReport";
 
 function isRelevantReportField(
   field: GameMiscFieldDefinition
@@ -58,6 +59,9 @@ export const GameReportView = (props: RouteComponentProps<any>) => {
       <p>Based on {gamePlays.length} plays.</p>
       <HighScoresReportTable game={game} plays={gamePlays} />
 
+      <GameScoreFieldReport game={game} plays={gamePlays} />
+      <GameCorrelationReport game={game} plays={gamePlays} />
+
       {reportDimensions?.map((x) => {
         const playsWithDimension = gamePlays.filter((p) =>
           p.misc.some((m) => m.fieldId === x.id)
@@ -81,37 +85,17 @@ export const GameReportView = (props: RouteComponentProps<any>) => {
         </a>
         .
       </p>
-      {game.simultaneousTurns ? null : (
-        <>
-          <h4>Ranking vs. starting order</h4>
-          <WinOrderCorrelationChart plays={gamePlays} />
-        </>
-      )}
     </div>
   );
 };
 
-const useReportTableStyles = makeStyles((theme) => ({
-  root: {
-    width: "100%",
-  },
-  paper: {
-    marginTop: theme.spacing(3),
-    width: "100%",
-    overflowX: "auto",
-    marginBottom: theme.spacing(2),
-    paddingLeft: "4px",
-  },
-  table: {
-    maxWidth: "100%",
-  },
-  "@global": {
-    ".MuiTableCell-root": {
-      padding: "0",
-      fontSize: "0.8em",
-    },
-  },
-}));
+function renderPercentage(count: number, max: number) {
+  const percentage = Math.round((count / max) * 100);
+  if (Number.isNaN(percentage) || !Number.isFinite(percentage)) {
+    return '–';
+  }
+  return `${percentage}% (${count})`;
+}
 
 const DimensionReportTable = (props: {
   plays: Play[];
@@ -141,8 +125,8 @@ const DimensionReportTable = (props: {
   const reportRows = rows.map((row) => {
     return [
       { value: row.option.label },
-      { value: Math.round((row.winCount / row.count) * 100) },
-      { value: Math.round((row.count / playCount) * 100) },
+      { value: renderPercentage(row.winCount, row.count) },
+      { value: renderPercentage(row.count, playCount) },
       {
         value:
           row.averageNormalizedPosition == null
@@ -213,68 +197,6 @@ const HighScoresReportTable = (props: { game: Game, plays: Play[] }) => {
   ];
 
   return <ReportTable rows={rows} columns={columns}></ReportTable>;
-};
-
-type ReportTableProps = {
-  rows: ReportTableRow[][];
-  columns: { name: string; tooltip?: string }[];
-};
-type ReportTableRow = {
-  value: string;
-  link?: string;
-};
-const ReportTable = ({ rows, columns }: ReportTableProps) => {
-  const classes = useReportTableStyles();
-
-  if (rows.length === 0) {
-    return <>No plays</>;
-  }
-
-  return (
-    <div className={classes.root}>
-      <ReactTooltip />
-      <Paper className={classes.paper}>
-        <Table className={classes.table}>
-          <TableHead>
-            <TableRow>
-              {columns.map((c) => (
-                <TableCell key={c.name}>
-                  {c.name}
-                  {c.tooltip ? (
-                    <span
-                      style={{
-                        borderRadius: "10px",
-                        padding: "0 5px",
-                        backgroundColor: "#ccc",
-                        color: "#fff",
-                        marginLeft: "5px",
-                      }}
-                      data-tip={c.tooltip}
-                    >
-                      ?
-                    </span>
-                  ) : (
-                    <></>
-                  )}
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.map((row) => (
-              <TableRow key={row[0].value}>
-                {columns.map((column, columnIdx) => (
-                  <TableCell scope="row" key={`${row[0].value}:${column.name}`}>
-                    <a href={row[columnIdx]?.link}>{row[columnIdx]?.value}</a>
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </Paper>
-    </div>
-  );
 };
 
 const useReportPlayersStyles = makeStyles((theme) => ({
