@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Issues setting scores with tabulator/enter in plays with expansions
 
+### Changed
+
+- Updated all NPM dependencies
+
 ## 2020-08-09
 
 ### Added
