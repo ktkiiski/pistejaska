@@ -30,7 +30,7 @@ export const PlayForm = (props: {
 
   const [activeViewIndex, setActiveViewIndex] = useState(0);
   const selectedFieldIndex = game.hasExpansions()
-    ? activeViewIndex - 1
+    ? activeViewIndex - 1 // -1 indicates the view where user chooses expansions
     : activeViewIndex;
 
   const scoreFields = game.getScoreFields(play.expansions).map((f) => f.field);
@@ -123,7 +123,7 @@ export const PlayForm = (props: {
   };
 
   const onSetFocusToNext = () => {
-    const field = game.getFields()[selectedFieldIndex];
+    const field = game.getFields(play.expansions)[selectedFieldIndex];
 
     const fieldPerPlayer =
       field.type === "score" ||
@@ -216,7 +216,7 @@ export const PlayForm = (props: {
         onKeyDown={handleKeyDown}
         onChange={handleScoreChange}
         focusOnMe={
-          selectedFieldIndex === scoreFields.indexOf(field) &&
+          fields[selectedFieldIndex]?.field?.id === field.id &&
           focusOnPlayerIndex >= 0 &&
           p.id === players[focusOnPlayerIndex].id
         }
@@ -240,7 +240,7 @@ export const PlayForm = (props: {
 
   const views = [
     game.hasExpansions() && (
-      <div>
+      <div key="expansions">
         <h3>Used expansions</h3>
         {(game.expansions || []).map((expansion) =>
           renderExpansionField(expansion)

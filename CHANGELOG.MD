@@ -7,7 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## 2020-08-9
+## 2020-09-05
+
+### Fixed
+
+- Issues setting scores with tabulator/enter in plays with expansions
+
+## 2020-08-09
 
 ### Added
 
