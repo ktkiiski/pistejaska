@@ -20,7 +20,7 @@ export const PlayForm = (props: {
 }) => {
   const {
     play: { players },
-    game
+    game,
   } = props;
 
   const [play, setPlay] = React.useState<Play>(props.play);
@@ -29,9 +29,11 @@ export const PlayForm = (props: {
   const saveButton = useRef<HTMLDivElement>(null);
 
   const [activeViewIndex, setActiveViewIndex] = useState(0);
-  const selectedFieldIndex = game.hasExpansions() ? activeViewIndex - 1 : activeViewIndex;
+  const selectedFieldIndex = game.hasExpansions()
+    ? activeViewIndex - 1
+    : activeViewIndex;
 
-  const scoreFields = game.getScoreFields(play.expansions).map(f => f.field);
+  const scoreFields = game.getScoreFields(play.expansions).map((f) => f.field);
   const done = play.scores.length === players.length * scoreFields.length;
 
   let isSwitchingHack = false;
@@ -39,22 +41,37 @@ export const PlayForm = (props: {
   const fields = game.getFields(play.expansions);
   const viewCount = game.hasExpansions() ? fields.length + 1 : fields.length;
 
-  const handleExpansionChange = (expansion: GameExpansionDefinition, selected: boolean) => {
+  const handleExpansionChange = (
+    expansion: GameExpansionDefinition,
+    selected: boolean
+  ) => {
     if (selected && !play.expansions.includes(expansion.id)) {
-      setPlay(new Play({
-        ...play,
-        expansions: play.expansions.concat(expansion.id),
-      }));
+      setPlay(
+        new Play({
+          ...play,
+          expansions: play.expansions.concat(expansion.id),
+        })
+      );
     } else if (!selected && play.expansions.includes(expansion.id)) {
-      const expansionScoreFieldIds = expansion.scoreFields.map(field => field.id);
-      const expansionMiscFieldIds = (expansion.miscFields || []).map(field => field.id);
-      setPlay(new Play({
-        ...play,
-        expansions: play.expansions.filter(id => id !== expansion.id),
-        // Omit score and misc fields from the removed expansion (in case they had already been filled)
-        scores: play.scores.filter(score => !expansionScoreFieldIds.includes(score.fieldId)),
-        misc: play.misc.filter(misc => !expansionMiscFieldIds.includes(misc.fieldId)),
-      }));
+      const expansionScoreFieldIds = expansion.scoreFields.map(
+        (field) => field.id
+      );
+      const expansionMiscFieldIds = (expansion.miscFields || []).map(
+        (field) => field.id
+      );
+      setPlay(
+        new Play({
+          ...play,
+          expansions: play.expansions.filter((id) => id !== expansion.id),
+          // Omit score and misc fields from the removed expansion (in case they had already been filled)
+          scores: play.scores.filter(
+            (score) => !expansionScoreFieldIds.includes(score.fieldId)
+          ),
+          misc: play.misc.filter(
+            (misc) => !expansionMiscFieldIds.includes(misc.fieldId)
+          ),
+        })
+      );
     }
   };
 
@@ -64,7 +81,7 @@ export const PlayForm = (props: {
     player: Player
   ) => {
     const oldScores = play.scores.filter(
-      s => s.fieldId !== field.id || s.playerId !== player.id
+      (s) => s.fieldId !== field.id || s.playerId !== player.id
     );
 
     if (score === null) {
@@ -76,7 +93,7 @@ export const PlayForm = (props: {
       const newScores = oldScores.concat({
         playerId: player.id,
         fieldId: field.id,
-        score: score
+        score: score,
       });
 
       setPlay(new Play({ ...play, ...{ scores: newScores } }));
@@ -90,12 +107,12 @@ export const PlayForm = (props: {
   ) => {
     const playerId = player && player.id;
     const oldMisc = play.misc.filter(
-      s => s.fieldId !== field.id || s.playerId !== playerId
+      (s) => s.fieldId !== field.id || s.playerId !== playerId
     );
     const newMisc = oldMisc.concat({
       fieldId: field.id,
       data: misc,
-      playerId: playerId
+      playerId: playerId,
     });
 
     setPlay(new Play({ ...play, ...{ misc: newMisc } }));
@@ -143,16 +160,18 @@ export const PlayForm = (props: {
   };
 
   const renderExpansionField = (expansion: GameExpansionDefinition) => (
-      <div key={expansion.id}>
-        <Checkbox checked={play.expansions.includes(expansion.id)}
-                  onChange={(_, checked) => handleExpansionChange(expansion, checked)} />
-        {expansion.name}
-      </div>
+    <div key={expansion.id}>
+      <Checkbox
+        checked={play.expansions.includes(expansion.id)}
+        onChange={(_, checked) => handleExpansionChange(expansion, checked)}
+      />
+      {expansion.name}
+    </div>
   );
 
   const renderMiscField = (field: GameMiscFieldDefinition) => {
     if (field.valuePerPlayer === true) {
-      return players.map(p => (
+      return players.map((p) => (
         <PlayFormMiscField
           key={p.id}
           field={field}
@@ -162,7 +181,7 @@ export const PlayForm = (props: {
           onKeyDown={handleKeyDown}
           onChange={handleMiscChange}
           focusOnMe={
-            selectedFieldIndex === fields.map(f => f.field).indexOf(field) &&
+            selectedFieldIndex === fields.map((f) => f.field).indexOf(field) &&
             focusOnPlayerIndex >= 0 &&
             p.id === players[focusOnPlayerIndex].id
           }
@@ -173,13 +192,13 @@ export const PlayForm = (props: {
         <PlayFormMiscField
           field={field}
           play={play}
-          onFocus={e => {}}
+          onFocus={(e) => {}}
           player={undefined}
           key={field.id}
           onKeyDown={handleKeyDown}
           onChange={handleMiscChange}
           focusOnMe={
-            selectedFieldIndex === fields.map(f => f.field).indexOf(field)
+            selectedFieldIndex === fields.map((f) => f.field).indexOf(field)
           }
         />
       );
@@ -187,7 +206,7 @@ export const PlayForm = (props: {
   };
 
   const renderScoreField = (field: GameScoreFieldDefinition) => {
-    return players.map(p => (
+    return players.map((p) => (
       <PlayFormScoreField
         player={p}
         field={field}
@@ -213,9 +232,7 @@ export const PlayForm = (props: {
   const onNextClick = () => {
     // Move to the next view
     setActiveViewIndex(
-        activeViewIndex < viewCount - 1
-        ? activeViewIndex + 1
-        : viewCount - 1
+      activeViewIndex < viewCount - 1 ? activeViewIndex + 1 : viewCount - 1
     );
     // Reset focus to the first player
     setFocusOnPlayerIndex(0);
@@ -225,8 +242,12 @@ export const PlayForm = (props: {
     game.hasExpansions() && (
       <div>
         <h3>Used expansions</h3>
-        {(game.expansions || []).map(expansion => (renderExpansionField(expansion)))}
-        <Button variant="outlined" color="default" onClick={onNextClick}>Next &gt;</Button>
+        {(game.expansions || []).map((expansion) =>
+          renderExpansionField(expansion)
+        )}
+        <Button variant="outlined" color="default" onClick={onNextClick}>
+          Next &gt;
+        </Button>
       </div>
     ),
     ...fields.map((item, idx) => (
@@ -237,22 +258,22 @@ export const PlayForm = (props: {
         {item.field.description ? <p>{item.field.description}</p> : null}
 
         {item.type === "misc"
-            ? renderMiscField(item.field)
-            : renderScoreField(item.field)}
+          ? renderMiscField(item.field)
+          : renderScoreField(item.field)}
 
         <Button
-            variant="outlined"
-            color="default"
-            disabled={activeViewIndex <= 0}
-            onClick={onPreviousClick}
+          variant="outlined"
+          color="default"
+          disabled={activeViewIndex <= 0}
+          onClick={onPreviousClick}
         >
           &lt; Previous
         </Button>
         <Button
-            variant="outlined"
-            color="default"
-            disabled={activeViewIndex >= viewCount - 1}
-            onClick={onNextClick}
+          variant="outlined"
+          color="default"
+          disabled={activeViewIndex >= viewCount - 1}
+          onClick={onNextClick}
         >
           Next &gt;
         </Button>
