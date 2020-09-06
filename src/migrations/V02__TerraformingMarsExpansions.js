@@ -5,7 +5,7 @@ const PLAYS = "plays-v1";
 
 const db = utils.getDatabase();
 db.collection(PLAYS)
-  .where("gameId", "==", "7-wonders")
+  .where("gameId", "==", "terraforming-mars")
   .get()
   .then((querySnapshots) => {
     const originalPlays = querySnapshots.docs.map((doc) => doc.data());
@@ -13,18 +13,19 @@ db.collection(PLAYS)
     if (!process.argv.includes("--prod")) {
       // Write original and updated data to files for testing purposes
       fs.writeFileSync(
-        "V01_original.json",
+        "V02_original.json",
         JSON.stringify(originalPlays, null, 2)
       );
       fs.writeFileSync(
-        "V01_updated.json",
+        "V02_updated.json",
         JSON.stringify(updatedPlays, null, 2)
       );
       console.log("Wrote debugging files");
     } else {
+      console.log("PROD");
       const batch = db.batch();
       updatedPlays.forEach((play) =>
-        batch.update(db.collection(PLAYS).doc(play.id), play)
+        batch.set(db.collection("plays-v2").doc(play.id), play)
       );
       batch
         .commit()
@@ -46,32 +47,65 @@ function migratePlay(play) {
     expansions: play.expansions || [],
     misc: play.misc.filter(
       (entry) =>
-        !["variant-leaders", "variant-cities", "variant-armada"].includes(
-          entry.fieldId
-        )
+        ![
+          "variant-venus-next",
+          "variant-colonies",
+          "variant-prelude",
+          "variant-turmoil",
+          "variant-map",
+        ].includes(entry.fieldId)
     ),
   };
   delete updated.rankings;
   if (
     play.misc.some(
-      (entry) => entry.fieldId === "variant-leaders" && entry.data === "Yes"
+      (entry) => entry.fieldId === "variant-venus-next" && entry.data === "Yes"
     )
   ) {
-    updated.expansions.push("leaders");
+    updated.expansions.push("venus-next");
   }
   if (
     play.misc.some(
-      (entry) => entry.fieldId === "variant-cities" && entry.data === "Yes"
+      (entry) =>
+        entry.fieldId === "variant-advanced-cards" && entry.data === "Yes"
     )
   ) {
-    updated.expansions.push("cities");
+    updated.expansions.push("advanced-cards");
   }
   if (
     play.misc.some(
-      (entry) => entry.fieldId === "variant-armada" && entry.data === "Yes"
+      (entry) => entry.fieldId === "variant-colonies" && entry.data === "Yes"
     )
   ) {
-    updated.expansions.push("armada");
+    updated.expansions.push("colonies");
+  }
+  if (
+    play.misc.some(
+      (entry) => entry.fieldId === "variant-prelude" && entry.data === "Yes"
+    )
+  ) {
+    updated.expansions.push("prelude");
+  }
+  if (
+    play.misc.some(
+      (entry) => entry.fieldId === "variant-turmoil" && entry.data === "Yes"
+    )
+  ) {
+    updated.expansions.push("turmoil");
+  }
+  if (
+    play.misc.some(
+      (entry) => entry.fieldId === "variant-map" && entry.data === "Hellas"
+    )
+  ) {
+    updated.expansions.push("map-hellas");
+  }
+  if (
+    play.misc.some(
+      (entry) => entry.fieldId === "variant-map" && entry.data === "Elysium"
+    )
+  ) {
+    updated.expansions.push("map-elysium");
   }
 
   return updated;
