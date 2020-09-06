@@ -68,30 +68,29 @@ Are done manually by exporting data. Should automate this.
 
 If you need to perform data migrations, do this:
 
-1. Take a backup of the current database :) 
+1. Take a backup of the current database :)
 1. Acquire Google Cloud Service Account credentials JSON from one of the project admins.
 1. Set the GOOGLE_APPLICATION_CREDENTIALS environment variable to point to the credentials JSON
-(see https://cloud.google.com/firestore/docs/quickstart-servers#set_up_authentication for details).
+   (see https://cloud.google.com/firestore/docs/quickstart-servers#set_up_authentication for details).
 1. Write a migration script under migrations/, prefix the script name with the next free version number.
-See existing scripts for examples.
+   See existing scripts for examples.
+1. Test migration: `node V0x_MyGreatMigration.js`
+1. Run migration: `node V0x_MyGreatMigration.js --prod`
 
 ## TODO
 
+- change "misc score field" for unknown expansion scores to be the last field of the PlayForm
 - reports (winrates, avg scores etc) for different races in asymmetrical games (like race in caverna or gameboard in 7 wonders)
 - statistical analysis for strongest victory predictor (eg. start order (is starting player more likely to win), number of dwarfs in caverna, player, race used)
 - generic reports: games by plays, longest/shortest games, best ELO rating for all games etc
-- support automatic game length detection
 - read support for everyone, write support for whitelisted emails
 - normalize player names (firstname and first letter of surname)
-- better authorization (see https://blog.jimmycai.com/p/firebase-limit-access-to-certain-domains/)
 - allow game field definitions editing on UI
-- save every change to localstorage (or even to server?) to prevent accidental data loss
 - celebration page on save to see the winner with konfetti animation
 
 ### Technical debt
 
 - denormalize players to their own root entity
-- consider refactoring components to presentational & container components
 - better backups
 - automatic tests
 

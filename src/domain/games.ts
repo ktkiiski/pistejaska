@@ -143,12 +143,6 @@ const terraFormingMars: GameDefinition = {
     { id: "milestones", name: "Milestones", type: "number", minValue: 0 },
     { id: "game-board", name: "Game board", type: "number", minValue: 0 },
     { id: "cards", name: "Cards", type: "number", minValue: 0 },
-    {
-      id: "politicians",
-      name: "Politicians (Turmoil)",
-      type: "number",
-      minValue: 0,
-    },
   ],
   miscFields: [
     {
@@ -199,46 +193,43 @@ const terraFormingMars: GameDefinition = {
       ],
     },
     { id: "generations", name: "Generations", type: "number", minValue: 0 },
+  ],
+  expansions: [
     {
-      id: "variant-advanced-cards",
-      name: "Variant: used advanced cards",
-      type: "boolean",
-      affectsScoring: true,
+      id: "advanced-cards",
+      name: "Advanced cards",
     },
     {
-      id: "variant-map",
-      name: "Map",
-      type: "text",
-      affectsScoring: true,
-      options: [
-        { value: "Default", label: "Default" },
-        { value: "Hellas", label: "Hellas" },
-        { value: "Elysium", label: "Elysium" },
+      id: "prelude",
+      name: "Prelude",
+    },
+    {
+      id: "map-hellas",
+      name: "Map: Hellas",
+    },
+    {
+      id: "map-elysium",
+      name: "Map: Elysium",
+    },
+    {
+      id: "venus-next",
+      name: "Venus Next",
+    },
+    {
+      id: "colonies",
+      name: "Colonies",
+    },
+    {
+      id: "turmoil",
+      name: "Turmoil",
+      scoreFields: [
+        {
+          id: "politicians",
+          name: "Politicians",
+          type: "number",
+          minValue: 0,
+        },
       ],
-    },
-    {
-      id: "variant-venus-next",
-      name: "Variant: used Venus next",
-      type: "boolean",
-      affectsScoring: true,
-    },
-    {
-      id: "variant-colonies",
-      name: "Variant: used Colonies",
-      type: "boolean",
-      affectsScoring: true,
-    },
-    {
-      id: "variant-prelude",
-      name: "Variant: used Prelude",
-      type: "boolean",
-      affectsScoring: true,
-    },
-    {
-      id: "variant-turmoil",
-      name: "Variant: used Turmoil",
-      type: "boolean",
-      affectsScoring: true,
     },
   ],
 };

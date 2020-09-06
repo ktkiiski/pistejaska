@@ -53,7 +53,7 @@ export const PlayForm = (props: {
         })
       );
     } else if (!selected && play.expansions.includes(expansion.id)) {
-      const expansionScoreFieldIds = expansion.scoreFields.map(
+      const expansionScoreFieldIds = (expansion.scoreFields || []).map(
         (field) => field.id
       );
       const expansionMiscFieldIds = (expansion.miscFields || []).map(

@@ -9,7 +9,7 @@ export const usePlays = (): [Play[], boolean, Error | undefined] => {
 
   const plays: Play[] = loading
     ? []
-    : (value && value.docs.map(d => new Play(d.data() as any))) || [];
+    : value?.docs?.map((d) => new Play(d.data() as any)) || [];
 
   return [plays, loading, error];
 };

@@ -13,7 +13,6 @@ import { PlayEdit } from "./PlayEdit";
 import { PlayView } from "./PlayView";
 import { CircularProgress } from "@material-ui/core";
 import { MarkdownViewer } from "./MarkdownViewer";
-// TODO PANU: export theme to its own file
 import { ThemeProvider } from "@material-ui/styles";
 import { createMuiTheme } from "@material-ui/core/styles";
 import { GameReportView } from "./GameReportView";
@@ -26,7 +25,7 @@ var config = {
   databaseURL: "https://pistejaska-dev.firebaseio.com",
   projectId: "pistejaska-dev",
   storageBucket: "pistejaska-dev.appspot.com",
-  messagingSenderId: "597805798706"
+  messagingSenderId: "597805798706",
 };
 firebase.initializeApp(config);
 
@@ -34,7 +33,7 @@ const center = {
   position: "absolute" as any,
   top: "50%",
   left: "50%",
-  transform: "translate(-50%, -50%)"
+  transform: "translate(-50%, -50%)",
 };
 const App = () => {
   const [user, loading] = useAuthState(firebase.auth());
@@ -60,13 +59,13 @@ const App = () => {
       <Route path="/admin/" component={Admin} />
       <Route
         path="/whatsnew/"
-        render={props => <MarkdownViewer {...props} fileName="CHANGELOG" />}
+        render={(props) => <MarkdownViewer {...props} fileName="CHANGELOG" />}
       />
     </>
   );
 
   const theme = createMuiTheme({
-    spacing: 2
+    spacing: 2,
   });
 
   return (
