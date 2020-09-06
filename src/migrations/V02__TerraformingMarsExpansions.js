@@ -50,6 +50,7 @@ function migratePlay(play) {
           "variant-venus-next",
           "variant-colonies",
           "variant-prelude",
+          "variant-advanced-cards",
           "variant-turmoil",
           "variant-map",
         ].includes(entry.fieldId)
