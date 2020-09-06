@@ -200,14 +200,6 @@ const terraFormingMars: GameDefinition = {
       name: "Advanced cards",
     },
     {
-      id: "venus-next",
-      name: "Venus Next",
-    },
-    {
-      id: "colonies",
-      name: "Colonies",
-    },
-    {
       id: "prelude",
       name: "Prelude",
     },
@@ -218,6 +210,14 @@ const terraFormingMars: GameDefinition = {
     {
       id: "map-elysium",
       name: "Map: Elysium",
+    },
+    {
+      id: "venus-next",
+      name: "Venus Next",
+    },
+    {
+      id: "colonies",
+      name: "Colonies",
     },
     {
       id: "turmoil",

@@ -22,10 +22,9 @@ db.collection(PLAYS)
       );
       console.log("Wrote debugging files");
     } else {
-      console.log("PROD");
       const batch = db.batch();
       updatedPlays.forEach((play) =>
-        batch.set(db.collection("plays-v2").doc(play.id), play)
+        batch.update(db.collection("plays-v1").doc(play.id), play)
       );
       batch
         .commit()
