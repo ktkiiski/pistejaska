@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## 2020-09-27
 
+### Added
+
+- Remind user to update the game duration when saving play if the play is edited 10 mins - 10 hour after it was created
+
 ### Changed
 
 - Sort players by position, not by starting order, in play view

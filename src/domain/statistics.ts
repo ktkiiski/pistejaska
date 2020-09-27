@@ -139,7 +139,7 @@ export function getGameStatistics(game: Game, plays: Play[]): GameStatistics[] {
     aggregateWinningScore(anyPlayerStats, win.score, play);
     aggregateWinningScore(playerCountStats, win.score, play);
 
-    const duration = play.getDuration();
+    const duration = play.getDurationInHours();
     if (duration != null) {
       aggregateDuration(anyPlayerStats, playerCount, duration);
       aggregateDuration(playerCountStats, playerCount, duration);

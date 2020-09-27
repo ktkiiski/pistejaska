@@ -5,6 +5,7 @@ import {
   dateField,
 } from "./game";
 import { rankScores } from "../common/rankings";
+import { round } from "lodash";
 
 export type Player = {
   name: string;
@@ -183,11 +184,34 @@ export class Play extends Entity implements PlayDTO {
   /**
    * Returns the duration of this game IN HOURS, if known.
    */
-  public getDuration(): number | null {
-    const field = this.misc.find((m) => m.fieldId === "duration");
+  public getDurationInHours(): number | null {
+    const field = this.getDurationField();
     if (field && typeof field.data === "number") {
       return field.data;
     }
     return null;
+  }
+
+  private getDurationField(): MiscDataDTO | null {
+    return this.misc.find((m) => m.fieldId === "duration") ?? null;
+  }
+
+  /**
+   * Sets the duration of this game IN HOURS.
+   */
+  public setDurationInHours(durationInHours: number) {
+    const field = this.getDurationField();
+    if (field) {
+      field.data = durationInHours;
+    } else {
+      console.warn("No duration field in play" + this.id);
+    }
+  }
+
+  public getTimeInHoursSinceCreation(): number {
+    const duration = new Date().getTime() - this.getCreationDate().getTime();
+    const hours = duration / (1000 * 60 * 60);
+
+    return round(hours, 1);
   }
 }

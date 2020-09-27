@@ -3,7 +3,6 @@ import { GameFieldDefinition, GameFieldOption } from "./domain/game";
 import { TextField, Button, Box } from "@material-ui/core";
 import DurationCounter from "./DurationCounter";
 import { Play } from "./domain/play";
-import { round } from "lodash";
 
 interface PlayFormFieldProps<T, F extends GameFieldDefinition<T>> {
   value: T | null;
@@ -76,9 +75,8 @@ export function PlayFormField<
   };
 
   const onSetDurationFromStartClick = () => {
-    const duration = new Date().getTime() - createdAt.getTime();
-    const hours = duration / (1000 * 60 * 60);
-    onChange(round(hours, 1) as T, field);
+    const duration = play.getTimeInHoursSinceCreation();
+    onChange(duration as T, field);
   };
 
   let options = field.options as
