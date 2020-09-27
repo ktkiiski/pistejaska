@@ -12,12 +12,9 @@ export const PlayList = (props: RouteComponentProps<{}>) => {
   const [plays, , error] = usePlays();
 
   const data = useMemo(
-    () => orderBy(
-      plays,
-      [play => play.getDate(), "created"],
-      ["desc", "desc"],
-    ),
-    [plays],
+    () =>
+      orderBy(plays, [(play) => play.getDate(), "created"], ["desc", "desc"]),
+    [plays]
   );
 
   const [itemsPerPage, setItemsPerPage] = useState(10);
@@ -38,13 +35,13 @@ export const PlayList = (props: RouteComponentProps<{}>) => {
 
   const onSelectPlay = (play: Play) => props.history.push("/view/" + play.id);
   const getGame = (play: Play) =>
-    games.find(g => g.id === play.gameId) || ({} as any);
+    games.find((g) => g.id === play.gameId) || ({} as any);
 
   return (
     <div>
       <h3>Plays</h3>
       <List component="nav">
-        {currentData.map(play => (
+        {currentData.map((play) => (
           <ListItem button onClick={() => onSelectPlay(play)} key={play.id}>
             <ListItemIcon>
               <img
@@ -68,15 +65,15 @@ export const PlayList = (props: RouteComponentProps<{}>) => {
         rowsPerPage={itemsPerPage}
         page={currentPage}
         backIconButtonProps={{
-          "aria-label": "Previous Page"
+          "aria-label": "Previous Page",
         }}
         nextIconButtonProps={{
-          "aria-label": "Next Page"
+          "aria-label": "Next Page",
         }}
         onChangePage={(e, page) => {
           setCurrentPage(page);
         }}
-        onChangeRowsPerPage={e => {
+        onChangeRowsPerPage={(e) => {
           setCurrentPage(0);
           setItemsPerPage((e as any).target.value);
         }}

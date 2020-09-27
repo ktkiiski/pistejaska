@@ -16,22 +16,19 @@ export const PlayEdit = (props: RouteComponentProps<any>) => {
 
   if (loading) return <>Loading...</>;
 
-  const existing = value && value.docs.find(d => d.id === playId);
+  const existing = value && value.docs.find((d) => d.id === playId);
 
   if (!existing) {
     return <>Play not found!</>;
   }
   const play = new Play(existing.data() as PlayDTO);
-  const game = games.find(g => g.id === play.gameId);
+  const game = games.find((g) => g.id === play.gameId);
   if (!game) return <>Game not found!</>;
 
   const onSave = async (play: Play) => {
     const db = firebase.firestore();
-    await db
-      .collection("plays-v1")
-      .doc(play.id)
-      .set(play.toDTO());
+    await db.collection("plays-v1").doc(play.id).set(play.toDTO());
     props.history.push("/view/" + playId);
   };
-  return <PlayForm game={game} play={play} onSave={play => onSave(play)} />;
+  return <PlayForm game={game} play={play} onSave={(play) => onSave(play)} />;
 };

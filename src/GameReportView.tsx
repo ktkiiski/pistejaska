@@ -92,7 +92,7 @@ export const GameReportView = (props: RouteComponentProps<any>) => {
 function renderPercentage(count: number, max: number) {
   const percentage = Math.round((count / max) * 100);
   if (Number.isNaN(percentage) || !Number.isFinite(percentage)) {
-    return '–';
+    return "–";
   }
   return `${percentage}% (${count})`;
 }
@@ -118,7 +118,7 @@ const DimensionReportTable = (props: {
   const rows = sortBy(
     stats,
     (stat) => stat.averageNormalizedPosition ?? Number.POSITIVE_INFINITY,
-    (stat) => -stat.count,
+    (stat) => -stat.count
   );
   const playCount = plays.length;
 
@@ -153,45 +153,55 @@ const DimensionReportTable = (props: {
   );
 };
 
-const stringifyScore = (score: number | null) => (score == null ? '—' : String(Math.round(score)));
+const stringifyScore = (score: number | null) =>
+  score == null ? "—" : String(Math.round(score));
 
-const HighScoresReportTable = (props: { game: Game, plays: Play[] }) => {
+const HighScoresReportTable = (props: { game: Game; plays: Play[] }) => {
   const { game, plays } = props;
 
   const statsByPlayerCount = getGameStatistics(game, plays);
   const columns = [
     { name: "# of players" },
-    ...statsByPlayerCount.map(
-      (s) => ({ name: s.playerCount == null ? 'Any' : String(s.playerCount) }),
-    ),
+    ...statsByPlayerCount.map((s) => ({
+      name: s.playerCount == null ? "Any" : String(s.playerCount),
+    })),
   ];
   const rows = [
     [
-      { value: 'Max winning score' },
+      { value: "Max winning score" },
       ...statsByPlayerCount.map((s) => ({
         value: stringifyScore(s.maxWinningScore),
-        link: s.maxWinningScorePlay ? `/view/${s.maxWinningScorePlay.id}` : undefined,
+        link: s.maxWinningScorePlay
+          ? `/view/${s.maxWinningScorePlay.id}`
+          : undefined,
       })),
     ],
     [
-      { value: 'Average winning score' },
+      { value: "Average winning score" },
       ...statsByPlayerCount.map((s) => ({
         value: stringifyScore(s.averageWinningScore),
       })),
     ],
     [
-      { value: 'Min winning score' },
+      { value: "Min winning score" },
       ...statsByPlayerCount.map((s) => ({
         value: stringifyScore(s.minWinningScore),
-        link: s.minWinningScorePlay ? `/view/${s.minWinningScorePlay.id}` : undefined,
+        link: s.minWinningScorePlay
+          ? `/view/${s.minWinningScorePlay.id}`
+          : undefined,
       })),
     ],
     [
-      { value: 'Average duration' },
+      { value: "Average duration" },
       ...statsByPlayerCount.map((s) => ({
-        value: s.playerCount == null
-          ? (s.averageDurationPerPlayer == null ? '—' : `${s.averageDurationPerPlayer.toFixed(1)}h / 👤`)
-          : (s.averageDuration == null ? '—' : `${s.averageDuration.toFixed(1)}h`),
+        value:
+          s.playerCount == null
+            ? s.averageDurationPerPlayer == null
+              ? "—"
+              : `${s.averageDurationPerPlayer.toFixed(1)}h / 👤`
+            : s.averageDuration == null
+            ? "—"
+            : `${s.averageDuration.toFixed(1)}h`,
       })),
     ],
   ];

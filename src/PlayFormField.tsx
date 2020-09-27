@@ -3,7 +3,7 @@ import { GameFieldDefinition, GameFieldOption } from "./domain/game";
 import { TextField, Button, Box } from "@material-ui/core";
 import DurationCounter from "./DurationCounter";
 import { Play } from "./domain/play";
-import { round } from 'lodash';
+import { round } from "lodash";
 
 interface PlayFormFieldProps<T, F extends GameFieldDefinition<T>> {
   value: T | null;
@@ -35,7 +35,7 @@ export function PlayFormField<
     focusOnMe,
     onFocus,
     onKeyDown,
-    id
+    id,
   } = props;
 
   useEffect(() => {
@@ -44,20 +44,20 @@ export function PlayFormField<
     }
   }, [focusOnMe]);
 
-  const isNumeric = field.type === 'number' || field.type === 'duration';
+  const isNumeric = field.type === "number" || field.type === "duration";
   const createdAt = play.getCreationDate();
-  const createdToday = new Date().getTime() - createdAt.getTime() < 24 * 60 * 60 * 1000;
-  const inputProps =
-    isNumeric
-      ? {
-          ref: inputRef,
-          min: field.minValue,
-          max: field.maxValue,
-          step: field.step
-        }
-      : {
-          ref: inputRef
-        };
+  const createdToday =
+    new Date().getTime() - createdAt.getTime() < 24 * 60 * 60 * 1000;
+  const inputProps = isNumeric
+    ? {
+        ref: inputRef,
+        min: field.minValue,
+        max: field.maxValue,
+        step: field.step,
+      }
+    : {
+        ref: inputRef,
+      };
 
   const onValueChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     let value = event.currentTarget.value as number | string | null;
@@ -88,17 +88,17 @@ export function PlayFormField<
     options = [
       { value: "", label: "" },
       { value: "Yes", label: "Yes" },
-      { value: "No", label: "No" }
+      { value: "No", label: "No" },
     ];
   }
   if (options) {
     // Only allow choosing from pre-defined options.
     // If 0 is one of the allowed options, then let the zero option be seem
     // to be selected by default. Otherwise a blank option is selected by default.
-    const hasZeroOption = options.some(option => option.value === 0);
+    const hasZeroOption = options.some((option) => option.value === 0);
     const selectedValue = !value && hasZeroOption ? 0 : value || "";
     const hasSelectedValidOption = options.some(
-      option => option.value === selectedValue
+      (option) => option.value === selectedValue
     );
     return (
       <div>
@@ -107,7 +107,7 @@ export function PlayFormField<
           label={label}
           value={selectedValue}
           onChange={onValueChange}
-          onFocus={e => (focusOnMe ? () => {} : onFocus(e))}
+          onFocus={(e) => (focusOnMe ? () => {} : onFocus(e))}
           onKeyDown={onKeyDown}
           inputProps={{ ref: inputRef }}
           SelectProps={{ native: true }}
@@ -134,19 +134,16 @@ export function PlayFormField<
           type={isNumeric ? "number" : "text"}
           variant="outlined"
           label={label}
-          onFocus={e => (focusOnMe ? () => {} : onFocus(e))}
+          onFocus={(e) => (focusOnMe ? () => {} : onFocus(e))}
           onKeyDown={onKeyDown}
           value={value === null ? "" : value}
           onChange={onValueChange}
           id={id}
         />
       </div>
-      {field.type !== 'duration' || !createdToday ? null : (
+      {field.type !== "duration" || !createdToday ? null : (
         <Box my={2}>
-          <Button
-            onClick={onSetDurationFromStartClick}
-            variant="outlined"
-          >
+          <Button onClick={onSetDurationFromStartClick} variant="outlined">
             <span>
               Set from start (<DurationCounter startTime={createdAt} />)
             </span>

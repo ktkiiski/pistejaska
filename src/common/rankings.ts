@@ -23,7 +23,9 @@ interface RankedObject {
  * - `normalizedIndex`: original index normalized between 0...1
  * - `normalizedPosition`: ranked position normalized between 0...1
  */
-export function rankScores<T extends ScoredObject>(values: T[]): (T & RankedObject)[] {
+export function rankScores<T extends ScoredObject>(
+  values: T[]
+): (T & RankedObject)[] {
   const { length } = values;
   if (!length) {
     return [];
@@ -38,7 +40,7 @@ export function rankScores<T extends ScoredObject>(values: T[]): (T & RankedObje
     // Primarily sort by score
     (obj) => -obj.score,
     // Secondarily sort by tie-breaker
-    (obj) => -(obj.tieBreaker ?? 0),
+    (obj) => -(obj.tieBreaker ?? 0)
   );
   const maxScore = scored[0].score;
   const minScore = scored[length - 1].score;
@@ -48,7 +50,7 @@ export function rankScores<T extends ScoredObject>(values: T[]): (T & RankedObje
   let latestScore = NaN;
   let latestTieBreaker = NaN;
   const rankings = scored.map((ranking, index) => {
-    const { score, tieBreaker = 0 } = ranking;
+    const { score, tieBreaker = 0 } = ranking;
     let position;
     if (score === latestScore && tieBreaker === latestTieBreaker) {
       // Tied with the previous place(s)
@@ -65,8 +67,10 @@ export function rankScores<T extends ScoredObject>(values: T[]): (T & RankedObje
   return rankings.map((ranking) => ({
     ...ranking,
     // Normalize position between 0...1, unless everyone are tied
-    normalizedPosition: latestPosition < 2 ? null : (ranking.position - 1) / (latestPosition - 1),
+    normalizedPosition:
+      latestPosition < 2 ? null : (ranking.position - 1) / (latestPosition - 1),
     // Normalize score between 0...1, unless everyone are tied
-    normalizedScore: scoreDiff > 0 ? (ranking.score - minScore) / scoreDiff : null,
+    normalizedScore:
+      scoreDiff > 0 ? (ranking.score - minScore) / scoreDiff : null,
   }));
 }

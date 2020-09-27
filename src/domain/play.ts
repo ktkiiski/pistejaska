@@ -1,4 +1,9 @@
-import { GameMiscFieldDefinition, nameField, locationField, dateField } from "./game";
+import {
+  GameMiscFieldDefinition,
+  nameField,
+  locationField,
+  dateField,
+} from "./game";
 import { rankScores } from "../common/rankings";
 
 export type Player = {
@@ -90,33 +95,37 @@ export class Play extends Entity implements PlayDTO {
     this.created = play.created || new Date().toISOString();
     this.date = this.getMiscFieldValue(dateField);
     // Calculate normalized positions for each player
-    this.rankings = rankScores(this.players.map((player, index) => ({
-      player,
-      score: this.getTotal(player.id),
-      tieBreaker: this.getTieBreaker(player.id),
-    })));
+    this.rankings = rankScores(
+      this.players.map((player, index) => ({
+        player,
+        score: this.getTotal(player.id),
+        tieBreaker: this.getTieBreaker(player.id),
+      }))
+    );
   }
 
   public getRanking(playerId: string): PlayRanking | undefined {
-    return this.rankings.find(ranking => ranking.player.id === playerId);
+    return this.rankings.find((ranking) => ranking.player.id === playerId);
   }
 
   // get position. Gives equal position to equal scores.
   public getPosition(player: Player) {
-    const ranking = this.rankings.find(ranking => ranking.player.id === player.id);
+    const ranking = this.rankings.find(
+      (ranking) => ranking.player.id === player.id
+    );
     return ranking ? ranking.position : NaN;
   }
 
   public getTieBreaker(playerId: string): number {
     const score = this.scores.find(
-      score => score.fieldId === 'tie-breaker' && score.playerId === playerId
+      (score) => score.fieldId === "tie-breaker" && score.playerId === playerId
     );
     return score?.score || 0;
   }
 
   public getTotal(playerId: string) {
     return this.scores
-      .filter(s => s.playerId === playerId && s.fieldId !== 'tie-breaker')
+      .filter((s) => s.playerId === playerId && s.fieldId !== "tie-breaker")
       .reduce((sum, s) => sum + (s.score || 0), 0);
   }
 
@@ -140,15 +149,20 @@ export class Play extends Entity implements PlayDTO {
     return `${this.getDate().toLocaleDateString()} ${name}`;
   }
 
-  public getMiscFieldValue<T extends string | number>(field: GameMiscFieldDefinition<T>, playerId?: string): T | null | undefined {
-    const item = this.misc.find(m => m.fieldId === field.id && m.playerId === playerId);
+  public getMiscFieldValue<T extends string | number>(
+    field: GameMiscFieldDefinition<T>,
+    playerId?: string
+  ): T | null | undefined {
+    const item = this.misc.find(
+      (m) => m.fieldId === field.id && m.playerId === playerId
+    );
     const value = item?.data;
     if (value == null) {
       return value;
     }
-    if (field.type === 'number' && typeof value === 'string') {
+    if (field.type === "number" && typeof value === "string") {
       const numberValue = parseFloat(value);
-      return Number.isFinite(numberValue) ? numberValue as T : null;
+      return Number.isFinite(numberValue) ? (numberValue as T) : null;
     }
     return String(value) as T;
   }
@@ -160,7 +174,9 @@ export class Play extends Entity implements PlayDTO {
    * @param fieldId optional score field ID
    */
   public getScoreFieldValue(playerId: string, fieldId: string): number {
-    const score = this.scores.find(item => item.fieldId === fieldId && item.playerId === playerId);
+    const score = this.scores.find(
+      (item) => item.fieldId === fieldId && item.playerId === playerId
+    );
     return score?.score ?? 0;
   }
 
@@ -168,8 +184,8 @@ export class Play extends Entity implements PlayDTO {
    * Returns the duration of this game IN HOURS, if known.
    */
   public getDuration(): number | null {
-    const field = this.misc.find(m => m.fieldId === 'duration');
-    if (field && typeof field.data === 'number') {
+    const field = this.misc.find((m) => m.fieldId === "duration");
+    if (field && typeof field.data === "number") {
       return field.data;
     }
     return null;

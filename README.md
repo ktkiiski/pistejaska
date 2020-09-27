@@ -31,6 +31,8 @@ Easiest way to achieve this is to
 - install [prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) extension
 - configure `"editor.formatOnSave": true` setting.
 
+Alternatively, you can run `npx prettier src/* --write` to format all files in project root before committing.
+
 ## Developing
 
 1. `npm install`

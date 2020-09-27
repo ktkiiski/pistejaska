@@ -23,7 +23,7 @@ const markdownWrapper = (fileName: string) => (
     <div
       className="markdown-body"
       dangerouslySetInnerHTML={{
-        __html: markdownFiles.get(fileName).__content
+        __html: markdownFiles.get(fileName).__content,
       }}
     />
   </div>

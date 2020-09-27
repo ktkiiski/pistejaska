@@ -8,11 +8,14 @@ export const usePlayers = (): [Player[], boolean, Error | undefined] => {
 
   // sorted by the number of plays, so that most common players are first
   const allPlayers = sortBy(
-    groupBy(plays.flatMap(v => v.players), p => p.id),
-    group => -group.length
+    groupBy(
+      plays.flatMap((v) => v.players),
+      (p) => p.id
+    ),
+    (group) => -group.length
   );
 
-  const players = map(allPlayers, p => p[0]);
+  const players = map(allPlayers, (p) => p[0]);
 
   return [players, loading, error];
 };

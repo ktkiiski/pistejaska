@@ -26,8 +26,9 @@ export function PlayFormMiscField<T>(props: PlayFormMiscFieldProps<T>) {
   const playerId = player && player.id;
   const value =
     (
-      play.misc.find(m => m.fieldId === field.id && m.playerId === playerId) ||
-      ({} as any)
+      play.misc.find(
+        (m) => m.fieldId === field.id && m.playerId === playerId
+      ) || ({} as any)
     ).data ||
     (field.getDefaultValue && field.getDefaultValue()) ||
     null;
@@ -41,4 +42,4 @@ export function PlayFormMiscField<T>(props: PlayFormMiscFieldProps<T>) {
       {...fieldProps}
     />
   );
-};
+}

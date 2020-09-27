@@ -10,7 +10,7 @@ export const Login = () => {
     position: "absolute" as any,
     top: "50%",
     left: "50%",
-    transform: "translate(-50%, -50%)"
+    transform: "translate(-50%, -50%)",
   };
   const [user, loading] = useAuthState(firebase.auth());
   const login = async () => {

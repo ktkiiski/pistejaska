@@ -1,7 +1,16 @@
-import { AppBar, Toolbar, Typography, Button, IconButton, Menu, MenuItem, makeStyles } from "@material-ui/core";
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+  IconButton,
+  Menu,
+  MenuItem,
+  makeStyles,
+} from "@material-ui/core";
 import React, { useMemo, useState } from "react";
 import { useHistory } from "react-router-dom";
-import AccountCircle from '@material-ui/icons/AccountCircle';
+import AccountCircle from "@material-ui/icons/AccountCircle";
 import * as firebase from "firebase/app";
 import "firebase/auth";
 
@@ -11,29 +20,35 @@ const logout = () => {
 
 const useStyles = makeStyles(() => ({
   title: {
-    textAlign: 'left',
+    textAlign: "left",
     flexGrow: 1,
-    cursor: 'pointer',
+    cursor: "pointer",
   },
 }));
 
 export function NavBar() {
   const history = useHistory();
   const styles = useStyles();
-  const [menuAnchorElement, setMenuAnchorElement] = useState<HTMLElement | null>(null);
-  const menuIcon = useMemo(() => (
-    <IconButton
-      aria-label="More options"
-      aria-controls="menu-appbar"
-      aria-haspopup="true"
-      onClick={(event) => {
-        setMenuAnchorElement(event.currentTarget);
-      }}
-      color="inherit"
-    >
-      <AccountCircle />
-    </IconButton>
-  ), []);
+  const [
+    menuAnchorElement,
+    setMenuAnchorElement,
+  ] = useState<HTMLElement | null>(null);
+  const menuIcon = useMemo(
+    () => (
+      <IconButton
+        aria-label="More options"
+        aria-controls="menu-appbar"
+        aria-haspopup="true"
+        onClick={(event) => {
+          setMenuAnchorElement(event.currentTarget);
+        }}
+        color="inherit"
+      >
+        <AccountCircle />
+      </IconButton>
+    ),
+    []
+  );
   const menu = useMemo(() => {
     const isMenuOpen = menuAnchorElement != null;
     const closeMenu = () => setMenuAnchorElement(null);
@@ -42,20 +57,20 @@ export function NavBar() {
         id="menu-appbar"
         anchorEl={menuAnchorElement}
         anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'right',
+          vertical: "top",
+          horizontal: "right",
         }}
         keepMounted
         transformOrigin={{
-          vertical: 'top',
-          horizontal: 'right',
+          vertical: "top",
+          horizontal: "right",
         }}
         open={isMenuOpen}
         onClose={closeMenu}
       >
         <MenuItem
           onClick={() => {
-            history.push("/whatsnew")
+            history.push("/whatsnew");
             closeMenu();
           }}
         >
@@ -71,7 +86,7 @@ export function NavBar() {
         </MenuItem>
       </Menu>
     );
-  }, [menuAnchorElement, history])
+  }, [menuAnchorElement, history]);
   return (
     <div>
       <AppBar position="static">
@@ -87,10 +102,7 @@ export function NavBar() {
           <Button color="inherit" onClick={() => history.push("/")}>
             Plays
           </Button>
-          <Button
-            color="inherit"
-            onClick={() => history.push("/new")}
-          >
+          <Button color="inherit" onClick={() => history.push("/new")}>
             New
           </Button>
           <Button color="inherit" onClick={() => history.push("/reports")}>

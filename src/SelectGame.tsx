@@ -13,9 +13,9 @@ export const SelectGame = (props: RouteComponentProps<{}>) => {
     props.history.push("/new/" + game.id);
 
   const [searchTerm, setSearchTerm] = useState("");
-  const listedGames = games.map(game => ({
+  const listedGames = games.map((game) => ({
     ...game,
-    lowercaseName: game.name.toLowerCase()
+    lowercaseName: game.name.toLowerCase(),
   }));
   listedGames.sort(({ lowercaseName: name1 }, { lowercaseName: name2 }) => {
     return name1 === "generic game"
@@ -35,12 +35,12 @@ export const SelectGame = (props: RouteComponentProps<{}>) => {
         label="Search..."
         value={searchTerm}
         autoFocus
-        onChange={e => setSearchTerm(e.currentTarget.value)}
+        onChange={(e) => setSearchTerm(e.currentTarget.value)}
       />
       <List component="nav">
         {listedGames
-          .filter(g => g.lowercaseName.includes(searchTerm.toLowerCase()))
-          .map(game => (
+          .filter((g) => g.lowercaseName.includes(searchTerm.toLowerCase()))
+          .map((game) => (
             <ListItem button onClick={() => onSelectGame(game)} key={game.id}>
               <ListItemIcon>
                 <img width={30} height={30} src={game.icon} alt={game.name} />

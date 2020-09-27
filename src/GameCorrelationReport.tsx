@@ -1,16 +1,22 @@
-import React from 'react';
+import React from "react";
 import { Play } from "./domain/play";
-import ReportTable from './ReportTable';
-import { calculatePearsonCorrelation, renderCorrelation } from './common/correlation';
-import { Game } from './domain/game';
+import ReportTable from "./ReportTable";
+import {
+  calculatePearsonCorrelation,
+  renderCorrelation,
+} from "./common/correlation";
+import { Game } from "./domain/game";
 
-const columns = [{
-  name: 'Factor',
-}, {
-  name: 'Correlation with ranking',
-}];
+const columns = [
+  {
+    name: "Factor",
+  },
+  {
+    name: "Correlation with ranking",
+  },
+];
 
-function GameCorrelationReport(props: { game: Game, plays: Play[] }) {
+function GameCorrelationReport(props: { game: Game; plays: Play[] }) {
   const { game, plays } = props;
   if (game.simultaneousTurns) {
     return null;
@@ -25,12 +31,20 @@ function GameCorrelationReport(props: { game: Game, plays: Play[] }) {
       }
     });
   });
-  const correlation = calculatePearsonCorrelation(normalizedPositions, normalizedIndexes);
-  const rows = [[{
-    value: 'Starting order',
-  }, {
-    value: renderCorrelation(correlation),
-  }]];
+  const correlation = calculatePearsonCorrelation(
+    normalizedPositions,
+    normalizedIndexes
+  );
+  const rows = [
+    [
+      {
+        value: "Starting order",
+      },
+      {
+        value: renderCorrelation(correlation),
+      },
+    ],
+  ];
   return <ReportTable columns={columns} rows={rows} />;
 }
 

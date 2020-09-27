@@ -7,8 +7,8 @@ import { usePlays } from "./common/hooks/usePlays";
 
 const useStyles = makeStyles(() => ({
   root: {
-    flexGrow: 1
-  }
+    flexGrow: 1,
+  },
 }));
 
 export const PlayListContainer = (props: RouteComponentProps<{}>) => {

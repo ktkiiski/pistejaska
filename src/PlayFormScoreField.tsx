@@ -27,7 +27,7 @@ export const PlayFormScoreField = (props: PlayFormScoreFieldProps) => {
   const playerTotalScore = play.getTotal(player.id);
 
   const scoreItem = play.scores.find(
-    s => s.fieldId === field.id && s.playerId === player.id
+    (s) => s.fieldId === field.id && s.playerId === player.id
   );
   const scoreValue = scoreItem ? scoreItem.score : null;
   const labelText = `${player.name} (${playerTotalScore} pts)`;
