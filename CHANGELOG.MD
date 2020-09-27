@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## 2020-09-27
+
+### Changed
+
+- Sort players by position, not by starting order, in play view
+
 ## 2020-09-06
 
 ### Changed
