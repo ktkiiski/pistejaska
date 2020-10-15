@@ -153,10 +153,12 @@ const terraFormingMars: GameDefinition = {
       isRelevantReportDimension: true,
       options: [
         { value: "Aridor", label: "Aridor" },
+        { value: "Aphrodite", label: "Aphrodite" },
         { value: "Arklight", label: "Arklight" },
         { value: "Beginner", label: "Beginner" },
         { value: "Cheung Shing Mars", label: "Cheung Shing Mars" },
         { value: "Credicor", label: "Credicor" },
+        { value: "Celestic", label: "Celestic" },
         { value: "Ecoline", label: "Ecoline" },
         { value: "Helion", label: "Helion" },
         { value: "Inventrix", label: "Inventrix" },
