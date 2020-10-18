@@ -61,10 +61,13 @@ export const SelectPlayers = (
 
   const selectPlayers = (
     <div>
-      {/* <h1>New game of {game.name}</h1> */}
-      <p>Please select players so in playing order. :)</p>
+      <h2>Select players</h2>
+      <p>
+        {`Add players to the new game of `}
+        <strong>{game.name}</strong>
+        {` in the playing order.`}
+      </p>
       <div>
-        <h2>Select player</h2>
         <TextField
           label="Search..."
           value={searchTerm}

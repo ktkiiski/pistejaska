@@ -65,7 +65,7 @@ export const PlayView = (props: RouteComponentProps<any>) => {
 
   return (
     <div style={{ paddingBottom: "1em" }}>
-      <h3>Play: {game.name}</h3>
+      <h2>Play: {game.name}</h2>
       <div>Played on {play.getDate().toLocaleDateString()}</div>
       {game.hasExpansions() && (
         <div>

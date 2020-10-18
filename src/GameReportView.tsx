@@ -55,7 +55,7 @@ export const GameReportView = (props: RouteComponentProps<any>) => {
 
   return (
     <div>
-      <h3>Reports: {game.name}</h3>
+      <h2>Reports: {game.name}</h2>
       <p>Based on {gamePlays.length} plays.</p>
       <HighScoresReportTable game={game} plays={gamePlays} />
 

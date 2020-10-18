@@ -12,7 +12,7 @@ export const GameReportList = (props: RouteComponentProps<{}>) => {
 
   return (
     <div>
-      <h3>Reports</h3>
+      <h2>Reports</h2>
       <List component="nav">
         {orderBy(games, (g) => g.name.toLowerCase()).map((game) => (
           <ListItem button onClick={() => onSelectGame(game)} key={game.id}>
