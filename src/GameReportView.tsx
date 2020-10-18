@@ -231,6 +231,8 @@ const useReportPlayersStyles = makeStyles((theme) => ({
   },
 }));
 
+const bestPlayerCount = 5;
+
 const ReportPlayers = (props: { plays: Play[] }) => {
   const { plays } = props;
 
@@ -250,17 +252,22 @@ const ReportPlayers = (props: { plays: Play[] }) => {
             <TableRow>
               <TableCell>Name</TableCell>
               <TableCell>Trueskill</TableCell>
+              <TableCell>Plays</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {elo.slice(0, 5).map((p) => (
-              <TableRow key={p.name}>
-                <TableCell scope="row">{p.name}</TableCell>
-                <TableCell scope="row">
-                  {Math.round(p.rating.mu)} (± {Math.round(3 * p.rating.sigma)})
-                </TableCell>
-              </TableRow>
-            ))}
+            {elo.slice(0, bestPlayerCount).map((player) => {
+              const { id, name, rating, playCount } = player;
+              return (
+                <TableRow key={id}>
+                  <TableCell scope="row">{name}</TableCell>
+                  <TableCell scope="row">
+                    {Math.round(rating.mu)} (± {Math.round(3 * rating.sigma)})
+                  </TableCell>
+                  <TableCell scope="row">{playCount}</TableCell>
+                </TableRow>
+              );
+            })}
           </TableBody>
         </Table>
       </Paper>
