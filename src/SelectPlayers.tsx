@@ -5,11 +5,19 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import { RouteComponentProps } from "react-router";
-import { Button, TextField } from "@material-ui/core";
+import { Button, TextField, makeStyles } from "@material-ui/core";
 import { v4 as uuid } from "uuid";
 import { PlayNew } from "./PlayNew";
 import { games } from "./domain/games";
 import { usePlayers } from "./common/hooks/usePlayers";
+
+const useStyles = makeStyles(theme => ({
+  buttonRow: {
+    '& > *': {
+      margin: theme.spacing(2),
+    },
+  },
+}));
 
 export const SelectPlayers = (
   props: RouteComponentProps<{ gameId: string }>
@@ -17,6 +25,7 @@ export const SelectPlayers = (
   const game = games.find((g) => g.id === props.match.params["gameId"]);
   if (game === undefined) throw new Error("unknown game");
 
+  const styles = useStyles();
   const [allPlayers] = usePlayers();
 
   const [searchTerm, setSearchTerm] = useState("");
@@ -52,6 +61,15 @@ export const SelectPlayers = (
 
   const onDeSelectPlayer = (player: Player) => {
     setPlayers(players.filter((p) => p.id !== player.id));
+  };
+
+  const onRandomizeStartingPlayer = () => {
+    const offset = Math.floor(Math.random() * players.length);
+    const newPlayers = [
+      ...players.slice(offset),
+      ...players.slice(0, offset),
+    ];
+    setPlayers(newPlayers);
   };
 
   const onSearch = (searchTerm: string) => {
@@ -157,14 +175,26 @@ export const SelectPlayers = (
           </ListItem>
         ))}
       </List>
-      <Button
-        color="primary"
-        onClick={onStartGame}
-        disabled={players.length === 0}
-        variant="contained"
-      >
-        Start
-      </Button>
+      <div className={styles.buttonRow}>
+        {game.simultaneousTurns ? null : (
+          <Button
+            color="default"
+            onClick={onRandomizeStartingPlayer}
+            disabled={players.length < 2}
+            variant="outlined"
+          >
+            Random starting player
+          </Button>
+        )}
+        <Button
+          color="primary"
+          onClick={onStartGame}
+          disabled={players.length === 0}
+          variant="contained"
+        >
+          Start
+        </Button>
+      </div>
     </div>
   );
 

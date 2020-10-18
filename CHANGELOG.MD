@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Button for randomizing the starting player when selecting players for a new play
+
 ## 2020-09-27
 
 ### Added
