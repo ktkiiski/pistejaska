@@ -4,32 +4,24 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import { RouteComponentProps } from "react-router";
-import { Button, TextField, makeStyles } from "@material-ui/core";
+import { Button, TextField } from "@material-ui/core";
 import { v4 as uuid } from "uuid";
 import { PlayNew } from "./PlayNew";
 import { games } from "./domain/games";
 import { usePlayers } from "./common/hooks/usePlayers";
+import ButtonRow from "./ButtonRow";
 
-const useStyles = makeStyles(theme => ({
-  buttonRow: {
-    '& > *': {
-      margin: theme.spacing(2),
-    },
-  },
-}));
-
-export const SelectPlayers = (
-  props: RouteComponentProps<{ gameId: string }>
+const SelectPlayers = (
+  props: { gameId: string, initialPlayers?: Player[] }
 ) => {
-  const game = games.find((g) => g.id === props.match.params["gameId"]);
+  const { gameId, initialPlayers = [] } = props;
+  const game = games.find((g) => g.id === gameId);
   if (game === undefined) throw new Error("unknown game");
 
-  const styles = useStyles();
   const [allPlayers] = usePlayers();
 
   const [searchTerm, setSearchTerm] = useState("");
-  const [players, setPlayers] = useState<Player[]>([]);
+  const [players, setPlayers] = useState<Player[]>(initialPlayers);
   const [isStarted, setIsStarted] = useState<boolean>(false);
   const [showAllPlayers, setShowAllPlayers] = useState<boolean>(false);
   const [currentPlayer, setCurrentPlayer] = useState<string>("");
@@ -175,7 +167,7 @@ export const SelectPlayers = (
           </ListItem>
         ))}
       </List>
-      <div className={styles.buttonRow}>
+      <ButtonRow>
         {game.simultaneousTurns ? null : (
           <Button
             color="default"
@@ -194,9 +186,11 @@ export const SelectPlayers = (
         >
           Start
         </Button>
-      </div>
+      </ButtonRow>
     </div>
   );
 
   return !isStarted ? selectPlayers : <PlayNew game={game} players={players} />;
 };
+
+export default SelectPlayers;

@@ -8,7 +8,6 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Admin } from "./Admin";
 import { SelectGame } from "./SelectGame";
-import { SelectPlayers } from "./SelectPlayers";
 import { PlayEdit } from "./PlayEdit";
 import { PlayView } from "./PlayView";
 import { CircularProgress } from "@material-ui/core";
@@ -18,6 +17,8 @@ import { createMuiTheme } from "@material-ui/core/styles";
 import { GameReportView } from "./GameReportView";
 import { PlayList } from "./PlayList";
 import { GameReportList } from "./GameReportList";
+import SelectPlayers from "./SelectPlayers";
+import SelectPlayersFromPlay from "./SelectPlayersFromPlay";
 
 var config = {
   apiKey: "AIzaSyDI_XDKW2vVftx7oUy1a_QTR5BE8j6S-Ds",
@@ -54,7 +55,20 @@ const App = () => {
       <Route path="/reports" exact component={GameReportList} />
       <Route path="/reports/:gameId" component={GameReportView} />
       <Route path="/edit/:playId" component={PlayEdit} />
-      <Route path="/new/:gameId" component={SelectPlayers} />
+      <Route
+        path="/new/:gameId"
+        exact
+        render={({ match: { params: { gameId } } }) => (
+          <SelectPlayers gameId={gameId} />
+        )}
+      />
+      <Route
+        path="/replay/:playId"
+        exact
+        render={({ match: { params: { gameId, playId } } }) => (
+          <SelectPlayersFromPlay playId={playId} />
+        )}
+      />
       <Route path="/new/" exact component={SelectGame} />
       <Route path="/admin/" component={Admin} />
       <Route
