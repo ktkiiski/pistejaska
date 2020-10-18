@@ -146,7 +146,7 @@ const PlayTable = (props: { game: Game; play: Play }) => {
     .filter((x) => (x.id === "misc" ? hasMiscScores : true))
     .filter((x) => (x.id === "tie-breaker" ? hasTieBreaker : true));
 
-  const players = sortBy(play.players, (x) => play.getPosition(x));
+  const players = sortBy(play.players, (x) => play.getPosition(x.id));
 
   return (
     <div className={classes.root}>
@@ -162,7 +162,7 @@ const PlayTable = (props: { game: Game; play: Play }) => {
                     backgroundColor: idx % 2 === 0 ? highlightColor : "",
                   }}
                 >
-                  {`${play.getPosition(p)}. ${p.name}`}
+                  {`${play.getPosition(p.id)}. ${p.name}`}
                 </TableCell>
               ))}
             </TableRow>

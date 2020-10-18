@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Button for randomizing the starting player when selecting players for a new play
 - Play again a previous play: use the game and the players from any existing play
-- Show play counts for best players
+- Show play & win counts for best players
 
 ## 2020-09-27
 

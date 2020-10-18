@@ -253,11 +253,12 @@ const ReportPlayers = (props: { plays: Play[] }) => {
               <TableCell>Name</TableCell>
               <TableCell>Trueskill</TableCell>
               <TableCell>Plays</TableCell>
+              <TableCell>Wins</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {elo.slice(0, bestPlayerCount).map((player) => {
-              const { id, name, rating, playCount } = player;
+              const { id, name, rating, playCount, winCount } = player;
               return (
                 <TableRow key={id}>
                   <TableCell scope="row">{name}</TableCell>
@@ -265,6 +266,9 @@ const ReportPlayers = (props: { plays: Play[] }) => {
                     {Math.round(rating.mu)} (± {Math.round(3 * rating.sigma)})
                   </TableCell>
                   <TableCell scope="row">{playCount}</TableCell>
+                  <TableCell scope="row">
+                  {Math.round(100 * winCount / playCount)}% ({winCount})
+                  </TableCell>
                 </TableRow>
               );
             })}
