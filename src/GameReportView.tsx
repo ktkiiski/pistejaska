@@ -55,7 +55,7 @@ export const GameReportView = (props: RouteComponentProps<any>) => {
 
   return (
     <div>
-      <h3>Reports: {game.name}</h3>
+      <h2>Reports: {game.name}</h2>
       <p>Based on {gamePlays.length} plays.</p>
       <HighScoresReportTable game={game} plays={gamePlays} />
 
@@ -231,6 +231,8 @@ const useReportPlayersStyles = makeStyles((theme) => ({
   },
 }));
 
+const bestPlayerCount = 5;
+
 const ReportPlayers = (props: { plays: Play[] }) => {
   const { plays } = props;
 
@@ -250,17 +252,26 @@ const ReportPlayers = (props: { plays: Play[] }) => {
             <TableRow>
               <TableCell>Name</TableCell>
               <TableCell>Trueskill</TableCell>
+              <TableCell>Plays</TableCell>
+              <TableCell>Wins</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {elo.slice(0, 5).map((p) => (
-              <TableRow key={p.name}>
-                <TableCell scope="row">{p.name}</TableCell>
-                <TableCell scope="row">
-                  {Math.round(p.rating.mu)} (± {Math.round(3 * p.rating.sigma)})
-                </TableCell>
-              </TableRow>
-            ))}
+            {elo.slice(0, bestPlayerCount).map((player) => {
+              const { id, name, rating, playCount, winCount } = player;
+              return (
+                <TableRow key={id}>
+                  <TableCell scope="row">{name}</TableCell>
+                  <TableCell scope="row">
+                    {Math.round(rating.mu)} (± {Math.round(3 * rating.sigma)})
+                  </TableCell>
+                  <TableCell scope="row">{playCount}</TableCell>
+                  <TableCell scope="row">
+                  {Math.round(100 * winCount / playCount)}% ({winCount})
+                  </TableCell>
+                </TableRow>
+              );
+            })}
           </TableBody>
         </Table>
       </Paper>

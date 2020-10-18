@@ -1,27 +1,21 @@
 import { RouteComponentProps } from "react-router";
-import { useCollection } from "react-firebase-hooks/firestore";
 import React from "react";
 import * as firebase from "firebase/app";
 import "firebase/firestore";
-import { Play, PlayDTO } from "./domain/play";
+import { Play } from "./domain/play";
 import { PlayForm } from "./PlayForm";
 import { games } from "./domain/games";
+import { usePlay } from "./common/hooks/usePlay";
 
 export const PlayEdit = (props: RouteComponentProps<any>) => {
   const playId = props.match.params["playId"];
-
-  const [value, loading] = useCollection(
-    firebase.firestore().collection("plays-v1")
-  );
+  const [play, loading] = usePlay(playId);
 
   if (loading) return <>Loading...</>;
 
-  const existing = value && value.docs.find((d) => d.id === playId);
-
-  if (!existing) {
+  if (!play) {
     return <>Play not found!</>;
   }
-  const play = new Play(existing.data() as PlayDTO);
   const game = games.find((g) => g.id === play.gameId);
   if (!game) return <>Game not found!</>;
 

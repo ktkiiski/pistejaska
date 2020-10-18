@@ -39,7 +39,7 @@ export const PlayList = (props: RouteComponentProps<{}>) => {
 
   return (
     <div>
-      <h3>Plays</h3>
+      <h2>Plays</h2>
       <List component="nav">
         {currentData.map((play) => (
           <ListItem button onClick={() => onSelectPlay(play)} key={play.id}>

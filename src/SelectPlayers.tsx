@@ -4,23 +4,24 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import { RouteComponentProps } from "react-router";
 import { Button, TextField } from "@material-ui/core";
 import { v4 as uuid } from "uuid";
 import { PlayNew } from "./PlayNew";
 import { games } from "./domain/games";
 import { usePlayers } from "./common/hooks/usePlayers";
+import ButtonRow from "./ButtonRow";
 
-export const SelectPlayers = (
-  props: RouteComponentProps<{ gameId: string }>
+const SelectPlayers = (
+  props: { gameId: string, initialPlayers?: Player[] }
 ) => {
-  const game = games.find((g) => g.id === props.match.params["gameId"]);
+  const { gameId, initialPlayers = [] } = props;
+  const game = games.find((g) => g.id === gameId);
   if (game === undefined) throw new Error("unknown game");
 
   const [allPlayers] = usePlayers();
 
   const [searchTerm, setSearchTerm] = useState("");
-  const [players, setPlayers] = useState<Player[]>([]);
+  const [players, setPlayers] = useState<Player[]>(initialPlayers);
   const [isStarted, setIsStarted] = useState<boolean>(false);
   const [showAllPlayers, setShowAllPlayers] = useState<boolean>(false);
   const [currentPlayer, setCurrentPlayer] = useState<string>("");
@@ -54,6 +55,15 @@ export const SelectPlayers = (
     setPlayers(players.filter((p) => p.id !== player.id));
   };
 
+  const onRandomizeStartingPlayer = () => {
+    const offset = Math.floor(Math.random() * players.length);
+    const newPlayers = [
+      ...players.slice(offset),
+      ...players.slice(0, offset),
+    ];
+    setPlayers(newPlayers);
+  };
+
   const onSearch = (searchTerm: string) => {
     setSearchTerm(searchTerm);
     setShowAllPlayers(false);
@@ -61,10 +71,13 @@ export const SelectPlayers = (
 
   const selectPlayers = (
     <div>
-      {/* <h1>New game of {game.name}</h1> */}
-      <p>Please select players so in playing order. :)</p>
+      <h2>Select players</h2>
+      <p>
+        {`Add players to the new game of `}
+        <strong>{game.name}</strong>
+        {` in the playing order.`}
+      </p>
       <div>
-        <h2>Select player</h2>
         <TextField
           label="Search..."
           value={searchTerm}
@@ -154,16 +167,30 @@ export const SelectPlayers = (
           </ListItem>
         ))}
       </List>
-      <Button
-        color="primary"
-        onClick={onStartGame}
-        disabled={players.length === 0}
-        variant="contained"
-      >
-        Start
-      </Button>
+      <ButtonRow>
+        {game.simultaneousTurns ? null : (
+          <Button
+            color="default"
+            onClick={onRandomizeStartingPlayer}
+            disabled={players.length < 2}
+            variant="outlined"
+          >
+            Random starting player
+          </Button>
+        )}
+        <Button
+          color="primary"
+          onClick={onStartGame}
+          disabled={players.length === 0}
+          variant="contained"
+        >
+          Start
+        </Button>
+      </ButtonRow>
     </div>
   );
 
   return !isStarted ? selectPlayers : <PlayNew game={game} players={players} />;
 };
+
+export default SelectPlayers;

@@ -17,6 +17,7 @@ import { GameMiscFieldDefinition, Game } from "./domain/game";
 import { usePlays } from "./common/hooks/usePlays";
 import firebase from "firebase";
 import { sortBy } from "lodash";
+import ButtonRow from "./ButtonRow";
 
 export const PlayView = (props: RouteComponentProps<any>) => {
   const playId = props.match.params["playId"];
@@ -37,6 +38,7 @@ export const PlayView = (props: RouteComponentProps<any>) => {
 
   const onEditPlay = () => props.history.push("/edit/" + play.id);
   const onBack = () => props.history.push("/");
+  const onReplay = () => props.history.push(`/replay/${playId}`);
 
   const onDelete = async () => {
     const reallyDelete = await window.confirm(
@@ -65,7 +67,7 @@ export const PlayView = (props: RouteComponentProps<any>) => {
 
   return (
     <div style={{ paddingBottom: "1em" }}>
-      <h3>Play: {game.name}</h3>
+      <h2>Play: {game.name}</h2>
       <div>Played on {play.getDate().toLocaleDateString()}</div>
       {game.hasExpansions() && (
         <div>
@@ -82,25 +84,26 @@ export const PlayView = (props: RouteComponentProps<any>) => {
         </div>
       ))}
       <PlayTable game={game} play={play} />
-      <br />
-      <Button variant="contained" color="default" onClick={onBack}>
-        &lt;
-      </Button>
-      &nbsp;
-      <Button variant="contained" color="primary" onClick={onEditPlay}>
-        Edit
-      </Button>
-      &nbsp;
-      <Button variant="contained" color="secondary" onClick={onDelete}>
-        Delete
-      </Button>
-      &nbsp;
-      <Button
-        variant="contained"
-        onClick={() => props.history.push("/reports/" + game.id)}
-      >
-        Show reports
-      </Button>
+      <ButtonRow>
+        <Button variant="contained" color="default" onClick={onBack}>
+          &lt;
+        </Button>
+        <Button variant="contained" color="primary" onClick={onEditPlay}>
+          Edit
+        </Button>
+        <Button variant="contained" color="secondary" onClick={onDelete}>
+          Delete
+        </Button>
+        <Button variant="contained" color="default" onClick={onReplay}>
+          Play again
+        </Button>
+        <Button
+          variant="contained"
+          onClick={() => props.history.push("/reports/" + game.id)}
+        >
+          Show reports
+        </Button>
+      </ButtonRow>
     </div>
   );
 };
@@ -143,7 +146,7 @@ const PlayTable = (props: { game: Game; play: Play }) => {
     .filter((x) => (x.id === "misc" ? hasMiscScores : true))
     .filter((x) => (x.id === "tie-breaker" ? hasTieBreaker : true));
 
-  const players = sortBy(play.players, (x) => play.getPosition(x));
+  const players = sortBy(play.players, (x) => play.getPosition(x.id));
 
   return (
     <div className={classes.root}>
@@ -159,7 +162,7 @@ const PlayTable = (props: { game: Game; play: Play }) => {
                     backgroundColor: idx % 2 === 0 ? highlightColor : "",
                   }}
                 >
-                  {`${play.getPosition(p)}. ${p.name}`}
+                  {`${play.getPosition(p.id)}. ${p.name}`}
                 </TableCell>
               ))}
             </TableRow>

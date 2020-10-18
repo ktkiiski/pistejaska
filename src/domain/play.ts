@@ -110,9 +110,9 @@ export class Play extends Entity implements PlayDTO {
   }
 
   // get position. Gives equal position to equal scores.
-  public getPosition(player: Player) {
+  public getPosition(playerId: string) {
     const ranking = this.rankings.find(
-      (ranking) => ranking.player.id === player.id
+      (ranking) => ranking.player.id === playerId
     );
     return ranking ? ranking.position : NaN;
   }

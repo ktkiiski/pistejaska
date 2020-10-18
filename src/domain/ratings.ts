@@ -10,6 +10,13 @@ function countPlaysForPlayerId(playerId: string, plays: Play[]) {
   );
 }
 
+function countWinsForPlayerId(playerId: string, plays: Play[]) {
+  return plays.reduce(
+    (count, play) => play.getPosition(playerId) === 1 ? count + 1 : count,
+    0,
+  );
+}
+
 export const calculateEloForPlayers = (plays: Play[], minPlays: number) => {
   const allPlayers = map(
     groupBy(
@@ -20,6 +27,7 @@ export const calculateEloForPlayers = (plays: Play[], minPlays: number) => {
   ).map((player) => ({
     ...player,
     playCount: countPlaysForPlayerId(player.id, plays),
+    winCount: countWinsForPlayerId(player.id, plays),
     rating: new Rating(),
   }));
   // Ensure that minPlays is not larger than the number of games anyone has played
@@ -34,7 +42,7 @@ export const calculateEloForPlayers = (plays: Play[], minPlays: number) => {
           rating: (allPlayers.find((x) => x.id === p.id) as any).rating,
         };
       }),
-      (p) => play.getPosition(p.player)
+      (p) => play.getPosition(p.player.id),
     );
     // NOTE: ties are not evaluated correctly
     const newRatings = rate(
