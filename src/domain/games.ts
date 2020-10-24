@@ -401,16 +401,82 @@ const eclipse: GameDefinition = {
   simultaneousTurns: false,
   scoreFields: [
     {
-      id: "karkit",
+      id: "game-board",
+      name: "Game board (only sectors)",
+      type: "number",
+      minValue: 0,
+    },
+    {
+      id: "technology",
+      name: "Technology track",
+      type: "number",
+      minValue: 0,
+    },
+    {
+      id: "reputatio-tiles",
+      name: "Reputation tiles",
+      type: "number",
+      minValue: 0,
+    },
+    {
+      id: "ambassadors",
+      name: "Ambassadors",
+      type: "number",
+      minValue: 0,
+    },
+    {
+      id: "discovery-tiles",
       name: "Discovery tiles",
       type: "number",
       minValue: 0,
     },
     {
-      id: "game-board",
-      name: "Game board",
+      id: "monoliths",
+      name: "Monoliths",
       type: "number",
       minValue: 0,
+    },
+    {
+      id: "other",
+      name:
+        "Other (like racial bonuses, development tiles, alliance points, traitor card)",
+      type: "number",
+      minValue: 0,
+    },
+  ],
+  miscFields: [
+    {
+      id: "race",
+      name: "Race",
+      type: "text",
+      valuePerPlayer: true,
+      isRelevantReportDimension: true,
+      options: [
+        { value: "Descendants of Draco", label: "Descendants of Draco" },
+        { value: "Eridani", label: "Eridani" },
+        { value: "Exiles", label: "Exiles" },
+        { value: "Hydrans", label: "Hydrans" },
+        { value: "Lyrans", label: "Lyrans" },
+        { value: "Magellan", label: "Magellan" },
+        { value: "Mechanic", label: "Mechanic" },
+        { value: "Octanis", label: "Octanis" },
+        { value: "Orions", label: "Orions" },
+        { value: "Planta", label: "Planta" },
+        { value: "Pryxis", label: "Pryxis" },
+        { value: "Rhi-No", label: "Rhi-No" },
+        { value: "Shapers", label: "Shapers" },
+        { value: "Terrans", label: "Terrans" },
+      ],
+    },
+  ],
+  expansions: [
+    {
+      id: "rise-of-the-ancients",
+      name: "Rise of the Ancients",
+    },
+    {
+      id: "shadow-of-the-rift",
+      name: "Shadow of the Rift",
     },
   ],
 };

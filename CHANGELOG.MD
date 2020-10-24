@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## 2020-10-24
+
+### Added
+
+- Support for Eclipse, for Eclipse: Rise of the Ancients and for Eclipse: Shadow of the Rift
+
 ## 2020-10-18
 
 ### Added
