@@ -12,17 +12,16 @@ export const PlayNew = (props: { game: GameDefinition; players: Player[] }) => {
   const [playId] = useState(game.id + "-" + uuid());
   const [loading, setLoading] = useState(true);
 
-  
   useEffect(() => {
     const play = new Play({
-    gameId: game.id,
-    id: playId,
-    players: players,
-    expansions: [],
-    scores: [],
-    misc: Game.getDefaultMiscFieldValues(),
-    created: new Date().toISOString(),
-  });
+      gameId: game.id,
+      id: playId,
+      players: players,
+      expansions: [],
+      scores: [],
+      misc: Game.getDefaultMiscFieldValues(),
+      created: new Date().toISOString(),
+    });
 
     const db = firebase.firestore();
     db.collection("plays-v1").doc(playId).set(play.toDTO());

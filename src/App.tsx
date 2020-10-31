@@ -58,16 +58,20 @@ const App = () => {
       <Route
         path="/new/:gameId"
         exact
-        render={({ match: { params: { gameId } } }) => (
-          <SelectPlayers gameId={gameId} />
-        )}
+        render={({
+          match: {
+            params: { gameId },
+          },
+        }) => <SelectPlayers gameId={gameId} />}
       />
       <Route
         path="/replay/:playId"
         exact
-        render={({ match: { params: { gameId, playId } } }) => (
-          <SelectPlayersFromPlay playId={playId} />
-        )}
+        render={({
+          match: {
+            params: { gameId, playId },
+          },
+        }) => <SelectPlayersFromPlay playId={playId} />}
       />
       <Route path="/new/" exact component={SelectGame} />
       <Route path="/admin/" component={Admin} />

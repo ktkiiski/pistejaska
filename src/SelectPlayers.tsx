@@ -11,9 +11,10 @@ import { games } from "./domain/games";
 import { usePlayers } from "./common/hooks/usePlayers";
 import ButtonRow from "./ButtonRow";
 
-const SelectPlayers = (
-  props: { gameId: string, initialPlayers?: Player[] }
-) => {
+const SelectPlayers = (props: {
+  gameId: string;
+  initialPlayers?: Player[];
+}) => {
   const { gameId, initialPlayers = [] } = props;
   const game = games.find((g) => g.id === gameId);
   if (game === undefined) throw new Error("unknown game");
@@ -57,10 +58,7 @@ const SelectPlayers = (
 
   const onRandomizeStartingPlayer = () => {
     const offset = Math.floor(Math.random() * players.length);
-    const newPlayers = [
-      ...players.slice(offset),
-      ...players.slice(0, offset),
-    ];
+    const newPlayers = [...players.slice(offset), ...players.slice(0, offset)];
     setPlayers(newPlayers);
   };
 

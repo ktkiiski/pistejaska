@@ -8,8 +8,8 @@ export const usePlays = (): [Play[], boolean, Error | undefined] => {
     firebase.firestore().collection("plays-v1")
   );
   const plays = useMemo(
-    () => loading || !docs ? [] : docs.map((data) => new Play(data)),
-    [docs, loading],
+    () => (loading || !docs ? [] : docs.map((data) => new Play(data))),
+    [docs, loading]
   );
   return [plays, loading, error];
 };

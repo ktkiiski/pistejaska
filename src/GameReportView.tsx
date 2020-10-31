@@ -267,7 +267,7 @@ const ReportPlayers = (props: { plays: Play[] }) => {
                   </TableCell>
                   <TableCell scope="row">{playCount}</TableCell>
                   <TableCell scope="row">
-                  {Math.round(100 * winCount / playCount)}% ({winCount})
+                    {Math.round((100 * winCount) / playCount)}% ({winCount})
                   </TableCell>
                 </TableRow>
               );

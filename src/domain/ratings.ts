@@ -12,8 +12,8 @@ function countPlaysForPlayerId(playerId: string, plays: Play[]) {
 
 function countWinsForPlayerId(playerId: string, plays: Play[]) {
   return plays.reduce(
-    (count, play) => play.getPosition(playerId) === 1 ? count + 1 : count,
-    0,
+    (count, play) => (play.getPosition(playerId) === 1 ? count + 1 : count),
+    0
   );
 }
 
@@ -42,7 +42,7 @@ export const calculateEloForPlayers = (plays: Play[], minPlays: number) => {
           rating: (allPlayers.find((x) => x.id === p.id) as any).rating,
         };
       }),
-      (p) => play.getPosition(p.player.id),
+      (p) => play.getPosition(p.player.id)
     );
     // NOTE: ties are not evaluated correctly
     const newRatings = rate(
