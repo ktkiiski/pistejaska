@@ -9,6 +9,7 @@ import {
   TableCell,
   TableBody,
 } from "@material-ui/core";
+import { Link } from "react-router-dom";
 
 const useReportTableStyles = makeStyles((theme) => ({
   root: {
@@ -47,6 +48,7 @@ const ReportTable = ({ rows, columns }: ReportTableProps) => {
     return <>No plays</>;
   }
 
+  // TODO PANU: allow sorting table by columns
   return (
     <div className={classes.root}>
       <ReactTooltip />
@@ -82,7 +84,11 @@ const ReportTable = ({ rows, columns }: ReportTableProps) => {
               <TableRow key={row[0].value}>
                 {columns.map((column, columnIdx) => (
                   <TableCell scope="row" key={`${row[0].value}:${column.name}`}>
-                    <a href={row[columnIdx]?.link}>{row[columnIdx]?.value}</a>
+                    {row[columnIdx]?.link !== undefined ? 
+                    <Link to={row[columnIdx]?.link ?? ""}>{row[columnIdx]?.value}</Link>
+                    :
+                    <>{row[columnIdx]?.value}</>
+                  }
                   </TableCell>
                 ))}
               </TableRow>

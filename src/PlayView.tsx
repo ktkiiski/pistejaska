@@ -18,6 +18,7 @@ import { usePlays } from "./common/hooks/usePlays";
 import firebase from "firebase";
 import { sortBy } from "lodash";
 import ButtonRow from "./ButtonRow";
+import { Link } from "react-router-dom";
 
 export const PlayView = (props: RouteComponentProps<any>) => {
   const playId = props.match.params["playId"];
@@ -165,14 +166,11 @@ const PlayTable = (
                   }}
                 >
                   {`${play.getPosition(p.id)}. `}
-                  <a
-                    onClick={() =>
-                      props.history.push("/reports/player/" + p.id)
-                    }
-                    href=""
+                  <Link
+                    to={"/reports/player/" + p.id}
                   >
                     {`${p.name}`}
-                  </a>
+                  </Link>
                 </TableCell>
               ))}
             </TableRow>

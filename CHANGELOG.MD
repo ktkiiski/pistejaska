@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Reports for single player showing max points, best position and number of plays for each game
 
+### Fixed
+
+- Issue where navigating between play view and report view was slow due to loading full page
+
 ## 2020-10-24
 
 ### Added

@@ -6,6 +6,7 @@ import { games } from "./domain/games";
 import { sortBy, flatMap, groupBy, uniq } from "lodash";
 import { usePlays } from "./common/hooks/usePlays";
 import ReportTable from "./ReportTable";
+import { stringifyScore } from "./common/stringUtils";
 
 export const ReportPlayerView = (props: RouteComponentProps<any>) => {
   const playerId = props.match.params["playerId"];
@@ -73,9 +74,10 @@ const PlayerGamesReport = (props: { player: Player; playerPlays: Play[] }) => {
     return [
       {
         value: game?.name ?? "-",
+        link: `/reports/game/${game?.id}`
       },
       {
-        value: maxScoresPlay.getTotal(player.id).toString(),
+        value: stringifyScore(maxScoresPlay.getTotal(player.id)),
         link: `/view/${maxScoresPlay.id}`,
       },
       {
