@@ -11,7 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Reports for single player showing max points, best position, win percentage and number of plays for each game & for all games
+- Reports for single player showing max points, best position, win percentage, trueskill and
+  number of plays for each game & for all games
 
 ### Fixed
 
