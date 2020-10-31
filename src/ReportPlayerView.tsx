@@ -57,11 +57,12 @@ const PlayerGamesReport = (props: { player: Player; playerPlays: Play[] }) => {
     { name: "Game name" },
     { name: "Max points" },
     { name: "Best position" },
+    { name: "Wins" },
     { name: "# of plays" },
   ];
 
-  const rows = playerGames.map((g) => {
-    const gamePlays = playerPlays.filter((x) => x.gameId === g);
+  const rows = playerGames.concat(["all"]).map((g) => {
+    const gamePlays = g === "all" ? playerPlays : playerPlays.filter((x) => x.gameId === g);
 
     const maxScoresPlay = sortBy(gamePlays, (p) =>
       p.getTotal(player.id)
@@ -69,12 +70,13 @@ const PlayerGamesReport = (props: { player: Player; playerPlays: Play[] }) => {
     const bestPositionPlay = sortBy(gamePlays, (p) =>
       p.getPosition(player.id)
     )[0];
+    const winnedPlays = gamePlays.filter(p => p.getPosition(player.id) === 1);
 
     const game = games.find((x) => x.id === g);
     return [
       {
-        value: game?.name ?? "-",
-        link: `/reports/game/${game?.id}`
+        value: game?.name ?? "All",
+        link: game ? `/reports/game/${game?.id}` : undefined
       },
       {
         value: stringifyScore(maxScoresPlay.getTotal(player.id)),
@@ -83,6 +85,9 @@ const PlayerGamesReport = (props: { player: Player; playerPlays: Play[] }) => {
       {
         value: bestPositionPlay.getPosition(player.id).toString(),
         link: `/view/${bestPositionPlay.id}`,
+      },
+      {
+        value: `${Math.round((winnedPlays.length/gamePlays.length*100))}% (${winnedPlays.length})`,
       },
       {
         value: gamePlays.length.toString(),
