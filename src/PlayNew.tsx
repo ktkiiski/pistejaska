@@ -12,7 +12,9 @@ export const PlayNew = (props: { game: GameDefinition; players: Player[] }) => {
   const [playId] = useState(game.id + "-" + uuid());
   const [loading, setLoading] = useState(true);
 
-  const play = new Play({
+  
+  useEffect(() => {
+    const play = new Play({
     gameId: game.id,
     id: playId,
     players: players,
@@ -22,11 +24,10 @@ export const PlayNew = (props: { game: GameDefinition; players: Player[] }) => {
     created: new Date().toISOString(),
   });
 
-  useEffect(() => {
     const db = firebase.firestore();
     db.collection("plays-v1").doc(playId).set(play.toDTO());
     setLoading(false);
-  }, [playId, play]);
+  }, [playId, game.id, players]);
 
   if (loading) return <>Loading...</>;
 
