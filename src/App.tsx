@@ -19,6 +19,8 @@ import { PlayList } from "./PlayList";
 import { GameReportList } from "./GameReportList";
 import SelectPlayers from "./SelectPlayers";
 import SelectPlayersFromPlay from "./SelectPlayersFromPlay";
+import { PlayerReportView } from "./PlayerReportView";
+import { PlayerReportList } from "./PlayerReportList";
 
 var config = {
   apiKey: "AIzaSyDI_XDKW2vVftx7oUy1a_QTR5BE8j6S-Ds",
@@ -52,8 +54,10 @@ const App = () => {
       <Route path="/" component={NavBar} />
       <Route path="/" exact component={PlayList} />
       <Route path="/view/:playId" component={PlayView} />
+      <Route path="/players" exact component={PlayerReportList} />
       <Route path="/reports" exact component={GameReportList} />
-      <Route path="/reports/:gameId" component={GameReportView} />
+      <Route path="/reports/player/:playerId" component={PlayerReportView} />
+      <Route path="/reports/game/:gameId" component={GameReportView} />
       <Route path="/edit/:playId" component={PlayEdit} />
       <Route
         path="/new/:gameId"

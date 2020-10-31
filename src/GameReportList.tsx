@@ -8,7 +8,7 @@ import { GameDefinition } from "./domain/game";
 
 export const GameReportList = (props: RouteComponentProps<{}>) => {
   const onSelectGame = (game: GameDefinition) =>
-    props.history.push("/reports/" + game.id);
+    props.history.push("/reports/game/" + game.id);
 
   return (
     <div>

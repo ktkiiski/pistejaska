@@ -20,6 +20,7 @@ import { getDimensionStatistics, getGameStatistics } from "./domain/statistics";
 import GameScoreFieldReport from "./GameScoreFieldReport";
 import ReportTable from "./ReportTable";
 import GameCorrelationReport from "./GameCorrelationReport";
+import { stringifyScore } from "./common/stringUtils";
 
 function isRelevantReportField(
   field: GameMiscFieldDefinition
@@ -27,6 +28,7 @@ function isRelevantReportField(
   return (field.isRelevantReportDimension ?? false) && field.type !== "number";
 }
 
+// TODO PANU: rename to ReportGameView?
 export const GameReportView = (props: RouteComponentProps<any>) => {
   const gameId = props.match.params["gameId"];
 
@@ -152,9 +154,6 @@ const DimensionReportTable = (props: {
     <ReportTable rows={beautifiedReportRows} columns={columns}></ReportTable>
   );
 };
-
-const stringifyScore = (score: number | null) =>
-  score == null ? "—" : String(Math.round(score));
 
 const HighScoresReportTable = (props: { game: Game; plays: Play[] }) => {
   const { game, plays } = props;

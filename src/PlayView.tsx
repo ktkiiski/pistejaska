@@ -83,7 +83,7 @@ export const PlayView = (props: RouteComponentProps<any>) => {
           {getFieldName(misc)}: {misc.data}
         </div>
       ))}
-      <PlayTable game={game} play={play} />
+      <PlayTable game={game} play={play} {...props} />
       <ButtonRow>
         <Button variant="contained" color="default" onClick={onBack}>
           &lt;
@@ -130,7 +130,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const PlayTable = (props: { game: Game; play: Play }) => {
+const PlayTable = (
+  props: { game: Game; play: Play } & RouteComponentProps<{}>
+) => {
   const classes = useStyles();
   const highlightColor = "#f5f5f5";
   const { game, play } = props;
@@ -162,7 +164,15 @@ const PlayTable = (props: { game: Game; play: Play }) => {
                     backgroundColor: idx % 2 === 0 ? highlightColor : "",
                   }}
                 >
-                  {`${play.getPosition(p.id)}. ${p.name}`}
+                  {`${play.getPosition(p.id)}. `}
+                  <a
+                    onClick={() =>
+                      props.history.push("/reports/player/" + p.id)
+                    }
+                    href="#"
+                  >
+                    {`${p.name}`}
+                  </a>
                 </TableCell>
               ))}
             </TableRow>

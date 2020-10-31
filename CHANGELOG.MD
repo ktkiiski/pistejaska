@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## 2020-10-31
+
+### Added
+
+- Reports for single player showing max points, best position and number of plays for each game
+
 ## 2020-10-24
 
 ### Added

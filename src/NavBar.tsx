@@ -70,6 +70,14 @@ export function NavBar() {
       >
         <MenuItem
           onClick={() => {
+            history.push("/players");
+            closeMenu();
+          }}
+        >
+          Players
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
             history.push("/whatsnew");
             closeMenu();
           }}
