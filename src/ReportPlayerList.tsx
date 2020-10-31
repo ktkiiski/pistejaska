@@ -1,14 +1,12 @@
 import React from "react";
 import "firebase/firestore";
-import { List, ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
+import { List, ListItem, ListItemText } from "@material-ui/core";
 import { RouteComponentProps } from "react-router";
-import { games } from "./domain/games";
 import { flatMap, groupBy, orderBy } from "lodash";
-import { GameDefinition } from "./domain/game";
 import { usePlays } from "./common/hooks/usePlays";
 import { Player } from "./domain/play";
 
-export const PlayerReportList = (props: RouteComponentProps<{}>) => {
+export const ReportPlayerList = (props: RouteComponentProps<{}>) => {
   const [plays, loading, error] = usePlays();
 
   if (error) {

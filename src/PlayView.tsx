@@ -169,7 +169,7 @@ const PlayTable = (
                     onClick={() =>
                       props.history.push("/reports/player/" + p.id)
                     }
-                    href="#"
+                    href=""
                   >
                     {`${p.name}`}
                   </a>

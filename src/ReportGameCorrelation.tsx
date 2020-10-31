@@ -16,7 +16,7 @@ const columns = [
   },
 ];
 
-function GameCorrelationReport(props: { game: Game; plays: Play[] }) {
+function ReportGameCorrelation(props: { game: Game; plays: Play[] }) {
   const { game, plays } = props;
   if (game.simultaneousTurns) {
     return null;
@@ -48,4 +48,4 @@ function GameCorrelationReport(props: { game: Game; plays: Play[] }) {
   return <ReportTable columns={columns} rows={rows} />;
 }
 
-export default GameCorrelationReport;
+export default ReportGameCorrelation;

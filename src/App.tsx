@@ -14,13 +14,13 @@ import { CircularProgress } from "@material-ui/core";
 import { MarkdownViewer } from "./MarkdownViewer";
 import { ThemeProvider } from "@material-ui/styles";
 import { createMuiTheme } from "@material-ui/core/styles";
-import { GameReportView } from "./GameReportView";
+import { ReportGameView } from "./ReportGameView";
 import { PlayList } from "./PlayList";
-import { GameReportList } from "./GameReportList";
+import { ReportGameList } from "./ReportGameList";
 import SelectPlayers from "./SelectPlayers";
 import SelectPlayersFromPlay from "./SelectPlayersFromPlay";
-import { PlayerReportView } from "./PlayerReportView";
-import { PlayerReportList } from "./PlayerReportList";
+import { ReportPlayerView } from "./ReportPlayerView";
+import { ReportPlayerList } from "./ReportPlayerList";
 
 var config = {
   apiKey: "AIzaSyDI_XDKW2vVftx7oUy1a_QTR5BE8j6S-Ds",
@@ -54,10 +54,10 @@ const App = () => {
       <Route path="/" component={NavBar} />
       <Route path="/" exact component={PlayList} />
       <Route path="/view/:playId" component={PlayView} />
-      <Route path="/players" exact component={PlayerReportList} />
-      <Route path="/reports" exact component={GameReportList} />
-      <Route path="/reports/player/:playerId" component={PlayerReportView} />
-      <Route path="/reports/game/:gameId" component={GameReportView} />
+      <Route path="/players" exact component={ReportPlayerList} />
+      <Route path="/reports" exact component={ReportGameList} />
+      <Route path="/reports/player/:playerId" component={ReportPlayerView} />
+      <Route path="/reports/game/:gameId" component={ReportGameView} />
       <Route path="/edit/:playId" component={PlayEdit} />
       <Route
         path="/new/:gameId"

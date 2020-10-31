@@ -2,7 +2,7 @@ import React from "react";
 import { Tabs, Tab, makeStyles } from "@material-ui/core";
 import { RouteComponentProps } from "react-router";
 import { PlayList } from "./PlayList";
-import { GameReportList } from "./GameReportList";
+import { ReportGameList } from "./ReportGameList";
 import { usePlays } from "./common/hooks/usePlays";
 
 const useStyles = makeStyles(() => ({
@@ -44,7 +44,7 @@ export const PlayListContainer = (props: RouteComponentProps<{}>) => {
         <PlayList {...props} />
       </div>
       <div hidden={selectedTab !== 1}>
-        <GameReportList {...props} />
+        <ReportGameList {...props} />
       </div>
     </div>
   );

@@ -6,7 +6,7 @@ import { games } from "./domain/games";
 import { orderBy } from "lodash";
 import { GameDefinition } from "./domain/game";
 
-export const GameReportList = (props: RouteComponentProps<{}>) => {
+export const ReportGameList = (props: RouteComponentProps<{}>) => {
   const onSelectGame = (game: GameDefinition) =>
     props.history.push("/reports/game/" + game.id);
 

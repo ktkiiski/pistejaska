@@ -17,9 +17,9 @@ import { usePlays } from "./common/hooks/usePlays";
 import { calculateEloForPlayers } from "./domain/ratings";
 import { GameMiscFieldDefinition, Game } from "./domain/game";
 import { getDimensionStatistics, getGameStatistics } from "./domain/statistics";
-import GameScoreFieldReport from "./GameScoreFieldReport";
+import GameScoreFieldReport from "./ReportGameScoreField";
 import ReportTable from "./ReportTable";
-import GameCorrelationReport from "./GameCorrelationReport";
+import ReportGameCorrelation from "./ReportGameCorrelation";
 import { stringifyScore } from "./common/stringUtils";
 
 function isRelevantReportField(
@@ -28,8 +28,7 @@ function isRelevantReportField(
   return (field.isRelevantReportDimension ?? false) && field.type !== "number";
 }
 
-// TODO PANU: rename to ReportGameView?
-export const GameReportView = (props: RouteComponentProps<any>) => {
+export const ReportGameView = (props: RouteComponentProps<any>) => {
   const gameId = props.match.params["gameId"];
 
   const [plays, loading, error] = usePlays();
@@ -62,7 +61,7 @@ export const GameReportView = (props: RouteComponentProps<any>) => {
       <HighScoresReportTable game={game} plays={gamePlays} />
 
       <GameScoreFieldReport game={game} plays={gamePlays} />
-      <GameCorrelationReport game={game} plays={gamePlays} />
+      <ReportGameCorrelation game={game} plays={gamePlays} />
 
       {reportDimensions?.map((x) => {
         const playsWithDimension = gamePlays.filter((p) =>

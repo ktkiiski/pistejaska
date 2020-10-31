@@ -7,7 +7,7 @@ import { sortBy, flatMap, groupBy, uniq } from "lodash";
 import { usePlays } from "./common/hooks/usePlays";
 import ReportTable from "./ReportTable";
 
-export const PlayerReportView = (props: RouteComponentProps<any>) => {
+export const ReportPlayerView = (props: RouteComponentProps<any>) => {
   const playerId = props.match.params["playerId"];
 
   const [plays, loading, error] = usePlays();
