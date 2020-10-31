@@ -59,7 +59,7 @@ const PlayerGamesReport = (props: { player: Player; plays: Play[] }) => {
     { name: "Game name" },
     { name: "Max points" },
     { name: "Best position" },
-    { name: "Trueskill", tooltip: "The skill level of player according to TrueSkill algorithm. Lower is better. If 10%, then the player is among the best 10% of players." },
+    { name: "Trueskill percentile", tooltip: "The skill level percentile of player according to TrueSkill algorithm. Higher is better. If 90%, then the player estimated to be among the best 10% of players." },
     { name: "Wins" },
     { name: "# of plays" },
   ];
@@ -79,11 +79,17 @@ const PlayerGamesReport = (props: { player: Player; plays: Play[] }) => {
 
     const game = games.find((x) => x.id === g);
 
-    const trueSkills = calculateEloForPlayers(allGamePlays, 0);
+    // if player has played 3 or more plays, only compare to players who have also played 3 or mote games
+    let trueSkills = calculateEloForPlayers(allGamePlays, 3);
+    let playerTrueSkillIndex = trueSkills.findIndex(x => x.id === player.id);
+    if (playerTrueSkillIndex === -1) {
+      // if player has played < 3 games, compare to all players
+      trueSkills = calculateEloForPlayers(allGamePlays, 0);
+      playerTrueSkillIndex = trueSkills.findIndex(x => x.id === player.id);
+    }
 
-    const playerTrueSkillIndex = trueSkills.findIndex(x => x.id === player.id);
-
-    const bracket = Math.ceil(Math.round(playerTrueSkillIndex / trueSkills.length * 100)/10)*10+10;
+    // calculate skill percentile
+    const percentile = Math.round(Math.round((trueSkills.length- playerTrueSkillIndex) / trueSkills.length * 100)/10)*10;
 
     return [
       {
@@ -99,7 +105,7 @@ const PlayerGamesReport = (props: { player: Player; plays: Play[] }) => {
         link: `/view/${bestPositionPlay.id}`,
       },
       {
-        value: `Best ${bracket}%`,
+        value: `${percentile}%`,
       },
       {
         value: `${Math.round((winnedPlays.length/gamePlays.length*100))}% (${winnedPlays.length})`,

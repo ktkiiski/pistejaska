@@ -21,6 +21,7 @@ import GameScoreFieldReport from "./ReportGameScoreField";
 import ReportTable from "./ReportTable";
 import ReportGameCorrelation from "./ReportGameCorrelation";
 import { stringifyScore } from "./common/stringUtils";
+import { Link } from "react-router-dom";
 
 function isRelevantReportField(
   field: GameMiscFieldDefinition
@@ -259,7 +260,7 @@ const ReportPlayers = (props: { plays: Play[] }) => {
               const { id, name, rating, playCount, winCount } = player;
               return (
                 <TableRow key={id}>
-                  <TableCell scope="row">{name}</TableCell>
+                  <TableCell scope="row"><Link to={`/reports/player/${id}`}>{name}</Link></TableCell>
                   <TableCell scope="row">
                     {Math.round(rating.mu)} (± {Math.round(3 * rating.sigma)})
                   </TableCell>
