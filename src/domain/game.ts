@@ -11,17 +11,20 @@ export const locationField: GameMiscFieldDefinition<string> = {
   id: "location",
   name: "Location",
   type: "text",
+  group: "Metadata",
 };
 export const nameField: GameMiscFieldDefinition<string> = {
   id: "name",
   name: "Name",
   type: "text",
+  group: "Metadata",
 };
 export const dateField: GameMiscFieldDefinition<string> = {
   id: "date",
   name: "Date",
   type: "date",
   getDefaultValue: () => getTodayAsString(),
+  group: "Metadata",
 };
 
 export class Game implements GameDefinition {
@@ -145,6 +148,8 @@ export interface GameFieldDefinition<T> {
   id: string;
   // A human-readable, short name for this field
   name: string;
+  // Name of a group, if this field should be grouped together with some other fields with the same group
+  group?: string;
   // A description how the field value should be calculated and entered
   description?: string;
   // If defined, then only allow choosing one of these values

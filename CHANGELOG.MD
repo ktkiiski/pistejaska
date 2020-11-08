@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Group certain fields on the same view when editing a play.
+
 ### Fixed
 
 - Do not confirm setting the play duration if already set.

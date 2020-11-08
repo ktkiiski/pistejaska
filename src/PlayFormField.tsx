@@ -1,22 +1,21 @@
-import React, { useRef, useEffect } from "react";
+import React from "react";
 import { GameFieldDefinition, GameFieldOption } from "./domain/game";
 import { TextField, Button, Box } from "@material-ui/core";
 import DurationCounter from "./DurationCounter";
 import { Play } from "./domain/play";
+import { useFormFieldRef } from "./utils/focus";
 
 interface PlayFormFieldProps<T, F extends GameFieldDefinition<T>> {
   value: T | null;
+  fieldIndex: number;
   field: F;
   label: string;
   play: Play;
   onChange: (score: T | null, field: F) => void;
-  focusOnMe: boolean;
+  // focusOnMe: boolean;
   onFocus: (
-    e: React.FocusEvent<
-      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-    >
+    e: React.FocusEvent<HTMLElement>
   ) => void;
-  onKeyDown: (e: React.KeyboardEvent<HTMLDivElement>) => void;
   id?: string;
 }
 
@@ -24,25 +23,18 @@ export function PlayFormField<
   T extends string | number | boolean,
   F extends GameFieldDefinition<T>
 >(props: PlayFormFieldProps<T, F>) {
-  const inputRef = useRef<HTMLInputElement>(null);
   const {
     value,
+    fieldIndex,
     field,
     label,
     play,
     onChange,
-    focusOnMe,
+    // focusOnMe,
     onFocus,
-    onKeyDown,
     id,
   } = props;
-
-  useEffect(() => {
-    if (focusOnMe && inputRef.current != null) {
-      inputRef.current.focus();
-    }
-  }, [focusOnMe]);
-
+  const inputRef = useFormFieldRef(fieldIndex);
   const isNumeric = field.type === "number" || field.type === "duration";
   const createdAt = play.getCreationDate();
   const createdToday =
@@ -105,8 +97,7 @@ export function PlayFormField<
           label={label}
           value={selectedValue}
           onChange={onValueChange}
-          onFocus={(e) => (focusOnMe ? () => {} : onFocus(e))}
-          onKeyDown={onKeyDown}
+          onFocus={onFocus}
           inputProps={{ ref: inputRef }}
           SelectProps={{ native: true }}
           margin="dense"
@@ -132,8 +123,7 @@ export function PlayFormField<
           type={isNumeric ? "number" : "text"}
           variant="outlined"
           label={label}
-          onFocus={(e) => (focusOnMe ? () => {} : onFocus(e))}
-          onKeyDown={onKeyDown}
+          onFocus={onFocus}
           value={value === null ? "" : value}
           onChange={onValueChange}
           id={id}
@@ -141,7 +131,7 @@ export function PlayFormField<
       </div>
       {field.type !== "duration" || !createdToday ? null : (
         <Box my={2}>
-          <Button onClick={onSetDurationFromStartClick} variant="outlined">
+          <Button onClick={onSetDurationFromStartClick} variant="outlined" onFocus={onFocus}>
             <span>
               Set from start (<DurationCounter startTime={createdAt} />)
             </span>

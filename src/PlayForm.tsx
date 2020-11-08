@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import SwipeableViews from "react-swipeable-views";
 import Button from "@material-ui/core/Button";
 import { Checkbox, Typography } from "@material-ui/core";
@@ -12,6 +12,9 @@ import {
 } from "./domain/game";
 import { PlayFormScoreField } from "./PlayFormScoreField";
 import { PlayFormMiscField } from "./PlayFormMiscField";
+import groupBy from 'lodash/groupBy';
+import map from 'lodash/map';
+import { FormFocusGroup, FormFocusContextProvider } from "./utils/focus";
 
 export const PlayForm = (props: {
   game: Game;
@@ -24,14 +27,8 @@ export const PlayForm = (props: {
   } = props;
 
   const [play, setPlay] = React.useState<Play>(props.play);
-
-  const [focusOnPlayerIndex, setFocusOnPlayerIndex] = useState<number>(0);
-  const saveButton = useRef<HTMLDivElement>(null);
-
   const [activeViewIndex, setActiveViewIndex] = useState(0);
-  const selectedFieldIndex = game.hasExpansions()
-    ? activeViewIndex - 1 // -1 indicates the view where user chooses expansions
-    : activeViewIndex;
+  const hasExpansions = game.hasExpansions();
 
   const scoreFields = game.getScoreFields(play.expansions).map((f) => f.field);
   const done = play.scores.length === players.length * scoreFields.length;
@@ -39,7 +36,22 @@ export const PlayForm = (props: {
   let isSwitchingHack = false;
 
   const fields = game.getFields(play.expansions);
-  const viewCount = game.hasExpansions() ? fields.length + 1 : fields.length;
+  const fieldGroupsById = groupBy(
+    fields,
+    ({ field }) => field.group ? `group:${field.group}` : `field:${field.id}`,
+  );
+  const fieldGroups = map(fieldGroupsById, (groupFields, viewId) => ({
+    fields: groupFields, viewId,
+  }));
+  const startViewIndex = hasExpansions ? 1 : 0;
+  const viewCount = startViewIndex + fieldGroups.length;
+
+  let fieldCount = 0;
+  function getNextFieldIndex(): number {
+    const nextIndex = fieldCount;
+    fieldCount += 1;
+    return nextIndex;
+  }
 
   const handleExpansionChange = (
     expansion: GameExpansionDefinition,
@@ -118,43 +130,6 @@ export const PlayForm = (props: {
     setPlay(new Play({ ...play, ...{ misc: newMisc } }));
   };
 
-  const onFocus = (player: Player) => {
-    setFocusOnPlayerIndex(players.indexOf(player));
-  };
-
-  const onSetFocusToNext = () => {
-    const field = game.getFields(play.expansions)[selectedFieldIndex];
-
-    const fieldPerPlayer =
-      field.type === "score" ||
-      (field.field as GameMiscFieldDefinition).valuePerPlayer === true;
-    const focusAtLastPlayer = focusOnPlayerIndex === players.length - 1;
-    if (!fieldPerPlayer || focusAtLastPlayer) {
-      setFocusOnPlayerIndex(0);
-      if (activeViewIndex < viewCount - 1) {
-        setActiveViewIndex(activeViewIndex + 1);
-      } else {
-        if (saveButton && saveButton.current) {
-          setFocusOnPlayerIndex(-1);
-          saveButton.current.focus();
-        }
-      }
-    } else {
-      setFocusOnPlayerIndex(focusOnPlayerIndex + 1);
-    }
-  };
-
-  const handleKeyDown = (
-    e: React.KeyboardEvent<HTMLInputElement | HTMLDivElement>
-  ) => {
-    if (
-      e.keyCode === 9 || // android numpad enter/next button (tabulator in computer)
-      e.keyCode === 13 // enter
-    ) {
-      onSetFocusToNext();
-    }
-  };
-
   const onSave = () => {
     props.onSave(play);
   };
@@ -169,77 +144,68 @@ export const PlayForm = (props: {
     </div>
   );
 
-  const renderMiscField = (field: GameMiscFieldDefinition) => {
+  const renderMiscField = (field: GameMiscFieldDefinition, viewIndex: number) => {
     if (field.valuePerPlayer === true) {
-      return players.map((p) => (
+      return players.map((p, index) => (
         <PlayFormMiscField
           key={p.id}
           field={field}
+          fieldIndex={getNextFieldIndex()}
           player={p}
           play={play}
-          onFocus={() => onFocus(p)}
-          onKeyDown={handleKeyDown}
+          onFocus={() => {
+            setActiveViewIndex(viewIndex);
+            // onFocus(p);
+          }}
           onChange={handleMiscChange}
-          focusOnMe={
-            selectedFieldIndex === fields.map((f) => f.field).indexOf(field) &&
-            focusOnPlayerIndex >= 0 &&
-            p.id === players[focusOnPlayerIndex].id
-          }
         />
       ));
     } else {
       return (
         <PlayFormMiscField
           field={field}
+          fieldIndex={getNextFieldIndex()}
           play={play}
-          onFocus={(e) => {}}
+          onFocus={() => {
+            setActiveViewIndex(viewIndex);
+          }}
           player={undefined}
           key={field.id}
-          onKeyDown={handleKeyDown}
           onChange={handleMiscChange}
-          focusOnMe={
-            selectedFieldIndex === fields.map((f) => f.field).indexOf(field)
-          }
         />
       );
     }
   };
 
-  const renderScoreField = (field: GameScoreFieldDefinition) => {
+  const renderScoreField = (field: GameScoreFieldDefinition, viewIndex: number) => {
     return players.map((p) => (
       <PlayFormScoreField
         player={p}
         field={field}
+        fieldIndex={getNextFieldIndex()}
         play={play}
         key={p.id}
-        onFocus={() => onFocus(p)}
-        onKeyDown={handleKeyDown}
+        onFocus={() => {
+          setActiveViewIndex(viewIndex);
+          // onFocus(p);
+        }}
         onChange={handleScoreChange}
-        focusOnMe={
-          fields[selectedFieldIndex]?.field?.id === field.id &&
-          focusOnPlayerIndex >= 0 &&
-          p.id === players[focusOnPlayerIndex].id
-        }
       />
     ));
   };
   const onPreviousClick = () => {
     // Move to previous view
     setActiveViewIndex(activeViewIndex > 0 ? activeViewIndex - 1 : 0);
-    // Reset focus to the first player
-    setFocusOnPlayerIndex(0);
   };
   const onNextClick = () => {
     // Move to the next view
     setActiveViewIndex(
       activeViewIndex < viewCount - 1 ? activeViewIndex + 1 : viewCount - 1
     );
-    // Reset focus to the first player
-    setFocusOnPlayerIndex(0);
   };
 
   const views = [
-    game.hasExpansions() && (
+    hasExpansions && (
       <div key="expansions">
         <h3>Used expansions</h3>
         {(game.expansions || []).map((expansion) =>
@@ -250,22 +216,32 @@ export const PlayForm = (props: {
         </Button>
       </div>
     ),
-    ...fields.map((item, idx) => (
-      <div key={item.field.id}>
-        <h3 id={item.field.id}>
-          {idx + 1}. {item.field.name}
-        </h3>
-        {item.field.description ? <p>{item.field.description}</p> : null}
+    ...fieldGroups.map(({ fields: groupFields, viewId }, groupIndex) => (
+      <div key={viewId}>
+        <FormFocusGroup
+          focused={activeViewIndex === startViewIndex + groupIndex}
+        >
+          {groupFields.map((item) => (
+            <div key={item.field.id}>
+              <h3 id={item.field.id}>
+                {item.field.name}
+              </h3>
+              {item.field.description ? <p>{item.field.description}</p> : null}
 
-        {item.type === "misc"
-          ? renderMiscField(item.field)
-          : renderScoreField(item.field)}
+              {item.type === "misc"
+                ? renderMiscField(item.field, startViewIndex + groupIndex)
+                : renderScoreField(item.field, startViewIndex + groupIndex)}
+            </div>
+          ))}
+        </FormFocusGroup>
 
         <Button
           variant="outlined"
           color="default"
           disabled={activeViewIndex <= 0}
           onClick={onPreviousClick}
+          // Skip from tab navigation
+          tabIndex={-1}
         >
           &lt; Previous
         </Button>
@@ -274,6 +250,8 @@ export const PlayForm = (props: {
           color="default"
           disabled={activeViewIndex >= viewCount - 1}
           onClick={onNextClick}
+          // Skip from tab navigation
+          tabIndex={-1}
         >
           Next &gt;
         </Button>
@@ -282,30 +260,31 @@ export const PlayForm = (props: {
   ].filter(Boolean);
 
   return (
-    <div>
-      <Typography variant="h6" gutterBottom>
-        {game.name}
-      </Typography>
+    <FormFocusContextProvider>
+      <div>
+        <Typography variant="h6" gutterBottom>
+          {game.name}
+        </Typography>
 
-      <SwipeableViews
-        enableMouseEvents
-        index={activeViewIndex}
-        onChangeIndex={(newIndex, oldIndex) => {
-          if (isSwitchingHack) setActiveViewIndex(newIndex);
-          else setActiveViewIndex(oldIndex);
-        }}
-        onSwitching={() => (isSwitchingHack = true)}
-      >
-        {views}
-      </SwipeableViews>
-      <Button
-        variant="contained"
-        color={done ? "primary" : "default"}
-        buttonRef={saveButton}
-        onClick={onSave}
-      >
-        Save
-      </Button>
-    </div>
+        <SwipeableViews
+          enableMouseEvents
+          index={activeViewIndex}
+          onChangeIndex={(newIndex, oldIndex) => {
+            if (isSwitchingHack) setActiveViewIndex(newIndex);
+            else setActiveViewIndex(oldIndex);
+          }}
+          onSwitching={() => (isSwitchingHack = true)}
+        >
+          {views}
+        </SwipeableViews>
+        <Button
+          variant="contained"
+          color={done ? "primary" : "default"}
+          onClick={onSave}
+        >
+          Save
+        </Button>
+      </div>
+    </FormFocusContextProvider>
   );
 };
