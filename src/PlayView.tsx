@@ -100,7 +100,7 @@ export const PlayView = (props: RouteComponentProps<any>) => {
         </Button>
         <Button
           variant="contained"
-          onClick={() => props.history.push("/reports/" + game.id)}
+          onClick={() => props.history.push(`/reports/game/${game.id}`)}
         >
           Show reports
         </Button>
