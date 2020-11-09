@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import SwipeableViews from "react-swipeable-views";
 import Button from "@material-ui/core/Button";
-import { Checkbox, Typography } from "@material-ui/core";
+import { Checkbox, Typography, FormControlLabel, FormGroup, makeStyles, ButtonGroup } from "@material-ui/core";
 import { Player, Play } from "./domain/play";
 import "firebase/firestore";
 import {
@@ -16,6 +16,19 @@ import groupBy from 'lodash/groupBy';
 import map from 'lodash/map';
 import { FormFocusGroup, FormFocusContextProvider } from "./utils/focus";
 
+const useStyles = makeStyles({
+  view: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    textAlign: 'left',
+  },
+  description: {
+    margin: '1em 2em',
+    textAlign: 'center',
+  },
+});
+
 export const PlayForm = (props: {
   game: Game;
   play: Play;
@@ -29,6 +42,7 @@ export const PlayForm = (props: {
   const [play, setPlay] = React.useState<Play>(props.play);
   const [activeViewIndex, setActiveViewIndex] = useState(0);
   const hasExpansions = game.hasExpansions();
+  const styles = useStyles();
 
   const scoreFields = game.getScoreFields(play.expansions).map((f) => f.field);
   const done = play.scores.length === players.length * scoreFields.length;
@@ -135,13 +149,16 @@ export const PlayForm = (props: {
   };
 
   const renderExpansionField = (expansion: GameExpansionDefinition) => (
-    <div key={expansion.id}>
-      <Checkbox
-        checked={play.expansions.includes(expansion.id)}
-        onChange={(_, checked) => handleExpansionChange(expansion, checked)}
-      />
-      {expansion.name}
-    </div>
+    <FormControlLabel
+      key={expansion.id}
+      label={expansion.name}
+      control={(
+        <Checkbox
+          checked={play.expansions.includes(expansion.id)}
+          onChange={(_, checked) => handleExpansionChange(expansion, checked)}
+        />
+      )}
+    />
   );
 
   const renderMiscField = (field: GameMiscFieldDefinition, viewIndex: number) => {
@@ -206,55 +223,78 @@ export const PlayForm = (props: {
 
   const views = [
     hasExpansions && (
-      <div key="expansions">
+      <div key="expansions" className={styles.view}>
         <h3>Used expansions</h3>
-        {(game.expansions || []).map((expansion) =>
-          renderExpansionField(expansion)
-        )}
-        <Button variant="outlined" color="default" onClick={onNextClick}>
-          Next &gt;
-        </Button>
+        <FormGroup>
+          {(game.expansions || []).map((expansion) =>
+            renderExpansionField(expansion)
+          )}
+        </FormGroup>
+        <ButtonGroup
+          variant="outlined"
+          color="default"
+        >
+          <Button
+            disabled
+            // Skip from tab navigation
+            tabIndex={-1}
+          >
+            &lt; Previous
+          </Button>
+          <Button
+            onClick={onNextClick}
+            // Skip from tab navigation
+            tabIndex={-1}
+          >
+            Next &gt;
+          </Button>
+        </ButtonGroup>
       </div>
     ),
     ...fieldGroups.map(({ fields: groupFields, viewId }, groupIndex) => (
-      <div key={viewId}>
+      <div key={viewId} className={styles.view}>
         <FormFocusGroup
           focused={activeViewIndex === startViewIndex + groupIndex}
         >
           {groupFields.map((item) => (
-            <div key={item.field.id}>
+            <React.Fragment key={item.field.id}>
               <h3 id={item.field.id}>
                 {item.field.name}
               </h3>
-              {item.field.description ? <p>{item.field.description}</p> : null}
+              {
+                item.field.description
+                  ? <p className={styles.description}>{item.field.description}</p>
+                  : null
+              }
 
               {item.type === "misc"
                 ? renderMiscField(item.field, startViewIndex + groupIndex)
                 : renderScoreField(item.field, startViewIndex + groupIndex)}
-            </div>
+            </React.Fragment>
           ))}
         </FormFocusGroup>
 
-        <Button
+        <ButtonGroup
           variant="outlined"
           color="default"
-          disabled={activeViewIndex <= 0}
-          onClick={onPreviousClick}
-          // Skip from tab navigation
-          tabIndex={-1}
         >
-          &lt; Previous
-        </Button>
-        <Button
-          variant="outlined"
-          color="default"
-          disabled={activeViewIndex >= viewCount - 1}
-          onClick={onNextClick}
-          // Skip from tab navigation
-          tabIndex={-1}
-        >
-          Next &gt;
-        </Button>
+          <Button
+            disabled={activeViewIndex <= 0}
+            onClick={onPreviousClick}
+            // Skip from tab navigation
+            tabIndex={-1}
+          >
+            &lt; Previous
+          </Button>
+          <Button
+            disabled={activeViewIndex >= viewCount - 1}
+            onClick={onNextClick}
+            // Skip from tab navigation
+            tabIndex={-1}
+          >
+            Next &gt;
+          </Button>
+        </ButtonGroup>
       </div>
     )),
   ].filter(Boolean);
