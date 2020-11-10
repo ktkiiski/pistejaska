@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import SwipeableViews from "react-swipeable-views";
 import Button from "@material-ui/core/Button";
-import { Checkbox, Typography, FormControlLabel, FormGroup, makeStyles, ButtonGroup } from "@material-ui/core";
+import { Checkbox, Typography, FormControlLabel, FormGroup, makeStyles, ButtonGroup, Box } from "@material-ui/core";
 import { Player, Play } from "./domain/play";
 import "firebase/firestore";
 import {
@@ -17,6 +17,9 @@ import map from 'lodash/map';
 import { FormFocusGroup, FormFocusContextProvider } from "./utils/focus";
 
 const useStyles = makeStyles({
+  heading: {
+    margin: '0.5em 2em',
+  },
   view: {
     display: 'flex',
     flexDirection: 'column',
@@ -212,48 +215,69 @@ export const PlayForm = (props: {
     ));
   };
 
+  const renderButtons = (viewIndex: number) => (
+    <Box marginTop={8}>
+      <ButtonGroup
+        variant="outlined"
+        color="default"
+      >
+        <Button
+          disabled={viewIndex <= 0}
+          onClick={() => setActiveViewIndex(
+            Math.max(viewIndex - 1, 0)
+          )}
+          // Skip from tab navigation
+          tabIndex={-1}
+        >
+          &lt; Previous
+        </Button>
+        <Button
+          variant={done || viewIndex >= viewCount - 1 ? "contained" : "outlined"}
+          color="primary"
+          onClick={onSave}
+          // Skip from tab navigation, except on the final tab
+          tabIndex={viewIndex < viewCount - 1 ? -1 : 0}
+        >
+          Save
+        </Button>
+        <Button
+          disabled={viewIndex >= viewCount - 1}
+          onClick={() => setActiveViewIndex(
+            Math.min(viewIndex + 1, viewCount - 1)
+          )}
+          // Skip from tab navigation
+          tabIndex={-1}
+        >
+          Next &gt;
+        </Button>
+      </ButtonGroup>
+    </Box>
+  );
+
   const views = [
     hasExpansions && (
       <div key="expansions" className={styles.view}>
-        <h3>Used expansions</h3>
+        <h3 className={styles.heading}>Used expansions</h3>
         <FormGroup>
           {(game.expansions || []).map((expansion) =>
             renderExpansionField(expansion)
           )}
         </FormGroup>
-        <ButtonGroup
-          variant="outlined"
-          color="default"
-        >
-          <Button
-            disabled
-            // Skip from tab navigation
-            tabIndex={-1}
-          >
-            &lt; Previous
-          </Button>
-          <Button
-            onClick={() => setActiveViewIndex(1)}
-            // Skip from tab navigation
-            tabIndex={-1}
-          >
-            Next &gt;
-          </Button>
-        </ButtonGroup>
+        {renderButtons(0)}
       </div>
     ),
     ...fieldGroups.map(({ group, fields: groupFields, viewId }, groupIndex) => {
       const viewIndex = startViewIndex + groupIndex;
       return (
         <div key={viewId} className={styles.view}>
-          {group ? <h3>{group}</h3> : null}
+          {group ? <h3 className={styles.heading}>{group}</h3> : null}
           <FormFocusGroup
             focused={activeViewIndex === viewIndex}
           >
             {groupFields.map((item) => (
               <React.Fragment key={item.field.id}>
                 {item.type === 'misc' && group ? null : (
-                  <h3 id={item.field.id}>
+                  <h3 className={styles.heading} id={item.field.id}>
                     {item.field.name}
                   </h3>
                 )}
@@ -269,32 +293,7 @@ export const PlayForm = (props: {
               </React.Fragment>
             ))}
           </FormFocusGroup>
-
-          <ButtonGroup
-            variant="outlined"
-            color="default"
-          >
-            <Button
-              disabled={viewIndex <= 0}
-              onClick={() => setActiveViewIndex(
-                Math.max(viewIndex - 1, 0)
-              )}
-              // Skip from tab navigation
-              tabIndex={-1}
-            >
-              &lt; Previous
-            </Button>
-            <Button
-              disabled={viewIndex >= viewCount - 1}
-              onClick={() => setActiveViewIndex(
-                Math.min(viewIndex + 1, viewCount - 1)
-              )}
-              // Skip from tab navigation
-              tabIndex={-1}
-            >
-              Next &gt;
-            </Button>
-          </ButtonGroup>
+          {renderButtons(viewIndex)}
         </div>
       );
     }),
@@ -318,13 +317,6 @@ export const PlayForm = (props: {
         >
           {views}
         </SwipeableViews>
-        <Button
-          variant="contained"
-          color={done ? "primary" : "default"}
-          onClick={onSave}
-        >
-          Save
-        </Button>
       </div>
     </FormFocusContextProvider>
   );
