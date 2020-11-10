@@ -211,16 +211,6 @@ export const PlayForm = (props: {
       />
     ));
   };
-  const onPreviousClick = () => {
-    // Move to previous view
-    setActiveViewIndex(activeViewIndex > 0 ? activeViewIndex - 1 : 0);
-  };
-  const onNextClick = () => {
-    // Move to the next view
-    setActiveViewIndex(
-      activeViewIndex < viewCount - 1 ? activeViewIndex + 1 : viewCount - 1
-    );
-  };
 
   const views = [
     hasExpansions && (
@@ -243,7 +233,7 @@ export const PlayForm = (props: {
             &lt; Previous
           </Button>
           <Button
-            onClick={onNextClick}
+            onClick={() => setActiveViewIndex(1)}
             // Skip from tab navigation
             tabIndex={-1}
           >
@@ -252,55 +242,62 @@ export const PlayForm = (props: {
         </ButtonGroup>
       </div>
     ),
-    ...fieldGroups.map(({ group, fields: groupFields, viewId }, groupIndex) => (
-      <div key={viewId} className={styles.view}>
-        {group ? <h3>{group}</h3> : null}
-        <FormFocusGroup
-          focused={activeViewIndex === startViewIndex + groupIndex}
-        >
-          {groupFields.map((item) => (
-            <React.Fragment key={item.field.id}>
-              {item.type === 'misc' && group ? null : (
-                <h3 id={item.field.id}>
-                  {item.field.name}
-                </h3>
+    ...fieldGroups.map(({ group, fields: groupFields, viewId }, groupIndex) => {
+      const viewIndex = startViewIndex + groupIndex;
+      return (
+        <div key={viewId} className={styles.view}>
+          {group ? <h3>{group}</h3> : null}
+          <FormFocusGroup
+            focused={activeViewIndex === viewIndex}
+          >
+            {groupFields.map((item) => (
+              <React.Fragment key={item.field.id}>
+                {item.type === 'misc' && group ? null : (
+                  <h3 id={item.field.id}>
+                    {item.field.name}
+                  </h3>
+                )}
+                {
+                  item.field.description
+                    ? <p className={styles.description}>{item.field.description}</p>
+                    : null
+                }
+
+                {item.type === "misc"
+                  ? renderMiscField(item.field, viewIndex)
+                  : renderScoreField(item.field, viewIndex)}
+              </React.Fragment>
+            ))}
+          </FormFocusGroup>
+
+          <ButtonGroup
+            variant="outlined"
+            color="default"
+          >
+            <Button
+              disabled={viewIndex <= 0}
+              onClick={() => setActiveViewIndex(
+                Math.max(viewIndex - 1, 0)
               )}
-              {
-                item.field.description
-                  ? <p className={styles.description}>{item.field.description}</p>
-                  : null
-              }
-
-              {item.type === "misc"
-                ? renderMiscField(item.field, startViewIndex + groupIndex)
-                : renderScoreField(item.field, startViewIndex + groupIndex)}
-            </React.Fragment>
-          ))}
-        </FormFocusGroup>
-
-        <ButtonGroup
-          variant="outlined"
-          color="default"
-        >
-          <Button
-            disabled={activeViewIndex <= 0}
-            onClick={onPreviousClick}
-            // Skip from tab navigation
-            tabIndex={-1}
-          >
-            &lt; Previous
-          </Button>
-          <Button
-            disabled={activeViewIndex >= viewCount - 1}
-            onClick={onNextClick}
-            // Skip from tab navigation
-            tabIndex={-1}
-          >
-            Next &gt;
-          </Button>
-        </ButtonGroup>
-      </div>
-    )),
+              // Skip from tab navigation
+              tabIndex={-1}
+            >
+              &lt; Previous
+            </Button>
+            <Button
+              disabled={viewIndex >= viewCount - 1}
+              onClick={() => setActiveViewIndex(
+                Math.min(viewIndex + 1, viewCount - 1)
+              )}
+              // Skip from tab navigation
+              tabIndex={-1}
+            >
+              Next &gt;
+            </Button>
+          </ButtonGroup>
+        </div>
+      );
+    }),
   ].filter(Boolean);
 
   return (
