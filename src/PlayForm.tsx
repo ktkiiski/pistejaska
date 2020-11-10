@@ -174,7 +174,6 @@ export const PlayForm = (props: {
           play={play}
           onFocus={() => {
             setActiveViewIndex(viewIndex);
-            // onFocus(p);
           }}
           onChange={handleMiscChange}
         />

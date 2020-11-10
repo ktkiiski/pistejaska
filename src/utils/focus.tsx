@@ -27,9 +27,9 @@ export function useFormFieldRef(index: number) {
     formFieldItems.push(formFieldItem);
     formFieldGroupItems?.push(formFieldItem);
     // Listen for 'keydown' events
-    function onFieldKeyDown(event: KeyboardEvent) {
+    const onFieldKeyDown = (event: KeyboardEvent) => {
       // Listen for Enter key, or the "Go" on Android
-      if (event.keyCode === 13) {
+      if (event.keyCode === 13 && element.tagName !== 'SELECT') {
         // Move focus to the next field
         event.preventDefault();
         const orderedFieldItems = orderBy(formFieldItems, 'index');
