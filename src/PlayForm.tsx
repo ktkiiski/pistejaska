@@ -55,7 +55,9 @@ export const PlayForm = (props: {
     ({ field }) => field.group ? `group:${field.group}` : `field:${field.id}`,
   );
   const fieldGroups = map(fieldGroupsById, (groupFields, viewId) => ({
-    fields: groupFields, viewId,
+    group: groupFields[0].field.group,
+    fields: groupFields,
+    viewId,
   }));
   const startViewIndex = hasExpansions ? 1 : 0;
   const viewCount = startViewIndex + fieldGroups.length;
@@ -251,16 +253,19 @@ export const PlayForm = (props: {
         </ButtonGroup>
       </div>
     ),
-    ...fieldGroups.map(({ fields: groupFields, viewId }, groupIndex) => (
+    ...fieldGroups.map(({ group, fields: groupFields, viewId }, groupIndex) => (
       <div key={viewId} className={styles.view}>
+        {group ? <h3>{group}</h3> : null}
         <FormFocusGroup
           focused={activeViewIndex === startViewIndex + groupIndex}
         >
           {groupFields.map((item) => (
             <React.Fragment key={item.field.id}>
-              <h3 id={item.field.id}>
-                {item.field.name}
-              </h3>
+              {item.type === 'misc' && group ? null : (
+                <h3 id={item.field.id}>
+                  {item.field.name}
+                </h3>
+              )}
               {
                 item.field.description
                   ? <p className={styles.description}>{item.field.description}</p>
