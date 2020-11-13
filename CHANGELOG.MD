@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Group certain fields on the same view when editing a play.
+- Move play edit "Save" button between "Next" and "Previous" buttons
+- Minor styling improvements of the play edit form.
+
+### Fixed
+
+- Do not confirm setting the play duration if already set.
+- Fixed "Show reports" link button.
+
 ## 2020-10-31
 
 ### Added

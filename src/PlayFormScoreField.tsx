@@ -5,6 +5,7 @@ import { PlayFormField } from "./PlayFormField";
 
 interface PlayFormScoreFieldProps {
   player: Player;
+  fieldIndex: number;
   field: GameScoreFieldDefinition;
   play: Play;
   onChange: (
@@ -12,13 +13,9 @@ interface PlayFormScoreFieldProps {
     field: GameScoreFieldDefinition,
     player: Player
   ) => void;
-  focusOnMe: boolean;
   onFocus: (
-    e: React.FocusEvent<
-      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-    >
+    e: React.FocusEvent<HTMLElement>
   ) => void;
-  onKeyDown: (e: React.KeyboardEvent<HTMLDivElement>) => void;
 }
 
 export const PlayFormScoreField = (props: PlayFormScoreFieldProps) => {

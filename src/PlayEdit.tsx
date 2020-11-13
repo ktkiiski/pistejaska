@@ -20,11 +20,12 @@ export const PlayEdit = (props: RouteComponentProps<any>) => {
   if (!game) return <>Game not found!</>;
 
   const onSave = async (play: Play) => {
+    const currentDuration = play.getDurationInHours();
     const duration = play.getTimeInHoursSinceCreation();
     const tenMins = 10 / 60;
     const tenHours = 10;
 
-    if (duration > tenMins && duration < tenHours) {
+    if (currentDuration == null && duration > tenMins && duration < tenHours) {
       const setDuration = window.confirm(
         "Looks like the play began " +
           duration +

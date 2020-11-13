@@ -5,19 +5,16 @@ import { GameMiscFieldDefinition } from "./domain/game";
 
 type PlayFormMiscFieldProps<T> = {
   field: GameMiscFieldDefinition<T>;
+  fieldIndex: number;
   play: Play;
   onChange: (
     value: string,
     field: GameMiscFieldDefinition<T>,
     player: Player | undefined
   ) => void;
-  focusOnMe: boolean;
   onFocus: (
-    e: React.FocusEvent<
-      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-    >
+    e: React.FocusEvent<HTMLElement>
   ) => void;
-  onKeyDown: (e: React.KeyboardEvent<HTMLDivElement>) => void;
   player?: Player;
 };
 
