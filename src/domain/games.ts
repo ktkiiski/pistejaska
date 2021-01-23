@@ -876,8 +876,37 @@ const wingspan: GameDefinition = {
     { id: "eggs", name: "Eggs", type: "number", minValue: 0 },
     { id: "food-on-cards", name: "Food on cards", type: "number", minValue: 0 },
     { id: "tucked cards", name: "Tucked cards", type: "number", minValue: 0 },
-  ]
+  ],
+  miscFields: [
+    {
+      id: "end-of-round-goal-board",
+      name: "End-of-round goal board side",
+      type: "text",
+      affectsScoring: true,
+      options: [
+        { value: "Green", label: "Green" },
+        { value: "Blue", label: "Blue" },
+      ],
+    },
+  ],
 };
+
+const clankInSpace: GameDefinition = {
+  name: "Clank! In! Space!",
+  id: "clank-in-space",
+  icon:
+    "https://cf.geekdo-images.com/haDQw7X8Z0VOItfow9eDtg__imagepagezoom/img/msLW6RNU_mcHXEgNORFj-XNWXnU=/fit-in/1200x900/filters:no_upscale():strip_icc()/pic3720843.jpg",
+  simultaneousTurns: false,
+  scoreFields: [
+    { id: "artifact", name: "Artifact", type: "number", minValue: 0, maxValue: 30, step: 5 },
+    { id: "escape-pod", name: "Escape pod", type: "number", minValue: 0, maxValue: 20, step: 20 },
+    { id: "major-secrets", name: "Major secrets", type: "number", minValue: 0 },
+    { id: "minor-secrets", name: "Minor secrets", type: "number", minValue: 0 },
+    { id: "market-items", name: "Market items", type: "number", minValue: 0 },
+    { id: "credits", name: "Credits", type: "number", minValue: 0 },
+    { id: "cards", name: "Cards", type: "number", minValue: 0 },
+  ],
+}
 
 const generic: GameDefinition = {
   name: "Generic game",
@@ -961,7 +990,8 @@ const gameDtos = [
   generic,
   lordsOfWaterdeep,
   everdell,
-  wingspan
+  wingspan,
+  clankInSpace
 ];
 
 export const games = gameDtos.map((g) => new Game(g));
