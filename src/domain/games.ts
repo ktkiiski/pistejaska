@@ -863,6 +863,22 @@ const lordsOfWaterdeep: GameDefinition = {
   ],
 };
 
+const wingspan: GameDefinition = {
+  name: "Wingspan",
+  id: "wingspan",
+  icon:
+    "https://cf.geekdo-images.com/yLZJCVLlIx4c7eJEWUNJ7w__itemrep/img/DR7181wU4sHT6gn6Q1XccpPxNHg=/fit-in/246x300/filters:strip_icc()/pic4458123.jpg",
+  simultaneousTurns: false,
+  scoreFields: [
+    { id: "birds", name: "Birds", type: "number", minValue: 0 },
+    { id: "bonus-cards", name: "Bonus cards", type: "number", minValue: 0 },
+    { id: "end-of-round-goals", name: "End-of-round goals", type: "number", minValue: 0 },
+    { id: "eggs", name: "Eggs", type: "number", minValue: 0 },
+    { id: "food-on-cards", name: "Food on cards", type: "number", minValue: 0 },
+    { id: "tucked cards", name: "Tucked cards", type: "number", minValue: 0 },
+  ]
+};
+
 const generic: GameDefinition = {
   name: "Generic game",
   id: "generic",
@@ -945,6 +961,7 @@ const gameDtos = [
   generic,
   lordsOfWaterdeep,
   everdell,
+  wingspan
 ];
 
 export const games = gameDtos.map((g) => new Game(g));
