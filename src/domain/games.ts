@@ -876,7 +876,19 @@ const wingspan: GameDefinition = {
     { id: "eggs", name: "Eggs", type: "number", minValue: 0 },
     { id: "food-on-cards", name: "Food on cards", type: "number", minValue: 0 },
     { id: "tucked cards", name: "Tucked cards", type: "number", minValue: 0 },
-  ]
+  ],
+  miscFields: [
+    {
+      id: "end-of-round-goal-board",
+      name: "End-of-round goal board side",
+      type: "text",
+      affectsScoring: true,
+      options: [
+        { value: "Green", label: "Green" },
+        { value: "Blue", label: "Blue" },
+      ],
+    },
+  ],
 };
 
 const clankInSpace: GameDefinition = {
