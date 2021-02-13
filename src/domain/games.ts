@@ -308,7 +308,7 @@ const sevenWonders: GameDefinition = {
   ],
 };
 
-const cavernaForgottenFolk: GameDefinition = {
+const caverna: GameDefinition = {
   name: "Caverna",
   id: "caverna",
   icon:
@@ -391,6 +391,116 @@ const cavernaForgottenFolk: GameDefinition = {
       ],
     },
   ],
+};
+
+const agricola: GameDefinition = {
+  name: "Agricola",
+  id: "agricola",
+  icon: "https://cf.geekdo-images.com/dDDo2Hexl80ucK1IlqTk-g__opengraph/img/j-3lDRZFLI7mKen8PoJKOTSkRY0=/fit-in/1200x630/filters:strip_icc()/pic831744.jpg",
+  simultaneousTurns: false,
+  scoreFields: [
+    {
+      id: "fields",
+      name: "Fields",
+      description: "Score -1/1/2/3/4 points for 0-1/2/3/4/5+ fields",
+      type: "number",
+      minValue: -1,
+      maxValue: 4,
+    }, {
+      id: "pastures",
+      name: "Pastures",
+      description: "Score -1/1/2/3/4 points for 0/1/2/3/4+ pastures",
+      type: "number",
+      minValue: -1,
+      maxValue: 4,
+    }, {
+      id: "grain",
+      name: "Grain",
+      description: "Score -1/1/2/3/4 points for 0/1/4/6/8+ grain",
+      type: "number",
+      minValue: -1,
+      maxValue: 4,
+    }, {
+      id: "vegetables",
+      name: "Vegetables",
+      description: "Score -1/1/2/3/4 points for 0/1/2/3/4+ vegetables",
+      type: "number",
+      minValue: -1,
+      maxValue: 4,
+    }, {
+      id: "sheep",
+      name: "Sheep",
+      description: "Score -1/1/2/3/4 points for 0/1/4/6/8+ sheep",
+      type: "number",
+      minValue: -1,
+      maxValue: 4,
+    }, {
+      id: "wild-boar",
+      name: "Wild boar",
+      description: "Score -1/1/2/3/4 points for 0/1/3/5/7+ wild boar",
+      type: "number",
+      minValue: -1,
+      maxValue: 4,
+    }, {
+      id: "cattle",
+      name: "Cattle",
+      description: "Score -1/1/2/3/4 points for 0/1/2/4/6+ cattle",
+      type: "number",
+      minValue: -1,
+      maxValue: 4,
+    }, {
+      id: "unused-spaces",
+      name: "Unused spaces",
+      description: "-1p per each empty and unfenced farmyard space",
+      type: "number",
+      maxValue: 0,
+    }, {
+      id: "fenced-stables",
+      name: "Fenced stables",
+      description: "1p per fenced stable",
+      type: "number",
+      minValue: 0,
+    }, {
+      id: "clay-hut-rooms",
+      name: "Clay hut rooms",
+      description: "1p per room in a Clay hut",
+      type: "number",
+      minValue: 0,
+      step: 1,
+    }, {
+      id: "stone-house-rooms",
+      name: "Stone house rooms",
+      description: "2p per room in a Stone house",
+      type: "number",
+      minValue: 0,
+      step: 2,
+    }, {
+      id: "family-members",
+      name: "3p per family member (max. 15p)",
+      type: "number",
+      minValue: 0,
+      maxValue: 15,
+      step: 3,
+    }, {
+      id: "cards",
+      name: "Points for cards",
+      description: "Points in yellow circles on the left of the Minor/Major Improvement cards.",
+      type: "number",
+    }, {
+      id: "begging-cards",
+      name: "Begging cards",
+      description: "-3p per begging card",
+      type: "number",
+      maxValue: 0,
+      step: 3,
+    }, {
+      id: "bonus-points",
+      name: "Bonus points",
+      description: "See texts on Improvement and Occupation cards",
+      type: "number",
+    },
+  ],
+  miscFields: [],
 };
 
 const eclipse: GameDefinition = {
@@ -972,7 +1082,8 @@ const gameDtos = [
   terraFormingMars,
   eclipse,
   feastForOdin,
-  cavernaForgottenFolk,
+  caverna,
+  agricola,
   honshu,
   terraMystica,
   azul,
