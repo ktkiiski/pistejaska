@@ -1,9 +1,16 @@
 import React from "react";
 import { GameFieldDefinition, GameFieldOption } from "./domain/game";
-import { TextField, Button, Box } from "@material-ui/core";
+import { TextField, Button, Box, makeStyles } from "@material-ui/core";
 import DurationCounter from "./DurationCounter";
 import { Play } from "./domain/play";
 import { useFormFieldRef } from "./utils/focus";
+
+const useFieldStyles = makeStyles({
+  root: {
+    width: '25ch',
+    maxWidth: '100%',
+  },
+})
 
 interface PlayFormFieldProps<T, F extends GameFieldDefinition<T>> {
   value: T | null;
@@ -34,6 +41,7 @@ export function PlayFormField<
     onFocus,
     id,
   } = props;
+  const styles = useFieldStyles();
   const inputRef = useFormFieldRef(fieldIndex);
   const isNumeric = field.type === "number" || field.type === "duration";
   const createdAt = play.getCreationDate();
@@ -102,6 +110,7 @@ export function PlayFormField<
           SelectProps={{ native: true }}
           margin="dense"
           variant="outlined"
+          classes={styles}
         >
           {hasSelectedValidOption ? null : <option value="" />}
           {options.map(({ value, label }) => (
@@ -127,6 +136,7 @@ export function PlayFormField<
           value={value === null ? "" : value}
           onChange={onValueChange}
           id={id}
+          classes={styles}
         />
       </div>
       {field.type !== "duration" || !createdToday ? null : (
