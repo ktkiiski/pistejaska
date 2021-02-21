@@ -9,11 +9,11 @@ import { useGames } from "./domain/games";
 export const ReportGameList = (props: RouteComponentProps<{}>) => {
   const games = useGames();
   const onSelectGame = (game: GameDefinition) =>
-    props.history.push("/reports/game/" + game.id);
+    props.history.push("/games/" + game.id);
 
   return (
     <div>
-      <h2>Reports</h2>
+      <h2>Games</h2>
       <List component="nav">
         {orderBy(games, (g) => g.name.toLowerCase()).map((game) => (
           <ListItem button onClick={() => onSelectGame(game)} key={game.id}>

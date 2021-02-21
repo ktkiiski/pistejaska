@@ -95,7 +95,7 @@ const PlayerGamesReport = (props: { player: Player; plays: Play[] }) => {
     return [
       {
         value: game?.name ?? "All",
-        link: game ? `/reports/game/${game?.id}` : undefined
+        link: game ? `/games/${game?.id}` : undefined
       },
       {
         value: stringifyScore(maxScoresPlay.getTotal(player.id)),

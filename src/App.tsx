@@ -4,7 +4,7 @@ import { Login } from "./Login";
 import * as firebase from "firebase/app";
 import "firebase/auth";
 import { NavBar } from "./NavBar";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { BrowserRouter as Router, Redirect, Route } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Admin } from "./Admin";
 import { SelectGame } from "./SelectGame";
@@ -54,10 +54,10 @@ const App = () => {
       <Route path="/" component={NavBar} />
       <Route path="/" exact component={PlayList} />
       <Route path="/view/:playId" component={PlayView} />
+      <Route path="/games" exact component={ReportGameList} />
+      <Route path="/games/:gameId" component={ReportGameView} />
       <Route path="/players" exact component={ReportPlayerList} />
-      <Route path="/reports" exact component={ReportGameList} />
-      <Route path="/reports/player/:playerId" component={ReportPlayerView} />
-      <Route path="/reports/game/:gameId" component={ReportGameView} />
+      <Route path="/players/:playerId" component={ReportPlayerView} />
       <Route path="/edit/:playId" component={PlayEdit} />
       <Route
         path="/new/:gameId"
@@ -83,6 +83,9 @@ const App = () => {
         path="/whatsnew/"
         render={(props) => <MarkdownViewer {...props} fileName="CHANGELOG" />}
       />
+      <Route path="/reports">
+        <Redirect to="/games" />
+      </Route>
     </>
   );
 

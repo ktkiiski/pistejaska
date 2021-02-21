@@ -113,8 +113,8 @@ export function NavBar() {
           <Button color="inherit" onClick={() => history.push("/new")}>
             New
           </Button>
-          <Button color="inherit" onClick={() => history.push("/reports")}>
-            Reports
+          <Button color="inherit" onClick={() => history.push("/games")}>
+            Games
           </Button>
           <div>
             {menuIcon}

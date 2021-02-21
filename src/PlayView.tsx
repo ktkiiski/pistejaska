@@ -101,7 +101,7 @@ export const PlayView = (props: RouteComponentProps<any>) => {
         </Button>
         <Button
           variant="contained"
-          onClick={() => props.history.push(`/reports/game/${game.id}`)}
+          onClick={() => props.history.push(`/games/${game.id}`)}
         >
           Show reports
         </Button>
@@ -168,7 +168,7 @@ const PlayTable = (
                 >
                   {`${play.getPosition(p.id)}. `}
                   <Link
-                    to={"/reports/player/" + p.id}
+                    to={"/players/" + p.id}
                   >
                     {`${p.name}`}
                   </Link>

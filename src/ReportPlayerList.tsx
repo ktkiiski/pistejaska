@@ -21,7 +21,7 @@ export const ReportPlayerList = (props: RouteComponentProps<{}>) => {
   }
 
   const onSelectPlayer = (player: Player) =>
-    props.history.push("/reports/player/" + player.id);
+    props.history.push("/players/" + player.id);
 
   const players = groupBy(
     orderBy(

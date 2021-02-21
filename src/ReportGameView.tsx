@@ -261,7 +261,7 @@ const ReportPlayers = (props: { plays: Play[] }) => {
               const { id, name, rating, playCount, winCount } = player;
               return (
                 <TableRow key={id}>
-                  <TableCell scope="row"><Link to={`/reports/player/${id}`}>{name}</Link></TableCell>
+                  <TableCell scope="row"><Link to={`/players/${id}`}>{name}</Link></TableCell>
                   <TableCell scope="row">
                     {Math.round(rating.mu)} (± {Math.round(3 * rating.sigma)})
                   </TableCell>
