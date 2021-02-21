@@ -12,7 +12,7 @@ import {
   makeStyles,
   Paper,
 } from "@material-ui/core";
-import { games } from "./domain/games";
+import { useGames } from "./domain/games";
 import { GameMiscFieldDefinition, Game } from "./domain/game";
 import { usePlays } from "./common/hooks/usePlays";
 import firebase from "firebase";
@@ -21,6 +21,7 @@ import ButtonRow from "./ButtonRow";
 import { Link } from "react-router-dom";
 
 export const PlayView = (props: RouteComponentProps<any>) => {
+  const games = useGames();
   const playId = props.match.params["playId"];
 
   const [plays, loading, error] = usePlays();

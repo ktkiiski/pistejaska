@@ -7,14 +7,15 @@ import ListItemText from "@material-ui/core/ListItemText";
 import { Button, TextField } from "@material-ui/core";
 import { v4 as uuid } from "uuid";
 import { PlayNew } from "./PlayNew";
-import { games } from "./domain/games";
 import { usePlayers } from "./common/hooks/usePlayers";
 import ButtonRow from "./ButtonRow";
+import { useGames } from "./domain/games";
 
 const SelectPlayers = (props: {
   gameId: string;
   initialPlayers?: Player[];
 }) => {
+  const games = useGames();
   const { gameId, initialPlayers = [] } = props;
   const game = games.find((g) => g.id === gameId);
   if (game === undefined) throw new Error("unknown game");

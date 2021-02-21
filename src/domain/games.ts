@@ -1105,4 +1105,8 @@ const gameDtos = [
   clankInSpace
 ];
 
-export const games = gameDtos.map((g) => new Game(g));
+const games = gameDtos.map((g) => new Game(g));
+
+export function useGames() {
+  return games;
+}

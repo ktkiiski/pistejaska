@@ -2,12 +2,12 @@ import React from "react";
 
 import { Play, Player } from "./domain/play";
 import { RouteComponentProps } from "react-router";
-import { games } from "./domain/games";
 import { sortBy, flatMap, groupBy, uniq } from "lodash";
 import { usePlays } from "./common/hooks/usePlays";
 import ReportTable from "./ReportTable";
 import { stringifyScore } from "./common/stringUtils";
 import { calculateEloForPlayers } from "./domain/ratings";
+import { useGames } from "./domain/games";
 
 export const ReportPlayerView = (props: RouteComponentProps<any>) => {
   const playerId = props.match.params["playerId"];
@@ -51,10 +51,11 @@ export const ReportPlayerView = (props: RouteComponentProps<any>) => {
 };
 
 const PlayerGamesReport = (props: { player: Player; plays: Play[] }) => {
+  const games = useGames();
   const { player, plays } = props;
   const playerPlays = plays.filter(p => p.players.find(x => x.id === player.id));
   const playerGames = uniq(Object.keys(groupBy(playerPlays, (p) => p.gameId)));
-  
+
   const columns = [
     { name: "Game name" },
     { name: "Max points" },
@@ -67,7 +68,7 @@ const PlayerGamesReport = (props: { player: Player; plays: Play[] }) => {
   const rows = playerGames.concat(["all"]).map((g) => {
     const gamePlays = g === "all" ? playerPlays : playerPlays.filter((x) => x.gameId === g);
 
-    const allGamePlays = g === "all" ? plays : plays.filter(p => p.gameId === g); 
+    const allGamePlays = g === "all" ? plays : plays.filter(p => p.gameId === g);
 
     const maxScoresPlay = sortBy(gamePlays, (p) =>
       p.getTotal(player.id)

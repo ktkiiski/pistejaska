@@ -11,7 +11,6 @@ import {
 } from "@material-ui/core";
 import { Play } from "./domain/play";
 import { RouteComponentProps } from "react-router";
-import { games } from "./domain/games";
 import { sortBy } from "lodash";
 import { usePlays } from "./common/hooks/usePlays";
 import { calculateEloForPlayers } from "./domain/ratings";
@@ -22,6 +21,7 @@ import ReportTable from "./ReportTable";
 import ReportGameCorrelation from "./ReportGameCorrelation";
 import { stringifyScore } from "./common/stringUtils";
 import { Link } from "react-router-dom";
+import { useGames } from "./domain/games";
 
 function isRelevantReportField(
   field: GameMiscFieldDefinition
@@ -30,6 +30,7 @@ function isRelevantReportField(
 }
 
 export const ReportGameView = (props: RouteComponentProps<any>) => {
+  const games = useGames();
   const gameId = props.match.params["gameId"];
 
   const [plays, loading, error] = usePlays();

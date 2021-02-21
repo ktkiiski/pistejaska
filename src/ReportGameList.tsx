@@ -2,11 +2,12 @@ import React from "react";
 import "firebase/firestore";
 import { List, ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
 import { RouteComponentProps } from "react-router";
-import { games } from "./domain/games";
 import { orderBy } from "lodash";
 import { GameDefinition } from "./domain/game";
+import { useGames } from "./domain/games";
 
 export const ReportGameList = (props: RouteComponentProps<{}>) => {
+  const games = useGames();
   const onSelectGame = (game: GameDefinition) =>
     props.history.push("/reports/game/" + game.id);
 

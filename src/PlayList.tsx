@@ -4,11 +4,12 @@ import { TablePagination } from "@material-ui/core";
 
 import { Play } from "./domain/play";
 import { RouteComponentProps } from "react-router";
-import { games } from "./domain/games";
 import { orderBy } from "lodash";
 import { usePlays } from "./common/hooks/usePlays";
+import { useGames } from "./domain/games";
 
 export const PlayList = (props: RouteComponentProps<{}>) => {
+  const games = useGames();
   const [plays, , error] = usePlays();
 
   const data = useMemo(

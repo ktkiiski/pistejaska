@@ -4,10 +4,11 @@ import * as firebase from "firebase/app";
 import "firebase/firestore";
 import { Play } from "./domain/play";
 import { PlayForm } from "./PlayForm";
-import { games } from "./domain/games";
+import { useGames } from "./domain/games";
 import { usePlay } from "./common/hooks/usePlay";
 
 export const PlayEdit = (props: RouteComponentProps<any>) => {
+  const games = useGames();
   const playId = props.match.params["playId"];
   const [play, loading] = usePlay(playId);
 
