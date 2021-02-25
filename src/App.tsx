@@ -6,7 +6,6 @@ import "firebase/auth";
 import { NavBar } from "./NavBar";
 import { BrowserRouter as Router, Redirect, Route } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { Admin } from "./Admin";
 import { SelectGame } from "./SelectGame";
 import { PlayEdit } from "./PlayEdit";
 import { PlayView } from "./PlayView";
@@ -21,6 +20,7 @@ import SelectPlayers from "./SelectPlayers";
 import SelectPlayersFromPlay from "./SelectPlayersFromPlay";
 import { ReportPlayerView } from "./ReportPlayerView";
 import { ReportPlayerList } from "./ReportPlayerList";
+import Admin from "./Admin";
 
 var config = {
   apiKey: "AIzaSyDI_XDKW2vVftx7oUy1a_QTR5BE8j6S-Ds",
