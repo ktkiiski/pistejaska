@@ -1,7 +1,7 @@
 import { firestore } from "firebase";
 import { useMemo } from "react";
 import { useCollectionData } from "react-firebase-hooks/firestore";
-import { Game, GameDefinition } from "./game";
+import { Game, GameDefinition } from "../../domain/game";
 
 const gamesQuery = firestore().collection('games').orderBy('name');
 

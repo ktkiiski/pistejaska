@@ -7,7 +7,7 @@ import { usePlays } from "./common/hooks/usePlays";
 import ReportTable from "./ReportTable";
 import { stringifyScore } from "./common/stringUtils";
 import { calculateEloForPlayers } from "./domain/ratings";
-import { useGames } from "./domain/games";
+import { useGames } from "./common/hooks/useGames";
 
 export const ReportPlayerView = (props: RouteComponentProps<any>) => {
   const playerId = props.match.params["playerId"];

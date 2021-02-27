@@ -9,7 +9,7 @@ import { v4 as uuid } from "uuid";
 import { PlayNew } from "./PlayNew";
 import { usePlayers } from "./common/hooks/usePlayers";
 import ButtonRow from "./ButtonRow";
-import { useGames } from "./domain/games";
+import { useGames } from "./common/hooks/useGames";
 
 const SelectPlayers = (props: {
   gameId: string;

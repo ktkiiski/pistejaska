@@ -3,7 +3,7 @@ import React from "react";
 import { firestore } from './common/firebase';
 import { Play } from "./domain/play";
 import { PlayForm } from "./PlayForm";
-import { useGames } from "./domain/games";
+import { useGames } from "./common/hooks/useGames";
 import { usePlay } from "./common/hooks/usePlay";
 
 export const PlayEdit = (props: RouteComponentProps<any>) => {

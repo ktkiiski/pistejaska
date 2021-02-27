@@ -12,7 +12,7 @@ import {
   makeStyles,
   Paper,
 } from "@material-ui/core";
-import { useGames } from "./domain/games";
+import { useGames } from "./common/hooks/useGames";
 import { GameMiscFieldDefinition, Game } from "./domain/game";
 import { usePlays } from "./common/hooks/usePlays";
 import { firestore } from './common/firebase';

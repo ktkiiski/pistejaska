@@ -21,7 +21,7 @@ import ReportTable from "./ReportTable";
 import ReportGameCorrelation from "./ReportGameCorrelation";
 import { stringifyScore } from "./common/stringUtils";
 import { Link } from "react-router-dom";
-import { useGames } from "./domain/games";
+import { useGames } from "./common/hooks/useGames";
 
 function isRelevantReportField(
   field: GameMiscFieldDefinition

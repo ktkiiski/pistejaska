@@ -6,7 +6,7 @@ import { Play } from "./domain/play";
 import { RouteComponentProps } from "react-router";
 import { orderBy } from "lodash";
 import { usePlays } from "./common/hooks/usePlays";
-import { useGames } from "./domain/games";
+import { useGames } from "./common/hooks/useGames";
 
 export const PlayList = (props: RouteComponentProps<{}>) => {
   const games = useGames();

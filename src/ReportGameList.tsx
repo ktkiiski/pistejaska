@@ -3,7 +3,7 @@ import { List, ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
 import { RouteComponentProps } from "react-router";
 import { orderBy } from "lodash";
 import { GameDefinition } from "./domain/game";
-import { useGames } from "./domain/games";
+import { useGames } from "./common/hooks/useGames";
 
 export const ReportGameList = (props: RouteComponentProps<{}>) => {
   const games = useGames();

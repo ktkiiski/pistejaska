@@ -6,7 +6,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import { RouteComponentProps } from "react-router";
 import { TextField } from "@material-ui/core";
 import { GameDefinition } from "./domain/game";
-import { useGames } from "./domain/games";
+import { useGames } from "./common/hooks/useGames";
 
 export const SelectGame = (props: RouteComponentProps<{}>) => {
   const games = useGames();
