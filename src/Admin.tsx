@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { GameDefinition } from "./domain/game";
 import { FormControl, makeStyles, MenuItem, Select } from "@material-ui/core";
 import { useCollectionData } from "react-firebase-hooks/firestore";
-import * as firebase from "firebase";
+import { firestore } from './common/firebase';
 import AdminGameEditor from "./AdminGameEditor";
 
 const useStyles = makeStyles((theme) => ({
@@ -26,7 +26,7 @@ const defaultGameJson: GameDefinition = {
 function Admin() {
   const [gameId, setGameId] = useState<string | null>(null);
   const [games] = useCollectionData<GameDefinition>(
-    firebase.firestore().collection("games").orderBy('name')
+    firestore().collection("games").orderBy('name')
   );
   const styles = useStyles();
   const initialGameJson = !games ? null : (games.find(game => game.id === gameId) || defaultGameJson);
@@ -59,8 +59,7 @@ function Admin() {
             if (!id) {
               throw new Error('Missing game ID');
             }
-            const db = firebase.firestore();
-            await db.collection("games").doc(id).set(json);
+            await firestore().collection("games").doc(id).set(json);
             setGameId(id);
           }}
           onDelete={!gameId ? null : async () => {
@@ -68,8 +67,7 @@ function Admin() {
             if (!confirm(`Are you sure you want to permanently delete the game "${initialGameJson.name ?? gameId}"?`)) {
               return;
             }
-            const db = firebase.firestore();
-            await db.collection("games").doc(gameId).delete();
+            await firestore().collection("games").doc(gameId).delete();
             setGameId(null);
           }}
           submitButtonLabel={gameId ? 'Update game' : 'Create game'}

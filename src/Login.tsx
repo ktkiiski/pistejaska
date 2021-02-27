@@ -1,7 +1,6 @@
 import React from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
-import * as firebase from "firebase/app";
-import "firebase/auth";
+import firebase from './common/firebase';
 import { Link } from "react-router-dom";
 import { Button } from "@material-ui/core";
 

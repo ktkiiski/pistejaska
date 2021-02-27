@@ -3,7 +3,6 @@ import SwipeableViews from "react-swipeable-views";
 import Button from "@material-ui/core/Button";
 import { Checkbox, Typography, FormControlLabel, FormGroup, makeStyles, ButtonGroup, Box } from "@material-ui/core";
 import { Player, Play } from "./domain/play";
-import "firebase/firestore";
 import {
   Game,
   GameExpansionDefinition,

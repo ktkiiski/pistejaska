@@ -1,8 +1,6 @@
 import React from "react";
 import "./App.css";
 import { Login } from "./Login";
-import * as firebase from "firebase/app";
-import "firebase/auth";
 import { NavBar } from "./NavBar";
 import { BrowserRouter as Router, Redirect, Route } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -21,16 +19,7 @@ import SelectPlayersFromPlay from "./SelectPlayersFromPlay";
 import { ReportPlayerView } from "./ReportPlayerView";
 import { ReportPlayerList } from "./ReportPlayerList";
 import Admin from "./Admin";
-
-var config = {
-  apiKey: "AIzaSyDI_XDKW2vVftx7oUy1a_QTR5BE8j6S-Ds",
-  authDomain: "pistejaska-dev.firebaseapp.com",
-  databaseURL: "https://pistejaska-dev.firebaseio.com",
-  projectId: "pistejaska-dev",
-  storageBucket: "pistejaska-dev.appspot.com",
-  messagingSenderId: "597805798706",
-};
-firebase.initializeApp(config);
+import firebase from './common/firebase';
 
 const center = {
   position: "absolute" as any,

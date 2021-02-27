@@ -78,7 +78,7 @@ const PlayerGamesReport = (props: { player: Player; plays: Play[] }) => {
     )[0];
     const winnedPlays = gamePlays.filter(p => p.getPosition(player.id) === 1);
 
-    const game = games.find((x) => x.id === g);
+    const game = games?.find((x) => x.id === g);
 
     // if player has played 3 or more plays, only compare to players who have also played 3 or mote games
     let trueSkills = calculateEloForPlayers(allGamePlays, 3);

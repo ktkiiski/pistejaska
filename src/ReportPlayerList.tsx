@@ -1,5 +1,4 @@
 import React from "react";
-import "firebase/firestore";
 import { List, ListItem, ListItemText } from "@material-ui/core";
 import { RouteComponentProps } from "react-router";
 import { flatMap, groupBy, orderBy } from "lodash";

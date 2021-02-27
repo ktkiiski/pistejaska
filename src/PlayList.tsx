@@ -35,29 +35,31 @@ export const PlayList = (props: RouteComponentProps<{}>) => {
   }
 
   const onSelectPlay = (play: Play) => props.history.push("/view/" + play.id);
-  const getGame = (play: Play) =>
-    games.find((g) => g.id === play.gameId) || ({} as any);
-
   return (
     <div>
       <h2>Plays</h2>
       <List component="nav">
-        {currentData.map((play) => (
-          <ListItem button onClick={() => onSelectPlay(play)} key={play.id}>
-            <ListItemIcon>
-              <img
-                width={30}
-                height={30}
-                src={getGame(play).icon}
-                alt={getGame(play).name}
+        {currentData.map((play) => {
+          const game = games?.find((g) => g.id === play.gameId);
+          return (
+            <ListItem button onClick={() => onSelectPlay(play)} key={play.id}>
+              {game && (
+                <ListItemIcon>
+                  <img
+                    width={30}
+                    height={30}
+                    src={game.icon}
+                    alt={game.name}
+                  />
+                </ListItemIcon>
+              )}
+              <ListItemText
+                primary={play.getName()}
+                secondary={game?.name}
               />
-            </ListItemIcon>
-            <ListItemText
-              primary={play.getName()}
-              secondary={getGame(play).name}
-            />
-          </ListItem>
-        ))}
+            </ListItem>
+          );
+        })}
       </List>
 
       <TablePagination

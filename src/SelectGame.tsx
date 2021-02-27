@@ -14,7 +14,7 @@ export const SelectGame = (props: RouteComponentProps<{}>) => {
     props.history.push("/new/" + game.id);
 
   const [searchTerm, setSearchTerm] = useState("");
-  const listedGames = games.map((game) => ({
+  const listedGames = (games || []).map((game) => ({
     ...game,
     lowercaseName: game.name.toLowerCase(),
   }));

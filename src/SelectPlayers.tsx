@@ -17,7 +17,7 @@ const SelectPlayers = (props: {
 }) => {
   const games = useGames();
   const { gameId, initialPlayers = [] } = props;
-  const game = games.find((g) => g.id === gameId);
+  const game = games?.find((g) => g.id === gameId);
   if (game === undefined) throw new Error("unknown game");
 
   const [allPlayers] = usePlayers();

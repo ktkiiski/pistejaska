@@ -48,7 +48,7 @@ export const ReportGameView = (props: RouteComponentProps<any>) => {
 
   const gamePlays = plays.filter((p) => p.gameId === gameId);
 
-  const game = games.find((g) => g.id === gameId);
+  const game = games?.find((g) => g.id === gameId);
 
   if (!game) {
     return <>Error</>;

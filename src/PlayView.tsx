@@ -15,7 +15,7 @@ import {
 import { useGames } from "./domain/games";
 import { GameMiscFieldDefinition, Game } from "./domain/game";
 import { usePlays } from "./common/hooks/usePlays";
-import firebase from "firebase";
+import { firestore } from './common/firebase';
 import { sortBy } from "lodash";
 import ButtonRow from "./ButtonRow";
 import { Link } from "react-router-dom";
@@ -35,7 +35,7 @@ export const PlayView = (props: RouteComponentProps<any>) => {
   if (!play) {
     return <>Play not found!</>;
   }
-  const game = games.find((g) => g.id === play.gameId);
+  const game = games?.find((g) => g.id === play.gameId);
   if (!game) return <>Game not found!</>;
 
   const onEditPlay = () => props.history.push("/edit/" + play.id);
@@ -47,7 +47,7 @@ export const PlayView = (props: RouteComponentProps<any>) => {
       `Do you really want to delete play ${play.getName()}?`
     );
     if (!reallyDelete) return;
-    const db = firebase.firestore();
+    const db = firestore();
     await db.collection("plays-v1").doc(playId).delete();
 
     props.history.push("/");

@@ -339,6 +339,11 @@ export class Game implements GameDefinition {
   public hasExpansions(): boolean {
     return !!this.expansions && this.expansions.length > 0;
   }
+
+  public toDTO(): GameDefinition {
+    const { id, name, scoreFields, simultaneousTurns, icon, expansions, miscFields } = this;
+    return { id, name, scoreFields, simultaneousTurns, icon, expansions, miscFields };
+  }
 }
 export type GameDefinition = {
   name: string;
