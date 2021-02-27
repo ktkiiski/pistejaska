@@ -2,12 +2,13 @@ import React from "react";
 
 import { Play, Player } from "./domain/play";
 import { RouteComponentProps } from "react-router";
-import { sortBy, flatMap, groupBy, uniq } from "lodash";
+import { sortBy, flatMap, groupBy, uniq, mean } from "lodash";
 import { usePlays } from "./common/hooks/usePlays";
 import ReportTable from "./ReportTable";
 import { stringifyScore } from "./common/stringUtils";
 import { calculateEloForPlayers } from "./domain/ratings";
 import { useGames } from "./common/hooks/useGames";
+import { getGameStatistics } from "./domain/statistics";
 
 export const ReportPlayerView = (props: RouteComponentProps<any>) => {
   const playerId = props.match.params["playerId"];
@@ -63,12 +64,20 @@ const PlayerGamesReport = (props: { player: Player; plays: Play[] }) => {
     { name: "Trueskill percentile", tooltip: "The skill level percentile of player according to TrueSkill algorithm. Higher is better. If 90%, then the player estimated to be among the best 10% of players." },
     { name: "Wins" },
     { name: "# of plays" },
+    { name: "Time well spent" },
   ];
+
+  if (!games) {
+    // Still loading games
+    return <div>Loading…</div>;
+  }
 
   const rows = playerGames.concat(["all"]).map((g) => {
     const gamePlays = g === "all" ? playerPlays : playerPlays.filter((x) => x.gameId === g);
 
     const allGamePlays = g === "all" ? plays : plays.filter(p => p.gameId === g);
+    const allGameDurations = allGamePlays.map(p => p.getDurationInHours()).filter(duration => duration != null);
+    const avgGameDuration = mean(allGameDurations); // NOTE: Will be NaN if no information available
 
     const maxScoresPlay = sortBy(gamePlays, (p) =>
       p.getTotal(player.id)
@@ -91,6 +100,7 @@ const PlayerGamesReport = (props: { player: Player; plays: Play[] }) => {
 
     // calculate skill percentile
     const percentile = Math.round(Math.round((trueSkills.length- playerTrueSkillIndex) / trueSkills.length * 100)/10)*10;
+    const totalGamePlayTime = gamePlays.reduce((sum, play) => sum + (play.getDurationInHours() ?? avgGameDuration), 0);
 
     return [
       {
@@ -114,6 +124,9 @@ const PlayerGamesReport = (props: { player: Player; plays: Play[] }) => {
       {
         value: gamePlays.length.toString(),
       },
+      {
+        value: Number.isNaN(totalGamePlayTime) ? 'N/A' : `${totalGamePlayTime.toFixed(1)}h`
+      }
     ];
   });
 
