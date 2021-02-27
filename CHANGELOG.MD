@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Games are stored in the Firestore** instead of being hard-coded. They can be edited in the Admin view, located at `/admin`
 - "Reports" is now "Games"
 
+### Fixed
+
+- Crash in report views when a play has less than 2 players
+
 ## 2021-01-23
 
 ### Added
