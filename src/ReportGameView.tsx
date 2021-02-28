@@ -13,7 +13,7 @@ import { Play } from "./domain/play";
 import { RouteComponentProps } from "react-router";
 import { usePlays } from "./common/hooks/usePlays";
 import { calculateEloForPlayers } from "./domain/ratings";
-import { GameMiscFieldDefinition, Game } from "./domain/game";
+import { Game } from "./domain/game";
 import { getGameStatistics } from "./domain/statistics";
 import GameScoreFieldReport from "./ReportGameScoreField";
 import ReportTable from "./ReportTable";
@@ -23,23 +23,14 @@ import { Link } from "react-router-dom";
 import { useGames } from "./common/hooks/useGames";
 import ReportDimensionReportTable from "./ReportDimensionReportTable";
 import ReportFilterSelector from "./ReportFilterSelector";
-import { applyPlayFilters, ReportFilters } from "./domain/filters";
-
-function isRelevantReportField(
-  field: GameMiscFieldDefinition
-): field is GameMiscFieldDefinition<string> {
-  return (field.isRelevantReportDimension ?? false) && field.type !== "number";
-}
+import { applyPlayFilters, emptyFilters, ReportFilters } from "./domain/filters";
 
 export const ReportGameView = (props: RouteComponentProps<any>) => {
   const games = useGames();
   const gameId = props.match.params["gameId"];
 
   const [allPlays, loading, error] = usePlays();
-  const [filters, setFilters] = useState<ReportFilters>({
-    expansions: [],
-    playerCount: null,
-  });
+  const [filters, setFilters] = useState<ReportFilters>(emptyFilters);
 
   if (error) {
     return (
@@ -61,16 +52,16 @@ export const ReportGameView = (props: RouteComponentProps<any>) => {
     return <>Error</>;
   }
 
-  const reportDimensions = game.miscFields?.filter(isRelevantReportField);
+  const reportDimensions = game.getRelevantReportFields();
 
   return (
     <div>
       <h2>Reports: {game.name}</h2>
       <ReportFilterSelector
+        game={game}
         plays={unfilteredGamePlays}
         filters={filters}
         onChange={setFilters}
-        expansions={game.expansions}
       />
       <p>Based on {gamePlays.length < unfilteredGamePlays.length ? `${gamePlays.length} / ${unfilteredGamePlays.length}` : gamePlays.length} plays.</p>
       <HighScoresReportTable game={game} plays={gamePlays} />
@@ -78,7 +69,7 @@ export const ReportGameView = (props: RouteComponentProps<any>) => {
       <GameScoreFieldReport game={game} plays={gamePlays} />
       <ReportGameCorrelation game={game} plays={gamePlays} />
 
-      {reportDimensions?.map((x) => {
+      {reportDimensions.map((x) => {
         const playsWithDimension = gamePlays.filter((p) =>
           p.misc.some((m) => m.fieldId === x.id)
         );

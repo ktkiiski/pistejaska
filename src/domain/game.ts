@@ -344,6 +344,10 @@ export class Game implements GameDefinition {
     const { id, name, scoreFields, simultaneousTurns, icon, expansions, miscFields } = this;
     return { id, name, scoreFields, simultaneousTurns, icon, expansions, miscFields };
   }
+
+  public getRelevantReportFields(): GameMiscFieldDefinition<string>[] {
+    return this.miscFields?.filter(isRelevantReportField) ?? [];
+  }
 }
 export type GameDefinition = {
   name: string;
@@ -406,3 +410,10 @@ export type GameExpansionDefinition = {
   scoreFields?: GameScoreFieldDefinition[];
   miscFields?: GameMiscFieldDefinition[];
 };
+
+
+function isRelevantReportField(
+  field: GameMiscFieldDefinition
+): field is GameMiscFieldDefinition<string> {
+  return (field.isRelevantReportDimension ?? false) && field.type !== "number";
+}
