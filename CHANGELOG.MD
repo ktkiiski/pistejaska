@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- New feature: filter game reports by expansions, player counts, and dimensions (e.g. races, factions, corporations)
 - Show stats how long players have played games
 
 ### Fixed
