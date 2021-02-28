@@ -23,7 +23,7 @@ import { Link } from "react-router-dom";
 import { useGames } from "./common/hooks/useGames";
 import ReportDimensionReportTable from "./ReportDimensionReportTable";
 import ReportFilterSelector from "./ReportFilterSelector";
-import { applyPlayFilters, emptyFilters, ReportFilters } from "./domain/filters";
+import { applyPlayFilters, emptyFilters, hasFilters, ReportFilters } from "./domain/filters";
 
 export const ReportGameView = (props: RouteComponentProps<any>) => {
   const games = useGames();
@@ -63,7 +63,7 @@ export const ReportGameView = (props: RouteComponentProps<any>) => {
         filters={filters}
         onChange={setFilters}
       />
-      <p>Based on {gamePlays.length < unfilteredGamePlays.length ? `${gamePlays.length} / ${unfilteredGamePlays.length}` : gamePlays.length} plays.</p>
+      <p>Based on {hasFilters(filters) ? `${gamePlays.length} / ${unfilteredGamePlays.length}` : gamePlays.length} plays.</p>
       <HighScoresReportTable game={game} plays={gamePlays} />
 
       <GameScoreFieldReport game={game} plays={gamePlays} />

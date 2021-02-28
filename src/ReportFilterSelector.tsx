@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: 300,
   },
   selection: {
-    minHeight: '36px',
+    minHeight: '28px',
     display: 'flex',
     flexWrap: 'wrap',
     alignContent: 'center',
@@ -34,8 +34,9 @@ const useStyles = makeStyles((theme) => ({
   chip: {
     margin: 2,
   },
-  noLabel: {
-    marginTop: theme.spacing(3),
+  clearButton: {
+    marginLeft: '1em',
+    marginTop: '20px',
   },
 }));
 
@@ -53,6 +54,7 @@ function ReportFilterSelector({ game, plays, filters, onChange }: ReportFilterSe
   const [expansionsOpen, setExpansionsOpen] = useState(false);
   const [fieldsOpen, setFieldsOpen] = useState<Record<string, boolean>>({});
   const { expansions } = game;
+  const isFiltering = hasFilters(filters);
   const reportFields = game.getRelevantReportFields()
     // TODO: Support fields without pre-defined options
     .filter(field => field.options?.length);
@@ -81,6 +83,7 @@ function ReportFilterSelector({ game, plays, filters, onChange }: ReportFilterSe
                 <div className={classes.selection}>
                   {!expansionIds.length ? <em>Any expansions</em> : expansionIds.map((expansionId) => (
                     <Chip
+                      size="small"
                       key={expansionId}
                       className={classes.chip}
                       label={expansions.find(exp => exp.id === expansionId)?.name}
@@ -138,6 +141,7 @@ function ReportFilterSelector({ game, plays, filters, onChange }: ReportFilterSe
                 <div className={classes.selection}>
                   {!values.length ? <em>Anything</em> : values.map((value) => (
                     <Chip
+                      size="small"
                       key={value}
                       className={classes.chip}
                       label={field.options?.find(option => option.value === value)?.label ?? value}
@@ -215,7 +219,13 @@ function ReportFilterSelector({ game, plays, filters, onChange }: ReportFilterSe
           })}
         </Select>
       </FormControl>
-      <Button disabled={!hasFilters(filters)} color="secondary" onClick={() => onChange(emptyFilters)}>
+      <Button
+        disabled={!isFiltering}
+        color="secondary"
+        variant={isFiltering ? 'contained' : 'outlined'}
+        onClick={() => onChange(emptyFilters)}
+        className={classes.clearButton}
+      >
         Clear filters
       </Button>
     </div>
