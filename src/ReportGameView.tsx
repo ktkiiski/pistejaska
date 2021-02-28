@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import {
   makeStyles,
@@ -22,6 +22,8 @@ import { stringifyScore } from "./common/stringUtils";
 import { Link } from "react-router-dom";
 import { useGames } from "./common/hooks/useGames";
 import ReportDimensionReportTable from "./ReportDimensionReportTable";
+import ReportFilterSelector from "./ReportFilterSelector";
+import { applyPlayFilters, ReportFilters } from "./domain/filters";
 
 function isRelevantReportField(
   field: GameMiscFieldDefinition
@@ -33,7 +35,11 @@ export const ReportGameView = (props: RouteComponentProps<any>) => {
   const games = useGames();
   const gameId = props.match.params["gameId"];
 
-  const [plays, loading, error] = usePlays();
+  const [allPlays, loading, error] = usePlays();
+  const [filters, setFilters] = useState<ReportFilters>({
+    expansions: [],
+    playerCount: null,
+  });
 
   if (error) {
     return (
@@ -46,7 +52,8 @@ export const ReportGameView = (props: RouteComponentProps<any>) => {
     return <>Loading...</>;
   }
 
-  const gamePlays = plays.filter((p) => p.gameId === gameId);
+  const unfilteredGamePlays = allPlays.filter((p) => p.gameId === gameId);
+  const gamePlays = applyPlayFilters(unfilteredGamePlays, filters);
 
   const game = games?.find((g) => g.id === gameId);
 
@@ -59,7 +66,13 @@ export const ReportGameView = (props: RouteComponentProps<any>) => {
   return (
     <div>
       <h2>Reports: {game.name}</h2>
-      <p>Based on {gamePlays.length} plays.</p>
+      <ReportFilterSelector
+        plays={unfilteredGamePlays}
+        filters={filters}
+        onChange={setFilters}
+        expansions={game.expansions}
+      />
+      <p>Based on {gamePlays.length < unfilteredGamePlays.length ? `${gamePlays.length} / ${unfilteredGamePlays.length}` : gamePlays.length} plays.</p>
       <HighScoresReportTable game={game} plays={gamePlays} />
 
       <GameScoreFieldReport game={game} plays={gamePlays} />
