@@ -18,11 +18,12 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-start',
+    flexWrap: 'wrap',
     textAlign: 'left',
   },
   formControl: {
     margin: theme.spacing(4),
-    minWidth: 200,
+    minWidth: 160,
     maxWidth: 300,
   },
   selection: {
