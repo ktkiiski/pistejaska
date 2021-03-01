@@ -18,7 +18,6 @@ const SelectPlayers = (props: {
   const games = useGames();
   const { gameId, initialPlayers = [] } = props;
   const game = games?.find((g) => g.id === gameId);
-  if (game === undefined) throw new Error("unknown game");
 
   const [allPlayers] = usePlayers();
 
@@ -67,6 +66,13 @@ const SelectPlayers = (props: {
     setSearchTerm(searchTerm);
     setShowAllPlayers(false);
   };
+
+  if (!games) {
+    return (<div>Loading…</div>);
+  }
+  if (!game) {
+    return (<div>Unknown game!</div>);
+  }
 
   const selectPlayers = (
     <div>
