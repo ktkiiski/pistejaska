@@ -5,15 +5,16 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import { RouteComponentProps } from "react-router";
 import { TextField } from "@material-ui/core";
-import { games } from "./domain/games";
 import { GameDefinition } from "./domain/game";
+import { useGames } from "./common/hooks/useGames";
 
 export const SelectGame = (props: RouteComponentProps<{}>) => {
+  const games = useGames();
   const onSelectGame = (game: GameDefinition) =>
     props.history.push("/new/" + game.id);
 
   const [searchTerm, setSearchTerm] = useState("");
-  const listedGames = games.map((game) => ({
+  const listedGames = (games || []).map((game) => ({
     ...game,
     lowercaseName: game.name.toLowerCase(),
   }));

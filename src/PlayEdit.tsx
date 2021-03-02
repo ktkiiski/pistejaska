@@ -1,13 +1,13 @@
 import { RouteComponentProps } from "react-router";
 import React from "react";
-import * as firebase from "firebase/app";
-import "firebase/firestore";
+import { firestore } from './common/firebase';
 import { Play } from "./domain/play";
 import { PlayForm } from "./PlayForm";
-import { games } from "./domain/games";
+import { useGames } from "./common/hooks/useGames";
 import { usePlay } from "./common/hooks/usePlay";
 
 export const PlayEdit = (props: RouteComponentProps<any>) => {
+  const games = useGames();
   const playId = props.match.params["playId"];
   const [play, loading] = usePlay(playId);
 
@@ -16,7 +16,7 @@ export const PlayEdit = (props: RouteComponentProps<any>) => {
   if (!play) {
     return <>Play not found!</>;
   }
-  const game = games.find((g) => g.id === play.gameId);
+  const game = games?.find((g) => g.id === play.gameId);
   if (!game) return <>Game not found!</>;
 
   const onSave = async (play: Play) => {
@@ -37,7 +37,7 @@ export const PlayEdit = (props: RouteComponentProps<any>) => {
         play.setDurationInHours(duration);
       }
     }
-    const db = firebase.firestore();
+    const db = firestore();
     await db.collection("plays-v1").doc(play.id).set(play.toDTO());
     props.history.push("/view/" + playId);
   };

@@ -69,12 +69,7 @@ export interface PlayRanking {
 }
 
 // describes class that can be persisted
-export abstract class Entity {
-  public toDTO() {
-    return JSON.parse(JSON.stringify(this));
-  }
-}
-export class Play extends Entity implements PlayDTO {
+export class Play implements PlayDTO {
   misc: MiscDataDTO[];
   id: string;
   gameId: string;
@@ -86,7 +81,6 @@ export class Play extends Entity implements PlayDTO {
   rankings: PlayRanking[];
 
   constructor(play: PlayDTO) {
-    super();
     this.id = play.id;
     this.gameId = play.gameId;
     this.expansions = play.expansions || [];
@@ -103,6 +97,10 @@ export class Play extends Entity implements PlayDTO {
         tieBreaker: this.getTieBreaker(player.id),
       }))
     );
+  }
+
+  public toDTO(): PlayDTO {
+    return JSON.parse(JSON.stringify(this));
   }
 
   public getRanking(playerId: string): PlayRanking | undefined {
@@ -166,6 +164,14 @@ export class Play extends Entity implements PlayDTO {
       return Number.isFinite(numberValue) ? (numberValue as T) : null;
     }
     return String(value) as T;
+  }
+
+  public hasMiscFieldValue(fieldId: string, fieldValue: string | number): boolean {
+    return this.misc.some(
+      // NOTE: Compare with "==" in case numbers are stringified
+      // eslint-disable-next-line eqeqeq
+      (m) => m.fieldId === fieldId && m.data == fieldValue,
+    );
   }
 
   /**

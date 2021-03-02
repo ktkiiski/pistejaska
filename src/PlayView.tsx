@@ -12,15 +12,16 @@ import {
   makeStyles,
   Paper,
 } from "@material-ui/core";
-import { games } from "./domain/games";
+import { useGames } from "./common/hooks/useGames";
 import { GameMiscFieldDefinition, Game } from "./domain/game";
 import { usePlays } from "./common/hooks/usePlays";
-import firebase from "firebase";
+import { firestore } from './common/firebase';
 import { sortBy } from "lodash";
 import ButtonRow from "./ButtonRow";
 import { Link } from "react-router-dom";
 
 export const PlayView = (props: RouteComponentProps<any>) => {
+  const games = useGames();
   const playId = props.match.params["playId"];
 
   const [plays, loading, error] = usePlays();
@@ -34,7 +35,7 @@ export const PlayView = (props: RouteComponentProps<any>) => {
   if (!play) {
     return <>Play not found!</>;
   }
-  const game = games.find((g) => g.id === play.gameId);
+  const game = games?.find((g) => g.id === play.gameId);
   if (!game) return <>Game not found!</>;
 
   const onEditPlay = () => props.history.push("/edit/" + play.id);
@@ -46,7 +47,7 @@ export const PlayView = (props: RouteComponentProps<any>) => {
       `Do you really want to delete play ${play.getName()}?`
     );
     if (!reallyDelete) return;
-    const db = firebase.firestore();
+    const db = firestore();
     await db.collection("plays-v1").doc(playId).delete();
 
     props.history.push("/");
@@ -100,7 +101,7 @@ export const PlayView = (props: RouteComponentProps<any>) => {
         </Button>
         <Button
           variant="contained"
-          onClick={() => props.history.push(`/reports/game/${game.id}`)}
+          onClick={() => props.history.push(`/games/${game.id}`)}
         >
           Show reports
         </Button>
@@ -167,7 +168,7 @@ const PlayTable = (
                 >
                   {`${play.getPosition(p.id)}. `}
                   <Link
-                    to={"/reports/player/" + p.id}
+                    to={"/players/" + p.id}
                   >
                     {`${p.name}`}
                   </Link>

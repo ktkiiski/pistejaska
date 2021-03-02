@@ -1,5 +1,229 @@
 import { getTodayAsString } from "../common/dateUtils";
 import { MiscDataDTO } from "./play";
+import { JSONSchema7 } from 'json-schema';
+
+const fieldIdSchema: JSONSchema7 = {
+  title: "Field ID",
+  description: "Must be unique among all fields of the game",
+  type: "string",
+  minLength: 1,
+};
+const fieldNameSchema: JSONSchema7 = {
+  title: "Field display name",
+  type: "string",
+  minLength: 1,
+};
+const fieldDescriptionSchema: JSONSchema7 = {
+  title: "Field description",
+  description: "Please describe e.g. how to calculate this score",
+  type: "string",
+};
+const commonMiscFieldProperties = {
+  group: {
+    title: "Group name",
+    description: "Show this field together with other fields in the same group",
+    type: "string",
+    minLength: 1,
+  },
+  valuePerPlayer: {
+    title: "Value for each player?",
+    type: "boolean",
+  },
+  affectsScoring: {
+    title: "Affects scoring reports?",
+    type: "boolean",
+  },
+  isRelevantReportDimension: {
+    title: "Is relevant report dimension?",
+    type: "boolean",
+  },
+};
+
+const numberFieldSchema: JSONSchema7 = {
+  type: "object",
+  properties: {
+    id: fieldIdSchema,
+    name: fieldNameSchema,
+    description: fieldDescriptionSchema,
+    type: {
+      title: "Field data type",
+      type: "string",
+      enum: [
+        "number",
+      ],
+    },
+    options: {
+      title: "Valid value options",
+      type: "array",
+      minItems: 1,
+      items: {
+        type: "object",
+        properties: {
+          value: {
+            title: "Value",
+            type: "number",
+          },
+          label: {
+            title: "Display name",
+            type: "string",
+            minLength: 1,
+          },
+        },
+        required: [
+          "value",
+          "label",
+        ],
+      },
+    },
+    minValue: {
+      title: "Minimun value",
+      description: "Only values equal or greater than this are allowed",
+      type: "number",
+    },
+    maxValue: {
+      title: "Maximum value",
+      description: "Only values equal or less than this are allowed. Use 0 for negative values.",
+      type: "number",
+    },
+    step: {
+      title: "Value step",
+      description: "Value should be divisible by this number",
+      type: "number",
+    },
+  },
+  required: [
+    "id",
+    "name",
+    "type",
+  ]
+};
+
+const textFieldSchema: JSONSchema7 = {
+  type: "object",
+  properties: {
+    id: fieldIdSchema,
+    name: fieldNameSchema,
+    description: fieldDescriptionSchema,
+    type: {
+      title: "Field data type",
+      type: "string",
+      enum: [
+        "text",
+      ],
+    },
+    options: {
+      title: "Valid value options",
+      type: "array",
+      minItems: 1,
+      items: {
+        type: "object",
+        properties: {
+          value: {
+            title: "Value",
+            type: "string",
+          },
+          label: {
+            title: "Display name",
+            type: "string",
+            minLength: 1,
+          },
+        },
+        required: [
+          "value",
+          "label",
+        ],
+      },
+    },
+  },
+  required: [
+    "id",
+    "name",
+    "type",
+  ]
+};
+
+const booleanFieldSchema: JSONSchema7 = {
+  type: "object",
+  properties: {
+    id: fieldIdSchema,
+    name: fieldNameSchema,
+    description: fieldDescriptionSchema,
+    type: {
+      title: "Field data type",
+      type: "string",
+      enum: [
+        "boolean",
+      ],
+    },
+  },
+  required: [
+    "id",
+    "name",
+    "type",
+  ]
+};
+
+const miscFieldSchema: JSONSchema7 = {
+  anyOf: [{
+    title: "Number field",
+    ...numberFieldSchema,
+  }, {
+    title: "Text field",
+    ...textFieldSchema,
+  }, {
+    title: "Boolean field",
+    ...booleanFieldSchema,
+  }].map((fieldSchema) => ({
+    ...fieldSchema,
+    properties: {
+      ...fieldSchema.properties,
+      ...commonMiscFieldProperties,
+    },
+  } as JSONSchema7)),
+}
+
+export const schema: JSONSchema7 = {
+  type: "object",
+  properties: {
+    id: {
+      title: "Unique ID",
+      description: "Must be unique to the game",
+      type: "string",
+      minLength: 1,
+    },
+    name: {
+      title: "Display name",
+      type: "string",
+      minLength: 1,
+    },
+    icon: {
+      title: "Icon image URL",
+      type: "string",
+      format: "uri",
+    },
+    simultaneousTurns: {
+      title: "Simultaneous turns (no starting player order)",
+      type: "boolean",
+    },
+    scoreFields: {
+      title: "Score fields",
+      type: "array",
+      items: numberFieldSchema,
+    },
+    miscFields: {
+      title: "Other fields",
+      type: "array",
+      items: miscFieldSchema,
+    }
+  },
+  required: [
+    "id",
+    "name",
+    "icon",
+    "simultaneousTurns",
+    "scoreFields",
+  ]
+};
 
 export const durationField: GameMiscFieldDefinition<number> = {
   id: "duration",
@@ -115,6 +339,15 @@ export class Game implements GameDefinition {
   public hasExpansions(): boolean {
     return !!this.expansions && this.expansions.length > 0;
   }
+
+  public toDTO(): GameDefinition {
+    const { id, name, scoreFields, simultaneousTurns, icon, expansions, miscFields } = this;
+    return { id, name, scoreFields, simultaneousTurns, icon, expansions, miscFields };
+  }
+
+  public getRelevantReportFields(): GameMiscFieldDefinition<string>[] {
+    return this.miscFields?.filter(isRelevantReportField) ?? [];
+  }
 }
 export type GameDefinition = {
   name: string;
@@ -177,3 +410,10 @@ export type GameExpansionDefinition = {
   scoreFields?: GameScoreFieldDefinition[];
   miscFields?: GameMiscFieldDefinition[];
 };
+
+
+function isRelevantReportField(
+  field: GameMiscFieldDefinition
+): field is GameMiscFieldDefinition<string> {
+  return (field.isRelevantReportDimension ?? false) && field.type !== "number";
+}

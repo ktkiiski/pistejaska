@@ -18,6 +18,9 @@ function countWinsForPlayerId(playerId: string, plays: Play[]) {
 }
 
 export const calculateEloForPlayers = (plays: Play[], minPlays: number) => {
+  // NOTE: `rate` will crash if a play does not have at least two players.
+  // Ignore single-player games
+  plays = plays.filter(play => play.players.length >= 2);
   const allPlayers = map(
     groupBy(
       plays.flatMap((v) => v.players),

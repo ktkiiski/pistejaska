@@ -11,8 +11,7 @@ import {
 import React, { useMemo, useState } from "react";
 import { useHistory } from "react-router-dom";
 import AccountCircle from "@material-ui/icons/AccountCircle";
-import * as firebase from "firebase/app";
-import "firebase/auth";
+import firebase from "./common/firebase";
 
 const logout = () => {
   firebase.auth().signOut();
@@ -113,8 +112,8 @@ export function NavBar() {
           <Button color="inherit" onClick={() => history.push("/new")}>
             New
           </Button>
-          <Button color="inherit" onClick={() => history.push("/reports")}>
-            Reports
+          <Button color="inherit" onClick={() => history.push("/games")}>
+            Games
           </Button>
           <div>
             {menuIcon}
