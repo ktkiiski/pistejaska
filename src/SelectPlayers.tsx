@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Player } from "./domain/play";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
@@ -26,6 +26,7 @@ const SelectPlayers = (props: {
   const [isStarted, setIsStarted] = useState<boolean>(false);
   const [showAllPlayers, setShowAllPlayers] = useState<boolean>(false);
   const [currentPlayer, setCurrentPlayer] = useState<string>("");
+  const [randomizeCounter, setRandomizeCounter] = useState(0);
 
   const selectablePlayers = allPlayers
     .filter(
@@ -56,16 +57,24 @@ const SelectPlayers = (props: {
     setPlayers(players.filter((p) => p.id !== player.id));
   };
 
-  const onRandomizeStartingPlayer = () => {
-    const offset = Math.floor(Math.random() * players.length);
-    const newPlayers = [...players.slice(offset), ...players.slice(0, offset)];
-    setPlayers(newPlayers);
-  };
-
   const onSearch = (searchTerm: string) => {
     setSearchTerm(searchTerm);
     setShowAllPlayers(false);
   };
+
+  useEffect(() => {
+    if (randomizeCounter <= 0) {
+      return undefined;
+    }
+    const timeout = requestAnimationFrame(() => {
+      setRandomizeCounter(randomizeCounter - 1);
+      setPlayers((oldPlayers) => {
+        const offset = 1;
+        return [...oldPlayers.slice(offset), ...oldPlayers.slice(0, offset)];
+      });
+    });
+    return () => cancelAnimationFrame(timeout);
+  }, [randomizeCounter])
 
   if (!games) {
     return (<div>Loading…</div>);
@@ -176,8 +185,11 @@ const SelectPlayers = (props: {
         {game.simultaneousTurns ? null : (
           <Button
             color="default"
-            onClick={onRandomizeStartingPlayer}
-            disabled={players.length < 2}
+            onClick={() => {
+              const randomShift = Math.floor(Math.random() * players.length);
+              setRandomizeCounter(30 + randomShift);
+            }}
+            disabled={players.length < 2 || randomizeCounter > 0}
             variant="outlined"
           >
             Random starting player
@@ -186,7 +198,7 @@ const SelectPlayers = (props: {
         <Button
           color="primary"
           onClick={onStartGame}
-          disabled={players.length === 0}
+          disabled={players.length === 0 || randomizeCounter > 0}
           variant="contained"
         >
           Start

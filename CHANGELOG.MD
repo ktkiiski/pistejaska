@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Show game trends as a chart on "Plays" and player report view
+- Show "animation" while randomizing starting player for a new play
 
 ## 2021-03-02
 
