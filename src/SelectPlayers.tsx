@@ -11,6 +11,16 @@ import { usePlayers } from "./common/hooks/usePlayers";
 import ButtonRow from "./ButtonRow";
 import { useGames } from "./common/hooks/useGames";
 
+function shiftRandomly<T>(values: T[]) {
+  const offset = Math.floor(Math.random() * values.length);
+  return shiftValues(values, offset)
+}
+
+function shiftValues<T>(values: T[], offset: number) {
+  const shift = offset % values.length;
+  return [...values.slice(shift), ...values.slice(0, shift)]
+}
+
 const SelectPlayers = (props: {
   gameId: string;
   initialPlayers?: Player[];
@@ -26,7 +36,7 @@ const SelectPlayers = (props: {
   const [isStarted, setIsStarted] = useState<boolean>(false);
   const [showAllPlayers, setShowAllPlayers] = useState<boolean>(false);
   const [currentPlayer, setCurrentPlayer] = useState<string>("");
-  const [randomizeCounter, setRandomizeCounter] = useState(0);
+  const [isRandomizing, setIsRandomizing] = useState(false);
 
   const selectablePlayers = allPlayers
     .filter(
@@ -63,18 +73,20 @@ const SelectPlayers = (props: {
   };
 
   useEffect(() => {
-    if (randomizeCounter <= 0) {
+    if (!isRandomizing) {
       return undefined;
     }
-    const timeout = requestAnimationFrame(() => {
-      setRandomizeCounter(randomizeCounter - 1);
-      setPlayers((oldPlayers) => {
-        const offset = 1;
-        return [...oldPlayers.slice(offset), ...oldPlayers.slice(0, offset)];
-      });
-    });
-    return () => cancelAnimationFrame(timeout);
-  }, [randomizeCounter])
+    let animation = requestAnimationFrame(animate);
+    function animate() {
+      setPlayers((oldPlayers) => shiftValues(oldPlayers, 1));
+      animation = requestAnimationFrame(animate);
+    }
+    const timeout = setTimeout(() => setIsRandomizing(false), 1000);
+    return () => {
+      cancelAnimationFrame(animation);
+      clearTimeout(timeout);
+    };
+  }, [isRandomizing])
 
   if (!games) {
     return (<div>Loading…</div>);
@@ -168,7 +180,10 @@ const SelectPlayers = (props: {
               </svg>
             </ListItemIcon>
             <ListItemText primary={player.name} />
-            <ListItemIcon onClick={() => onDeSelectPlayer(player)}>
+            <ListItemIcon
+              onClick={() => onDeSelectPlayer(player)}
+              style={{ visibility: isRandomizing ? 'hidden' : 'visible' }}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -186,10 +201,10 @@ const SelectPlayers = (props: {
           <Button
             color="default"
             onClick={() => {
-              const randomShift = Math.floor(Math.random() * players.length);
-              setRandomizeCounter(30 + randomShift);
+              setPlayers(shiftRandomly(players));
+              setIsRandomizing(true);
             }}
-            disabled={players.length < 2 || randomizeCounter > 0}
+            disabled={players.length < 2 || isRandomizing}
             variant="outlined"
           >
             Random starting player
@@ -198,7 +213,7 @@ const SelectPlayers = (props: {
         <Button
           color="primary"
           onClick={onStartGame}
-          disabled={players.length === 0 || randomizeCounter > 0}
+          disabled={players.length === 0 || isRandomizing}
           variant="contained"
         >
           Start
