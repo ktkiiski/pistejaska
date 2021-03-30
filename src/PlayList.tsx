@@ -7,6 +7,7 @@ import { RouteComponentProps } from "react-router";
 import { orderBy } from "lodash";
 import { usePlays } from "./common/hooks/usePlays";
 import { useGames } from "./common/hooks/useGames";
+import GamePopularityChart from "./GameTrendChart";
 
 export const PlayList = (props: RouteComponentProps<{}>) => {
   const games = useGames();
@@ -38,6 +39,7 @@ export const PlayList = (props: RouteComponentProps<{}>) => {
   return (
     <div>
       <h2>Plays</h2>
+      <GamePopularityChart plays={plays} />
       <List component="nav">
         {currentData.map((play) => {
           const game = games?.find((g) => g.id === play.gameId);
