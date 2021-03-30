@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## 2021-03-30
+
 ### Added
 
 - Show game trends as a chart on "Plays" and player report view
