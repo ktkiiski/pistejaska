@@ -48,7 +48,6 @@ const ReportTable = ({ rows, columns }: ReportTableProps) => {
     return <>No plays</>;
   }
 
-  // TODO PANU: allow sorting table by columns
   return (
     <div className={classes.root}>
       <ReactTooltip />

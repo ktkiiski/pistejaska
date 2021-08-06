@@ -3,6 +3,7 @@ import {
   nameField,
   locationField,
   dateField,
+  imageField,
 } from "./game";
 import { rankScores } from "../common/rankings";
 import { round } from "lodash";
@@ -29,7 +30,7 @@ export type PlayDTO = {
 
 export type MiscDataDTO = {
   fieldId: string;
-  data: string | number;
+  data: string | number | string[];
   playerId?: string | undefined;
 };
 
@@ -68,6 +69,12 @@ export interface PlayRanking {
   normalizedPosition: number | null;
 }
 
+export type UnsavedImage = {
+  file: File;
+  filename: string;
+  imageAsBase64: string;
+};
+
 // describes class that can be persisted
 export class Play implements PlayDTO {
   misc: MiscDataDTO[];
@@ -79,8 +86,10 @@ export class Play implements PlayDTO {
   created: string;
   date?: string | null;
   rankings: PlayRanking[];
+  unsavedImages: UnsavedImage[];
 
-  constructor(play: PlayDTO) {
+  constructor(play: PlayDTO, unsavedImages?: UnsavedImage[]) {
+    // persisted values
     this.id = play.id;
     this.gameId = play.gameId;
     this.expansions = play.expansions || [];
@@ -88,6 +97,9 @@ export class Play implements PlayDTO {
     this.players = play.players || [];
     this.misc = play.misc || [];
     this.created = play.created || new Date().toISOString();
+
+    // temporary values
+    this.unsavedImages = unsavedImages || [];
     this.date = this.getMiscFieldValue(dateField);
     // Calculate normalized positions for each player
     this.rankings = rankScores(
@@ -100,7 +112,33 @@ export class Play implements PlayDTO {
   }
 
   public toDTO(): PlayDTO {
-    return JSON.parse(JSON.stringify(this));
+    return {
+      id: this.id,
+      gameId: this.gameId,
+      expansions: this.expansions,
+      scores: this.scores,
+      players: this.players,
+      misc: this.misc,
+      created: this.created,
+    };
+  }
+
+  public getImageUrl(filename: string) {
+    return `https://firebasestorage.googleapis.com/v0/b/pistejaska-dev.appspot.com/o/play-images%2F${filename}?alt=media`;
+  }
+
+  public getImageUrls(): string[] {
+    return this.getImages().map((x) => this.getImageUrl(x));
+  }
+
+  public getImages(): string[] {
+    return this.getMiscFieldValue(imageField) || [];
+  }
+
+  public getExistingImages(): string[] {
+    return this.getImages().filter(
+      (x) => this.unsavedImages.find((y) => y.filename === x) === undefined
+    );
   }
 
   public getRanking(playerId: string): PlayRanking | undefined {
@@ -134,7 +172,10 @@ export class Play implements PlayDTO {
 
   public getDate(): Date {
     const dateField = this.misc.find((m) => m.fieldId === "date");
-    return (dateField && new Date(dateField.data)) || new Date("1900/01/01");
+    return (
+      (dateField && new Date(dateField.data as string)) ||
+      new Date("1900/01/01")
+    );
   }
 
   public getCreationDate(): Date {
@@ -148,7 +189,7 @@ export class Play implements PlayDTO {
     return `${this.getDate().toLocaleDateString()} ${name}`;
   }
 
-  public getMiscFieldValue<T extends string | number>(
+  public getMiscFieldValue<T extends string | number | string[]>(
     field: GameMiscFieldDefinition<T>,
     playerId?: string
   ): T | null | undefined {
@@ -162,6 +203,9 @@ export class Play implements PlayDTO {
     if (field.type === "number" && typeof value === "string") {
       const numberValue = parseFloat(value);
       return Number.isFinite(numberValue) ? (numberValue as T) : null;
+    }
+    if (field.type === "images") {
+      return (value as T) ?? ([] as any);
     }
     return String(value) as T;
   }

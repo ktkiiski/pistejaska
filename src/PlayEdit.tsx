@@ -5,6 +5,7 @@ import { Play } from "./domain/play";
 import { PlayForm } from "./PlayForm";
 import { useGames } from "./common/hooks/useGames";
 import { usePlay } from "./common/hooks/usePlay";
+import firebase from "firebase";
 
 export const PlayEdit = (props: RouteComponentProps<any>) => {
   const games = useGames();
@@ -37,8 +38,19 @@ export const PlayEdit = (props: RouteComponentProps<any>) => {
         play.setDurationInHours(duration);
       }
     }
-    const db = firestore();
-    await db.collection("plays-v1").doc(play.id).set(play.toDTO());
+
+    var storageRef = firebase.storage().ref("play-images");
+
+    await Promise.all(
+      play.unsavedImages.map(async (file) => {
+        var ref = storageRef.child(file.filename);
+
+        await ref.put(file.file);
+      })
+    );
+
+    await firestore().collection("plays-v1").doc(play.id).set(play.toDTO());
+
     props.history.push("/view/" + playId);
   };
   return <PlayForm game={game} play={play} onSave={(play) => onSave(play)} />;

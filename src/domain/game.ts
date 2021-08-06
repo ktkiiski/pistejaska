@@ -228,6 +228,12 @@ export const dateField: GameMiscFieldDefinition<string> = {
   getDefaultValue: () => getTodayAsString(),
   group: "Metadata",
 };
+export const imageField: GameMiscFieldDefinition<string[]> = {
+  id: "images",
+  name: "Images",
+  type: "images",
+  group: "Metadata",
+};
 
 export class Game implements GameDefinition {
   name: string;
@@ -258,7 +264,7 @@ export class Game implements GameDefinition {
     });
   }
   private static getDefaultMiscFields(): GameMiscFieldDefinition[] {
-    return [durationField, locationField, nameField, dateField];
+    return [durationField, locationField, nameField, dateField, imageField];
   }
 
   private static getDefaultScoreFields(): GameScoreFieldDefinition[] {
@@ -370,7 +376,9 @@ export interface GameFieldOption<T> {
 }
 
 export interface GameFieldDefinition<T> {
-  type: T extends number ? "number" | "duration" : "date" | "text" | "boolean";
+  type: T extends number
+    ? "number" | "duration"
+    : "date" | "text" | "boolean" | "images";
   // please use human-readable, slugified ids, like "terraforming-rating". Do not change once created!
   id: string;
   // A human-readable, short name for this field
@@ -389,7 +397,7 @@ export interface GameFieldDefinition<T> {
 
 export type GameScoreFieldDefinition = GameFieldDefinition<number>;
 
-export interface GameMiscFieldDefinition<T = string | number>
+export interface GameMiscFieldDefinition<T = string | number | string[]>
   extends GameFieldDefinition<T> {
   valuePerPlayer?: boolean; // defaults to false
   getDefaultValue?: () => string;

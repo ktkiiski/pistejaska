@@ -1,5 +1,5 @@
 import { RouteComponentProps } from "react-router";
-import React from "react";
+import React, { useState } from "react";
 import { Play, MiscDataDTO } from "./domain/play";
 import {
   Button,
@@ -25,6 +25,8 @@ export const PlayView = (props: RouteComponentProps<any>) => {
   const playId = props.match.params["playId"];
 
   const [plays, loading, error] = usePlays();
+
+  const [isFullscreenImage, setIsFullScreenImage] = useState("");
 
   if (error) return <>Error: {error}</>;
 
@@ -67,6 +69,62 @@ export const PlayView = (props: RouteComponentProps<any>) => {
     return field.field.name;
   };
 
+  const minimizedStyle = { maxWidth: "100vw", maxHeight: "50vh" };
+  const maximizedStyle = {
+    maxWidth: "100%",
+
+    maxHeight: "100%",
+    bottom: "0",
+    left: "0",
+    margin: "auto",
+    overflow: "auto",
+    position: "fixed",
+    right: "0",
+    top: "0",
+    objectFit: "contain",
+    zIndex: 900,
+    opacity: "100%",
+  };
+  const fadeBackground = {
+    position: "absolute" as "absolute",
+    width: "100%",
+    height: "100%",
+    left: "0",
+    top: "0",
+    opacity: "70%",
+    backgroundColor: "black",
+    zIndex: 100,
+  };
+
+  const images = play.getImageUrls();
+  const renderImages =
+    images.length > 0 ? (
+      <>
+        <h3>Images</h3>
+        {images.map((src, idx) => (
+          <div
+            key={src}
+            onClick={() =>
+              isFullscreenImage
+                ? setIsFullScreenImage("")
+                : setIsFullScreenImage(src)
+            }
+          >
+            {isFullscreenImage ? <div style={fadeBackground}></div> : <></>}
+            <img
+              src={src}
+              style={
+                isFullscreenImage === src ? maximizedStyle : minimizedStyle
+              }
+              alt={src}
+            />
+          </div>
+        ))}
+      </>
+    ) : (
+      <></>
+    );
+
   return (
     <div style={{ paddingBottom: "1em" }}>
       <h2>Play: {game.name}</h2>
@@ -80,11 +138,13 @@ export const PlayView = (props: RouteComponentProps<any>) => {
             .join(", ") || "None"}
         </div>
       )}
-      {play.misc.map((misc, idx) => (
-        <div key={idx}>
-          {getFieldName(misc)}: {misc.data}
-        </div>
-      ))}
+      {play.misc
+        .filter((x) => x.fieldId !== "images")
+        .map((misc, idx) => (
+          <div key={idx}>
+            {getFieldName(misc)}: {misc.data}
+          </div>
+        ))}
       <PlayTable game={game} play={play} {...props} />
       <ButtonRow>
         <Button variant="contained" color="default" onClick={onBack}>
@@ -106,6 +166,7 @@ export const PlayView = (props: RouteComponentProps<any>) => {
           Show reports
         </Button>
       </ButtonRow>
+      {renderImages}
     </div>
   );
 };
