@@ -11,7 +11,7 @@ import {
 import React, { useMemo, useState } from "react";
 import { useHistory } from "react-router-dom";
 import AccountCircle from "@material-ui/icons/AccountCircle";
-import firebase from "./common/firebase";
+import firebase from "firebase";
 
 const logout = () => {
   firebase.auth().signOut();

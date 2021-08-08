@@ -19,7 +19,7 @@ import SelectPlayersFromPlay from "./SelectPlayersFromPlay";
 import { ReportPlayerView } from "./ReportPlayerView";
 import { ReportPlayerList } from "./ReportPlayerList";
 import Admin from "./Admin";
-import firebase from './common/firebase';
+import firebase from "firebase";
 
 const center = {
   position: "absolute" as any,
