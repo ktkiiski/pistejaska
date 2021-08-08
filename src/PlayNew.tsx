@@ -3,7 +3,7 @@ import { Player, Play } from "./domain/play";
 import { v4 as uuid } from "uuid";
 import { Redirect } from "react-router";
 import { GameDefinition, Game } from "./domain/game";
-import { firestore } from './common/firebase';
+import { firestore } from "./common/firebase";
 
 export const PlayNew = (props: { game: GameDefinition; players: Player[] }) => {
   const { game, players } = props;

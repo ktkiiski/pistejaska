@@ -1,5 +1,5 @@
 import { useCollection } from "react-firebase-hooks/firestore";
-import { firestore } from '../firebase';
+import { firestore } from "../firebase";
 import { Play, PlayDTO } from "../../domain/play";
 import { useMemo } from "react";
 

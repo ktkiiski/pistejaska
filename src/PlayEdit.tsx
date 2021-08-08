@@ -1,6 +1,6 @@
 import { RouteComponentProps } from "react-router";
 import React from "react";
-import { firestore } from './common/firebase';
+import { firestore } from "./common/firebase";
 import { Play } from "./domain/play";
 import { PlayForm } from "./PlayForm";
 import { useGames } from "./common/hooks/useGames";

@@ -15,7 +15,7 @@ import {
 import { useGames } from "./common/hooks/useGames";
 import { GameMiscFieldDefinition, Game } from "./domain/game";
 import { usePlays } from "./common/hooks/usePlays";
-import { firestore } from './common/firebase';
+import { firestore } from "./common/firebase";
 import { sortBy } from "lodash";
 import ButtonRow from "./ButtonRow";
 import { Link } from "react-router-dom";
@@ -167,11 +167,7 @@ const PlayTable = (
                   }}
                 >
                   {`${play.getPosition(p.id)}. `}
-                  <Link
-                    to={"/players/" + p.id}
-                  >
-                    {`${p.name}`}
-                  </Link>
+                  <Link to={"/players/" + p.id}>{`${p.name}`}</Link>
                 </TableCell>
               ))}
             </TableRow>

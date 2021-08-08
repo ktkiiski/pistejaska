@@ -2,16 +2,16 @@ import React, { useState } from "react";
 import { GameDefinition } from "./domain/game";
 import { FormControl, makeStyles, MenuItem, Select } from "@material-ui/core";
 import { useCollectionData } from "react-firebase-hooks/firestore";
-import { firestore } from './common/firebase';
+import { firestore } from "./common/firebase";
 import AdminGameEditor from "./AdminGameEditor";
 
 const useStyles = makeStyles((theme) => ({
   edit: {
-    textAlign: 'left',
+    textAlign: "left",
     padding: theme.spacing(4),
   },
   gameSelect: {
-    width: '100%',
+    width: "100%",
   },
 }));
 
@@ -26,17 +26,19 @@ const defaultGameJson: GameDefinition = {
 function Admin() {
   const [gameId, setGameId] = useState<string | null>(null);
   const [games] = useCollectionData<GameDefinition>(
-    firestore().collection("games").orderBy('name')
+    firestore().collection("games").orderBy("name")
   );
   const styles = useStyles();
-  const initialGameJson = !games ? null : (games.find(game => game.id === gameId) || defaultGameJson);
+  const initialGameJson = !games
+    ? null
+    : games.find((game) => game.id === gameId) || defaultGameJson;
   return (
     <div className={styles.edit}>
       <h2>Admin</h2>
       <FormControl className={styles.gameSelect}>
         <Select
           labelId="admin-game-select"
-          value={gameId || ''}
+          value={gameId || ""}
           displayEmpty
           onChange={(event) => {
             setGameId(event.target.value as string);
@@ -50,31 +52,44 @@ function Admin() {
           <MenuItem value="">(New game)</MenuItem>
         </Select>
       </FormControl>
-      <h3>{gameId ? `Edit: ${initialGameJson?.name ?? gameId}` : 'Create new game'}</h3>
+      <h3>
+        {gameId
+          ? `Edit: ${initialGameJson?.name ?? gameId}`
+          : "Create new game"}
+      </h3>
       {!initialGameJson ? null : (
         <AdminGameEditor
           json={initialGameJson}
           onSubmit={async (json) => {
             const { id } = json;
             if (!id) {
-              throw new Error('Missing game ID');
+              throw new Error("Missing game ID");
             }
             await firestore().collection("games").doc(id).set(json);
             setGameId(id);
           }}
-          onDelete={!gameId ? null : async () => {
-            // eslint-disable-next-line no-restricted-globals
-            if (!confirm(`Are you sure you want to permanently delete the game "${initialGameJson.name ?? gameId}"?`)) {
-              return;
-            }
-            await firestore().collection("games").doc(gameId).delete();
-            setGameId(null);
-          }}
-          submitButtonLabel={gameId ? 'Update game' : 'Create game'}
+          onDelete={
+            !gameId
+              ? null
+              : async () => {
+                  if (
+                    !window.confirm(
+                      `Are you sure you want to permanently delete the game "${
+                        initialGameJson.name ?? gameId
+                      }"?`
+                    )
+                  ) {
+                    return;
+                  }
+                  await firestore().collection("games").doc(gameId).delete();
+                  setGameId(null);
+                }
+          }
+          submitButtonLabel={gameId ? "Update game" : "Create game"}
         />
       )}
     </div>
   );
-};
+}
 
 export default Admin;
