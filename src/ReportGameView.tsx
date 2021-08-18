@@ -23,7 +23,12 @@ import { Link } from "react-router-dom";
 import { useGames } from "./common/hooks/useGames";
 import ReportDimensionReportTable from "./ReportDimensionReportTable";
 import ReportFilterSelector from "./ReportFilterSelector";
-import { applyPlayFilters, emptyFilters, hasFilters, ReportFilters } from "./domain/filters";
+import {
+  applyPlayFilters,
+  emptyFilters,
+  hasFilters,
+  ReportFilters,
+} from "./domain/filters";
 
 export const ReportGameView = (props: RouteComponentProps<any>) => {
   const games = useGames();
@@ -63,7 +68,13 @@ export const ReportGameView = (props: RouteComponentProps<any>) => {
         filters={filters}
         onChange={setFilters}
       />
-      <p>Based on {hasFilters(filters) ? `${gamePlays.length} / ${unfilteredGamePlays.length}` : gamePlays.length} plays.</p>
+      <p>
+        Based on{" "}
+        {hasFilters(filters)
+          ? `${gamePlays.length} / ${unfilteredGamePlays.length}`
+          : gamePlays.length}{" "}
+        plays.
+      </p>
       <HighScoresReportTable game={game} plays={gamePlays} />
 
       <GameScoreFieldReport game={game} plays={gamePlays} />
@@ -77,7 +88,10 @@ export const ReportGameView = (props: RouteComponentProps<any>) => {
           <React.Fragment key={x.id}>
             <h4>{x.name}</h4>
             <p>Based on {playsWithDimension.length} plays.</p>
-            <ReportDimensionReportTable plays={playsWithDimension} dimension={x} />
+            <ReportDimensionReportTable
+              plays={playsWithDimension}
+              dimension={x}
+            />
           </React.Fragment>
         );
       })}
@@ -201,7 +215,9 @@ const ReportPlayers = (props: { plays: Play[] }) => {
               const { id, name, rating, playCount, winCount } = player;
               return (
                 <TableRow key={id}>
-                  <TableCell scope="row"><Link to={`/players/${id}`}>{name}</Link></TableCell>
+                  <TableCell scope="row">
+                    <Link to={`/players/${id}`}>{name}</Link>
+                  </TableCell>
                   <TableCell scope="row">
                     {Math.round(rating.mu)} (± {Math.round(3 * rating.sigma)})
                   </TableCell>

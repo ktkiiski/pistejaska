@@ -1,6 +1,6 @@
 import { getTodayAsString } from "../common/dateUtils";
 import { MiscDataDTO } from "./play";
-import { JSONSchema7 } from 'json-schema';
+import { JSONSchema7 } from "json-schema";
 
 const fieldIdSchema: JSONSchema7 = {
   title: "Field ID",
@@ -48,9 +48,7 @@ const numberFieldSchema: JSONSchema7 = {
     type: {
       title: "Field data type",
       type: "string",
-      enum: [
-        "number",
-      ],
+      enum: ["number"],
     },
     options: {
       title: "Valid value options",
@@ -69,10 +67,7 @@ const numberFieldSchema: JSONSchema7 = {
             minLength: 1,
           },
         },
-        required: [
-          "value",
-          "label",
-        ],
+        required: ["value", "label"],
       },
     },
     minValue: {
@@ -82,7 +77,8 @@ const numberFieldSchema: JSONSchema7 = {
     },
     maxValue: {
       title: "Maximum value",
-      description: "Only values equal or less than this are allowed. Use 0 for negative values.",
+      description:
+        "Only values equal or less than this are allowed. Use 0 for negative values.",
       type: "number",
     },
     step: {
@@ -91,11 +87,7 @@ const numberFieldSchema: JSONSchema7 = {
       type: "number",
     },
   },
-  required: [
-    "id",
-    "name",
-    "type",
-  ]
+  required: ["id", "name", "type"],
 };
 
 const textFieldSchema: JSONSchema7 = {
@@ -107,9 +99,7 @@ const textFieldSchema: JSONSchema7 = {
     type: {
       title: "Field data type",
       type: "string",
-      enum: [
-        "text",
-      ],
+      enum: ["text"],
     },
     options: {
       title: "Valid value options",
@@ -128,18 +118,11 @@ const textFieldSchema: JSONSchema7 = {
             minLength: 1,
           },
         },
-        required: [
-          "value",
-          "label",
-        ],
+        required: ["value", "label"],
       },
     },
   },
-  required: [
-    "id",
-    "name",
-    "type",
-  ]
+  required: ["id", "name", "type"],
 };
 
 const booleanFieldSchema: JSONSchema7 = {
@@ -151,36 +134,37 @@ const booleanFieldSchema: JSONSchema7 = {
     type: {
       title: "Field data type",
       type: "string",
-      enum: [
-        "boolean",
-      ],
+      enum: ["boolean"],
     },
   },
-  required: [
-    "id",
-    "name",
-    "type",
-  ]
+  required: ["id", "name", "type"],
 };
 
 const miscFieldSchema: JSONSchema7 = {
-  anyOf: [{
-    title: "Number field",
-    ...numberFieldSchema,
-  }, {
-    title: "Text field",
-    ...textFieldSchema,
-  }, {
-    title: "Boolean field",
-    ...booleanFieldSchema,
-  }].map((fieldSchema) => ({
-    ...fieldSchema,
-    properties: {
-      ...fieldSchema.properties,
-      ...commonMiscFieldProperties,
+  anyOf: [
+    {
+      title: "Number field",
+      ...numberFieldSchema,
     },
-  } as JSONSchema7)),
-}
+    {
+      title: "Text field",
+      ...textFieldSchema,
+    },
+    {
+      title: "Boolean field",
+      ...booleanFieldSchema,
+    },
+  ].map(
+    (fieldSchema) =>
+      ({
+        ...fieldSchema,
+        properties: {
+          ...fieldSchema.properties,
+          ...commonMiscFieldProperties,
+        },
+      } as JSONSchema7)
+  ),
+};
 
 export const schema: JSONSchema7 = {
   type: "object",
@@ -214,15 +198,9 @@ export const schema: JSONSchema7 = {
       title: "Other fields",
       type: "array",
       items: miscFieldSchema,
-    }
+    },
   },
-  required: [
-    "id",
-    "name",
-    "icon",
-    "simultaneousTurns",
-    "scoreFields",
-  ]
+  required: ["id", "name", "icon", "simultaneousTurns", "scoreFields"],
 };
 
 export const durationField: GameMiscFieldDefinition<number> = {
@@ -341,8 +319,24 @@ export class Game implements GameDefinition {
   }
 
   public toDTO(): GameDefinition {
-    const { id, name, scoreFields, simultaneousTurns, icon, expansions, miscFields } = this;
-    return { id, name, scoreFields, simultaneousTurns, icon, expansions, miscFields };
+    const {
+      id,
+      name,
+      scoreFields,
+      simultaneousTurns,
+      icon,
+      expansions,
+      miscFields,
+    } = this;
+    return {
+      id,
+      name,
+      scoreFields,
+      simultaneousTurns,
+      icon,
+      expansions,
+      miscFields,
+    };
   }
 
   public getRelevantReportFields(): GameMiscFieldDefinition<string>[] {
@@ -410,7 +404,6 @@ export type GameExpansionDefinition = {
   scoreFields?: GameScoreFieldDefinition[];
   miscFields?: GameMiscFieldDefinition[];
 };
-
 
 function isRelevantReportField(
   field: GameMiscFieldDefinition

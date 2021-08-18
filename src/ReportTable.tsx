@@ -84,11 +84,13 @@ const ReportTable = ({ rows, columns }: ReportTableProps) => {
               <TableRow key={row[0].value}>
                 {columns.map((column, columnIdx) => (
                   <TableCell scope="row" key={`${row[0].value}:${column.name}`}>
-                    {row[columnIdx]?.link !== undefined ? 
-                    <Link to={row[columnIdx]?.link ?? ""}>{row[columnIdx]?.value}</Link>
-                    :
-                    <>{row[columnIdx]?.value}</>
-                  }
+                    {row[columnIdx]?.link !== undefined ? (
+                      <Link to={row[columnIdx]?.link ?? ""}>
+                        {row[columnIdx]?.value}
+                      </Link>
+                    ) : (
+                      <>{row[columnIdx]?.value}</>
+                    )}
                   </TableCell>
                 ))}
               </TableRow>

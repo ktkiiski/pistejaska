@@ -13,9 +13,7 @@ interface PlayFormScoreFieldProps {
     field: GameScoreFieldDefinition,
     player: Player
   ) => void;
-  onFocus: (
-    e: React.FocusEvent<HTMLElement>
-  ) => void;
+  onFocus: (e: React.FocusEvent<HTMLElement>) => void;
 }
 
 export const PlayFormScoreField = (props: PlayFormScoreFieldProps) => {

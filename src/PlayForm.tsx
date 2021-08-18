@@ -1,7 +1,15 @@
 import React, { useState } from "react";
 import SwipeableViews from "react-swipeable-views";
 import Button from "@material-ui/core/Button";
-import { Checkbox, Typography, FormControlLabel, FormGroup, makeStyles, ButtonGroup, Box } from "@material-ui/core";
+import {
+  Checkbox,
+  Typography,
+  FormControlLabel,
+  FormGroup,
+  makeStyles,
+  ButtonGroup,
+  Box,
+} from "@material-ui/core";
 import { Player, Play } from "./domain/play";
 import {
   Game,
@@ -11,23 +19,23 @@ import {
 } from "./domain/game";
 import { PlayFormScoreField } from "./PlayFormScoreField";
 import { PlayFormMiscField } from "./PlayFormMiscField";
-import groupBy from 'lodash/groupBy';
-import map from 'lodash/map';
+import groupBy from "lodash/groupBy";
+import map from "lodash/map";
 import { FormFocusGroup, FormFocusContextProvider } from "./utils/focus";
 
 const useStyles = makeStyles({
   heading: {
-    margin: '0.5em 2em',
+    margin: "0.5em 2em",
   },
   view: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    textAlign: 'left',
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    textAlign: "left",
   },
   description: {
-    margin: '1em 2em',
-    textAlign: 'center',
+    margin: "1em 2em",
+    textAlign: "center",
   },
 });
 
@@ -52,9 +60,8 @@ export const PlayForm = (props: {
   let isSwitchingHack = false;
 
   const fields = game.getFields(play.expansions);
-  const fieldGroupsById = groupBy(
-    fields,
-    ({ field }) => field.group ? `group:${field.group}` : `field:${field.id}`,
+  const fieldGroupsById = groupBy(fields, ({ field }) =>
+    field.group ? `group:${field.group}` : `field:${field.id}`
   );
   const fieldGroups = map(fieldGroupsById, (groupFields, viewId) => ({
     group: groupFields[0].field.group,
@@ -156,16 +163,19 @@ export const PlayForm = (props: {
     <FormControlLabel
       key={expansion.id}
       label={expansion.name}
-      control={(
+      control={
         <Checkbox
           checked={play.expansions.includes(expansion.id)}
           onChange={(_, checked) => handleExpansionChange(expansion, checked)}
         />
-      )}
+      }
     />
   );
 
-  const renderMiscField = (field: GameMiscFieldDefinition, viewIndex: number) => {
+  const renderMiscField = (
+    field: GameMiscFieldDefinition,
+    viewIndex: number
+  ) => {
     if (field.valuePerPlayer === true) {
       return players.map((p, index) => (
         <PlayFormMiscField
@@ -197,7 +207,10 @@ export const PlayForm = (props: {
     }
   };
 
-  const renderScoreField = (field: GameScoreFieldDefinition, viewIndex: number) => {
+  const renderScoreField = (
+    field: GameScoreFieldDefinition,
+    viewIndex: number
+  ) => {
     return players.map((p) => (
       <PlayFormScoreField
         player={p}
@@ -216,22 +229,19 @@ export const PlayForm = (props: {
 
   const renderButtons = (viewIndex: number) => (
     <Box marginTop={8}>
-      <ButtonGroup
-        variant="outlined"
-        color="default"
-      >
+      <ButtonGroup variant="outlined" color="default">
         <Button
           disabled={viewIndex <= 0}
-          onClick={() => setActiveViewIndex(
-            Math.max(viewIndex - 1, 0)
-          )}
+          onClick={() => setActiveViewIndex(Math.max(viewIndex - 1, 0))}
           // Skip from tab navigation
           tabIndex={-1}
         >
           &lt; Previous
         </Button>
         <Button
-          variant={done || viewIndex >= viewCount - 1 ? "contained" : "outlined"}
+          variant={
+            done || viewIndex >= viewCount - 1 ? "contained" : "outlined"
+          }
           color="primary"
           onClick={onSave}
           // Skip from tab navigation, except on the final tab
@@ -241,9 +251,9 @@ export const PlayForm = (props: {
         </Button>
         <Button
           disabled={viewIndex >= viewCount - 1}
-          onClick={() => setActiveViewIndex(
-            Math.min(viewIndex + 1, viewCount - 1)
-          )}
+          onClick={() =>
+            setActiveViewIndex(Math.min(viewIndex + 1, viewCount - 1))
+          }
           // Skip from tab navigation
           tabIndex={-1}
         >
@@ -270,21 +280,17 @@ export const PlayForm = (props: {
       return (
         <div key={viewId} className={styles.view}>
           {group ? <h3 className={styles.heading}>{group}</h3> : null}
-          <FormFocusGroup
-            focused={activeViewIndex === viewIndex}
-          >
+          <FormFocusGroup focused={activeViewIndex === viewIndex}>
             {groupFields.map((item) => (
               <React.Fragment key={item.field.id}>
-                {item.type === 'misc' && group ? null : (
+                {item.type === "misc" && group ? null : (
                   <h3 className={styles.heading} id={item.field.id}>
                     {item.field.name}
                   </h3>
                 )}
-                {
-                  item.field.description
-                    ? <p className={styles.description}>{item.field.description}</p>
-                    : null
-                }
+                {item.field.description ? (
+                  <p className={styles.description}>{item.field.description}</p>
+                ) : null}
 
                 {item.type === "misc"
                   ? renderMiscField(item.field, viewIndex)

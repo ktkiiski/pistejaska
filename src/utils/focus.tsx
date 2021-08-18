@@ -1,5 +1,11 @@
-import React, { useRef, createContext, useEffect, useContext, useState } from "react";
-import orderBy from 'lodash/orderBy';
+import React, {
+  useRef,
+  createContext,
+  useEffect,
+  useContext,
+  useState,
+} from "react";
+import orderBy from "lodash/orderBy";
 
 interface FormFieldItem {
   element: HTMLElement;
@@ -14,7 +20,7 @@ export function useFormFieldRef(index: number) {
   const formFieldItems = useContext(FormFieldContext);
   const formFieldGroupItems = useContext(FormFieldGroupContext);
   if (!formFieldItems) {
-    throw new Error('FormFocusContextProvider is missing!');
+    throw new Error("FormFocusContextProvider is missing!");
   }
 
   useEffect(() => {
@@ -29,18 +35,18 @@ export function useFormFieldRef(index: number) {
     // Listen for 'keydown' events
     const onFieldKeyDown = (event: KeyboardEvent) => {
       // Listen for Enter key, or the "Go" on Android
-      if (event.keyCode === 13 && element.tagName !== 'SELECT') {
+      if (event.keyCode === 13 && element.tagName !== "SELECT") {
         // Move focus to the next field
         event.preventDefault();
-        const orderedFieldItems = orderBy(formFieldItems, 'index');
+        const orderedFieldItems = orderBy(formFieldItems, "index");
         const currentIndex = orderedFieldItems.indexOf(formFieldItem);
         const nextIndex = currentIndex + 1;
         const nextFieldItem = orderedFieldItems[nextIndex];
         nextFieldItem?.element.focus();
       }
-    }
+    };
 
-    element.addEventListener('keydown', onFieldKeyDown);
+    element.addEventListener("keydown", onFieldKeyDown);
 
     return () => {
       // Forget this form field item
@@ -51,7 +57,7 @@ export function useFormFieldRef(index: number) {
         formFieldGroupItems.splice(indexInGroup, 1);
       }
       // Stop listening 'keydown' events
-      element.removeEventListener('keydown', onFieldKeyDown);
+      element.removeEventListener("keydown", onFieldKeyDown);
     };
   }, [index, formFieldItems, formFieldGroupItems]);
 
@@ -68,13 +74,16 @@ export function FormFocusContextProvider(props: { children: React.ReactNode }) {
   );
 }
 
-export function FormFocusGroup(props: { focused: boolean, children: React.ReactNode }) {
+export function FormFocusGroup(props: {
+  focused: boolean;
+  children: React.ReactNode;
+}) {
   const { children, focused } = props;
   const [groupItems] = useState<FormFieldItem[]>([]);
 
   useEffect(() => {
     if (focused) {
-      const [firstItem] = orderBy(groupItems, 'index');
+      const [firstItem] = orderBy(groupItems, "index");
       firstItem?.element.focus();
     }
   }, [focused, groupItems]);

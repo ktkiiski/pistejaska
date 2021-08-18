@@ -166,11 +166,14 @@ export class Play implements PlayDTO {
     return String(value) as T;
   }
 
-  public hasMiscFieldValue(fieldId: string, fieldValue: string | number): boolean {
+  public hasMiscFieldValue(
+    fieldId: string,
+    fieldValue: string | number
+  ): boolean {
     return this.misc.some(
       // NOTE: Compare with "==" in case numbers are stringified
       // eslint-disable-next-line eqeqeq
-      (m) => m.fieldId === fieldId && m.data == fieldValue,
+      (m) => m.fieldId === fieldId && m.data == fieldValue
     );
   }
 
