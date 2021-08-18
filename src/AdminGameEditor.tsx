@@ -1,8 +1,8 @@
 import React, { useEffect, useReducer, useRef, useState } from "react";
 import { GameDefinition, schema } from "./domain/game";
 import { Button, makeStyles } from "@material-ui/core";
-import JsonEditor from 'jsoneditor';
-import Ajv from 'ajv';
+import JsonEditor from "jsoneditor";
+import Ajv from "ajv";
 import { isEqual } from "lodash";
 import "jsoneditor/dist/jsoneditor.css";
 
@@ -10,23 +10,31 @@ const ajv = new Ajv({ allErrors: true, verbose: true });
 
 const useStyles = makeStyles((theme) => ({
   editor: {
-    marginBottom: '1em',
-    height: '600px',
+    marginBottom: "1em",
+    height: "600px",
   },
 }));
 
 interface AdminGameEditorProps {
   json: GameDefinition;
   onSubmit: (json: GameDefinition) => void;
-  onDelete: null | (() => void);
+  onDelete: null | (() => void);
   submitButtonLabel: string;
 }
 
-function updateJson(oldJson: GameDefinition | null, newJson: GameDefinition | null): GameDefinition | null {
+function updateJson(
+  oldJson: GameDefinition | null,
+  newJson: GameDefinition | null
+): GameDefinition | null {
   return isEqual(newJson, oldJson) ? oldJson : newJson;
 }
 
-function AdminGameEditor({ json, onSubmit, onDelete, submitButtonLabel }: AdminGameEditorProps) {
+function AdminGameEditor({
+  json,
+  onSubmit,
+  onDelete,
+  submitButtonLabel,
+}: AdminGameEditorProps) {
   const styles = useStyles();
   const [inputJson, setInputJson] = useReducer(updateJson, json);
   const [outputJson, setOutputJson] = useState<GameDefinition | null>(null);
@@ -36,7 +44,7 @@ function AdminGameEditor({ json, onSubmit, onDelete, submitButtonLabel }: AdminG
   const editorRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const editor = new JsonEditor(editorRef.current!, {
-      mode: 'code',
+      mode: "code",
       ajv,
       schema,
       onChange: () => {
@@ -48,7 +56,7 @@ function AdminGameEditor({ json, onSubmit, onDelete, submitButtonLabel }: AdminG
       },
       onValidationError: (errors) => {
         setIsValid(!errors.length);
-      }
+      },
     });
     editor.set(inputJson);
     setIsValid(true);
@@ -73,12 +81,13 @@ function AdminGameEditor({ json, onSubmit, onDelete, submitButtonLabel }: AdminG
       return undefined;
     }
     function confirmExit(e: BeforeUnloadEvent) {
-      const confirmationMessage = 'You have unsaved changes. Are you sure you want to leave?';
+      const confirmationMessage =
+        "You have unsaved changes. Are you sure you want to leave?";
       (e || window.event).returnValue = confirmationMessage; //Gecko + IE
       return confirmationMessage; //Gecko + Webkit, Safari, Chrome etc.
     }
-    window.addEventListener('beforeunload', confirmExit);
-    return () => window.removeEventListener('beforeunload', confirmExit)
+    window.addEventListener("beforeunload", confirmExit);
+    return () => window.removeEventListener("beforeunload", confirmExit);
   }, [hasChanges]);
   return (
     <>
@@ -103,6 +112,6 @@ function AdminGameEditor({ json, onSubmit, onDelete, submitButtonLabel }: AdminG
       </div>
     </>
   );
-};
+}
 
 export default AdminGameEditor;

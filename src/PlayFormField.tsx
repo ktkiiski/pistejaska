@@ -7,10 +7,10 @@ import { useFormFieldRef } from "./utils/focus";
 
 const useFieldStyles = makeStyles({
   root: {
-    width: '25ch',
-    maxWidth: '100%',
+    width: "25ch",
+    maxWidth: "100%",
   },
-})
+});
 
 interface PlayFormFieldProps<T, F extends GameFieldDefinition<T>> {
   value: T | null;
@@ -20,9 +20,7 @@ interface PlayFormFieldProps<T, F extends GameFieldDefinition<T>> {
   play: Play;
   onChange: (score: T | null, field: F) => void;
   // focusOnMe: boolean;
-  onFocus: (
-    e: React.FocusEvent<HTMLElement>
-  ) => void;
+  onFocus: (e: React.FocusEvent<HTMLElement>) => void;
   id?: string;
 }
 
@@ -141,7 +139,11 @@ export function PlayFormField<
       </div>
       {field.type !== "duration" || !createdToday ? null : (
         <Box my={2}>
-          <Button onClick={onSetDurationFromStartClick} variant="outlined" onFocus={onFocus}>
+          <Button
+            onClick={onSetDurationFromStartClick}
+            variant="outlined"
+            onFocus={onFocus}
+          >
             <span>
               Set from start (<DurationCounter startTime={createdAt} />)
             </span>

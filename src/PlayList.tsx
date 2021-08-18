@@ -47,18 +47,10 @@ export const PlayList = (props: RouteComponentProps<{}>) => {
             <ListItem button onClick={() => onSelectPlay(play)} key={play.id}>
               {game && (
                 <ListItemIcon>
-                  <img
-                    width={30}
-                    height={30}
-                    src={game.icon}
-                    alt={game.name}
-                  />
+                  <img width={30} height={30} src={game.icon} alt={game.name} />
                 </ListItemIcon>
               )}
-              <ListItemText
-                primary={play.getName()}
-                secondary={game?.name}
-              />
+              <ListItemText primary={play.getName()} secondary={game?.name} />
             </ListItem>
           );
         })}

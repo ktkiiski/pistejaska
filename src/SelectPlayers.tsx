@@ -13,12 +13,12 @@ import { useGames } from "./common/hooks/useGames";
 
 function shiftRandomly<T>(values: T[]) {
   const offset = Math.floor(Math.random() * values.length);
-  return shiftValues(values, offset)
+  return shiftValues(values, offset);
 }
 
 function shiftValues<T>(values: T[], offset: number) {
   const shift = offset % values.length;
-  return [...values.slice(shift), ...values.slice(0, shift)]
+  return [...values.slice(shift), ...values.slice(0, shift)];
 }
 
 const SelectPlayers = (props: {
@@ -86,13 +86,13 @@ const SelectPlayers = (props: {
       cancelAnimationFrame(animation);
       clearTimeout(timeout);
     };
-  }, [isRandomizing])
+  }, [isRandomizing]);
 
   if (!games) {
-    return (<div>Loading…</div>);
+    return <div>Loading…</div>;
   }
   if (!game) {
-    return (<div>Unknown game!</div>);
+    return <div>Unknown game!</div>;
   }
 
   const selectPlayers = (
@@ -182,7 +182,7 @@ const SelectPlayers = (props: {
             <ListItemText primary={player.name} />
             <ListItemIcon
               onClick={() => onDeSelectPlayer(player)}
-              style={{ visibility: isRandomizing ? 'hidden' : 'visible' }}
+              style={{ visibility: isRandomizing ? "hidden" : "visible" }}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"

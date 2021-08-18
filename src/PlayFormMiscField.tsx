@@ -12,9 +12,7 @@ type PlayFormMiscFieldProps<T> = {
     field: GameMiscFieldDefinition<T>,
     player: Player | undefined
   ) => void;
-  onFocus: (
-    e: React.FocusEvent<HTMLElement>
-  ) => void;
+  onFocus: (e: React.FocusEvent<HTMLElement>) => void;
   player?: Player;
 };
 

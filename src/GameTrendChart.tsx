@@ -1,9 +1,17 @@
-import React from 'react';
-import { XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, BarChart, Bar } from 'recharts';
-import { useGames } from './common/hooks/useGames';
+import React from "react";
+import {
+  XAxis,
+  YAxis,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+} from "recharts";
+import { useGames } from "./common/hooks/useGames";
 import { Play } from "./domain/play";
-import { countBy, groupBy, minBy, orderBy } from 'lodash';
-import { makeStyles } from '@material-ui/core';
+import { countBy, groupBy, minBy, orderBy } from "lodash";
+import { makeStyles } from "@material-ui/core";
 
 interface GamePopularityChartProps {
   plays: Play[];
@@ -18,8 +26,10 @@ function useGamePopularityTimeData(plays: Play[]) {
   if (!allGames) {
     return [null, []] as const;
   }
-  const dates = plays.map(play => play.getDate()).filter(date => date.getTime() > 0);
-  const playsBySlot = groupBy(plays, play => {
+  const dates = plays
+    .map((play) => play.getDate())
+    .filter((date) => date.getTime() > 0);
+  const playsBySlot = groupBy(plays, (play) => {
     const date = play.getDate();
     return getSlot(date.getFullYear(), date.getMonth());
   });
@@ -36,18 +46,17 @@ function useGamePopularityTimeData(plays: Play[]) {
   while (year < endYear || (year === endYear && month <= endMonth)) {
     const slot = getSlot(year, month);
     const slotPlays = playsBySlot[slot];
-    const gameCounts = allGames.reduce(
-      (countByGameId, game) => {
-        const playCount = slotPlays?.filter(play => play.gameId === game.id).length ?? 0;
-        if (!playCount) {
-          return countByGameId;
-        }
-        return {
-          ...countByGameId,
-          [game.id]: playCount,
-        };
-      }, {},
-    );
+    const gameCounts = allGames.reduce((countByGameId, game) => {
+      const playCount =
+        slotPlays?.filter((play) => play.gameId === game.id).length ?? 0;
+      if (!playCount) {
+        return countByGameId;
+      }
+      return {
+        ...countByGameId,
+        [game.id]: playCount,
+      };
+    }, {});
     data.push({
       name: slot,
       counts: gameCounts,
@@ -62,77 +71,77 @@ function useGamePopularityTimeData(plays: Play[]) {
   const games = orderBy(
     allGames.filter((game) => countsByGame[game.id] != null),
     (game) => countsByGame[game.id],
-    'desc',
+    "desc"
   );
   return [games, data] as const;
 }
 
 const colors = [
-  '#e6194b',
-  '#3cb44b',
-  '#ffe119',
-  '#4363d8',
-  '#f58231',
-  '#911eb4',
-  '#42d4f4',
-  '#f032e6',
-  '#bfef45',
-  '#fabed4',
-  '#469990',
-  '#dcbeff',
-  '#9a6324',
-  '#800000',
-  '#aaffc3',
-  '#808000',
-  '#ffd8b1',
-  '#000075',
-  '#a9a9a9',
-  '#0000ff',
-  '#a52a2a',
-  '#00008b',
-  '#008b8b',
-  '#006400',
-  '#bdb76b',
-  '#8b008b',
-  '#556b2f',
-  '#ff8c00',
-  '#9932cc',
-  '#8b0000',
-  '#e9967a',
-  '#9400d3',
-  '#ff00ff',
-  '#ffd700',
-  '#008000',
-  '#4b0082',
-  '#f0e68c',
-  '#add8e6',
-  '#90ee90',
-  '#ffb6c1',
-  '#000080',
-  '#ffa500',
-  '#ffc0cb',
-  '#800080',
-  '#ff0000',
-  '#ffff00',
-  '#d3d3d3',
-  '#c0c0c0',
-  '#ffffff',
-  '#e0ffff',
-  '#00ffff',
-  '#00ff00',
-  '#ffffe0',
-  '#f5f5dc',
-  '#f0ffff',
-  '#fffac8',
+  "#e6194b",
+  "#3cb44b",
+  "#ffe119",
+  "#4363d8",
+  "#f58231",
+  "#911eb4",
+  "#42d4f4",
+  "#f032e6",
+  "#bfef45",
+  "#fabed4",
+  "#469990",
+  "#dcbeff",
+  "#9a6324",
+  "#800000",
+  "#aaffc3",
+  "#808000",
+  "#ffd8b1",
+  "#000075",
+  "#a9a9a9",
+  "#0000ff",
+  "#a52a2a",
+  "#00008b",
+  "#008b8b",
+  "#006400",
+  "#bdb76b",
+  "#8b008b",
+  "#556b2f",
+  "#ff8c00",
+  "#9932cc",
+  "#8b0000",
+  "#e9967a",
+  "#9400d3",
+  "#ff00ff",
+  "#ffd700",
+  "#008000",
+  "#4b0082",
+  "#f0e68c",
+  "#add8e6",
+  "#90ee90",
+  "#ffb6c1",
+  "#000080",
+  "#ffa500",
+  "#ffc0cb",
+  "#800080",
+  "#ff0000",
+  "#ffff00",
+  "#d3d3d3",
+  "#c0c0c0",
+  "#ffffff",
+  "#e0ffff",
+  "#00ffff",
+  "#00ff00",
+  "#ffffe0",
+  "#f5f5dc",
+  "#f0ffff",
+  "#fffac8",
 ];
 
 const useStyles = makeStyles({
   chart: {
-    width: '100%',
-    height: '60vw',
-    position: 'relative',
+    width: "100%",
+    height: "60vw",
+    position: "relative",
     fontSize: 10,
-  }
+  },
 });
 
 function GameTrendChart({ plays }: GamePopularityChartProps) {
@@ -155,17 +164,9 @@ function GameTrendChart({ plays }: GamePopularityChartProps) {
           }}
         >
           <XAxis dataKey="name" />
-          <YAxis
-            width={15}
-            domain={[0, 'dataMax']}
-            tickSize={3}
-          />
+          <YAxis width={15} domain={[0, "dataMax"]} tickSize={3} />
           <Tooltip />
-          <Legend
-            iconType="square"
-            align="center"
-            iconSize={10}
-          />
+          <Legend iconType="square" align="center" iconSize={10} />
           {games.map((game, index) => (
             <Bar
               key={game.id}
