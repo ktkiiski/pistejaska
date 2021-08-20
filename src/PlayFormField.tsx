@@ -2,8 +2,9 @@ import React from "react";
 import { GameFieldDefinition, GameFieldOption } from "./domain/game";
 import { TextField, Button, Box, makeStyles } from "@material-ui/core";
 import DurationCounter from "./DurationCounter";
-import { Play } from "./domain/play";
+import { Play, UnsavedImage } from "./domain/play";
 import { useFormFieldRef } from "./utils/focus";
+import { v4 as uuid } from "uuid";
 
 const useFieldStyles = makeStyles({
   root: {
@@ -19,13 +20,14 @@ interface PlayFormFieldProps<T, F extends GameFieldDefinition<T>> {
   label: string;
   play: Play;
   onChange: (score: T | null, field: F) => void;
-  // focusOnMe: boolean;
   onFocus: (e: React.FocusEvent<HTMLElement>) => void;
   id?: string;
+  onImageChange?: (image: UnsavedImage) => void;
+  onImageRemove?: (filename: string) => void;
 }
 
 export function PlayFormField<
-  T extends string | number | boolean,
+  T extends string | number | boolean | string[],
   F extends GameFieldDefinition<T>
 >(props: PlayFormFieldProps<T, F>) {
   const {
@@ -35,9 +37,10 @@ export function PlayFormField<
     label,
     play,
     onChange,
-    // focusOnMe,
     onFocus,
     id,
+    onImageChange,
+    onImageRemove,
   } = props;
   const styles = useFieldStyles();
   const inputRef = useFormFieldRef(fieldIndex);
@@ -56,7 +59,45 @@ export function PlayFormField<
         ref: inputRef,
       };
 
-  const onValueChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+  const onImageUploaderValueChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    if (!event.target.files || !event.target.files[0]) {
+      return;
+    }
+
+    const file = event.target.files[0];
+
+    const toBase64 = (file: File) =>
+      new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = (error) => reject(error);
+      });
+
+    const imageAsBase64 = (await toBase64(file)) as string;
+
+    const getExtension = (filename: string) => {
+      return filename.slice(((filename.lastIndexOf(".") - 1) >>> 0) + 2);
+    };
+
+    const filename = `${new Date().toISOString().substr(0, 10)}--${
+      play.id
+    }--${uuid()}.${getExtension(file.name)}`;
+
+    if (onImageChange) {
+      onImageChange({
+        file: event.target.files[0],
+        filename: filename,
+        imageAsBase64,
+      });
+    }
+  };
+
+  const onValueChange = async (
+    event: React.ChangeEvent<{ value: unknown }>
+  ) => {
     let value = event.currentTarget.value as number | string | null;
     if (value === "" || value === null) {
       // Chose a blank option
@@ -106,6 +147,7 @@ export function PlayFormField<
           onFocus={onFocus}
           inputProps={{ ref: inputRef }}
           SelectProps={{ native: true }}
+          type="file"
           margin="dense"
           variant="outlined"
           classes={styles}
@@ -121,13 +163,44 @@ export function PlayFormField<
     );
   }
 
-  return (
+  return field.type === "images" ? (
+    <>
+      <h5>Images</h5>
+      <input
+        type="file"
+        accept="image/*"
+        onChange={onImageUploaderValueChange}
+      ></input>
+
+      {play.unsavedImages.map((img) => (
+        <>
+          <div
+            style={{ marginLeft: "180px" }}
+            onClick={() => onImageRemove && onImageRemove(img.filename)}
+          >
+            ❌
+          </div>
+          <img src={`${img.imageAsBase64}`} width={200} alt="Uploaded" />{" "}
+        </>
+      ))}
+      {play.getExistingImages().map((filename) => (
+        <>
+          <div
+            style={{ marginLeft: "180px" }}
+            onClick={() => onImageRemove && onImageRemove(filename)}
+          >
+            ❌
+          </div>
+          <img src={play.getImageUrl(filename)} width={200} alt="Existing" />
+        </>
+      ))}
+    </>
+  ) : (
     <>
       <div>
         <TextField
           margin="dense"
           inputProps={inputProps}
-          type={isNumeric ? "number" : "text"}
           variant="outlined"
           label={label}
           onFocus={onFocus}

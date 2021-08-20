@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## 2021-08-20
+
+### Changed
+
+- Removed all calculated properties (like date and rankings) from plays. This reduces the size of documents and improves performance.
+
+### Added
+
+- Feature to add images to plays
+
 ## 2021-03-30
 
 ### Added

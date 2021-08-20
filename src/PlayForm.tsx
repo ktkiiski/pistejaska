@@ -10,7 +10,7 @@ import {
   ButtonGroup,
   Box,
 } from "@material-ui/core";
-import { Player, Play } from "./domain/play";
+import { Player, Play, UnsavedImage } from "./domain/play";
 import {
   Game,
   GameExpansionDefinition,
@@ -155,6 +155,44 @@ export const PlayForm = (props: {
     setPlay(new Play({ ...play, ...{ misc: newMisc } }));
   };
 
+  const handleImageChange = (
+    image: UnsavedImage,
+    field: GameMiscFieldDefinition
+  ) => {
+    const newUnsavedImages = play.unsavedImages.concat(image);
+
+    const oldValue = play.misc.find((x) => x.fieldId === field.id);
+    const oldMisc = play.misc.filter((x) => x.fieldId !== field.id);
+
+    const newMisc = oldMisc.concat({
+      fieldId: field.id,
+      data: ((oldValue?.data as string[]) || []).concat(
+        newUnsavedImages.map((x) => x.filename)
+      ),
+    });
+
+    setPlay(new Play({ ...play, ...{ misc: newMisc } }, newUnsavedImages));
+  };
+
+  const handleImageRemove = (
+    filename: string,
+    field: GameMiscFieldDefinition
+  ) => {
+    const newUnsavedImages = play.unsavedImages.filter(
+      (x) => x.filename !== filename
+    );
+
+    const oldValue = play.misc.find((x) => x.fieldId === field.id);
+    const oldMisc = play.misc.filter((x) => x.fieldId !== field.id);
+
+    const newMisc = oldMisc.concat({
+      fieldId: field.id,
+      data: ((oldValue?.data as string[]) || []).filter((x) => x !== filename),
+    });
+
+    setPlay(new Play({ ...play, ...{ misc: newMisc } }, newUnsavedImages));
+  };
+
   const onSave = () => {
     props.onSave(play);
   };
@@ -188,6 +226,8 @@ export const PlayForm = (props: {
             setActiveViewIndex(viewIndex);
           }}
           onChange={handleMiscChange}
+          onImageChange={handleImageChange}
+          onImageRemove={handleImageRemove}
         />
       ));
     } else {
@@ -202,6 +242,8 @@ export const PlayForm = (props: {
           player={undefined}
           key={field.id}
           onChange={handleMiscChange}
+          onImageChange={handleImageChange}
+          onImageRemove={handleImageRemove}
         />
       );
     }

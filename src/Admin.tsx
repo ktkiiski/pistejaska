@@ -25,6 +25,7 @@ const defaultGameJson: GameDefinition = {
 
 function Admin() {
   const [gameId, setGameId] = useState<string | null>(null);
+
   const [games] = useCollectionData<GameDefinition>(
     firestore().collection("games").orderBy("name")
   );
