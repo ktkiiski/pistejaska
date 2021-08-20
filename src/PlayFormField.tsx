@@ -176,6 +176,7 @@ export function PlayFormField<
         <>
           <div
             style={{ marginLeft: "180px" }}
+            key={img.filename}
             onClick={() => onImageRemove && onImageRemove(img.filename)}
           >
             ❌
@@ -187,6 +188,7 @@ export function PlayFormField<
         <>
           <div
             style={{ marginLeft: "180px" }}
+            key={filename}
             onClick={() => onImageRemove && onImageRemove(filename)}
           >
             ❌

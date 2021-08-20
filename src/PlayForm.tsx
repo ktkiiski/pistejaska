@@ -166,9 +166,11 @@ export const PlayForm = (props: {
 
     const newMisc = oldMisc.concat({
       fieldId: field.id,
-      data: ((oldValue?.data as string[]) || []).concat(
-        newUnsavedImages.map((x) => x.filename)
-      ),
+      data: ((oldValue?.data as string[]) || [])
+        .filter(
+          (x) => newUnsavedImages.find((y) => y.filename === x) === undefined
+        )
+        .concat(newUnsavedImages.map((x) => x.filename)),
     });
 
     setPlay(new Play({ ...play, ...{ misc: newMisc } }, newUnsavedImages));
