@@ -146,11 +146,16 @@ export const PlayForm = (props: {
     const oldMisc = play.misc.filter(
       (s) => s.fieldId !== field.id || s.playerId !== playerId
     );
-    const newMisc = oldMisc.concat({
-      fieldId: field.id,
-      data: misc,
-      playerId: playerId,
-    });
+    let newMisc = playerId
+      ? oldMisc.concat({
+          fieldId: field.id,
+          data: misc,
+          playerId: playerId,
+        })
+      : oldMisc.concat({
+          fieldId: field.id,
+          data: misc,
+        });
 
     setPlay(new Play({ ...play, ...{ misc: newMisc } }));
   };
