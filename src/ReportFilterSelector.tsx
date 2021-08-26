@@ -80,6 +80,7 @@ function ReportFilterSelector({
   const [fieldsOpen, setFieldsOpen] = useState<Record<string, boolean>>({});
   const { expansions } = game;
   const isFiltering = hasFilters(filters);
+  // TODO: support expansion misc fields
   const reportFields = game
     .getRelevantReportFields()
     // TODO: Support fields without pre-defined options
