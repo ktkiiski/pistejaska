@@ -206,6 +206,7 @@ export function PlayFormField<
           variant="outlined"
           label={label}
           onFocus={onFocus}
+          type={isNumeric ? "number" : "text"}
           value={value === null ? "" : value}
           onChange={onValueChange}
           id={id}
