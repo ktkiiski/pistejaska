@@ -1,12 +1,18 @@
 import React, { useState } from "react";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
 import { RouteComponentProps } from "react-router";
 import { TextField } from "@material-ui/core";
 import { GameDefinition } from "./domain/game";
 import { useGames } from "./common/hooks/useGames";
+import {
+  TailwindCard,
+  TailwindContainerTitle,
+} from "./common/components/Container";
+import {
+  TailwindList,
+  TailwindListItem,
+  TailwindListItemIcon,
+  TailwindListItemText,
+} from "./common/components/List";
 
 export const SelectGame = (props: RouteComponentProps<{}>) => {
   const games = useGames();
@@ -30,26 +36,39 @@ export const SelectGame = (props: RouteComponentProps<{}>) => {
       : 0;
   });
   return (
-    <div>
-      <h2>Select game</h2>
-      <TextField
-        label="Search..."
-        value={searchTerm}
-        autoFocus
-        onChange={(e) => setSearchTerm(e.currentTarget.value)}
-      />
-      <List component="nav">
-        {listedGames
-          .filter((g) => g.lowercaseName.includes(searchTerm.toLowerCase()))
-          .map((game) => (
-            <ListItem button onClick={() => onSelectGame(game)} key={game.id}>
-              <ListItemIcon>
-                <img width={30} height={30} src={game.icon} alt={game.name} />
-              </ListItemIcon>
-              <ListItemText primary={game.name} />
-            </ListItem>
-          ))}
-      </List>
+    <div className="p-2">
+      <TailwindCard>
+        <TailwindContainerTitle>Select game</TailwindContainerTitle>
+
+        <div className="p-2">
+          <TextField
+            label="Search..."
+            value={searchTerm}
+            autoFocus
+            onChange={(e) => setSearchTerm(e.currentTarget.value)}
+          />
+        </div>
+
+        <TailwindList onClickShowAll={() => {}}>
+          {listedGames
+            .filter((g) => g.lowercaseName.includes(searchTerm.toLowerCase()))
+            .map((game) => (
+              <TailwindListItem
+                onClick={() => onSelectGame(game)}
+                key={game.id}
+              >
+                <TailwindListItemIcon>
+                  <img
+                    alt="gamepic"
+                    src={game.icon}
+                    className="mx-auto object-cover rounded-full h-10 w-10"
+                  />
+                </TailwindListItemIcon>
+                <TailwindListItemText title={game.name} />
+              </TailwindListItem>
+            ))}
+        </TailwindList>
+      </TailwindCard>
     </div>
   );
 };

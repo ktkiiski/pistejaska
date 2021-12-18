@@ -10,7 +10,7 @@ import { PlayView } from "./PlayView";
 import { CircularProgress } from "@material-ui/core";
 import { MarkdownViewer } from "./MarkdownViewer";
 import { ThemeProvider } from "@material-ui/styles";
-import { createMuiTheme } from "@material-ui/core/styles";
+import { createTheme } from '@material-ui/core/styles';
 import { ReportGameView } from "./ReportGameView";
 import { PlayList } from "./PlayList";
 import { ReportGameList } from "./ReportGameList";
@@ -78,13 +78,12 @@ const App = () => {
     </>
   );
 
-  const theme = createMuiTheme({
+  const theme = createTheme({
     spacing: 2,
   });
-
   return (
     <ThemeProvider theme={theme}>
-      <div className="App">
+      <div className="container mx-auto bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 min-h-screen">
         <Router>{app}</Router>
       </div>
     </ThemeProvider>

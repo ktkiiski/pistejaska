@@ -1,15 +1,25 @@
 import React, { useEffect, useState } from "react";
 import { Player } from "./domain/play";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import { Button, TextField } from "@material-ui/core";
+import { TextField } from "@material-ui/core";
 import { v4 as uuid } from "uuid";
 import { PlayNew } from "./PlayNew";
 import { usePlayers } from "./common/hooks/usePlayers";
-import ButtonRow from "./ButtonRow";
 import { useGames } from "./common/hooks/useGames";
+import {
+  TailwindCard,
+  TailwindContainerTitle,
+} from "./common/components/Container";
+import {
+  TailwindList,
+  TailwindListItem,
+  TailwindListItemIcon,
+  TailwindListItemText,
+} from "./common/components/List";
+import {
+  TailwindButton,
+  TailwindButtonPrimary,
+  TailwindCardButtonRow,
+} from "./common/components/Button";
 
 function shiftRandomly<T>(values: T[]) {
   const offset = Math.floor(Math.random() * values.length);
@@ -96,129 +106,134 @@ const SelectPlayers = (props: {
   }
 
   const selectPlayers = (
-    <div>
-      <h2>Select players</h2>
-      <p>
-        {`Add players to the new game of `}
-        <strong>{game.name}</strong>
-        {` in the playing order.`}
-      </p>
-      <div>
-        <TextField
-          label="Search..."
-          value={searchTerm}
-          autoFocus
-          onChange={(e) => onSearch(e.currentTarget.value)}
-        />
-        <List component="nav">
-          {visiblePlayers.map((player) => (
-            <ListItem
-              dense={true}
-              button
-              onClick={() => onSelectPlayer(player)}
-              key={player.id}
-            >
-              <ListItemIcon>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="18"
-                  height="18"
-                  viewBox="0 0 18 18"
-                >
-                  <path d="M9 1C4.58 1 1 4.58 1 9s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm0 2.75c1.24 0 2.25 1.01 2.25 2.25S10.24 8.25 9 8.25 6.75 7.24 6.75 6 7.76 3.75 9 3.75zM9 14.5c-1.86 0-3.49-.92-4.49-2.33C4.62 10.72 7.53 10 9 10c1.47 0 4.38.72 4.49 2.17-1 1.41-2.63 2.33-4.49 2.33z" />
-                </svg>
-              </ListItemIcon>
-              <ListItemText primary={player.name} />
-            </ListItem>
-          ))}
-          {!showAllPlayers && selectablePlayers.length > 6 ? (
-            <ListItem dense={true} onClick={() => setShowAllPlayers(true)}>
-              Show more...
-            </ListItem>
-          ) : showAllPlayers && selectablePlayers.length > 6 ? (
-            <ListItem dense={true} onClick={() => setShowAllPlayers(false)}>
-              Show less...
-            </ListItem>
-          ) : (
-            <></>
-          )}
+    <div className="p-2">
+      <TailwindCard className="p-0">
+        <div className="p-2">
+          <TailwindContainerTitle>Select players</TailwindContainerTitle>
 
-          <ListItem>
-            <ListItemIcon>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-              >
-                <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
-              </svg>
-            </ListItemIcon>
+          <p>
+            {`Add players to the new game of `}
+            <strong>{game.name}</strong>
+            {game.simultaneousTurns ? "" : ` in the playing order.`}
+          </p>
+          <div>
             <TextField
-              value={currentPlayer}
-              placeholder="New player"
-              onChange={(e) => setCurrentPlayer(e.currentTarget.value)}
+              label="Search..."
+              value={searchTerm}
+              autoFocus
+              onChange={(e) => onSearch(e.currentTarget.value)}
             />
-            <Button color="default" onClick={onAddPlayer} variant="contained">
-              Add
-            </Button>
-          </ListItem>
-        </List>
-      </div>
+            <TailwindList>
+              {visiblePlayers.map((player) => (
+                <TailwindListItem
+                  onClick={() => onSelectPlayer(player)}
+                  className="text-sm"
+                  key={player.id}
+                >
+                  <TailwindListItemIcon>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="18"
+                      height="18"
+                      viewBox="0 0 18 18"
+                    >
+                      <path d="M9 1C4.58 1 1 4.58 1 9s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm0 2.75c1.24 0 2.25 1.01 2.25 2.25S10.24 8.25 9 8.25 6.75 7.24 6.75 6 7.76 3.75 9 3.75zM9 14.5c-1.86 0-3.49-.92-4.49-2.33C4.62 10.72 7.53 10 9 10c1.47 0 4.38.72 4.49 2.17-1 1.41-2.63 2.33-4.49 2.33z" />
+                    </svg>
+                  </TailwindListItemIcon>
+                  <TailwindListItemText title={player.name} />
+                </TailwindListItem>
+              ))}
+              {!showAllPlayers && selectablePlayers.length > 6 ? (
+                <TailwindListItem onClick={() => setShowAllPlayers(true)} key='showmore'>
+                  Show more...
+                </TailwindListItem>
+              ) : showAllPlayers && selectablePlayers.length > 6 ? (
+                <TailwindListItem onClick={() => setShowAllPlayers(false)} key='showless'>
+                  Show less...
+                </TailwindListItem>
+              ) : (
+                <></>
+              )}
 
-      <List component="nav">
-        {players.map((player) => (
-          <ListItem button key={player.id}>
-            <ListItemIcon>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="18"
-                height="18"
-                viewBox="0 0 18 18"
-              >
-                <path d="M9 1C4.58 1 1 4.58 1 9s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm0 2.75c1.24 0 2.25 1.01 2.25 2.25S10.24 8.25 9 8.25 6.75 7.24 6.75 6 7.76 3.75 9 3.75zM9 14.5c-1.86 0-3.49-.92-4.49-2.33C4.62 10.72 7.53 10 9 10c1.47 0 4.38.72 4.49 2.17-1 1.41-2.63 2.33-4.49 2.33z" />
-              </svg>
-            </ListItemIcon>
-            <ListItemText primary={player.name} />
-            <ListItemIcon
-              onClick={() => onDeSelectPlayer(player)}
-              style={{ visibility: isRandomizing ? "hidden" : "visible" }}
+              <TailwindListItem key='currentplayer'>
+                <TailwindListItemIcon>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
+                  </svg>
+                </TailwindListItemIcon>
+                <TextField
+                  value={currentPlayer}
+                  placeholder="New player"
+                  onChange={(e) => setCurrentPlayer(e.currentTarget.value)}
+                />
+                <TailwindButton onClick={onAddPlayer}>Add</TailwindButton>
+              </TailwindListItem>
+            </TailwindList>
+          </div>
+
+          <TailwindList className="mt-8">
+            {players.map((player) => (
+              <TailwindListItem key={player.id}>
+                <TailwindListItemIcon>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9a1 1 0 100-2 1 1 0 000 2zm7-1a1 1 0 11-2 0 1 1 0 012 0zm-.464 5.535a1 1 0 10-1.415-1.414 3 3 0 01-4.242 0 1 1 0 00-1.415 1.414 5 5 0 007.072 0z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </TailwindListItemIcon>
+                <TailwindListItemText title={player.name} />
+                {isRandomizing ? (
+                  <></>
+                ) : (
+                  <TailwindListItemIcon
+                    onClick={() => onDeSelectPlayer(player)}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" />
+                    </svg>
+                  </TailwindListItemIcon>
+                )}
+              </TailwindListItem>
+            ))}
+          </TailwindList>
+        </div>
+        <TailwindCardButtonRow>
+          {game.simultaneousTurns ? null : (
+            <TailwindButton
+              onClick={() => {
+                setPlayers(shiftRandomly(players));
+                setIsRandomizing(true);
+              }}
+              disabled={players.length < 2 || isRandomizing}
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-              >
-                <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" />
-              </svg>
-            </ListItemIcon>
-          </ListItem>
-        ))}
-      </List>
-      <ButtonRow>
-        {game.simultaneousTurns ? null : (
-          <Button
-            color="default"
-            onClick={() => {
-              setPlayers(shiftRandomly(players));
-              setIsRandomizing(true);
-            }}
-            disabled={players.length < 2 || isRandomizing}
-            variant="outlined"
+              Random starting player
+            </TailwindButton>
+          )}
+          <TailwindButtonPrimary
+            onClick={onStartGame}
+            disabled={players.length === 0 || isRandomizing}
           >
-            Random starting player
-          </Button>
-        )}
-        <Button
-          color="primary"
-          onClick={onStartGame}
-          disabled={players.length === 0 || isRandomizing}
-          variant="contained"
-        >
-          Start
-        </Button>
-      </ButtonRow>
+            Start
+          </TailwindButtonPrimary>
+        </TailwindCardButtonRow>
+      </TailwindCard>
     </div>
   );
 

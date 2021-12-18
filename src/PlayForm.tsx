@@ -3,7 +3,6 @@ import SwipeableViews from "react-swipeable-views";
 import Button from "@material-ui/core/Button";
 import {
   Checkbox,
-  Typography,
   FormControlLabel,
   FormGroup,
   makeStyles,
@@ -22,6 +21,10 @@ import { PlayFormMiscField } from "./PlayFormMiscField";
 import groupBy from "lodash/groupBy";
 import map from "lodash/map";
 import { FormFocusGroup, FormFocusContextProvider } from "./utils/focus";
+import {
+  TailwindCard,
+  TailwindContainerTitle,
+} from "./common/components/Container";
 
 const useStyles = makeStyles({
   heading: {
@@ -355,22 +358,22 @@ export const PlayForm = (props: {
 
   return (
     <FormFocusContextProvider>
-      <div>
-        <Typography variant="h6" gutterBottom>
-          {game.name}
-        </Typography>
+      <div className="p-2">
+        <TailwindCard>
+          <TailwindContainerTitle>{game.name}</TailwindContainerTitle>
 
-        <SwipeableViews
-          enableMouseEvents
-          index={activeViewIndex}
-          onChangeIndex={(newIndex, oldIndex) => {
-            if (isSwitchingHack) setActiveViewIndex(newIndex);
-            else setActiveViewIndex(oldIndex);
-          }}
-          onSwitching={() => (isSwitchingHack = true)}
-        >
-          {views}
-        </SwipeableViews>
+          <SwipeableViews
+            enableMouseEvents
+            index={activeViewIndex}
+            onChangeIndex={(newIndex, oldIndex) => {
+              if (isSwitchingHack) setActiveViewIndex(newIndex);
+              else setActiveViewIndex(oldIndex);
+            }}
+            onSwitching={() => (isSwitchingHack = true)}
+          >
+            {views}
+          </SwipeableViews>
+        </TailwindCard>
       </div>
     </FormFocusContextProvider>
   );

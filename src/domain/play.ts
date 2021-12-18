@@ -182,11 +182,26 @@ export class Play implements PlayDTO {
     return new Date(this.created);
   }
 
-  public getName(): string {
+  public getName(): string | null {
     const nameValue = this.getMiscFieldValue(nameField);
     const locationValue = this.getMiscFieldValue(locationField);
-    const name = nameValue || locationValue || "";
+    const name =
+      nameValue || locationValue || this.getDate().toLocaleDateString();
+
+    return name;
+  }
+
+  public getDisplayName(): string {
+    const nameValue = this.getMiscFieldValue(nameField);
+    const locationValue = this.getMiscFieldValue(locationField);
+    const name = nameValue ?? locationValue ?? "";
     return `${this.getDate().toLocaleDateString()} ${name}`;
+  }
+
+  public getLocation(): string {
+    const locationValue = this.getMiscFieldValue(locationField);
+    const name = locationValue ?? "";
+    return `${name}`;
   }
 
   public getMiscFieldValue<T extends string | number | string[]>(

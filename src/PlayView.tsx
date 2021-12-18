@@ -1,24 +1,34 @@
 import { RouteComponentProps } from "react-router";
 import React, { useState } from "react";
 import { Play, MiscDataDTO } from "./domain/play";
-import {
-  Button,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
-  TableFooter,
-  makeStyles,
-  Paper,
-} from "@material-ui/core";
 import { useGames } from "./common/hooks/useGames";
 import { GameMiscFieldDefinition, Game } from "./domain/game";
 import { usePlays } from "./common/hooks/usePlays";
 import { firestore } from "./common/firebase";
 import { sortBy } from "lodash";
-import ButtonRow from "./ButtonRow";
 import { Link } from "react-router-dom";
+import {
+  TailwindCard,
+  TailwindContainerTitle,
+  TailwindCardContent,
+} from "./common/components/Container";
+import {
+  TailwindTableHead,
+  TailwindTableHeadCell,
+  TailwindTableCell,
+  TailwindTableRow,
+  TailwindTableFooter,
+  TailwindTableBody,
+  TailwindTable,
+} from "./common/components/Table";
+import {
+  TailwindBackButton,
+  TailwindButton,
+  TailwindButtonDanger,
+  TailwindButtonPrimary,
+  TailwindCardButtonRow,
+} from "./common/components/Button";
+import { LoadingSpinner } from "./common/components/LoadingSpinner";
 
 export const PlayView = (props: RouteComponentProps<any>) => {
   const games = useGames();
@@ -26,11 +36,24 @@ export const PlayView = (props: RouteComponentProps<any>) => {
 
   const [plays, loading, error] = usePlays();
 
-  const [isFullscreenImage, setIsFullScreenImage] = useState("");
+  const [fullScreenImageSrc, setFullScreenImageSrc] = useState("");
 
   if (error) return <>Error: {error}</>;
 
-  if (loading) return <>Loading...</>;
+  const onBack = () => props.history.push("/");
+
+  if (loading) {
+    return (
+      <div className="p-2">
+        <div className="p-2">
+          <TailwindBackButton onClick={onBack} />
+        </div>
+        <TailwindCard className="h-screen">
+          <LoadingSpinner />
+        </TailwindCard>
+      </div>
+    );
+  }
 
   const play = plays.find((d) => d.id === playId);
 
@@ -41,7 +64,7 @@ export const PlayView = (props: RouteComponentProps<any>) => {
   if (!game) return <>Game not found!</>;
 
   const onEditPlay = () => props.history.push("/edit/" + play.id);
-  const onBack = () => props.history.push("/");
+
   const onReplay = () => props.history.push(`/replay/${playId}`);
 
   const onDelete = async () => {
@@ -69,55 +92,37 @@ export const PlayView = (props: RouteComponentProps<any>) => {
     return field.field.name;
   };
 
-  const minimizedStyle = { maxWidth: "100vw", maxHeight: "50vh" };
-  const maximizedStyle = {
-    maxWidth: "100%",
-
-    maxHeight: "100%",
-    bottom: "0",
-    left: "0",
-    margin: "auto",
-    overflow: "auto",
-    position: "fixed",
-    right: "0",
-    top: "0",
-    objectFit: "contain",
-    zIndex: 900,
-    opacity: "100%",
-  };
-  const fadeBackground = {
-    position: "absolute" as "absolute",
-    width: "100%",
-    height: "100%",
-    left: "0",
-    top: "0",
-    opacity: "70%",
-    backgroundColor: "black",
-    zIndex: 100,
-  };
-
   const images = play.getImageUrls();
-  const renderImages =
+  const PlayImages = () =>
     images.length > 0 ? (
       <>
-        <h3>Images</h3>
-        {images.map((src, idx) => (
+        {fullScreenImageSrc ? (
+          <div
+            className="backdrop-blur-lg top-0 left-0 fixed w-full h-full z-10 flex justify-center"
+            onClick={() => setFullScreenImageSrc("")}
+          >
+            <img
+              src={fullScreenImageSrc}
+              className="object-contain"
+              alt={fullScreenImageSrc}
+            />
+          </div>
+        ) : (
+          <></>
+        )}
+
+        <TailwindContainerTitle>Images</TailwindContainerTitle>
+        {images.map((src) => (
           <div
             key={src}
+            className="flex justify-center"
             onClick={() =>
-              isFullscreenImage
-                ? setIsFullScreenImage("")
-                : setIsFullScreenImage(src)
+              fullScreenImageSrc
+                ? setFullScreenImageSrc("")
+                : setFullScreenImageSrc(src)
             }
           >
-            {isFullscreenImage ? <div style={fadeBackground}></div> : <></>}
-            <img
-              src={src}
-              style={
-                isFullscreenImage === src ? maximizedStyle : minimizedStyle
-              }
-              alt={src}
-            />
+            <img src={src} alt={src} className="max-h-80" />
           </div>
         ))}
       </>
@@ -126,78 +131,91 @@ export const PlayView = (props: RouteComponentProps<any>) => {
     );
 
   return (
-    <div style={{ paddingBottom: "1em" }}>
-      <h2>Play: {game.name}</h2>
-      <div>Played on {play.getDate().toLocaleDateString()}</div>
-      {game.hasExpansions() && (
-        <div>
-          Used expansions:{" "}
-          {(game.expansions || [])
-            .filter(({ id }) => play.expansions.includes(id))
-            .map(({ name }) => name)
-            .join(", ") || "None"}
+    <>
+      <div className="p-2">
+        <div className="p-2">
+          <TailwindBackButton onClick={onBack} />
         </div>
-      )}
-      {play.misc
-        .filter((x) => x.fieldId !== "images")
-        .map((misc, idx) => (
-          <div key={idx}>
-            {getFieldName(misc)}: {misc.data}
+
+        <TailwindCard className="text-center text-sm p-0">
+          <div className="p-2">
+            <div className="overflow-visible m-10 relative mx-auto bg-white shadow-lg ring-1 ring-black/5 rounded-xl flex items-center gap-6 ml-4 md:ml-6">
+              <img
+                className="object-cover object-top absolute -left-4 md:-left-6 w-24 h-24 md:w-28 md:h-28 rounded-full shadow-lg"
+                alt={game.name}
+                src={game.icon}
+              />
+              <div className="flex flex-col py-5 pl-24">
+                <strong className="text-gray-900 text-xl font-medium text-left">
+                  Play: {game.name}
+                </strong>
+                <div className="text-gray-500 font-medium text-sm sm:text-base leading-tight truncate text-left">
+                  {play.getName()}
+                </div>
+              </div>
+            </div>
+
+            <TailwindCardContent className="p-2">
+              <div>Played on {play.getDate().toLocaleDateString()}</div>
+              {game.hasExpansions() && (
+                <div>
+                  Used expansions:{" "}
+                  {(game.expansions || [])
+                    .filter(({ id }) => play.expansions.includes(id))
+                    .map(({ name }) => name)
+                    .join(", ") || "None"}
+                </div>
+              )}
+              {play.misc
+                .filter((x) => x.fieldId !== "images")
+                .map((misc, idx) => (
+                  <div key={idx}>
+                    {getFieldName(misc)}: {misc.data}
+                  </div>
+                ))}
+            </TailwindCardContent>
+
+            <TailwindContainerTitle>Scores</TailwindContainerTitle>
+            <PlayTable game={game} play={play} {...props} />
+
+            <PlayImages />
           </div>
-        ))}
-      <PlayTable game={game} play={play} {...props} />
-      <ButtonRow>
-        <Button variant="contained" color="default" onClick={onBack}>
-          &lt;
-        </Button>
-        <Button variant="contained" color="primary" onClick={onEditPlay}>
-          Edit
-        </Button>
-        <Button variant="contained" color="secondary" onClick={onDelete}>
-          Delete
-        </Button>
-        <Button variant="contained" color="default" onClick={onReplay}>
-          Play again
-        </Button>
-        <Button
-          variant="contained"
-          onClick={() => props.history.push(`/games/${game.id}`)}
-        >
-          Show reports
-        </Button>
-      </ButtonRow>
-      {renderImages}
-    </div>
+          <div className="hidden md:flex">
+            <TailwindCardButtonRow className="hidden md:flex">
+              <TailwindButtonPrimary onClick={onEditPlay}>
+                Edit
+              </TailwindButtonPrimary>
+              <TailwindButtonDanger onClick={onDelete}>
+                Delete
+              </TailwindButtonDanger>
+              <TailwindButton onClick={onReplay}>
+                Play&nbsp;again
+              </TailwindButton>
+              <TailwindButton
+                onClick={() => props.history.push(`/games/${game.id}`)}
+              >
+                Show&nbsp;reports
+              </TailwindButton>
+            </TailwindCardButtonRow>
+          </div>
+        </TailwindCard>
+      </div>
+
+      <div className="w-full p-4 bg-white mt-8 flex flex-row gap-4 flex-wrap justify-center sticky bottom-0 border-t-2 md:hidden">
+        <TailwindButtonPrimary onClick={onEditPlay}>Edit</TailwindButtonPrimary>
+        <TailwindButtonDanger onClick={onDelete}>Delete</TailwindButtonDanger>
+        <TailwindButton onClick={onReplay}>Again</TailwindButton>
+        <TailwindButton onClick={() => props.history.push(`/games/${game.id}`)}>
+          Reports
+        </TailwindButton>
+      </div>
+    </>
   );
 };
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    width: "100%",
-  },
-  paper: {
-    marginTop: theme.spacing(3),
-    width: "100%",
-    overflowX: "auto",
-    marginBottom: theme.spacing(2),
-    paddingLeft: "4px",
-  },
-  table: {
-    maxWidth: "100%",
-  },
-  "@global": {
-    ".MuiTableCell-root": {
-      padding: "0",
-      fontSize: "0.8em",
-    },
-  },
-}));
 
 const PlayTable = (
   props: { game: Game; play: Play } & RouteComponentProps<{}>
 ) => {
-  const classes = useStyles();
-  const highlightColor = "#f5f5f5";
   const { game, play } = props;
   const hasTieBreaker =
     play.scores.filter((x) => x.fieldId === "tie-breaker" && x.score).length >
@@ -213,81 +231,77 @@ const PlayTable = (
 
   const players = sortBy(play.players, (x) => play.getPosition(x.id));
 
-  return (
-    <div className={classes.root}>
-      <Paper className={classes.paper}>
-        <Table className={classes.table}>
-          <TableHead>
-            <TableRow>
-              <TableCell>Category</TableCell>
-              {players.map((p, idx) => (
-                <TableCell
-                  key={p.id}
-                  style={{
-                    backgroundColor: idx % 2 === 0 ? highlightColor : "",
-                  }}
-                >
-                  {`${play.getPosition(p.id)}. `}
-                  <Link to={"/players/" + p.id}>{`${p.name}`}</Link>
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            <TableRow>
-              <TableCell>Starting order</TableCell>
-              {players.map((f, idx) => (
-                <TableCell
-                  key={f.id}
-                  style={{
-                    backgroundColor: idx % 2 === 0 ? highlightColor : "",
-                  }}
-                >
-                  {play.players.lastIndexOf(f) + 1}.
-                </TableCell>
-              ))}
-            </TableRow>
-            {scoreFields.map((p) => (
-              <TableRow key={p.id}>
-                <TableCell scope="row">{p.name}</TableCell>
-                {players.map((f, idx) => (
-                  <TableCell
-                    scope="row"
-                    key={f.id}
-                    style={{
-                      backgroundColor: idx % 2 === 0 ? highlightColor : "",
-                    }}
-                  >
-                    {
-                      (
-                        play.scores.find(
-                          (s) => s.fieldId === p.id && s.playerId === f.id
-                        ) || ({} as any)
-                      ).score
-                    }
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))}
-          </TableBody>
+  const formatName = (name: string) => {
+    const parts = name.split(" ");
+    const firstName = parts[0];
+    const lastName =
+      parts.length > 1 ? parts[1].substring(0, 1).toUpperCase() : "";
 
-          <TableFooter>
-            <TableRow>
-              <TableCell>Total</TableCell>
-              {players.map((f, idx) => (
-                <TableCell
-                  key={f.id}
-                  style={{
-                    backgroundColor: idx % 2 === 0 ? highlightColor : "",
-                  }}
+    return `${firstName}${lastName}`;
+  };
+
+  return (
+    <TailwindCardContent>
+      <TailwindTable>
+        <TailwindTableHead>
+          <TailwindTableRow key='1'>
+            <TailwindTableHeadCell key='category'>Category</TailwindTableHeadCell>
+            {players.map((p, idx) => (
+              <TailwindTableCell key={p.id}>
+                {`${play.getPosition(p.id)}.`}
+                <Link to={"/players/" + p.id}>{`${formatName(p.name)}`}</Link>
+              </TailwindTableCell>
+            ))}
+          </TailwindTableRow>
+        </TailwindTableHead>
+        <TailwindTableBody>
+          <TailwindTableRow key='2'>
+            <TailwindTableCell className="text-left" key='starting-order'>
+              Starting order
+            </TailwindTableCell>
+            {players.map((f, idx) => (
+              <TailwindTableCell
+                key={f.id}
+                className={idx % 2 === 0 ? "bg-gray-50" : ""}
+              >
+                {play.players.lastIndexOf(f) + 1}.
+              </TailwindTableCell>
+            ))}
+          </TailwindTableRow>
+          {scoreFields.map((f) => (
+            <TailwindTableRow key={f.id}>
+              <TailwindTableCell className="text-left" key='name'>
+                {f.name}
+              </TailwindTableCell>
+              {players.map((p, idx) => (
+                <TailwindTableCell
+                  key={p.id}
+                  className={idx % 2 === 0 ? "bg-gray-50" : ""}
                 >
-                  {play.getTotal(f.id)}
-                </TableCell>
+                  {
+                    (
+                      play.scores.find(
+                        (s) => s.fieldId === f.id && s.playerId === p.id
+                      ) || ({} as any)
+                    ).score
+                  }
+                </TailwindTableCell>
               ))}
-            </TableRow>
-          </TableFooter>
-        </Table>
-      </Paper>
-    </div>
+            </TailwindTableRow>
+          ))}
+        </TailwindTableBody>
+
+        <TailwindTableFooter>
+          <TailwindTableRow key='footer'>
+            <TailwindTableCell key='total'>Total</TailwindTableCell>
+            {players.map((f, idx) => (
+              <TailwindTableCell key={f.id}>
+                {play.getTotal(f.id)}
+              </TailwindTableCell>
+            ))}
+          </TailwindTableRow>
+        </TailwindTableFooter>
+      </TailwindTable>
+    </TailwindCardContent>
   );
 };
