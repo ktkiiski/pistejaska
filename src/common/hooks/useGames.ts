@@ -1,15 +1,19 @@
-import { firestore } from "../firebase";
+import { useCollection } from "react-firebase-hooks/firestore";
+import { app } from "../firebase";
+import { Game } from "../../domain/game";
 import { useMemo } from "react";
-import { useCollectionData } from "react-firebase-hooks/firestore";
-import { Game, GameDefinition } from "../../domain/game";
+import { getFirestore, collection } from 'firebase/firestore';
+import { orderBy } from "lodash";
 
-const gamesQuery = firestore().collection("games").orderBy("name");
+export const useGames = (): [Game[], boolean, Error | undefined] => {
 
-export function useGames(): Game[] | undefined {
-  const [gamesData] = useCollectionData<GameDefinition>(gamesQuery);
-  const games = useMemo(
-    () => gamesData?.map((game) => new Game(game)),
-    [gamesData]
+  const [value, loading, error] = useCollection(
+    collection(getFirestore(app), 'games')
   );
-  return games;
-}
+
+  const plays = useMemo(
+    () => (loading || !value ? [] : orderBy(value.docs.map((x: any) => x.data()), x => x.name).map((data) => new Game(data))),
+    [value, loading]
+  );
+  return [plays, loading, error];
+};

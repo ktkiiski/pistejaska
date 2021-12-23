@@ -3,9 +3,8 @@ import React, { useState } from "react";
 import { Play, MiscDataDTO } from "./domain/play";
 import { useGames } from "./common/hooks/useGames";
 import { GameMiscFieldDefinition, Game } from "./domain/game";
-import { usePlays } from "./common/hooks/usePlays";
-import { firestore } from "./common/firebase";
 import { sortBy } from "lodash";
+import { getFirestore, deleteDoc, doc } from 'firebase/firestore';
 import { Link } from "react-router-dom";
 import {
   TailwindCard,
@@ -29,12 +28,14 @@ import {
   TailwindCardButtonRow,
 } from "./common/components/Button";
 import { LoadingSpinner } from "./common/components/LoadingSpinner";
+import { app } from "./common/firebase";
+import { usePlay } from "./common/hooks/usePlay";
 
 export const PlayView = (props: RouteComponentProps<any>) => {
-  const games = useGames();
+  const [games] = useGames();
   const playId = props.match.params["playId"];
 
-  const [plays, loading, error] = usePlays();
+  const [play, loading, error] = usePlay(playId);
 
   const [fullScreenImageSrc, setFullScreenImageSrc] = useState("");
 
@@ -55,8 +56,6 @@ export const PlayView = (props: RouteComponentProps<any>) => {
     );
   }
 
-  const play = plays.find((d) => d.id === playId);
-
   if (!play) {
     return <>Play not found!</>;
   }
@@ -72,8 +71,8 @@ export const PlayView = (props: RouteComponentProps<any>) => {
       `Do you really want to delete play ${play.getName()}?`
     );
     if (!reallyDelete) return;
-    const db = firestore();
-    await db.collection("plays-v1").doc(playId).delete();
+    const db = getFirestore(app)
+    await deleteDoc(doc(db, "plays-v1", playId));
 
     props.history.push("/");
   };

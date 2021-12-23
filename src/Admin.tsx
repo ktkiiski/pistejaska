@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { GameDefinition } from "./domain/game";
 import { FormControl, makeStyles, MenuItem, Select } from "@material-ui/core";
-import { useCollectionData } from "react-firebase-hooks/firestore";
-import { firestore } from "./common/firebase";
 import AdminGameEditor from "./AdminGameEditor";
+import { useGames } from "./common/hooks/useGames";
+import { deleteDoc, doc, getFirestore, setDoc } from "firebase/firestore";
+import { app } from "./common/firebase";
 
 const useStyles = makeStyles((theme) => ({
   edit: {
@@ -26,9 +27,7 @@ const defaultGameJson: GameDefinition = {
 function Admin() {
   const [gameId, setGameId] = useState<string | null>(null);
 
-  const [games] = useCollectionData<GameDefinition>(
-    firestore().collection("games").orderBy("name")
-  );
+  const [games] = useGames()
   const styles = useStyles();
   const initialGameJson = !games
     ? null
@@ -66,8 +65,10 @@ function Admin() {
             if (!id) {
               throw new Error("Missing game ID");
             }
-            await firestore().collection("games").doc(id).set(json);
-            setGameId(id);
+
+            const db = getFirestore(app)
+            await setDoc(doc(db, "games", id), json)
+            setGameId(id)
           }}
           onDelete={
             !gameId
@@ -82,7 +83,8 @@ function Admin() {
                   ) {
                     return;
                   }
-                  await firestore().collection("games").doc(gameId).delete();
+                  const db = getFirestore(app)
+                  await deleteDoc(doc(db, "games", gameId));
                   setGameId(null);
                 }
           }

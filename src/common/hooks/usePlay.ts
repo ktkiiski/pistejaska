@@ -1,14 +1,15 @@
 import { useCollection } from "react-firebase-hooks/firestore";
-import { firestore } from "../firebase";
+import { getFirestore, collection } from 'firebase/firestore';
 import { Play, PlayDTO } from "../../domain/play";
 import { useMemo } from "react";
-
-const playQuery = firestore().collection("plays-v1");
+import { app } from "../firebase";
 
 export const usePlay = (
   playId: string
 ): [Play | null, boolean, Error | undefined] => {
-  const [value, loading, error] = useCollection(playQuery);
+  const [value, loading, error] = useCollection(
+    collection(getFirestore(app), 'plays-v1')
+  );
   const doc = value && value.docs.find((d) => d.id === playId);
   const play = useMemo(
     () => (doc && new Play(doc.data() as PlayDTO)) || null,

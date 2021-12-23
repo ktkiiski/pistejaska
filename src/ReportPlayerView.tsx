@@ -49,7 +49,7 @@ export const ReportPlayerView = (props: RouteComponentProps<any>) => {
 };
 
 const PlayerGamesReport = (props: { player: Player; plays: Play[] }) => {
-  const games = useGames();
+  const [games] = useGames();
   const { player, plays } = props;
   const playerPlays = plays.filter((p) =>
     p.players.find((x) => x.id === player.id)

@@ -16,13 +16,13 @@ import {
 } from "./common/components/List";
 import {
   TailwindCard,
-  TailwindContainerTitle,
   TailwindCardContent,
+  TailwindContainerTitle,
 } from "./common/components/Container";
 import { SkeletonLoader } from "./common/components/SkeletonLoader";
 
 export const PlayList = (props: RouteComponentProps<{}>) => {
-  const games = useGames();
+  const [games] = useGames();
   const [plays, loading, error] = usePlays();
 
   const data = useMemo(

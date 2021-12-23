@@ -35,7 +35,7 @@ import {
 } from "./common/components/Container";
 
 export const ReportGameView = (props: RouteComponentProps<any>) => {
-  const games = useGames();
+  const [games] = useGames();
   const gameId = props.match.params["gameId"];
 
   const [allPlays, loading, error] = usePlays();
