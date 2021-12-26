@@ -62,4 +62,12 @@ typings/
 
 # IntelliJ config files
 .idea
+
+# prod credentials
 pistejaska-dev-serviceaccount-credentials-private-key.json
+
+# build
+build/**/*
+
+# OS X finder config file for folder
+.DS_Store

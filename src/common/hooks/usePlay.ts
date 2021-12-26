@@ -10,8 +10,9 @@ export const usePlay = (
 ): [Play | null, boolean, Error | undefined] => {
   const [value, loading, error] = useCollection(playQuery);
   const doc = value && value.docs.find((d) => d.id === playId);
-  const play = useMemo(() => (doc && new Play(doc.data() as PlayDTO)) || null, [
-    doc,
-  ]);
+  const play = useMemo(
+    () => (doc && new Play(doc.data() as PlayDTO)) || null,
+    [doc]
+  );
   return [play, loading, error];
 };

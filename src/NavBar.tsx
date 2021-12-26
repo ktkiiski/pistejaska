@@ -28,10 +28,8 @@ const useStyles = makeStyles(() => ({
 export function NavBar() {
   const history = useHistory();
   const styles = useStyles();
-  const [
-    menuAnchorElement,
-    setMenuAnchorElement,
-  ] = useState<HTMLElement | null>(null);
+  const [menuAnchorElement, setMenuAnchorElement] =
+    useState<HTMLElement | null>(null);
   const menuIcon = useMemo(
     () => (
       <IconButton

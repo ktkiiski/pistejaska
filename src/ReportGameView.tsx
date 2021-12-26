@@ -29,6 +29,10 @@ import {
   hasFilters,
   ReportFilters,
 } from "./domain/filters";
+import {
+  TailwindCard,
+  TailwindContainerTitle,
+} from "./common/components/Container";
 
 export const ReportGameView = (props: RouteComponentProps<any>) => {
   const games = useGames();
@@ -60,52 +64,55 @@ export const ReportGameView = (props: RouteComponentProps<any>) => {
   const reportDimensions = game.getRelevantReportFields();
 
   return (
-    <div>
-      <h2>Reports: {game.name}</h2>
-      <ReportFilterSelector
-        game={game}
-        plays={unfilteredGamePlays}
-        filters={filters}
-        onChange={setFilters}
-      />
-      <p>
-        Based on{" "}
-        {hasFilters(filters)
-          ? `${gamePlays.length} / ${unfilteredGamePlays.length}`
-          : gamePlays.length}{" "}
-        plays.
-      </p>
-      <HighScoresReportTable game={game} plays={gamePlays} />
+    <div className="p-2">
+      <TailwindCard>
+        <TailwindContainerTitle>Reports: {game.name}</TailwindContainerTitle>
 
-      <GameScoreFieldReport game={game} plays={gamePlays} />
-      <ReportGameCorrelation game={game} plays={gamePlays} />
+        <ReportFilterSelector
+          game={game}
+          plays={unfilteredGamePlays}
+          filters={filters}
+          onChange={setFilters}
+        />
+        <p>
+          Based on{" "}
+          {hasFilters(filters)
+            ? `${gamePlays.length} / ${unfilteredGamePlays.length}`
+            : gamePlays.length}{" "}
+          plays.
+        </p>
+        <HighScoresReportTable game={game} plays={gamePlays} />
 
-      {reportDimensions.map((x) => {
-        const playsWithDimension = gamePlays.filter((p) =>
-          p.misc.some((m) => m.fieldId === x.id)
-        );
-        return (
-          <React.Fragment key={x.id}>
-            <h4>{x.name}</h4>
-            <p>Based on {playsWithDimension.length} plays.</p>
-            <ReportDimensionReportTable
-              plays={playsWithDimension}
-              dimension={x}
-            />
-          </React.Fragment>
-        );
-      })}
+        <GameScoreFieldReport game={game} plays={gamePlays} />
+        <ReportGameCorrelation game={game} plays={gamePlays} />
 
-      <h4>Best players</h4>
-      <ReportPlayers plays={gamePlays}></ReportPlayers>
+        {reportDimensions.map((x) => {
+          const playsWithDimension = gamePlays.filter((p) =>
+            p.misc.some((m) => m.fieldId === x.id)
+          );
+          return (
+            <React.Fragment key={x.id}>
+              <h4>{x.name}</h4>
+              <p>Based on {playsWithDimension.length} plays.</p>
+              <ReportDimensionReportTable
+                plays={playsWithDimension}
+                dimension={x}
+              />
+            </React.Fragment>
+          );
+        })}
 
-      <p>
-        Calculated with{" "}
-        <a href="https://www.microsoft.com/en-us/research/project/trueskill-ranking-system/">
-          TrueSkill
-        </a>
-        .
-      </p>
+        <h4>Best players</h4>
+        <ReportPlayers plays={gamePlays}></ReportPlayers>
+
+        <p>
+          Calculated with{" "}
+          <a href="https://www.microsoft.com/en-us/research/project/trueskill-ranking-system/">
+            TrueSkill
+          </a>
+          .
+        </p>
+      </TailwindCard>
     </div>
   );
 };

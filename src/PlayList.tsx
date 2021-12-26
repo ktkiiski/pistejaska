@@ -1,5 +1,4 @@
 import React, { useState, useMemo } from "react";
-import { List, ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
 import { TablePagination } from "@material-ui/core";
 
 import { Play } from "./domain/play";
@@ -8,10 +7,23 @@ import { orderBy } from "lodash";
 import { usePlays } from "./common/hooks/usePlays";
 import { useGames } from "./common/hooks/useGames";
 import GamePopularityChart from "./GameTrendChart";
+import {
+  TailwindList,
+  TailwindListItem,
+  TailwindListItemDescription,
+  TailwindListItemIcon,
+  TailwindListItemText,
+} from "./common/components/List";
+import {
+  TailwindCard,
+  TailwindContainerTitle,
+  TailwindCardContent,
+} from "./common/components/Container";
+import { SkeletonLoader } from "./common/components/SkeletonLoader";
 
 export const PlayList = (props: RouteComponentProps<{}>) => {
   const games = useGames();
-  const [plays, , error] = usePlays();
+  const [plays, loading, error] = usePlays();
 
   const data = useMemo(
     () =>
@@ -27,6 +39,8 @@ export const PlayList = (props: RouteComponentProps<{}>) => {
     return data.slice(offset, offset + itemsPerPage);
   }, [currentPage, data, itemsPerPage]);
 
+  const [showAll, setShowAll] = useState(false);
+
   if (error) {
     return (
       <div>
@@ -37,45 +51,69 @@ export const PlayList = (props: RouteComponentProps<{}>) => {
 
   const onSelectPlay = (play: Play) => props.history.push("/view/" + play.id);
   return (
-    <div>
-      <h2>Plays</h2>
-      <GamePopularityChart plays={plays} />
-      <List component="nav">
-        {currentData.map((play) => {
-          const game = games?.find((g) => g.id === play.gameId);
-          return (
-            <ListItem button onClick={() => onSelectPlay(play)} key={play.id}>
-              {game && (
-                <ListItemIcon>
-                  <img width={30} height={30} src={game.icon} alt={game.name} />
-                </ListItemIcon>
-              )}
-              <ListItemText primary={play.getName()} secondary={game?.name} />
-            </ListItem>
-          );
-        })}
-      </List>
+    <div className="p-2">
+      <TailwindCard>
+        <TailwindContainerTitle>Plays</TailwindContainerTitle>
 
-      <TablePagination
-        component="div"
-        count={data.length}
-        rowsPerPage={itemsPerPage}
-        page={currentPage}
-        backIconButtonProps={{
-          "aria-label": "Previous Page",
-        }}
-        nextIconButtonProps={{
-          "aria-label": "Next Page",
-        }}
-        onChangePage={(e, page) => {
-          setCurrentPage(page);
-        }}
-        onChangeRowsPerPage={(e) => {
-          setCurrentPage(0);
-          setItemsPerPage((e as any).target.value);
-        }}
-        rowsPerPageOptions={[10, 25, 50, 100, 1000]}
-      />
+        {loading && <SkeletonLoader />}
+
+        <TailwindList onClickShowAll={() => setShowAll(!showAll)}>
+          {(showAll ? data : currentData).map((play) => {
+            const game = games?.find((g) => g.id === play.gameId);
+            return (
+              <TailwindListItem
+                key={play.id}
+                onClick={() => onSelectPlay(play)}
+              >
+                {game && (
+                  <TailwindListItemIcon>
+                    <img
+                      alt="gamepic"
+                      src={game.icon}
+                      className="mx-auto object-cover rounded-full h-14 w-14 "
+                    />
+                  </TailwindListItemIcon>
+                )}
+                <TailwindListItemText
+                  title={play.getName() ?? ""}
+                  description={game?.name}
+                />
+                <TailwindListItemDescription
+                  text={play.getDate().toLocaleDateString()}
+                />
+              </TailwindListItem>
+            );
+          })}
+        </TailwindList>
+
+        <TablePagination
+          component="div"
+          count={data.length}
+          rowsPerPage={itemsPerPage}
+          page={currentPage}
+          backIconButtonProps={{
+            "aria-label": "Previous Page",
+          }}
+          nextIconButtonProps={{
+            "aria-label": "Next Page",
+          }}
+          onPageChange={(e, page) => {
+            setCurrentPage(page);
+          }}
+          onChangeRowsPerPage={(e) => {
+            setCurrentPage(0);
+            setItemsPerPage((e as any).target.value);
+          }}
+          rowsPerPageOptions={[10, 25, 50, 100, 1000]}
+        />
+      </TailwindCard>
+
+      <TailwindCard>
+        <TailwindContainerTitle>Game popularity chart</TailwindContainerTitle>
+        <TailwindCardContent className="p-2">
+          <GamePopularityChart plays={plays} />
+        </TailwindCardContent>
+      </TailwindCard>
     </div>
   );
 };

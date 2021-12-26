@@ -54,7 +54,9 @@ export const calculateEloForPlayers = (plays: Play[], minPlays: number) => {
       })
     );
 
-    newRatings.forEach((rating, idx) => (players[idx].rating = rating[0]));
+    newRatings.forEach(
+      (rating: any, idx: number) => (players[idx].rating = rating[0])
+    );
 
     players.forEach(
       (p) =>

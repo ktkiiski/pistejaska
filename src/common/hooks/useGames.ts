@@ -7,8 +7,9 @@ const gamesQuery = firestore().collection("games").orderBy("name");
 
 export function useGames(): Game[] | undefined {
   const [gamesData] = useCollectionData<GameDefinition>(gamesQuery);
-  const games = useMemo(() => gamesData?.map((game) => new Game(game)), [
-    gamesData,
-  ]);
+  const games = useMemo(
+    () => gamesData?.map((game) => new Game(game)),
+    [gamesData]
+  );
   return games;
 }

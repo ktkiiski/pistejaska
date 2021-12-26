@@ -81,13 +81,13 @@ If you need to perform data migrations, do this:
 
 ## TODO
 
+- save PlayForm state to session storage so that in case of bugs it is saved
+- CRA => esbuild?
 - change "misc score field" for unknown expansion scores to be the last field of the PlayForm
-- reports (winrates, avg scores etc) for different races in asymmetrical games (like race in caverna or gameboard in 7 wonders)
 - statistical analysis for strongest victory predictor (eg. start order (is starting player more likely to win), number of dwarfs in caverna, player, race used)
 - generic reports: games by plays, longest/shortest games, best ELO rating for all games etc
 - read support for everyone, write support for whitelisted emails
 - normalize player names (firstname and first letter of surname)
-- allow game field definitions editing on UI
 - celebration page on save to see the winner with konfetti animation
 
 ### Technical debt
@@ -95,6 +95,10 @@ If you need to perform data migrations, do this:
 - denormalize players to their own root entity
 - better backups
 - automatic tests
+
+## Tips
+
+- `npx run prettier --write .` will auto-format all code to look nice
 
 ## Known issues
 
