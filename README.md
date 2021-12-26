@@ -99,6 +99,7 @@ If you need to perform data migrations, do this:
 ## Tips
 
 - `npx run prettier --write .` will auto-format all code to look nice
+- Analyze bundle size: npm run build && npm run analyze
 
 ## Known issues
 

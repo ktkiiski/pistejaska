@@ -22,7 +22,7 @@ function getSlot(year: number, month: number) {
 }
 
 function useGamePopularityTimeData(plays: Play[]) {
-  const allGames = useGames();
+  const [allGames] = useGames();
   if (!allGames) {
     return [null, []] as const;
   }

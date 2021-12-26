@@ -35,7 +35,7 @@ const SelectPlayers = (props: {
   gameId: string;
   initialPlayers?: Player[];
 }) => {
-  const games = useGames();
+  const [games] = useGames();
   const { gameId, initialPlayers = [] } = props;
   const game = games?.find((g) => g.id === gameId);
 

@@ -11,10 +11,10 @@ import {
 import React, { useMemo, useState } from "react";
 import { useHistory } from "react-router-dom";
 import AccountCircle from "@material-ui/icons/AccountCircle";
-import firebase from "firebase";
+import { getAuth, signOut } from "firebase/auth";
 
 const logout = () => {
-  firebase.auth().signOut();
+  signOut(getAuth())
 };
 
 const useStyles = makeStyles(() => ({

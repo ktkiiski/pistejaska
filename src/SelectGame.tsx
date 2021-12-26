@@ -15,7 +15,7 @@ import {
 } from "./common/components/List";
 
 export const SelectGame = (props: RouteComponentProps<{}>) => {
-  const games = useGames();
+  const [games] = useGames();
   const onSelectGame = (game: GameDefinition) =>
     props.history.push("/new/" + game.id);
 

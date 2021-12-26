@@ -19,7 +19,7 @@ import SelectPlayersFromPlay from "./SelectPlayersFromPlay";
 import { ReportPlayerView } from "./ReportPlayerView";
 import { ReportPlayerList } from "./ReportPlayerList";
 import Admin from "./Admin";
-import firebase from "firebase";
+import { getAuth } from 'firebase/auth'
 
 const center = {
   position: "absolute" as any,
@@ -28,7 +28,7 @@ const center = {
   transform: "translate(-50%, -50%)",
 };
 const App = () => {
-  const [user, loading] = useAuthState(firebase.auth());
+  const [user, loading] = useAuthState(getAuth());
   if (loading) {
     return (
       <div style={center}>
