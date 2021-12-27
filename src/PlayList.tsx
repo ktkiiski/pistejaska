@@ -6,7 +6,6 @@ import { RouteComponentProps } from "react-router";
 import { orderBy } from "lodash";
 import { usePlays } from "./common/hooks/usePlays";
 import { useGames } from "./common/hooks/useGames";
-import GamePopularityChart from "./GameTrendChart";
 import {
   TailwindList,
   TailwindListItem,
@@ -16,7 +15,6 @@ import {
 } from "./common/components/List";
 import {
   TailwindCard,
-  TailwindCardContent,
   TailwindContainerTitle,
 } from "./common/components/Container";
 import { SkeletonLoader } from "./common/components/SkeletonLoader";
@@ -106,13 +104,6 @@ export const PlayList = (props: RouteComponentProps<{}>) => {
           }}
           rowsPerPageOptions={[10, 25, 50, 100, 1000]}
         />
-      </TailwindCard>
-
-      <TailwindCard>
-        <TailwindContainerTitle>Game popularity chart</TailwindContainerTitle>
-        <TailwindCardContent className="p-2">
-          <GamePopularityChart plays={plays} />
-        </TailwindCardContent>
       </TailwindCard>
     </div>
   );

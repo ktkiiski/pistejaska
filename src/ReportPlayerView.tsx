@@ -8,7 +8,6 @@ import ReportTable from "./ReportTable";
 import { stringifyScore } from "./common/stringUtils";
 import { calculateEloForPlayers } from "./domain/ratings";
 import { useGames } from "./common/hooks/useGames";
-import GameTrendChart from "./GameTrendChart";
 
 export const ReportPlayerView = (props: RouteComponentProps<any>) => {
   const playerId = props.match.params["playerId"];
@@ -42,7 +41,6 @@ export const ReportPlayerView = (props: RouteComponentProps<any>) => {
     <div>
       <h2>Reports: {player.name}</h2>
       <p>Based on {playerPlays.length} plays.</p>
-      <GameTrendChart plays={playerPlays} />
       <PlayerGamesReport player={player} plays={plays}></PlayerGamesReport>
     </div>
   );
