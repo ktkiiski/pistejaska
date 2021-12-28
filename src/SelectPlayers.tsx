@@ -131,7 +131,7 @@ const SelectPlayers = (props: {
           )}
           <TailwindButtonPrimary
             onClick={onStartGame}
-            disabled={players.length === 0 || isRandomizing}
+            disabled={players.length < 2 || isRandomizing}
           >
             Start
           </TailwindButtonPrimary>
