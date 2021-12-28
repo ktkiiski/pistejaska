@@ -54,9 +54,9 @@ export const TailwindButton: React.FC<TailwindStyle> = (props) => (
   <TailwindButtonBase
     {...props}
     className={`$
-    bg-gray-500 
+    bg-gray-500
     hover:bg-gray-600
-    ${props.disabled ? "text-gray-400 bg-gray-300 hover:bg-gray-300" : ""} 
+    ${props.disabled ? "text-gray-400 bg-gray-300 hover:bg-gray-300" : ""}
     ${props.className || ""}`}
   >
     {props.children}
@@ -68,7 +68,9 @@ export const TailwindCardButtonRow: React.FC<TailwindStyle> = ({
   className,
 }) => (
   <div
-    className={`w-full p-4 bg-white mt-8 flex flex-row gap-4 justify-center flex-wrap border-t-2 rounded-b-xl ${className}`}
+    className={`flex flex-row gap-2 justify-center flex-wrap ${
+      className || ""
+    }`}
   >
     {children}
   </div>
