@@ -1,4 +1,5 @@
 import { TailwindCard } from "./Container";
+import styles from './ViewContentLayout.module.css';
 
 interface ViewContentLayoutProps {
   header?: React.ReactNode;
@@ -27,9 +28,15 @@ const ViewContentLayout: React.FC<ViewContentLayoutProps> = ({
         </TailwindCard>
       </div>
 
-      <div className="w-full p-4 bg-white mt-8 sticky bottom-0 border-t-2 md:hidden">
-        <div className="container mx-auto">{footer}</div>
-      </div>
+      {footer && (
+        <>
+          {/* Invisible placeholder for the fixed footer */}
+          <div className={`md:hidden ${styles.footerPlaceholder}`} />
+          <div className="w-full p-4 bg-white fixed bottom-0 border-t-2 md:hidden">
+            <div className="container mx-auto">{footer}</div>
+          </div>
+        </>
+      )}
     </>
   );
 };

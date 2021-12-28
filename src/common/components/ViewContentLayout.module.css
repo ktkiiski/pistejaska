@@ -1,0 +1,4 @@
+.footerPlaceholder {
+    /* TODO: In reality the fixed positioned footer has dynamic height! */
+    height: 80px;
+}
