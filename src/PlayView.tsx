@@ -1,5 +1,5 @@
 import { RouteComponentProps } from "react-router";
-import React, { useState } from "react";
+import { useState } from "react";
 import { Play, MiscDataDTO } from "./domain/play";
 import { useGames } from "./common/hooks/useGames";
 import { GameMiscFieldDefinition, Game } from "./domain/game";
@@ -7,7 +7,6 @@ import { sortBy } from "lodash";
 import { getFirestore, deleteDoc, doc } from "firebase/firestore";
 import { Link } from "react-router-dom";
 import {
-  TailwindCard,
   TailwindContainerTitle,
   TailwindCardContent,
 } from "./common/components/Container";
@@ -46,14 +45,9 @@ export const PlayView = (props: RouteComponentProps<any>) => {
 
   if (loading) {
     return (
-      <div className="p-2">
-        <div className="p-2">
-          <TailwindBackButton onClick={onBack} />
-        </div>
-        <TailwindCard className="h-screen">
-          <LoadingSpinner />
-        </TailwindCard>
-      </div>
+      <ViewContentLayout header={<TailwindBackButton onClick={onBack} />}>
+        <LoadingSpinner />
+      </ViewContentLayout>
     );
   }
 
@@ -168,7 +162,7 @@ export const PlayView = (props: RouteComponentProps<any>) => {
         </div>
       </div>
 
-      <TailwindCardContent className="p-2">
+      <TailwindCardContent className="p-2 text-center">
         <div>Played on {play.getDate().toLocaleDateString()}</div>
         {game.hasExpansions() && (
           <div>
@@ -224,7 +218,7 @@ const PlayTable = (
   };
 
   return (
-    <TailwindCardContent>
+    <TailwindCardContent className="text-center">
       <TailwindTable>
         <TailwindTableHead>
           <TailwindTableRow key="1">

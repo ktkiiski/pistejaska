@@ -1,18 +1,16 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { RouteComponentProps } from "react-router";
 import { TextField } from "@material-ui/core";
 import { GameDefinition } from "./domain/game";
 import { useGames } from "./common/hooks/useGames";
-import {
-  TailwindCard,
-  TailwindContainerTitle,
-} from "./common/components/Container";
+import { TailwindContainerTitle } from "./common/components/Container";
 import {
   TailwindList,
   TailwindListItem,
   TailwindListItemIcon,
   TailwindListItemText,
 } from "./common/components/List";
+import ViewContentLayout from "./common/components/ViewContentLayout";
 
 export const SelectGame = (props: RouteComponentProps<{}>) => {
   const [games] = useGames();
@@ -36,39 +34,34 @@ export const SelectGame = (props: RouteComponentProps<{}>) => {
       : 0;
   });
   return (
-    <div className="p-2">
-      <TailwindCard>
-        <TailwindContainerTitle>Select game</TailwindContainerTitle>
+    <ViewContentLayout>
+      <TailwindContainerTitle>Select game</TailwindContainerTitle>
 
-        <div className="p-2">
-          <TextField
-            label="Search..."
-            value={searchTerm}
-            autoFocus
-            onChange={(e) => setSearchTerm(e.currentTarget.value)}
-          />
-        </div>
+      <div className="p-2">
+        <TextField
+          label="Search..."
+          value={searchTerm}
+          autoFocus
+          onChange={(e) => setSearchTerm(e.currentTarget.value)}
+        />
+      </div>
 
-        <TailwindList onClickShowAll={() => {}}>
-          {listedGames
-            .filter((g) => g.lowercaseName.includes(searchTerm.toLowerCase()))
-            .map((game) => (
-              <TailwindListItem
-                onClick={() => onSelectGame(game)}
-                key={game.id}
-              >
-                <TailwindListItemIcon>
-                  <img
-                    alt="gamepic"
-                    src={game.icon}
-                    className="mx-auto object-cover rounded-full h-10 w-10"
-                  />
-                </TailwindListItemIcon>
-                <TailwindListItemText title={game.name} />
-              </TailwindListItem>
-            ))}
-        </TailwindList>
-      </TailwindCard>
-    </div>
+      <TailwindList onClickShowAll={() => {}}>
+        {listedGames
+          .filter((g) => g.lowercaseName.includes(searchTerm.toLowerCase()))
+          .map((game) => (
+            <TailwindListItem onClick={() => onSelectGame(game)} key={game.id}>
+              <TailwindListItemIcon>
+                <img
+                  alt="gamepic"
+                  src={game.icon}
+                  className="mx-auto object-cover rounded-full h-10 w-10"
+                />
+              </TailwindListItemIcon>
+              <TailwindListItemText title={game.name} />
+            </TailwindListItem>
+          ))}
+      </TailwindList>
+    </ViewContentLayout>
   );
 };

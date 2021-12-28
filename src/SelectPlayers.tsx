@@ -1,14 +1,11 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Player } from "./domain/play";
 import { TextField } from "@material-ui/core";
 import { v4 as uuid } from "uuid";
 import { PlayNew } from "./PlayNew";
 import { usePlayers } from "./common/hooks/usePlayers";
 import { useGames } from "./common/hooks/useGames";
-import {
-  TailwindCard,
-  TailwindContainerTitle,
-} from "./common/components/Container";
+import { TailwindContainerTitle } from "./common/components/Container";
 import {
   TailwindList,
   TailwindListItem,

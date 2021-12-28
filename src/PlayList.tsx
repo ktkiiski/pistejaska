@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { TablePagination } from "@material-ui/core";
 
 import { Play } from "./domain/play";
@@ -13,11 +13,9 @@ import {
   TailwindListItemIcon,
   TailwindListItemText,
 } from "./common/components/List";
-import {
-  TailwindCard,
-  TailwindContainerTitle,
-} from "./common/components/Container";
+import { TailwindContainerTitle } from "./common/components/Container";
 import { SkeletonLoader } from "./common/components/SkeletonLoader";
+import ViewContentLayout from "./common/components/ViewContentLayout";
 
 export const PlayList = (props: RouteComponentProps<{}>) => {
   const [games] = useGames();
@@ -49,62 +47,57 @@ export const PlayList = (props: RouteComponentProps<{}>) => {
 
   const onSelectPlay = (play: Play) => props.history.push("/view/" + play.id);
   return (
-    <div className="p-2">
-      <TailwindCard>
-        <TailwindContainerTitle>Plays</TailwindContainerTitle>
+    <ViewContentLayout>
+      <TailwindContainerTitle>Plays</TailwindContainerTitle>
 
-        {loading && <SkeletonLoader />}
+      {loading && <SkeletonLoader />}
 
-        <TailwindList onClickShowAll={() => setShowAll(!showAll)}>
-          {(showAll ? data : currentData).map((play) => {
-            const game = games?.find((g) => g.id === play.gameId);
-            return (
-              <TailwindListItem
-                key={play.id}
-                onClick={() => onSelectPlay(play)}
-              >
-                {game && (
-                  <TailwindListItemIcon>
-                    <img
-                      alt="gamepic"
-                      src={game.icon}
-                      className="mx-auto object-cover rounded-full h-14 w-14 "
-                    />
-                  </TailwindListItemIcon>
-                )}
-                <TailwindListItemText
-                  title={play.getName() ?? ""}
-                  description={game?.name}
-                />
-                <TailwindListItemDescription
-                  text={play.getDate().toLocaleDateString()}
-                />
-              </TailwindListItem>
-            );
-          })}
-        </TailwindList>
+      <TailwindList onClickShowAll={() => setShowAll(!showAll)}>
+        {(showAll ? data : currentData).map((play) => {
+          const game = games?.find((g) => g.id === play.gameId);
+          return (
+            <TailwindListItem key={play.id} onClick={() => onSelectPlay(play)}>
+              {game && (
+                <TailwindListItemIcon>
+                  <img
+                    alt="gamepic"
+                    src={game.icon}
+                    className="mx-auto object-cover rounded-full h-14 w-14 "
+                  />
+                </TailwindListItemIcon>
+              )}
+              <TailwindListItemText
+                title={play.getName() ?? ""}
+                description={game?.name}
+              />
+              <TailwindListItemDescription
+                text={play.getDate().toLocaleDateString()}
+              />
+            </TailwindListItem>
+          );
+        })}
+      </TailwindList>
 
-        <TablePagination
-          component="div"
-          count={data.length}
-          rowsPerPage={itemsPerPage}
-          page={currentPage}
-          backIconButtonProps={{
-            "aria-label": "Previous Page",
-          }}
-          nextIconButtonProps={{
-            "aria-label": "Next Page",
-          }}
-          onPageChange={(e, page) => {
-            setCurrentPage(page);
-          }}
-          onChangeRowsPerPage={(e) => {
-            setCurrentPage(0);
-            setItemsPerPage((e as any).target.value);
-          }}
-          rowsPerPageOptions={[10, 25, 50, 100, 1000]}
-        />
-      </TailwindCard>
-    </div>
+      <TablePagination
+        component="div"
+        count={data.length}
+        rowsPerPage={itemsPerPage}
+        page={currentPage}
+        backIconButtonProps={{
+          "aria-label": "Previous Page",
+        }}
+        nextIconButtonProps={{
+          "aria-label": "Next Page",
+        }}
+        onPageChange={(e, page) => {
+          setCurrentPage(page);
+        }}
+        onChangeRowsPerPage={(e) => {
+          setCurrentPage(0);
+          setItemsPerPage((e as any).target.value);
+        }}
+        rowsPerPageOptions={[10, 25, 50, 100, 1000]}
+      />
+    </ViewContentLayout>
   );
 };

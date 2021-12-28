@@ -12,10 +12,10 @@ const ViewContentLayout: React.FC<ViewContentLayoutProps> = ({
 }) => {
   return (
     <>
-      <div className="p-2">
+      <div className="p-2 container mx-auto">
         {header && <div className="p-2">{header}</div>}
 
-        <TailwindCard className="text-center text-sm p-0">
+        <TailwindCard className="text-sm">
           {children}
           {footer && (
             <div className="hidden md:flex">
@@ -28,7 +28,7 @@ const ViewContentLayout: React.FC<ViewContentLayoutProps> = ({
       </div>
 
       <div className="w-full p-4 bg-white mt-8 sticky bottom-0 border-t-2 md:hidden">
-        {footer}
+        <div className="container mx-auto">{footer}</div>
       </div>
     </>
   );
