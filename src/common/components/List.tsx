@@ -1,5 +1,4 @@
-import React from "react";
-import { TailwindListStyle, TailwindStyle } from "./types";
+import React, { HTMLAttributes } from "react";
 import { TailwindCardContent } from "./Container";
 
 export const TailwindListItemText: React.FC<{
@@ -14,13 +13,16 @@ export const TailwindListItemText: React.FC<{
   </div>
 );
 
-export const TailwindListItemIcon: React.FC<TailwindStyle> = ({
+export const TailwindListItemIcon: React.FC<HTMLAttributes<HTMLDivElement>> = ({
   children,
-  onClick,
+  className,
+  ...props
 }) => (
   <div
-    className="flex flex-col justify-center items-center mr-4"
-    onClick={onClick}
+    className={`flex flex-col justify-center items-center mr-4 ${
+      className || ""
+    }`}
+    {...props}
   >
     {children}
   </div>
@@ -30,14 +32,13 @@ export const TailwindListItemDescription: React.FC<{ text: string }> = ({
   text,
 }) => <div className="text-gray-600 dark:text-gray-200 text-xs">{text}</div>;
 
-export const TailwindListItem: React.FC<TailwindListStyle> = ({
+export const TailwindListItem: React.FC<HTMLAttributes<HTMLLIElement>> = ({
   children,
-  key,
-  onClick,
   className,
+  ...props
 }) => {
   return (
-    <li className="flex flex-row"  onClick={onClick}>
+    <li className="flex flex-row" {...props}>
       <div
         className={`select-none cursor-pointer flex flex-1 items-center px-4 py-2 hover:bg-gray-50 dark:hover:bg-gray-900 ${
           className || ""
@@ -49,13 +50,12 @@ export const TailwindListItem: React.FC<TailwindListStyle> = ({
   );
 };
 
-export const TailwindList: React.FC<
-  TailwindStyle & {
-    onClickShowAll?: () => void;
-    showPagination?: boolean;
-    showShowAll?: boolean;
-  }
-> = ({ children, onClickShowAll, showPagination, showShowAll, className }) => (
+export const TailwindList: React.FC<{
+  className?: string;
+  onClickShowAll?: () => void;
+  showPagination?: boolean;
+  showShowAll?: boolean;
+}> = ({ children, onClickShowAll, showPagination, showShowAll, className }) => (
   <>
     <TailwindCardContent
       className={`flex flex-col mx-auto items-center justify-center ${

@@ -4,6 +4,7 @@ import { RouteComponentProps } from "react-router";
 import { flatMap, groupBy, orderBy } from "lodash";
 import { usePlays } from "./common/hooks/usePlays";
 import { Player } from "./domain/play";
+import ViewContentLayout from "./common/components/ViewContentLayout";
 
 export const ReportPlayerList = (props: RouteComponentProps<{}>) => {
   const [plays, loading, error] = usePlays();
@@ -31,7 +32,7 @@ export const ReportPlayerList = (props: RouteComponentProps<{}>) => {
   );
 
   return (
-    <div>
+    <ViewContentLayout>
       <h2>Players</h2>
       <List component="nav">
         {Object.keys(players).map((playerId) => {
@@ -47,6 +48,6 @@ export const ReportPlayerList = (props: RouteComponentProps<{}>) => {
           );
         })}
       </List>
-    </div>
+    </ViewContentLayout>
   );
 };

@@ -1,13 +1,10 @@
 import React, { useState } from "react";
 import SwipeableViews from "react-swipeable-views";
-import Button from "@material-ui/core/Button";
 import {
   Checkbox,
   FormControlLabel,
   FormGroup,
   makeStyles,
-  ButtonGroup,
-  Box,
 } from "@material-ui/core";
 import { Player, Play, UnsavedImage } from "./domain/play";
 import {
@@ -21,10 +18,13 @@ import { PlayFormMiscField } from "./PlayFormMiscField";
 import groupBy from "lodash/groupBy";
 import map from "lodash/map";
 import { FormFocusGroup, FormFocusContextProvider } from "./utils/focus";
+import { TailwindContainerTitle } from "./common/components/Container";
+import ViewContentLayout from "./common/components/ViewContentLayout";
 import {
-  TailwindCard,
-  TailwindContainerTitle,
-} from "./common/components/Container";
+  TailwindButton,
+  TailwindButtonPrimary,
+  TailwindCardButtonRow,
+} from "./common/components/Button";
 
 const useStyles = makeStyles({
   heading: {
@@ -35,6 +35,7 @@ const useStyles = makeStyles({
     flexDirection: "column",
     alignItems: "center",
     textAlign: "left",
+    paddingBottom: "1em",
   },
   description: {
     margin: "1em 2em",
@@ -56,9 +57,6 @@ export const PlayForm = (props: {
   const [activeViewIndex, setActiveViewIndex] = useState(0);
   const hasExpansions = game.hasExpansions();
   const styles = useStyles();
-
-  const scoreFields = game.getScoreFields(play.expansions).map((f) => f.field);
-  const done = play.scores.length === players.length * scoreFields.length;
 
   let isSwitchingHack = false;
 
@@ -279,42 +277,6 @@ export const PlayForm = (props: {
     ));
   };
 
-  const renderButtons = (viewIndex: number) => (
-    <Box marginTop={8}>
-      <ButtonGroup variant="outlined" color="default">
-        <Button
-          disabled={viewIndex <= 0}
-          onClick={() => setActiveViewIndex(Math.max(viewIndex - 1, 0))}
-          // Skip from tab navigation
-          tabIndex={-1}
-        >
-          &lt; Previous
-        </Button>
-        <Button
-          variant={
-            done || viewIndex >= viewCount - 1 ? "contained" : "outlined"
-          }
-          color="primary"
-          onClick={onSave}
-          // Skip from tab navigation, except on the final tab
-          tabIndex={viewIndex < viewCount - 1 ? -1 : 0}
-        >
-          Save
-        </Button>
-        <Button
-          disabled={viewIndex >= viewCount - 1}
-          onClick={() =>
-            setActiveViewIndex(Math.min(viewIndex + 1, viewCount - 1))
-          }
-          // Skip from tab navigation
-          tabIndex={-1}
-        >
-          Next &gt;
-        </Button>
-      </ButtonGroup>
-    </Box>
-  );
-
   const views = [
     hasExpansions && (
       <div key="expansions" className={styles.view}>
@@ -324,7 +286,6 @@ export const PlayForm = (props: {
             renderExpansionField(expansion)
           )}
         </FormGroup>
-        {renderButtons(0)}
       </div>
     ),
     ...fieldGroups.map(({ group, fields: groupFields, viewId }, groupIndex) => {
@@ -350,7 +311,6 @@ export const PlayForm = (props: {
               </React.Fragment>
             ))}
           </FormFocusGroup>
-          {renderButtons(viewIndex)}
         </div>
       );
     }),
@@ -358,23 +318,55 @@ export const PlayForm = (props: {
 
   return (
     <FormFocusContextProvider>
-      <div className="p-2">
-        <TailwindCard>
-          <TailwindContainerTitle>{game.name}</TailwindContainerTitle>
-
-          <SwipeableViews
-            enableMouseEvents
-            index={activeViewIndex}
-            onChangeIndex={(newIndex, oldIndex) => {
-              if (isSwitchingHack) setActiveViewIndex(newIndex);
-              else setActiveViewIndex(oldIndex);
-            }}
-            onSwitching={() => (isSwitchingHack = true)}
-          >
-            {views}
-          </SwipeableViews>
-        </TailwindCard>
-      </div>
+      <ViewContentLayout
+        footer={
+          <TailwindCardButtonRow>
+            <TailwindButton
+              disabled={activeViewIndex <= 0}
+              onClick={() =>
+                setActiveViewIndex(Math.max(activeViewIndex - 1, 0))
+              }
+              // Skip from tab navigation
+              tabIndex={-1}
+            >
+              &lt; Previous
+            </TailwindButton>
+            <TailwindButtonPrimary
+              color="primary"
+              onClick={onSave}
+              style={
+                // TODO: Better visual effect to highlight the "Save" button when done
+                activeViewIndex === viewCount - 1 ? undefined : { opacity: 0.8 }
+              }
+            >
+              Save
+            </TailwindButtonPrimary>
+            <TailwindButton
+              disabled={activeViewIndex >= viewCount - 1}
+              onClick={() =>
+                setActiveViewIndex(Math.min(activeViewIndex + 1, viewCount - 1))
+              }
+              // Skip from tab navigation
+              tabIndex={-1}
+            >
+              Next &gt;
+            </TailwindButton>
+          </TailwindCardButtonRow>
+        }
+      >
+        <TailwindContainerTitle>{game.name}</TailwindContainerTitle>
+        <SwipeableViews
+          enableMouseEvents
+          index={activeViewIndex}
+          onChangeIndex={(newIndex, oldIndex) => {
+            if (isSwitchingHack) setActiveViewIndex(newIndex);
+            else setActiveViewIndex(oldIndex);
+          }}
+          onSwitching={() => (isSwitchingHack = true)}
+        >
+          {views}
+        </SwipeableViews>
+      </ViewContentLayout>
     </FormFocusContextProvider>
   );
 };

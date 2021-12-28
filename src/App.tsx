@@ -10,7 +10,7 @@ import { PlayView } from "./PlayView";
 import { CircularProgress } from "@material-ui/core";
 import { MarkdownViewer } from "./MarkdownViewer";
 import { ThemeProvider } from "@material-ui/styles";
-import { createTheme } from '@material-ui/core/styles';
+import { createTheme } from "@material-ui/core/styles";
 import { ReportGameView } from "./ReportGameView";
 import { PlayList } from "./PlayList";
 import { ReportGameList } from "./ReportGameList";
@@ -19,7 +19,7 @@ import SelectPlayersFromPlay from "./SelectPlayersFromPlay";
 import { ReportPlayerView } from "./ReportPlayerView";
 import { ReportPlayerList } from "./ReportPlayerList";
 import Admin from "./Admin";
-import { getAuth } from 'firebase/auth'
+import { getAuth } from "firebase/auth";
 
 const center = {
   position: "absolute" as any,
@@ -83,7 +83,7 @@ const App = () => {
   });
   return (
     <ThemeProvider theme={theme}>
-      <div className="container mx-auto bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 min-h-screen">
+      <div className="bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 min-h-screen">
         <Router>{app}</Router>
       </div>
     </ThemeProvider>

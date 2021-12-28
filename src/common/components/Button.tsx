@@ -1,5 +1,4 @@
-import React from "react";
-import { TailwindStyle } from "./types";
+import React, { ButtonHTMLAttributes, HTMLAttributes } from "react";
 
 const defaultButtonClasses = `inline-block px-4 py-3
 text-sm font-semibold text-center
@@ -9,24 +8,22 @@ shadow-md
 rounded-full
 cursor-pointer`;
 
-export const TailwindButtonBase: React.FC<TailwindStyle> = ({
-  children,
-  onClick,
-  className,
-  disabled,
-  tabIndex,
-}) => (
+export const TailwindButtonBase: React.FC<
+  ButtonHTMLAttributes<HTMLButtonElement>
+> = ({ children, onClick, className, disabled, ...props }) => (
   <button
     className={`${defaultButtonClasses} ${className}
     `}
     onClick={disabled || !onClick ? () => {} : onClick}
-    tabIndex={tabIndex}
+    {...props}
   >
     {children}
   </button>
 );
 
-export const TailwindButtonPrimary: React.FC<TailwindStyle> = (props) => (
+export const TailwindButtonPrimary: React.FC<
+  ButtonHTMLAttributes<HTMLButtonElement>
+> = (props) => (
   <TailwindButtonBase
     {...props}
     className={`
@@ -38,7 +35,9 @@ bg-purple-700 hover:bg-purple-800 ${
   </TailwindButtonBase>
 );
 
-export const TailwindButtonDanger: React.FC<TailwindStyle> = (props) => (
+export const TailwindButtonDanger: React.FC<
+  ButtonHTMLAttributes<HTMLButtonElement>
+> = (props) => (
   <TailwindButtonBase
     {...props}
     className={`
@@ -50,31 +49,37 @@ export const TailwindButtonDanger: React.FC<TailwindStyle> = (props) => (
   </TailwindButtonBase>
 );
 
-export const TailwindButton: React.FC<TailwindStyle> = (props) => (
+export const TailwindButton: React.FC<
+  ButtonHTMLAttributes<HTMLButtonElement>
+> = (props) => (
   <TailwindButtonBase
     {...props}
     className={`$
-    bg-gray-500 
+    bg-gray-500
     hover:bg-gray-600
-    ${props.disabled ? "text-gray-400 bg-gray-300 hover:bg-gray-300" : ""} 
+    ${props.disabled ? "text-gray-400 bg-gray-300 hover:bg-gray-300" : ""}
     ${props.className || ""}`}
   >
     {props.children}
   </TailwindButtonBase>
 );
 
-export const TailwindCardButtonRow: React.FC<TailwindStyle> = ({
-  children,
-  className,
-}) => (
+export const TailwindCardButtonRow: React.FC<
+  HTMLAttributes<HTMLDivElement>
+> = ({ children, className, ...props }) => (
   <div
-    className={`w-full p-4 bg-white mt-8 flex flex-row gap-4 justify-center flex-wrap border-t-2 rounded-b-xl ${className}`}
+    className={`flex flex-row gap-2 justify-center flex-wrap ${
+      className || ""
+    }`}
+    {...props}
   >
     {children}
   </div>
 );
 
-export const TailwindBackButton: React.FC<TailwindStyle> = ({ onClick }) => (
+export const TailwindBackButton: React.FC<
+  ButtonHTMLAttributes<HTMLButtonElement>
+> = ({ onClick }) => (
   <TailwindButton onClick={onClick} className="px-4 py-4">
     <svg
       xmlns="http://www.w3.org/2000/svg"
