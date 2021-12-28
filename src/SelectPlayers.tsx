@@ -86,16 +86,24 @@ const SelectPlayers = (props: {
     if (!isRandomizing) {
       return undefined;
     }
+    let hasEnded = false;
     let animation = requestAnimationFrame(animate);
     function animate() {
+      if (hasEnded) return;
       setPlayers((oldPlayers) => shiftValues(oldPlayers, 1));
       animation = requestAnimationFrame(animate);
     }
-    const timeout = setTimeout(() => setIsRandomizing(false), 1000);
-    return () => {
+    function endAnimation() {
+      hasEnded = true;
       cancelAnimationFrame(animation);
       clearTimeout(timeout);
-    };
+    }
+    const timeout = setTimeout(() => {
+      setIsRandomizing(false);
+      endAnimation();
+    }, 1000);
+
+    return endAnimation;
   }, [isRandomizing]);
 
   if (!games) {
@@ -144,18 +152,24 @@ const SelectPlayers = (props: {
                 </TailwindListItem>
               ))}
               {!showAllPlayers && selectablePlayers.length > 6 ? (
-                <TailwindListItem onClick={() => setShowAllPlayers(true)} key='showmore'>
+                <TailwindListItem
+                  onClick={() => setShowAllPlayers(true)}
+                  key="showmore"
+                >
                   Show more...
                 </TailwindListItem>
               ) : showAllPlayers && selectablePlayers.length > 6 ? (
-                <TailwindListItem onClick={() => setShowAllPlayers(false)} key='showless'>
+                <TailwindListItem
+                  onClick={() => setShowAllPlayers(false)}
+                  key="showless"
+                >
                   Show less...
                 </TailwindListItem>
               ) : (
                 <></>
               )}
 
-              <TailwindListItem key='currentplayer'>
+              <TailwindListItem key="currentplayer">
                 <TailwindListItemIcon>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
