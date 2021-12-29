@@ -12,7 +12,7 @@ import { MarkdownViewer } from "./MarkdownViewer";
 import { ThemeProvider } from "@material-ui/styles";
 import { createTheme } from "@material-ui/core/styles";
 import { ReportGameView } from "./ReportGameView";
-import { PlayList } from "./PlayList";
+import { PlayListView } from "./PlayListView";
 import { ReportGameList } from "./ReportGameList";
 import SelectPlayers from "./SelectPlayers";
 import SelectPlayersFromPlay from "./SelectPlayersFromPlay";
@@ -41,7 +41,7 @@ const App = () => {
   ) : (
     <>
       <Route path="/" component={NavBar} />
-      <Route path="/" exact component={PlayList} />
+      <Route path="/" exact component={PlayListView} />
       <Route path="/view/:playId" component={PlayView} />
       <Route path="/games" exact component={ReportGameList} />
       <Route path="/games/:gameId" component={ReportGameView} />
