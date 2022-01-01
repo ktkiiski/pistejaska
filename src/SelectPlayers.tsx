@@ -18,6 +18,7 @@ import {
   TailwindCardButtonRow,
 } from "./common/components/Button";
 import ViewContentLayout from "./common/components/ViewContentLayout";
+import { LoadingSpinner } from "./common/components/LoadingSpinner";
 
 function shiftRandomly<T>(values: T[]) {
   const offset = Math.floor(Math.random() * values.length);
@@ -33,7 +34,7 @@ const SelectPlayers = (props: {
   gameId: string;
   initialPlayers?: Player[];
 }) => {
-  const [games] = useGames();
+  const [games, isLoadingGames] = useGames();
   const { gameId, initialPlayers = [] } = props;
   const game = games?.find((g) => g.id === gameId);
 
@@ -104,11 +105,11 @@ const SelectPlayers = (props: {
     return endAnimation;
   }, [isRandomizing]);
 
-  if (!games) {
-    return <div>Loading…</div>;
+  if (isLoadingGames) {
+    return <LoadingSpinner />;
   }
   if (!game) {
-    return <div>Unknown game!</div>;
+    return <ViewContentLayout>Unknown game!</ViewContentLayout>;
   }
 
   const selectPlayers = (

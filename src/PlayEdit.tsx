@@ -7,20 +7,33 @@ import { usePlay } from "./common/hooks/usePlay";
 import { app } from "./common/firebase";
 import { getStorage, ref, uploadBytes } from "firebase/storage";
 import { getFirestore, setDoc, doc } from "firebase/firestore";
+import { LoadingSpinner } from "./common/components/LoadingSpinner";
+import ViewContentLayout from "./common/components/ViewContentLayout";
 
 
 export const PlayEdit = (props: RouteComponentProps<any>) => {
-  const [games] = useGames();
+  const [games, isLoadingGames] = useGames();
   const playId = props.match.params["playId"];
-  const [play, loading] = usePlay(playId);
-
-  if (loading) return <>Loading...</>;
+  const [play, isLoadingPlay] = usePlay(playId);
 
   if (!play) {
-    return <>Play not found!</>;
+    return isLoadingPlay ? (
+      <LoadingSpinner />
+    ) : (
+      <ViewContentLayout>Play not found!</ViewContentLayout>
+    )
   }
   const game = games?.find((g) => g.id === play.gameId);
-  if (!game) return <>Game not found!</>;
+  if (!game) {
+    if (isLoadingGames) {
+      return <LoadingSpinner />;
+    }
+    return isLoadingGames ? (
+      <LoadingSpinner />
+    ) : (
+      <ViewContentLayout>Game not found!</ViewContentLayout>
+    );
+  };
 
   const onSave = async (play: Play) => {
     const currentDuration = play.getDurationInHours();
@@ -31,10 +44,10 @@ export const PlayEdit = (props: RouteComponentProps<any>) => {
     if (currentDuration == null && duration > tenMins && duration < tenHours) {
       const setDuration = window.confirm(
         "Looks like the play began " +
-          duration +
-          "h ago.\n\nDo you want to set the play length to be " +
-          duration +
-          " hours?"
+        duration +
+        "h ago.\n\nDo you want to set the play length to be " +
+        duration +
+        " hours?"
       );
       if (setDuration) {
         play.setDurationInHours(duration);
