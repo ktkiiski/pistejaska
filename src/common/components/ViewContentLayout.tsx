@@ -16,11 +16,15 @@ const ViewContentLayout: React.FC<ViewContentLayoutProps> = ({
       <div className="p-2 container mx-auto">
         {header && <div className="p-2">{header}</div>}
 
-        <TailwindCard className="text-sm">
-          {children}
+        <TailwindCard className="text-sm p-0">
+          <div className="p-2">
+            {children}
+          </div>
+          
+          { /* Desktop footer */}
           {footer && (
             <div className="hidden md:flex">
-              <div className="w-full p-4 pg-white mt-8 border-t-2 rounded-b-xl">
+              <div className="w-full p-4 bg-white mt-8 border-t-2 rounded-b-xl">
                 {footer}
               </div>
             </div>
@@ -28,6 +32,7 @@ const ViewContentLayout: React.FC<ViewContentLayoutProps> = ({
         </TailwindCard>
       </div>
 
+      { /* Mobile footer */}
       {footer && (
         <>
           {/* Invisible placeholder for the fixed footer */}

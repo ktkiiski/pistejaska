@@ -14,16 +14,17 @@ import PlayList from "./PlayList";
 export const ReportPlayerView = (props: RouteComponentProps<any>) => {
   const playerId = props.match.params["playerId"];
 
-  const [plays, loading, error] = usePlays();
+  const [plays, loadingPlays, errorPlays] = usePlays();
+  const [games, loadingGames, errorGames] = useGames();
 
-  if (error) {
+  if (errorPlays || errorGames) {
     return (
       <div>
         Permission denied. Ask permissions from panu.vuorinen@gmail.com.
       </div>
     );
   }
-  if (loading) {
+  if (loadingPlays || loadingGames) {
     return <>Loading...</>;
   }
 
@@ -44,7 +45,7 @@ export const ReportPlayerView = (props: RouteComponentProps<any>) => {
       <h2>Reports: {player.name}</h2>
       <p>Based on {playerPlays.length} plays.</p>
       <PlayerGamesReport player={player} plays={plays}></PlayerGamesReport>
-      <PlayList plays={playerPlays} />
+      <PlayList plays={playerPlays} games={games} />
     </ViewContentLayout>
   );
 };

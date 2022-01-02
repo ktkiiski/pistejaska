@@ -3,7 +3,6 @@ import { TablePagination } from "@material-ui/core";
 import { useHistory } from "react-router";
 import { Play } from "./domain/play";
 import { orderBy } from "lodash";
-import { useGames } from "./common/hooks/useGames";
 import {
   TailwindList,
   TailwindListItem,
@@ -11,15 +10,16 @@ import {
   TailwindListItemIcon,
   TailwindListItemText,
 } from "./common/components/List";
+import { Game } from "./domain/game";
 
 interface PlayListProps {
   plays: Play[];
+  games: Game[];
 }
 
 const PlayList = (props: PlayListProps) => {
-  const { plays } = props;
+  const { plays, games } = props;
   const history = useHistory();
-  const [games] = useGames();
 
   const data = useMemo(
     () =>
@@ -45,15 +45,16 @@ const PlayList = (props: PlayListProps) => {
     <>
       <TailwindList onClickShowAll={() => setShowAll(!showAll)}>
         {(showAll ? data : currentData).map((play) => {
-          const game = games?.find((g) => g.id === play.gameId);
+          const game = games.find((g) => g.id === play.gameId);
           return (
             <TailwindListItem key={play.id} onClick={() => onSelectPlay(play)}>
               <TailwindListItemIcon>
+                {game ? (
                 <img
                   alt="gamepic"
-                  src={game?.icon}
+                  src={game.icon}
                   className="mx-auto object-cover rounded-full h-14 w-14 "
-                />
+                />) : (<div className="mx-auto object-cover rounded-full h-14 w-14 background-gray" />)}
               </TailwindListItemIcon>
               <TailwindListItemText
                 title={play.getName() ?? ""}

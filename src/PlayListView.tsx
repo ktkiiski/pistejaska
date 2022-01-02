@@ -3,11 +3,13 @@ import { TailwindContainerTitle } from "./common/components/Container";
 import { SkeletonLoader } from "./common/components/SkeletonLoader";
 import ViewContentLayout from "./common/components/ViewContentLayout";
 import PlayList from "./PlayList";
+import { useGames } from "./common/hooks/useGames";
 
 export const PlayListView = () => {
-  const [plays, loading, error] = usePlays();
+  const [plays, loadingPlays, errorPlays] = usePlays();
+  const [games, loadingGames, errorGames] = useGames();
 
-  if (error) {
+  if (errorPlays || errorGames) {
     return (
       <ViewContentLayout>
         Permission denied. Ask permissions from panu.vuorinen@gmail.com.
@@ -18,7 +20,7 @@ export const PlayListView = () => {
   return (
     <ViewContentLayout>
       <TailwindContainerTitle>Plays</TailwindContainerTitle>
-      {loading ? <SkeletonLoader /> : <PlayList plays={plays} />}
+      {loadingPlays || loadingGames ? <SkeletonLoader /> : <PlayList plays={plays} games={games} />}
     </ViewContentLayout>
   );
 };
