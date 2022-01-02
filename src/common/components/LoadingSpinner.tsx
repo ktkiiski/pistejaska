@@ -1,7 +1,7 @@
 import React from "react";
 
 export const LoadingSpinner: React.FC = () => (
-  <div className="flex justify-center w-full my-2">
+  <div className="flex justify-center w-full my-2 py-4">
     <svg
       className="animate-spin -ml-1 mr-3 h-8 w-8 text-indigo-800"
       xmlns="http://www.w3.org/2000/svg"

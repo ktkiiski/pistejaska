@@ -6,8 +6,8 @@ export const TailwindListItemText: React.FC<{
   description?: string;
 }> = ({ title, description }) => (
   <div className="flex-1 pl-1 mr-8">
-    <div className="font-medium dark:text-white">{title}</div>
-    <div className="text-gray-600 dark:text-gray-200 text-sm">
+    <div className="font-medium">{title}</div>
+    <div className="text-gray-600 text-sm">
       {description}
     </div>
   </div>
@@ -19,9 +19,8 @@ export const TailwindListItemIcon: React.FC<HTMLAttributes<HTMLDivElement>> = ({
   ...props
 }) => (
   <div
-    className={`flex flex-col justify-center items-center mr-4 ${
-      className || ""
-    }`}
+    className={`flex flex-col justify-center items-center mr-4 ${className || ""
+      }`}
     {...props}
   >
     {children}
@@ -30,7 +29,7 @@ export const TailwindListItemIcon: React.FC<HTMLAttributes<HTMLDivElement>> = ({
 
 export const TailwindListItemDescription: React.FC<{ text: string }> = ({
   text,
-}) => <div className="text-gray-600 dark:text-gray-200 text-xs">{text}</div>;
+}) => <div className="text-gray-600 text-xs">{text}</div>;
 
 export const TailwindListItem: React.FC<HTMLAttributes<HTMLLIElement>> = ({
   children,
@@ -40,9 +39,8 @@ export const TailwindListItem: React.FC<HTMLAttributes<HTMLLIElement>> = ({
   return (
     <li className="flex flex-row" {...props}>
       <div
-        className={`select-none cursor-pointer flex flex-1 items-center px-4 py-2 hover:bg-gray-50 dark:hover:bg-gray-900 ${
-          className || ""
-        }`}
+        className={`select-none cursor-pointer flex flex-1 items-center px-4 py-2 hover:bg-gray-50 ${className || ""
+          }`}
       >
         {children}
       </div>
@@ -58,9 +56,8 @@ export const TailwindList: React.FC<{
 }> = ({ children, onClickShowAll, showPagination, showShowAll, className }) => (
   <>
     <TailwindCardContent
-      className={`flex flex-col mx-auto items-center justify-center ${
-        className || ""
-      }`}
+      className={`flex flex-col mx-auto items-center justify-center ${className || ""
+        }`}
     >
       <ul className="flex flex-col divide divide-y w-full">{children}</ul>
     </TailwindCardContent>

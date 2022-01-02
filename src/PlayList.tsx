@@ -1,10 +1,8 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { TablePagination } from "@material-ui/core";
-
+import { useHistory } from "react-router";
 import { Play } from "./domain/play";
-import { RouteComponentProps } from "react-router";
 import { orderBy } from "lodash";
-import { usePlays } from "./common/hooks/usePlays";
 import { useGames } from "./common/hooks/useGames";
 import {
   TailwindList,
@@ -13,13 +11,15 @@ import {
   TailwindListItemIcon,
   TailwindListItemText,
 } from "./common/components/List";
-import { TailwindContainerTitle } from "./common/components/Container";
-import { SkeletonLoader } from "./common/components/SkeletonLoader";
-import ViewContentLayout from "./common/components/ViewContentLayout";
 
-export const PlayList = (props: RouteComponentProps<{}>) => {
+interface PlayListProps {
+  plays: Play[];
+}
+
+const PlayList = (props: PlayListProps) => {
+  const { plays } = props;
+  const history = useHistory();
   const [games] = useGames();
-  const [plays, loading, error] = usePlays();
 
   const data = useMemo(
     () =>
@@ -37,21 +37,12 @@ export const PlayList = (props: RouteComponentProps<{}>) => {
 
   const [showAll, setShowAll] = useState(false);
 
-  if (error) {
-    return (
-      <div>
-        Permission denied. Ask permissions from panu.vuorinen@gmail.com.
-      </div>
-    );
-  }
-
-  const onSelectPlay = (play: Play) => props.history.push("/view/" + play.id);
+  const onSelectPlay = useCallback(
+    (play: Play) => history.push("/view/" + play.id),
+    [history]
+  );
   return (
-    <ViewContentLayout>
-      <TailwindContainerTitle>Plays</TailwindContainerTitle>
-
-      {loading && <SkeletonLoader />}
-
+    <>
       <TailwindList onClickShowAll={() => setShowAll(!showAll)}>
         {(showAll ? data : currentData).map((play) => {
           const game = games?.find((g) => g.id === play.gameId);
@@ -98,6 +89,8 @@ export const PlayList = (props: RouteComponentProps<{}>) => {
         }}
         rowsPerPageOptions={[10, 25, 50, 100, 1000]}
       />
-    </ViewContentLayout>
+    </>
   );
 };
+
+export default PlayList;

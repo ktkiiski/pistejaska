@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
-import { Player } from "./domain/play";
+import { Play, Player } from "./domain/play";
 import { TextField } from "@material-ui/core";
 import { v4 as uuid } from "uuid";
-import { PlayNew } from "./PlayNew";
 import { usePlayers } from "./common/hooks/usePlayers";
 import { useGames } from "./common/hooks/useGames";
 import { TailwindContainerTitle } from "./common/components/Container";
@@ -18,6 +17,11 @@ import {
   TailwindCardButtonRow,
 } from "./common/components/Button";
 import ViewContentLayout from "./common/components/ViewContentLayout";
+import { LoadingSpinner } from "./common/components/LoadingSpinner";
+import { getFirestore, setDoc, doc } from "firebase/firestore";
+import { Game } from "./domain/game";
+import { app } from "./common/firebase";
+import { useHistory } from "react-router-dom";
 
 function shiftRandomly<T>(values: T[]) {
   const offset = Math.floor(Math.random() * values.length);
@@ -29,11 +33,29 @@ function shiftValues<T>(values: T[], offset: number) {
   return [...values.slice(shift), ...values.slice(0, shift)];
 }
 
+async function createPlay(gameId: string, players: Player[]): Promise<Play> {
+  const playId = `${gameId}-${uuid()}`;
+  const play = new Play({
+    gameId: gameId,
+    id: playId,
+    players: players,
+    expansions: [],
+    scores: [],
+    misc: Game.getDefaultMiscFieldValues(),
+    created: new Date().toISOString(),
+  });
+
+  const db = getFirestore(app)
+  await setDoc(doc(db, "plays-v1", playId), play.toDTO())
+  return play;
+}
+
 const SelectPlayers = (props: {
   gameId: string;
   initialPlayers?: Player[];
 }) => {
-  const [games] = useGames();
+  const history = useHistory();
+  const [games, isLoadingGames] = useGames();
   const { gameId, initialPlayers = [] } = props;
   const game = games?.find((g) => g.id === gameId);
 
@@ -41,7 +63,7 @@ const SelectPlayers = (props: {
 
   const [searchTerm, setSearchTerm] = useState("");
   const [players, setPlayers] = useState<Player[]>(initialPlayers);
-  const [isStarted, setIsStarted] = useState<boolean>(false);
+  const [isStarting, setIsStarting] = useState<boolean>(false);
   const [showAllPlayers, setShowAllPlayers] = useState<boolean>(false);
   const [currentPlayer, setCurrentPlayer] = useState<string>("");
   const [isRandomizing, setIsRandomizing] = useState(false);
@@ -56,8 +78,15 @@ const SelectPlayers = (props: {
     ? selectablePlayers
     : selectablePlayers.slice(0, 6);
 
-  const onStartGame = () => {
-    setIsStarted(true);
+  const onStartGame = async () => {
+    setIsStarting(true);
+    try {
+      const play = await createPlay(gameId, players);
+      history.push(`/edit/${play.id}`);
+    } catch (error) {
+      console.error(error);
+      setIsStarting(false);
+    }
   };
 
   const onAddPlayer = () => {
@@ -104,14 +133,14 @@ const SelectPlayers = (props: {
     return endAnimation;
   }, [isRandomizing]);
 
-  if (!games) {
-    return <div>Loading…</div>;
+  if (isLoadingGames || isStarting) {
+    return <LoadingSpinner />;
   }
   if (!game) {
-    return <div>Unknown game!</div>;
+    return <ViewContentLayout>Unknown game!</ViewContentLayout>;
   }
 
-  const selectPlayers = (
+  return (
     <ViewContentLayout
       footer={
         <TailwindCardButtonRow>
@@ -226,27 +255,24 @@ const SelectPlayers = (props: {
               </svg>
             </TailwindListItemIcon>
             <TailwindListItemText title={player.name} />
-            {isRandomizing ? (
-              <></>
-            ) : (
-              <TailwindListItemIcon onClick={() => onDeSelectPlayer(player)}>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                >
-                  <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" />
-                </svg>
-              </TailwindListItemIcon>
-            )}
+            <TailwindListItemIcon
+              onClick={() => onDeSelectPlayer(player)}
+              className={isRandomizing ? "invisible" : ""}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+              >
+                <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" />
+              </svg>
+            </TailwindListItemIcon>
           </TailwindListItem>
         ))}
       </TailwindList>
     </ViewContentLayout>
   );
-
-  return !isStarted ? selectPlayers : <PlayNew game={game} players={players} />;
 };
 
 export default SelectPlayers;

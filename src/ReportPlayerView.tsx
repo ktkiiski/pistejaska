@@ -9,6 +9,7 @@ import { stringifyScore } from "./common/stringUtils";
 import { calculateEloForPlayers } from "./domain/ratings";
 import { useGames } from "./common/hooks/useGames";
 import ViewContentLayout from "./common/components/ViewContentLayout";
+import PlayList from "./PlayList";
 
 export const ReportPlayerView = (props: RouteComponentProps<any>) => {
   const playerId = props.match.params["playerId"];
@@ -43,6 +44,7 @@ export const ReportPlayerView = (props: RouteComponentProps<any>) => {
       <h2>Reports: {player.name}</h2>
       <p>Based on {playerPlays.length} plays.</p>
       <PlayerGamesReport player={player} plays={plays}></PlayerGamesReport>
+      <PlayList plays={playerPlays} />
     </ViewContentLayout>
   );
 };
