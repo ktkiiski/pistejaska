@@ -13,7 +13,7 @@ import { Play } from "./domain/play";
 import { RouteComponentProps } from "react-router";
 import { usePlays } from "./common/hooks/usePlays";
 import { calculateEloForPlayers } from "./domain/ratings";
-import { Game } from "./domain/game";
+import { Game, GameMiscFieldDefinition } from "./domain/game";
 import { getGameStatistics } from "./domain/statistics";
 import GameScoreFieldReport from "./ReportGameScoreField";
 import ReportTable from "./ReportTable";
@@ -116,7 +116,11 @@ export const ReportGameView = (props: RouteComponentProps<any>) => {
 const HighScoresReportTable = (props: { game: Game; plays: Play[] }) => {
   const { game, plays } = props;
 
-  const statsByPlayerCount = getGameStatistics(game, plays);
+  const otherDimensions = (game.miscFields ?? []).filter(
+    field => field.type === 'number' && !field.valuePerPlayer
+  ) as GameMiscFieldDefinition<number>[];
+
+  const statsByPlayerCount = getGameStatistics(game, plays, otherDimensions);
   const columns = [
     { name: "# of players" },
     ...statsByPlayerCount.map((s) => ({
@@ -157,10 +161,30 @@ const HighScoresReportTable = (props: { game: Game; plays: Play[] }) => {
               ? "—"
               : `${s.averageDurationPerPlayer.toFixed(1)}h / 👤`
             : s.averageDuration == null
-            ? "—"
-            : `${s.averageDuration.toFixed(1)}h`,
+              ? "—"
+              : `${s.averageDuration.toFixed(1)}h`,
       })),
     ],
+    ...otherDimensions.flatMap((field) => [
+      [
+        { value: `Maximum ${field.name}` },
+        ...statsByPlayerCount.map((s) => ({
+          value: s.dimensions[field.id]?.maxValue?.toString() ?? '-',
+        })),
+      ],
+      [
+        { value: `Average ${field.name}` },
+        ...statsByPlayerCount.map((s) => ({
+          value: s.dimensions[field.id]?.averageValue?.toFixed(1) ?? '-',
+        })),
+      ],
+      [
+        { value: `Minimum ${field.name}` },
+        ...statsByPlayerCount.map((s) => ({
+          value: s.dimensions[field.id]?.minValue?.toString() ?? '-',
+        })),
+      ],
+    ])
   ];
 
   return <ReportTable rows={rows} columns={columns}></ReportTable>;

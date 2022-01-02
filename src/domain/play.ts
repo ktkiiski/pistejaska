@@ -215,8 +215,8 @@ export class Play implements PlayDTO {
     if (value == null) {
       return value;
     }
-    if (field.type === "number" && typeof value === "string") {
-      const numberValue = parseFloat(value);
+    if (field.type === "number") {
+      const numberValue = typeof value === 'string' ? parseFloat(value) : value;
       return Number.isFinite(numberValue) ? (numberValue as T) : null;
     }
     if (field.type === "images") {
