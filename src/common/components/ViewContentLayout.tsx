@@ -32,7 +32,7 @@ const ViewContentLayout: React.FC<ViewContentLayoutProps> = ({
         <>
           {/* Invisible placeholder for the fixed footer */}
           <div className={`md:hidden ${styles.footerPlaceholder}`} />
-          <div className="w-full p-4 bg-white fixed bottom-0 border-t-2 md:hidden">
+          <div className="w-full px-2 py-4 bg-white fixed bottom-0 border-t-2 md:hidden">
             <div className="container mx-auto">{footer}</div>
           </div>
         </>
