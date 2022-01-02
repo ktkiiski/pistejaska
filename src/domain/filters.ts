@@ -98,7 +98,7 @@ export function applyPlayFilters(allPlays: Play[], filters: ReportFilters) {
   // Filter by expansions
   let filteredPlays = expansions.reduce(
     (plays, expansionId) =>
-      plays.filter((play) => play.expansions.includes(expansionId)),
+      plays.filter((play) => (expansionId === null && play.expansions.length === 0 ) || play.expansions.includes(expansionId)),
     allPlays
   );
   // Filter by player count

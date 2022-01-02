@@ -20,8 +20,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Start player randomization animation bug
-- Play list load flicker bug
+- Start player randomization animation
+- Play list load flicker
+- Footer buttons layout broken on mobile
 - Footer buttons flow to two rows on some mobile phones instead of staying in one row
 
 ## 2022-12-28

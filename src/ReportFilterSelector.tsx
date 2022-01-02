@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Chip,
@@ -79,6 +79,19 @@ function ReportFilterSelector({
   const [expansionsOpen, setExpansionsOpen] = useState(false);
   const [fieldsOpen, setFieldsOpen] = useState<Record<string, boolean>>({});
   const { expansions } = game;
+
+  useEffect(() => {
+    // Add "No expansions" filter category
+
+    const noExpansions = {
+      name: 'No expansions',
+      id: null as any
+    }
+    if (expansions && expansions?.length > 0) {
+      expansions.unshift(noExpansions)
+    }
+  }, [expansions])
+
   const isFiltering = hasFilters(filters);
   // TODO: support expansion misc fields
   const reportFields = game
