@@ -48,15 +48,13 @@ const PlayList = (props: PlayListProps) => {
           const game = games?.find((g) => g.id === play.gameId);
           return (
             <TailwindListItem key={play.id} onClick={() => onSelectPlay(play)}>
-              {game && (
-                <TailwindListItemIcon>
-                  <img
-                    alt="gamepic"
-                    src={game.icon}
-                    className="mx-auto object-cover rounded-full h-14 w-14 "
-                  />
-                </TailwindListItemIcon>
-              )}
+              <TailwindListItemIcon>
+                <img
+                  alt="gamepic"
+                  src={game?.icon}
+                  className="mx-auto object-cover rounded-full h-14 w-14 "
+                />
+              </TailwindListItemIcon>
               <TailwindListItemText
                 title={play.getName() ?? ""}
                 description={game?.name}
