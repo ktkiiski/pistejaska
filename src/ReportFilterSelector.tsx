@@ -82,7 +82,6 @@ function ReportFilterSelector({
 
   useEffect(() => {
     // Add "No expansions" filter category
-
     const noExpansions = {
       name: 'No expansions',
       id: null as any
@@ -144,8 +143,9 @@ function ReportFilterSelector({
                 filters,
                 expansion.id
               );
-              const nestedPlays = applyPlayFilters(plays, nestedFilters);
               const isSelected = filters.expansions.includes(expansion.id);
+              const nestedPlays = applyPlayFilters(plays, isSelected ? filters : nestedFilters);
+              
               return (
                 <MenuItem
                   key={expansion.id}
