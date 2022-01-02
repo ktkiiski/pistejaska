@@ -30,6 +30,7 @@ import { LoadingSpinner } from "./common/components/LoadingSpinner";
 import { app } from "./common/firebase";
 import { usePlay } from "./common/hooks/usePlay";
 import ViewContentLayout from "./common/components/ViewContentLayout";
+import { getPositionAsEmoji } from "./common/stringUtils";
 
 export const PlayView = (props: RouteComponentProps<any>) => {
   const [games] = useGames();
@@ -225,9 +226,9 @@ const PlayTable = (
             <TailwindTableHeadCell key="category">
               Category
             </TailwindTableHeadCell>
-            {players.map((p, idx) => (
+            {players.map((p) => (
               <TailwindTableCell key={p.id}>
-                {`${play.getPosition(p.id)}.`}
+                {`${getPositionAsEmoji(play.getPosition(p.id))} `}
                 <Link to={"/players/" + p.id}>{`${formatName(p.name)}`}</Link>
               </TailwindTableCell>
             ))}
