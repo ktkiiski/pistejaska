@@ -7,6 +7,39 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## 2022-01-02
+
+### Added
+
+- Player's plays to player view
+- Recently played games as shortcuts when starting new play
+
+### Removed
+
+- Broken dark mode support
+
+### Fixed
+
+- Start player randomization animation bug
+- Play list load flicker bug
+
+## 2022-12-28
+
+### Changed
+
+- Sticky footer to edit play view
+
+### Fixed
+
+- Start player randomization animation bug
+- Prevent starting game with less than two players
+
+### Removed
+
+- Game trend chart
+
+## 2021-12-26
+
 ### Changed
 
 - New design using Tailwind CSS
