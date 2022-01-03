@@ -12,13 +12,13 @@ Using the app requires Google login with whitelisted email. Emails are whitelist
 
 ## Requirements
 
-1. node.js (7.6 or newer)
+1. node.js (14 or newer)
 
 ## Technology
 
 This project uses Firebase's authentication & Firestore as database. Admin is panu.vuorinen@gmail.com.
 
-The major libraries used in this project: React.js, Firebase, Material UI.
+The major libraries used in this project: React.js, Firebase, Material UI, Tailwind CSS.
 
 ## Developing
 
@@ -26,12 +26,18 @@ Please use eslint and prettier for code formatting & linting.
 
 Easiest way to achieve this is to
 
-- use VS Code
-- install [eslint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) extension
-- install [prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) extension
-- configure `"editor.formatOnSave": true` setting.
+- Use VS Code
+- Install [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) extension
+- Install [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) extension
+- Configure `"editor.formatOnSave": true` setting.
+- Set "Prettier" as the default formatter
 
 Alternatively, you can run `npx prettier src/* --write` to format all files in project root before committing.
+
+### Tips
+
+- Analyze bundle size: `npm run build && npm run analyze`
+- Install [Tailwind CSS Intellisense](https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss) extension
 
 ## Developing
 
@@ -95,11 +101,6 @@ If you need to perform data migrations, do this:
 - denormalize players to their own root entity
 - better backups
 - automatic tests
-
-## Tips
-
-- `npx run prettier --write .` will auto-format all code to look nice
-- Analyze bundle size: npm run build && npm run analyze
 
 ## Known issues
 
