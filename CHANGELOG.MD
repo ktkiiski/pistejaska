@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## 2022-01-09
+
+### Changed
+
+- "Total" to "𝚺" in play view
+
 ## 2022-01-02
 
 ### Added

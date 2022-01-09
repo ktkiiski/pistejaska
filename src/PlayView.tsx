@@ -272,7 +272,9 @@ const PlayTable = (
 
         <TailwindTableFooter>
           <TailwindTableRow key="footer">
-            <TailwindTableCell key="total">Total</TailwindTableCell>
+            <TailwindTableCell key="total" className="text-left">
+              𝚺
+            </TailwindTableCell>
             {players.map((f, idx) => (
               <TailwindTableCell key={f.id}>
                 {play.getTotal(f.id)}
