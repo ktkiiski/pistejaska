@@ -1,27 +1,27 @@
 import { TailwindCard } from "./Container";
-import styles from './ViewContentLayout.module.css';
+import styles from "./ViewContentLayout.module.css";
 
 interface ViewContentLayoutProps {
   header?: React.ReactNode;
   footer?: React.ReactNode;
+  className?: string;
 }
 
 const ViewContentLayout: React.FC<ViewContentLayoutProps> = ({
   header,
   children,
   footer,
+  className,
 }) => {
   return (
     <>
-      <div className="p-2 container mx-auto">
+      <div className={`p-2 container mx-auto ${className || ""}`}>
         {header && <div className="p-2">{header}</div>}
 
         <TailwindCard className="text-sm p-0">
-          <div className="p-2">
-            {children}
-          </div>
-          
-          { /* Desktop footer */}
+          <div className="p-2">{children}</div>
+
+          {/* Desktop footer */}
           {footer && (
             <div className="hidden md:flex">
               <div className="w-full p-4 bg-white mt-8 border-t-2 rounded-b-xl">
@@ -32,7 +32,7 @@ const ViewContentLayout: React.FC<ViewContentLayoutProps> = ({
         </TailwindCard>
       </div>
 
-      { /* Mobile footer */}
+      {/* Mobile footer */}
       {footer && (
         <>
           {/* Invisible placeholder for the fixed footer */}

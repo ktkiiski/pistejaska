@@ -6,7 +6,7 @@ import {
   FormGroup,
   makeStyles,
 } from "@material-ui/core";
-import { Player, Play, UnsavedImage } from "./domain/play";
+import { Player, Play, PlayDTO } from "./domain/play";
 import {
   Game,
   GameExpansionDefinition,
@@ -46,14 +46,14 @@ const useStyles = makeStyles({
 export const PlayForm = (props: {
   game: Game;
   play: Play;
-  onSave: (play: Play) => void;
+  className?: string;
+  onImageUpload: (fieldId: string, file: File) => Promise<void>;
+  onEdit: (changes: Partial<PlayDTO>) => void;
+  onDone: () => void;
 }) => {
-  const {
-    play: { players },
-    game,
-  } = props;
+  const { play, game, onEdit, onDone, onImageUpload, className } = props;
+  const { players } = play;
 
-  const [play, setPlay] = React.useState<Play>(props.play);
   const [activeViewIndex, setActiveViewIndex] = useState(0);
   const hasExpansions = game.hasExpansions();
   const styles = useStyles();
@@ -84,12 +84,9 @@ export const PlayForm = (props: {
     selected: boolean
   ) => {
     if (selected && !play.expansions.includes(expansion.id)) {
-      setPlay(
-        new Play({
-          ...play,
-          expansions: play.expansions.concat(expansion.id),
-        })
-      );
+      onEdit({
+        expansions: play.expansions.concat(expansion.id),
+      });
     } else if (!selected && play.expansions.includes(expansion.id)) {
       const expansionScoreFieldIds = (expansion.scoreFields || []).map(
         (field) => field.id
@@ -97,19 +94,16 @@ export const PlayForm = (props: {
       const expansionMiscFieldIds = (expansion.miscFields || []).map(
         (field) => field.id
       );
-      setPlay(
-        new Play({
-          ...play,
-          expansions: play.expansions.filter((id) => id !== expansion.id),
-          // Omit score and misc fields from the removed expansion (in case they had already been filled)
-          scores: play.scores.filter(
-            (score) => !expansionScoreFieldIds.includes(score.fieldId)
-          ),
-          misc: play.misc.filter(
-            (misc) => !expansionMiscFieldIds.includes(misc.fieldId)
-          ),
-        })
-      );
+      onEdit({
+        expansions: play.expansions.filter((id) => id !== expansion.id),
+        // Omit score and misc fields from the removed expansion (in case they had already been filled)
+        scores: play.scores.filter(
+          (score) => !expansionScoreFieldIds.includes(score.fieldId)
+        ),
+        misc: play.misc.filter(
+          (misc) => !expansionMiscFieldIds.includes(misc.fieldId)
+        ),
+      });
     }
   };
 
@@ -123,7 +117,7 @@ export const PlayForm = (props: {
     );
 
     if (score === null) {
-      setPlay(new Play({ ...play, ...{ scores: oldScores } }));
+      onEdit({ scores: oldScores });
     } else {
       if (field.maxValue === 0) score = -Math.abs(score);
       if (field.minValue === 0) score = Math.abs(score);
@@ -134,7 +128,7 @@ export const PlayForm = (props: {
         score: score,
       });
 
-      setPlay(new Play({ ...play, ...{ scores: newScores } }));
+      onEdit({ scores: newScores });
     }
   };
 
@@ -158,38 +152,14 @@ export const PlayForm = (props: {
           data: misc,
         });
 
-    setPlay(new Play({ ...play, ...{ misc: newMisc } }));
-  };
-
-  const handleImageChange = (
-    image: UnsavedImage,
-    field: GameMiscFieldDefinition
-  ) => {
-    const newUnsavedImages = play.unsavedImages.concat(image);
-
-    const oldValue = play.misc.find((x) => x.fieldId === field.id);
-    const oldMisc = play.misc.filter((x) => x.fieldId !== field.id);
-
-    const newMisc = oldMisc.concat({
-      fieldId: field.id,
-      data: ((oldValue?.data as string[]) || [])
-        .filter(
-          (x) => newUnsavedImages.find((y) => y.filename === x) === undefined
-        )
-        .concat(newUnsavedImages.map((x) => x.filename)),
-    });
-
-    setPlay(new Play({ ...play, ...{ misc: newMisc } }, newUnsavedImages));
+    onEdit({ misc: newMisc });
   };
 
   const handleImageRemove = (
     filename: string,
     field: GameMiscFieldDefinition
   ) => {
-    const newUnsavedImages = play.unsavedImages.filter(
-      (x) => x.filename !== filename
-    );
-
+    // TODO: Actually delete images from storage?
     const oldValue = play.misc.find((x) => x.fieldId === field.id);
     const oldMisc = play.misc.filter((x) => x.fieldId !== field.id);
 
@@ -198,11 +168,7 @@ export const PlayForm = (props: {
       data: ((oldValue?.data as string[]) || []).filter((x) => x !== filename),
     });
 
-    setPlay(new Play({ ...play, ...{ misc: newMisc } }, newUnsavedImages));
-  };
-
-  const onSave = () => {
-    props.onSave(play);
+    onEdit({ misc: newMisc });
   };
 
   const renderExpansionField = (expansion: GameExpansionDefinition) => (
@@ -234,7 +200,7 @@ export const PlayForm = (props: {
             setActiveViewIndex(viewIndex);
           }}
           onChange={handleMiscChange}
-          onImageChange={handleImageChange}
+          onImageUpload={onImageUpload}
           onImageRemove={handleImageRemove}
         />
       ));
@@ -250,7 +216,7 @@ export const PlayForm = (props: {
           player={undefined}
           key={field.id}
           onChange={handleMiscChange}
-          onImageChange={handleImageChange}
+          onImageUpload={onImageUpload}
           onImageRemove={handleImageRemove}
         />
       );
@@ -319,6 +285,7 @@ export const PlayForm = (props: {
   return (
     <FormFocusContextProvider>
       <ViewContentLayout
+        className={className}
         footer={
           <TailwindCardButtonRow>
             <TailwindButton
@@ -333,13 +300,13 @@ export const PlayForm = (props: {
             </TailwindButton>
             <TailwindButtonPrimary
               color="primary"
-              onClick={onSave}
+              onClick={onDone}
               style={
                 // TODO: Better visual effect to highlight the "Save" button when done
                 activeViewIndex === viewCount - 1 ? undefined : { opacity: 0.8 }
               }
             >
-              Save
+              Done
             </TailwindButtonPrimary>
             <TailwindButton
               disabled={activeViewIndex >= viewCount - 1}

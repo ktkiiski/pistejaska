@@ -1,6 +1,6 @@
 import React, { ButtonHTMLAttributes, HTMLAttributes } from "react";
 
-const defaultButtonClasses = `inline-block px-4 py-3
+export const defaultButtonClasses = `inline-block px-4 py-3
 text-sm font-semibold text-center
 text-white uppercase transition
 duration-200 ease-in-out
