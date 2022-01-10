@@ -117,7 +117,10 @@ const HighScoresReportTable = (props: { game: Game; plays: Play[] }) => {
   const { game, plays } = props;
 
   const otherDimensions = (game.miscFields ?? []).filter(
-    field => field.type === 'number' && !field.valuePerPlayer
+    (field) =>
+      field.type === "number" &&
+      !field.valuePerPlayer &&
+      field.isRelevantReportDimension
   ) as GameMiscFieldDefinition<number>[];
 
   const statsByPlayerCount = getGameStatistics(game, plays, otherDimensions);
@@ -161,30 +164,30 @@ const HighScoresReportTable = (props: { game: Game; plays: Play[] }) => {
               ? "—"
               : `${s.averageDurationPerPlayer.toFixed(1)}h / 👤`
             : s.averageDuration == null
-              ? "—"
-              : `${s.averageDuration.toFixed(1)}h`,
+            ? "—"
+            : `${s.averageDuration.toFixed(1)}h`,
       })),
     ],
     ...otherDimensions.flatMap((field) => [
       [
         { value: `Maximum ${field.name}` },
         ...statsByPlayerCount.map((s) => ({
-          value: s.dimensions[field.id]?.maxValue?.toString() ?? '-',
+          value: s.dimensions[field.id]?.maxValue?.toString() ?? "-",
         })),
       ],
       [
         { value: `Average ${field.name}` },
         ...statsByPlayerCount.map((s) => ({
-          value: s.dimensions[field.id]?.averageValue?.toFixed(1) ?? '-',
+          value: s.dimensions[field.id]?.averageValue?.toFixed(1) ?? "-",
         })),
       ],
       [
         { value: `Minimum ${field.name}` },
         ...statsByPlayerCount.map((s) => ({
-          value: s.dimensions[field.id]?.minValue?.toString() ?? '-',
+          value: s.dimensions[field.id]?.minValue?.toString() ?? "-",
         })),
       ],
-    ])
+    ]),
   ];
 
   return <ReportTable rows={rows} columns={columns}></ReportTable>;
