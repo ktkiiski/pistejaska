@@ -69,12 +69,6 @@ export interface PlayRanking {
   normalizedPosition: number | null;
 }
 
-export type UnsavedImage = {
-  file: File;
-  filename: string;
-  imageAsBase64: string;
-};
-
 // describes class that can be persisted
 export class Play implements PlayDTO {
   misc: MiscDataDTO[];
@@ -86,9 +80,8 @@ export class Play implements PlayDTO {
   created: string;
   date?: string | null;
   rankings: PlayRanking[];
-  unsavedImages: UnsavedImage[];
 
-  constructor(play: PlayDTO, unsavedImages?: UnsavedImage[]) {
+  constructor(play: PlayDTO) {
     // persisted values
     this.id = play.id;
     this.gameId = play.gameId;
@@ -99,7 +92,6 @@ export class Play implements PlayDTO {
     this.created = play.created || new Date().toISOString();
 
     // temporary values
-    this.unsavedImages = unsavedImages || [];
     this.date = this.getMiscFieldValue(dateField);
     // Calculate normalized positions for each player
     this.rankings = rankScores(
@@ -133,12 +125,6 @@ export class Play implements PlayDTO {
 
   public getImages(): string[] {
     return this.getMiscFieldValue(imageField) || [];
-  }
-
-  public getExistingImages(): string[] {
-    return this.getImages().filter(
-      (x) => this.unsavedImages.find((y) => y.filename === x) === undefined
-    );
   }
 
   public getRanking(playerId: string): PlayRanking | undefined {
@@ -215,8 +201,8 @@ export class Play implements PlayDTO {
     if (value == null) {
       return value;
     }
-    if (field.type === "number" && typeof value === "string") {
-      const numberValue = parseFloat(value);
+    if (field.type === "number") {
+      const numberValue = typeof value === "string" ? parseFloat(value) : value;
       return Number.isFinite(numberValue) ? (numberValue as T) : null;
     }
     if (field.type === "images") {

@@ -1,6 +1,6 @@
 import React from "react";
 import { PlayFormField } from "./PlayFormField";
-import { Player, Play, UnsavedImage } from "./domain/play";
+import { Player, Play } from "./domain/play";
 import { GameMiscFieldDefinition } from "./domain/game";
 
 type PlayFormMiscFieldProps<T> = {
@@ -14,10 +14,7 @@ type PlayFormMiscFieldProps<T> = {
   ) => void;
   onFocus: (e: React.FocusEvent<HTMLElement>) => void;
   player?: Player;
-  onImageChange: (
-    value: UnsavedImage,
-    field: GameMiscFieldDefinition<T>
-  ) => void;
+  onImageUpload: (fieldId: string, file: File) => Promise<void>;
   onImageRemove: (value: string, field: GameMiscFieldDefinition<T>) => void;
 };
 
@@ -27,7 +24,7 @@ export function PlayFormMiscField<T>(props: PlayFormMiscFieldProps<T>) {
     play,
     onChange,
     player,
-    onImageChange,
+    onImageUpload,
     onImageRemove,
     ...fieldProps
   } = props;
@@ -47,7 +44,7 @@ export function PlayFormMiscField<T>(props: PlayFormMiscFieldProps<T>) {
       label={player ? player.name : field.name}
       play={play}
       onChange={(value, field) => onChange(value, field, player)}
-      onImageChange={(value) => onImageChange(value, field)}
+      onImageUpload={(file) => onImageUpload(field.id, file)}
       onImageRemove={(value) => onImageRemove(value, field)}
       {...fieldProps}
     />

@@ -70,6 +70,18 @@ export interface GameStatistics {
    * calculate the average duration per player.
    */
   durationPlayerCount: number;
+  /**
+   * Aggregated stats of other miscellaus non-player-specific dimensions.
+   */
+  dimensions: {
+    [fieldId: string]: {
+      minValue: number | null;
+      maxValue: number | null;
+      averageValue: number | null;
+      valueSum: number;
+      valueCount: number;
+    };
+  };
 }
 
 /**
@@ -79,7 +91,11 @@ export interface GameStatistics {
  * @param game the game to analyze
  * @param plays all the plays for the game
  */
-export function getGameStatistics(game: Game, plays: Play[]): GameStatistics[] {
+export function getGameStatistics(
+  game: Game,
+  plays: Play[],
+  otherDimensions?: GameMiscFieldDefinition<number>[],
+): GameStatistics[] {
   const initStats = (playerCount: number | null): GameStatistics => ({
     game,
     playerCount,
@@ -95,6 +111,15 @@ export function getGameStatistics(game: Game, plays: Play[]): GameStatistics[] {
     durationSum: 0,
     durationCount: 0,
     durationPlayerCount: 0,
+    dimensions: {},
+  });
+
+  const initDimension = () => ({
+    minValue: null,
+    maxValue: null,
+    averageValue: null,
+    valueSum: 0,
+    valueCount: 0,
   });
 
   function aggregateWinningScore(
@@ -128,6 +153,24 @@ export function getGameStatistics(game: Game, plays: Play[]): GameStatistics[] {
       stats.durationSum / stats.durationPlayerCount;
   }
 
+  function aggregateOtherDimension(
+    stats: GameStatistics,
+    field: GameMiscFieldDefinition<number>,
+    value: number,
+  ) {
+    const dimension = stats.dimensions[field.id] ?? initDimension();
+    stats.dimensions[field.id] = dimension;
+    if (dimension.maxValue == null || value > dimension.maxValue) {
+      dimension.maxValue = value;
+    }
+    if (dimension.minValue == null || value < dimension.minValue) {
+      dimension.minValue = value;
+    }
+    dimension.valueCount += 1;
+    dimension.valueSum += value;
+    dimension.averageValue = dimension.valueSum / dimension.valueCount;
+  }
+
   const anyPlayerStats = initStats(null);
   const statsByPlayerCount: GameStatistics[] = [anyPlayerStats];
   plays.forEach((play) => {
@@ -144,6 +187,14 @@ export function getGameStatistics(game: Game, plays: Play[]): GameStatistics[] {
       aggregateDuration(anyPlayerStats, playerCount, duration);
       aggregateDuration(playerCountStats, playerCount, duration);
     }
+    // Aggregate other dimensions
+    otherDimensions?.forEach((field) => {
+      const value = play.getMiscFieldValue(field);
+      if (value != null) {
+        aggregateOtherDimension(anyPlayerStats, field, value);
+        aggregateOtherDimension(playerCountStats, field, value);
+      }
+    });
   });
   return statsByPlayerCount.filter((stats) => stats != null);
 }

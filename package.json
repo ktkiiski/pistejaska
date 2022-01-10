@@ -27,6 +27,7 @@
   },
   "scripts": {
     "analyze": "source-map-explorer 'build/static/js/*.js'",
+    "lint": "eslint src --ext=.tsx,.ts",
     "start": "cross-env GENERATE_SOURCEMAP='false' react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",

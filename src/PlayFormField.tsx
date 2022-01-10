@@ -2,9 +2,10 @@ import React from "react";
 import { GameFieldDefinition, GameFieldOption } from "./domain/game";
 import { TextField, Button, Box, makeStyles } from "@material-ui/core";
 import DurationCounter from "./DurationCounter";
-import { Play, UnsavedImage } from "./domain/play";
+import { Play } from "./domain/play";
 import { useFormFieldRef } from "./utils/focus";
-import { v4 as uuid } from "uuid";
+import UploadButton from "./common/components/UploadButton";
+import Spinner from "./common/components/Spinner";
 
 const useFieldStyles = makeStyles({
   root: {
@@ -22,7 +23,7 @@ interface PlayFormFieldProps<T, F extends GameFieldDefinition<T>> {
   onChange: (score: T | null, field: F) => void;
   onFocus: (e: React.FocusEvent<HTMLElement>) => void;
   id?: string;
-  onImageChange?: (image: UnsavedImage) => void;
+  onImageUpload?: (file: File) => Promise<void>;
   onImageRemove?: (filename: string) => void;
 }
 
@@ -39,7 +40,7 @@ export function PlayFormField<
     onChange,
     onFocus,
     id,
-    onImageChange,
+    onImageUpload,
     onImageRemove,
   } = props;
   const styles = useFieldStyles();
@@ -58,42 +59,6 @@ export function PlayFormField<
     : {
         ref: inputRef,
       };
-
-  const onImageUploaderValueChange = async (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    if (!event.target.files || !event.target.files[0]) {
-      return;
-    }
-
-    const file = event.target.files[0];
-
-    const toBase64 = (file: File) =>
-      new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = (error) => reject(error);
-      });
-
-    const imageAsBase64 = (await toBase64(file)) as string;
-
-    const getExtension = (filename: string) => {
-      return filename.slice(((filename.lastIndexOf(".") - 1) >>> 0) + 2);
-    };
-
-    const filename = `${new Date().toISOString().substr(0, 10)}--${
-      play.id
-    }--${uuid()}.${getExtension(file.name)}`;
-
-    if (onImageChange) {
-      onImageChange({
-        file: event.target.files[0],
-        filename: filename,
-        imageAsBase64,
-      });
-    }
-  };
 
   const onValueChange = async (
     event: React.ChangeEvent<{ value: unknown }>
@@ -166,35 +131,29 @@ export function PlayFormField<
   return field.type === "images" ? (
     <>
       <h5>Images</h5>
-      <input
-        type="file"
+      <UploadButton
+        idleLabel="Select image"
+        uploadingLabel={
+          <>
+            <Spinner className="inline-block w-4 h-4 mr-2" />
+            Uploading…
+          </>
+        }
         accept="image/*"
-        onChange={onImageUploaderValueChange}
-      ></input>
+        onUpload={onImageUpload!}
+      />
 
-      {play.unsavedImages.map((img) => (
-        <>
+      {play.getImages().map((filename) => (
+        <React.Fragment key={filename}>
           <div
+            className="cursor-pointer"
             style={{ marginLeft: "180px" }}
-            key={img.filename}
-            onClick={() => onImageRemove && onImageRemove(img.filename)}
-          >
-            ❌
-          </div>
-          <img src={`${img.imageAsBase64}`} width={200} alt="Uploaded" />{" "}
-        </>
-      ))}
-      {play.getExistingImages().map((filename) => (
-        <>
-          <div
-            style={{ marginLeft: "180px" }}
-            key={filename}
             onClick={() => onImageRemove && onImageRemove(filename)}
           >
             ❌
           </div>
           <img src={play.getImageUrl(filename)} width={200} alt="Existing" />
-        </>
+        </React.Fragment>
       ))}
     </>
   ) : (
