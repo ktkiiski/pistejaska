@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Game report view also lists all the plays of that game
+- Show winner name(s) on all play lists
 
 ## 2022-01-10
 

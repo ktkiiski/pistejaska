@@ -46,22 +46,33 @@ const PlayList = (props: PlayListProps) => {
       <TailwindList onClickShowAll={() => setShowAll(!showAll)}>
         {(showAll ? data : currentData).map((play) => {
           const game = games.find((g) => g.id === play.gameId);
+          const winners = play.rankings.filter(
+            (ranking) => ranking.position === 1
+          );
+          const winnerNames = winners
+            .map((winner) => winner.player.name)
+            .join(" / ");
           return (
             <TailwindListItem key={play.id} onClick={() => onSelectPlay(play)}>
               <TailwindListItemIcon>
                 {game ? (
-                <img
-                  alt="gamepic"
-                  src={game.icon}
-                  className="mx-auto object-cover rounded-full h-14 w-14 "
-                />) : (<div className="mx-auto object-cover rounded-full h-14 w-14 background-gray" />)}
+                  <img
+                    alt="gamepic"
+                    src={game.icon}
+                    className="mx-auto object-cover rounded-full h-14 w-14 "
+                  />
+                ) : (
+                  <div className="mx-auto object-cover rounded-full h-14 w-14 background-gray" />
+                )}
               </TailwindListItemIcon>
               <TailwindListItemText
                 title={play.getName() ?? ""}
                 description={game?.name}
               />
               <TailwindListItemDescription
-                text={play.getDate().toLocaleDateString()}
+                text={`${play
+                  .getDate()
+                  .toLocaleDateString()}\n🥇 ${winnerNames}`}
               />
             </TailwindListItem>
           );
