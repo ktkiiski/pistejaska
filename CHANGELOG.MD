@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## 2022-01-10
+
+### Added
+
+- **Auto-save play while editing**. Show loading spinner while saving is in progress.
+- **Immediately upload images on select**. The file input field is now a button (which changes state while upload is in progress). Because of the auto-save, the play is immediately saved after the upload. ![Image upload screenshot](https://bitbucket.org/repo/eyyL58g/images/2741685717-Screenshot%202022-01-10%20at%2021.40.47.png)
+- **Show player rankings as emojis** in the play results view
+- **Report non-player-specific dimensions** (e.g. generations in Terraforming Mars) ![Non-player-specific dimensions reporting screenshot](https://bitbucket.org/repo/eyyL58g/images/3607138419-Screenshot%202022-01-02%20at%2014.32.44.png)
+- Chore: explicitly set tab size to 2 spaces in Prettier configuration
+- Chore: Add `lint` script for running ESLint on command line
+
 ## 2022-01-09
 
 ### Changed
