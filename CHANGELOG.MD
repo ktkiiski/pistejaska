@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Game report view also lists all the plays of that game
+
 ## 2022-01-10
 
 ### Added

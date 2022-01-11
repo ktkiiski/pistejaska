@@ -20,6 +20,7 @@ import {
 } from "./domain/filters";
 import { TailwindContainerTitle } from "./common/components/Container";
 import ViewContentLayout from "./common/components/ViewContentLayout";
+import PlayList from "./PlayList";
 
 export const ReportGameView = (props: RouteComponentProps<any>) => {
   const [games] = useGames();
@@ -98,6 +99,9 @@ export const ReportGameView = (props: RouteComponentProps<any>) => {
         </a>
         .
       </p>
+
+      <h4 className="mt-4 mb-3">Plays</h4>
+      <PlayList games={games} plays={gamePlays} />
     </ViewContentLayout>
   );
 };
