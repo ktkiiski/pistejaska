@@ -21,8 +21,14 @@ import {
 import { TailwindContainerTitle } from "./common/components/Container";
 import ViewContentLayout from "./common/components/ViewContentLayout";
 import PlayList from "./PlayList";
+import {
+  TailwindButtonPrimary,
+  TailwindCardButtonRow,
+} from "./common/components/Button";
+import { useHistory } from "react-router-dom";
 
 export const ReportGameView = (props: RouteComponentProps<any>) => {
+  const history = useHistory();
   const [games] = useGames();
   const gameId = props.match.params["gameId"];
 
@@ -52,7 +58,19 @@ export const ReportGameView = (props: RouteComponentProps<any>) => {
   const reportDimensions = game.getRelevantReportFields();
 
   return (
-    <ViewContentLayout>
+    <ViewContentLayout
+      footer={
+        <TailwindCardButtonRow>
+          <TailwindButtonPrimary
+            onClick={() => {
+              history.push(`/new/${gameId}`);
+            }}
+          >
+            Start play
+          </TailwindButtonPrimary>
+        </TailwindCardButtonRow>
+      }
+    >
       <TailwindContainerTitle>Reports: {game.name}</TailwindContainerTitle>
 
       <ReportFilterSelector

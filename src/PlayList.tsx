@@ -69,11 +69,11 @@ const PlayList = (props: PlayListProps) => {
                 title={play.getName() ?? ""}
                 description={game?.name}
               />
-              <TailwindListItemDescription
-                text={`${play
-                  .getDate()
-                  .toLocaleDateString()}\n🥇 ${winnerNames}`}
-              />
+              <TailwindListItemDescription>
+                {play.getDate().toLocaleDateString()}
+                <br />
+                <span className="text-gray-300">{winnerNames}</span>
+              </TailwindListItemDescription>
             </TailwindListItem>
           );
         })}

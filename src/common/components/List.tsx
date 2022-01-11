@@ -26,11 +26,9 @@ export const TailwindListItemIcon: React.FC<HTMLAttributes<HTMLDivElement>> = ({
   </div>
 );
 
-export const TailwindListItemDescription: React.FC<{ text: string }> = ({
-  text,
-}) => (
+export const TailwindListItemDescription: React.FC = ({ children }) => (
   <div className="text-gray-600 text-right text-xs whitespace-pre-line">
-    {text}
+    {children}
   </div>
 );
 
