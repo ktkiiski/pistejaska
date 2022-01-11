@@ -11,6 +11,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Button for starting a new play from the game report view
+
+### Fixed
+
+- Visual improvements to play list winner names
+
+## 2022-01-11
+
+### Added
+
 - Game report view also lists all the plays of that game
 - Show winner name(s) on all play lists
 
