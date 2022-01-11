@@ -1,14 +1,4 @@
 import React, { useState } from "react";
-
-import {
-  makeStyles,
-  Paper,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
-} from "@material-ui/core";
 import { Play } from "./domain/play";
 import { RouteComponentProps } from "react-router";
 import { usePlays } from "./common/hooks/usePlays";
@@ -19,7 +9,6 @@ import GameScoreFieldReport from "./ReportGameScoreField";
 import ReportTable from "./ReportTable";
 import ReportGameCorrelation from "./ReportGameCorrelation";
 import { stringifyScore } from "./common/stringUtils";
-import { Link } from "react-router-dom";
 import { useGames } from "./common/hooks/useGames";
 import ReportDimensionReportTable from "./ReportDimensionReportTable";
 import ReportFilterSelector from "./ReportFilterSelector";
@@ -193,34 +182,17 @@ const HighScoresReportTable = (props: { game: Game; plays: Play[] }) => {
   return <ReportTable rows={rows} columns={columns}></ReportTable>;
 };
 
-const useReportPlayersStyles = makeStyles((theme) => ({
-  root: {
-    width: "100%",
-  },
-  paper: {
-    marginTop: theme.spacing(3),
-    width: "100%",
-    overflowX: "auto",
-    marginBottom: theme.spacing(2),
-    paddingLeft: "4px",
-  },
-  table: {
-    maxWidth: "100%",
-  },
-  "@global": {
-    ".MuiTableCell-root": {
-      padding: "0",
-      fontSize: "0.8em",
-    },
-  },
-}));
-
 const bestPlayerCount = 5;
+
+const playerReportTableColumns = [
+  { name: "Name" },
+  { name: "Trueskill" },
+  { name: "Plays" },
+  { name: "Wins" },
+];
 
 const ReportPlayers = (props: { plays: Play[] }) => {
   const { plays } = props;
-
-  const classes = useReportPlayersStyles();
 
   if (plays.length === 0) {
     return <>No plays</>;
@@ -229,38 +201,28 @@ const ReportPlayers = (props: { plays: Play[] }) => {
   const elo = calculateEloForPlayers(plays, 3);
 
   return (
-    <div className={classes.root}>
-      <Paper className={classes.paper}>
-        <Table className={classes.table}>
-          <TableHead>
-            <TableRow>
-              <TableCell>Name</TableCell>
-              <TableCell>Trueskill</TableCell>
-              <TableCell>Plays</TableCell>
-              <TableCell>Wins</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {elo.slice(0, bestPlayerCount).map((player) => {
-              const { id, name, rating, playCount, winCount } = player;
-              return (
-                <TableRow key={id}>
-                  <TableCell scope="row">
-                    <Link to={`/players/${id}`}>{name}</Link>
-                  </TableCell>
-                  <TableCell scope="row">
-                    {Math.round(rating.mu)} (± {Math.round(3 * rating.sigma)})
-                  </TableCell>
-                  <TableCell scope="row">{playCount}</TableCell>
-                  <TableCell scope="row">
-                    {Math.round((100 * winCount) / playCount)}% ({winCount})
-                  </TableCell>
-                </TableRow>
-              );
-            })}
-          </TableBody>
-        </Table>
-      </Paper>
-    </div>
+    <ReportTable
+      columns={playerReportTableColumns}
+      rows={elo.slice(0, bestPlayerCount).map((player) => {
+        const { id, name, rating, playCount, winCount } = player;
+        return [
+          {
+            value: name,
+            link: `/players/${id}`,
+          },
+          {
+            value: `${Math.round(rating.mu)} (± ${Math.round(
+              3 * rating.sigma
+            )})`,
+          },
+          {
+            value: String(playCount),
+          },
+          {
+            value: `${Math.round((100 * winCount) / playCount)}% (${winCount})`,
+          },
+        ];
+      })}
+    />
   );
 };
