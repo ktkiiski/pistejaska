@@ -30,7 +30,7 @@ import { LoadingSpinner } from "./common/components/LoadingSpinner";
 import { app } from "./common/firebase";
 import { usePlay } from "./common/hooks/usePlay";
 import ViewContentLayout from "./common/components/ViewContentLayout";
-import { getPositionAsEmoji } from "./common/stringUtils";
+import { formatDuration, getPositionAsEmoji } from "./common/stringUtils";
 
 export const PlayView = (props: RouteComponentProps<any>) => {
   const [games] = useGames();
@@ -178,7 +178,10 @@ export const PlayView = (props: RouteComponentProps<any>) => {
           .filter((x) => x.fieldId !== "images")
           .map((misc, idx) => (
             <div key={idx}>
-              {getFieldName(misc)}: {misc.data}
+              {getFieldName(misc)}:{" "}
+              {misc.fieldId === "duration"
+                ? formatDuration(misc.data as number)
+                : misc.data}
             </div>
           ))}
       </TailwindCardContent>

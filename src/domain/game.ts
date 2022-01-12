@@ -156,13 +156,13 @@ const miscFieldSchema: JSONSchema7 = {
     },
   ].map(
     (fieldSchema) =>
-    ({
-      ...fieldSchema,
-      properties: {
-        ...fieldSchema.properties,
-        ...commonMiscFieldProperties,
-      },
-    } as JSONSchema7)
+      ({
+        ...fieldSchema,
+        properties: {
+          ...fieldSchema.properties,
+          ...commonMiscFieldProperties,
+        },
+      } as JSONSchema7)
   ),
 };
 
@@ -205,7 +205,8 @@ export const schema: JSONSchema7 = {
 
 export const durationField: GameMiscFieldDefinition<number> = {
   id: "duration",
-  name: "Duration (in hours)",
+  name: "Duration",
+  description: "Please enter the duration IN HOURS. Use decimals if needed.",
   type: "duration",
   step: 0.1,
 };
@@ -362,13 +363,13 @@ export type GameDefinition = {
 
 type GameFieldItem =
   | {
-    type: "score";
-    field: GameScoreFieldDefinition;
-  }
+      type: "score";
+      field: GameScoreFieldDefinition;
+    }
   | {
-    type: "misc";
-    field: GameMiscFieldDefinition;
-  };
+      type: "misc";
+      field: GameMiscFieldDefinition;
+    };
 
 export interface GameFieldOption<T> {
   value: T;
@@ -377,8 +378,8 @@ export interface GameFieldOption<T> {
 
 export interface GameFieldDefinition<T> {
   type: T extends number
-  ? "number" | "duration"
-  : "date" | "text" | "boolean" | "images";
+    ? "number" | "duration"
+    : "date" | "text" | "boolean" | "images";
   // please use human-readable, slugified ids, like "terraforming-rating". Do not change once created!
   id: string;
   // A human-readable, short name for this field
