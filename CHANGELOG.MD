@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Allow sorting games by different criteria and show additional stats
+
 ## 2022-01-11
 
 ### Added
