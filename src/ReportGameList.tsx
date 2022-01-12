@@ -16,6 +16,7 @@ import TabLink from "./common/components/tabs/TabLink";
 import { useState } from "react";
 import { usePlays } from "./common/hooks/usePlays";
 import { formatDuration, pluralize } from "./common/stringUtils";
+import { SkeletonLoader } from "./common/components/SkeletonLoader";
 
 type GameSortCriteriaId = "alphabetic" | "popular" | "shortest" | "longest";
 
@@ -58,7 +59,7 @@ function useGameStats() {
 
 export const ReportGameList = () => {
   const history = useHistory();
-  const [games] = useGames();
+  const [games, loadingGames] = useGames();
   const gameStats = useGameStats();
   const sortCriterias: Record<GameSortCriteriaId, GameSortCriteria> = {
     alphabetic: {
@@ -119,23 +120,27 @@ export const ReportGameList = () => {
           ))}
         </TabSet>
       </div>
-      <TailwindList>
-        {sortedGameItems.map((game) => (
-          <TailwindListItem onClick={() => onSelectGame(game)} key={game.id}>
-            <TailwindListItemIcon>
-              <img
-                alt={game.name}
-                src={game.icon}
-                className="mx-auto object-cover rounded-full h-10 w-10"
-              />
-            </TailwindListItemIcon>
-            <TailwindListItemText title={game.name} />
-            <TailwindListItemDescription>
-              {currentSortCriteria.getDetailLabel(game)}
-            </TailwindListItemDescription>
-          </TailwindListItem>
-        ))}
-      </TailwindList>
+      {loadingGames ? (
+        <SkeletonLoader />
+      ) : (
+        <TailwindList>
+          {sortedGameItems.map((game) => (
+            <TailwindListItem onClick={() => onSelectGame(game)} key={game.id}>
+              <TailwindListItemIcon>
+                <img
+                  alt={game.name}
+                  src={game.icon}
+                  className="mx-auto object-cover rounded-full h-10 w-10"
+                />
+              </TailwindListItemIcon>
+              <TailwindListItemText title={game.name} />
+              <TailwindListItemDescription>
+                {currentSortCriteria.getDetailLabel(game)}
+              </TailwindListItemDescription>
+            </TailwindListItem>
+          ))}
+        </TailwindList>
+      )}
     </ViewContentLayout>
   );
 };
