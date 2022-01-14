@@ -26,6 +26,7 @@ import {
   TailwindCardButtonRow,
 } from "./common/components/Button";
 import { useHistory } from "react-router-dom";
+import { LoadingSpinner } from "./common/components/LoadingSpinner";
 
 export const ReportGameView = (props: RouteComponentProps<any>) => {
   const history = useHistory();
@@ -43,7 +44,7 @@ export const ReportGameView = (props: RouteComponentProps<any>) => {
     );
   }
   if (loading) {
-    return <>Loading...</>;
+    return <LoadingSpinner />;
   }
 
   const unfilteredGamePlays = allPlays.filter((p) => p.gameId === gameId);

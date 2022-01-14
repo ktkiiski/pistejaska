@@ -94,7 +94,7 @@ export interface GameStatistics {
 export function getGameStatistics(
   game: Game,
   plays: Play[],
-  otherDimensions?: GameMiscFieldDefinition<number>[],
+  otherDimensions?: GameMiscFieldDefinition<number>[]
 ): GameStatistics[] {
   const initStats = (playerCount: number | null): GameStatistics => ({
     game,
@@ -156,7 +156,7 @@ export function getGameStatistics(
   function aggregateOtherDimension(
     stats: GameStatistics,
     field: GameMiscFieldDefinition<number>,
-    value: number,
+    value: number
   ) {
     const dimension = stats.dimensions[field.id] ?? initDimension();
     stats.dimensions[field.id] = dimension;
@@ -209,9 +209,16 @@ export interface DimensionValueStatistics<T> {
    */
   option: GameFieldOption<T>;
   /**
-   * How many times this dimension value was used in the original set of plays.
+   * How many times this dimension value was used IN TOTAL in the original set of plays.
+   * Note that this is NOT the number of plays and could even be larger, if the option
+   * was used more than once in each play.
    */
-  count: number;
+  useCount: number;
+  /**
+   * How many times this dimension value was used in any play in the original set of plays.
+   * This is the distinct number of plays, so multiple uses in the same play are ignored.
+   */
+  playCount: number;
   /**
    * How many times this value was used by a winning player
    */
@@ -243,11 +250,13 @@ export function getDimensionStatistics(
   dimension: GameMiscFieldDefinition<string>
 ): Map<string, DimensionValueStatistics<string>> {
   const statsByValue = new Map<string, DimensionValueStatistics<string>>();
+  const playIdsByValue = new Map<string, Set<string>>();
 
   const initValueStats = (option: GameFieldOption<string>) => ({
     dimension,
     option,
-    count: 0,
+    useCount: 0,
+    playCount: 0,
     winCount: 0,
     averageNormalizedPosition: null,
     normalizedPositionSum: 0,
@@ -269,7 +278,16 @@ export function getDimensionStatistics(
           statsByValue.set(data, stats);
         }
         // Was used in the play
-        stats.count += 1;
+        stats.useCount += 1;
+        // Track the distinct number of plays where this value was used at least onces
+        let playIds = playIdsByValue.get(data);
+        if (!playIds) {
+          playIds = new Set<string>();
+          playIdsByValue.set(data, playIds);
+        }
+        playIds.add(play.id);
+        stats.playCount = playIds.size;
+
         if (playerId != null) {
           // Check if used by a winner
           const playerRanking = play.getRanking(playerId);

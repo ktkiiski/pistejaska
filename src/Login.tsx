@@ -3,7 +3,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { Link } from "react-router-dom";
 import { Button } from "@material-ui/core";
 import { getAuth, GoogleAuthProvider, signInWithRedirect } from "firebase/auth";
-
+import { LoadingSpinner } from "./common/components/LoadingSpinner";
 
 export const Login = () => {
   const center = {
@@ -12,7 +12,7 @@ export const Login = () => {
     left: "50%",
     transform: "translate(-50%, -50%)",
   };
-  const auth = getAuth()
+  const auth = getAuth();
   const [user, loading] = useAuthState(auth);
   const login = async () => {
     // NOTE: could change implementation, this requires 3rd party cookies
@@ -24,7 +24,7 @@ export const Login = () => {
       alert(error);
     }
 
-    return <div>Loading...</div>;
+    return <LoadingSpinner />;
   };
   if (loading) {
     return (

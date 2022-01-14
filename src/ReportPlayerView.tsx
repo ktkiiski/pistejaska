@@ -10,6 +10,7 @@ import { calculateEloForPlayers } from "./domain/ratings";
 import { useGames } from "./common/hooks/useGames";
 import ViewContentLayout from "./common/components/ViewContentLayout";
 import PlayList from "./PlayList";
+import { LoadingSpinner } from "./common/components/LoadingSpinner";
 
 export const ReportPlayerView = (props: RouteComponentProps<any>) => {
   const playerId = props.match.params["playerId"];
@@ -25,7 +26,7 @@ export const ReportPlayerView = (props: RouteComponentProps<any>) => {
     );
   }
   if (loadingPlays || loadingGames) {
-    return <>Loading...</>;
+    return <LoadingSpinner />;
   }
 
   const player = flatMap(plays, (p) => p.players).find(
@@ -74,7 +75,7 @@ const PlayerGamesReport = (props: { player: Player; plays: Play[] }) => {
 
   if (!games) {
     // Still loading games
-    return <div>Loading…</div>;
+    return <LoadingSpinner />;
   }
 
   const rows = playerGames.concat(["all"]).map((g) => {
