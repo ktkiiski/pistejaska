@@ -34,15 +34,15 @@ const ReportDimensionReportTable = (props: {
   const rows = sortBy(
     stats,
     (stat) => stat.averageNormalizedPosition ?? Number.POSITIVE_INFINITY,
-    (stat) => -stat.count
+    (stat) => -stat.useCount
   );
   const playCount = plays.length;
 
   const reportRows = rows.map((row) => {
     return [
       { value: row.option.label },
-      { value: renderPercentage(row.winCount, row.count) },
-      { value: renderPercentage(row.count, playCount) },
+      { value: renderPercentage(row.winCount, row.useCount) },
+      { value: renderPercentage(row.playCount, playCount) },
       {
         value:
           row.averageNormalizedPosition == null
