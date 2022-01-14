@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Fix usage counts for options used multiple times in the same play
+- Show loading spinners in different UIs instead of "Loading…" text
 
 ## 2022-01-13
 

@@ -5,6 +5,7 @@ import { flatMap, groupBy, orderBy } from "lodash";
 import { usePlays } from "./common/hooks/usePlays";
 import { Player } from "./domain/play";
 import ViewContentLayout from "./common/components/ViewContentLayout";
+import { LoadingSpinner } from "./common/components/LoadingSpinner";
 
 export const ReportPlayerList = (props: RouteComponentProps<{}>) => {
   const [plays, loading, error] = usePlays();
@@ -17,7 +18,7 @@ export const ReportPlayerList = (props: RouteComponentProps<{}>) => {
     );
   }
   if (loading) {
-    return <>Loading...</>;
+    return <LoadingSpinner />;
   }
 
   const onSelectPlayer = (player: Player) =>
