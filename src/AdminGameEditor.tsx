@@ -5,6 +5,7 @@ import JsonEditor from "jsoneditor";
 import Ajv from "ajv";
 import { isEqual } from "lodash";
 import "jsoneditor/dist/jsoneditor.css";
+import useConfirmLeave from "./common/hooks/useConfirmLeave";
 
 const ajv = new Ajv({ allErrors: true, verbose: true });
 
@@ -76,19 +77,8 @@ function AdminGameEditor({
       }
     }
   };
-  useEffect(() => {
-    if (!hasChanges) {
-      return undefined;
-    }
-    function confirmExit(e: BeforeUnloadEvent) {
-      const confirmationMessage =
-        "You have unsaved changes. Are you sure you want to leave?";
-      (e || window.event).returnValue = confirmationMessage; //Gecko + IE
-      return confirmationMessage; //Gecko + Webkit, Safari, Chrome etc.
-    }
-    window.addEventListener("beforeunload", confirmExit);
-    return () => window.removeEventListener("beforeunload", confirmExit);
-  }, [hasChanges]);
+  useConfirmLeave(hasChanges);
+
   return (
     <>
       <div className={styles.editor} ref={editorRef} />

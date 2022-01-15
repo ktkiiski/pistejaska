@@ -18,15 +18,13 @@ import {
   hasFilters,
   ReportFilters,
 } from "./domain/filters";
-import { TailwindContainerTitle } from "./common/components/Container";
 import ViewContentLayout from "./common/components/ViewContentLayout";
 import PlayList from "./PlayList";
-import {
-  TailwindButtonPrimary,
-  TailwindCardButtonRow,
-} from "./common/components/Button";
 import { useHistory } from "react-router-dom";
 import { LoadingSpinner } from "./common/components/LoadingSpinner";
+import CardButtonRow from "./common/components/buttons/CardButtonRow";
+import PrimaryButton from "./common/components/buttons/PrimaryButton";
+import Title from "./common/components/typography/Title";
 
 export const ReportGameView = (props: RouteComponentProps<any>) => {
   const history = useHistory();
@@ -61,18 +59,18 @@ export const ReportGameView = (props: RouteComponentProps<any>) => {
   return (
     <ViewContentLayout
       footer={
-        <TailwindCardButtonRow>
-          <TailwindButtonPrimary
+        <CardButtonRow>
+          <PrimaryButton
             onClick={() => {
               history.push(`/new/${gameId}`);
             }}
           >
             Start play
-          </TailwindButtonPrimary>
-        </TailwindCardButtonRow>
+          </PrimaryButton>
+        </CardButtonRow>
       }
     >
-      <TailwindContainerTitle>Reports: {game.name}</TailwindContainerTitle>
+      <Title>Reports: {game.name}</Title>
 
       <ReportFilterSelector
         game={game}

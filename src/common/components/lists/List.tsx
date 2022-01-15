@@ -1,69 +1,19 @@
-import React, { HTMLAttributes } from "react";
-import { TailwindCardContent } from "./Container";
+import CardContent from "../CardContent";
 
-export const TailwindListItemText: React.FC<{
-  title: string;
-  description?: string;
-}> = ({ title, description }) => (
-  <div className="flex-1 pl-1 mr-8">
-    <div className="font-medium">{title}</div>
-    <div className="text-gray-600 text-sm">{description}</div>
-  </div>
-);
-
-export const TailwindListItemIcon: React.FC<HTMLAttributes<HTMLDivElement>> = ({
-  children,
-  className,
-  ...props
-}) => (
-  <div
-    className={`flex flex-col justify-center items-center mr-4 ${
-      className || ""
-    }`}
-    {...props}
-  >
-    {children}
-  </div>
-);
-
-export const TailwindListItemDescription: React.FC = ({ children }) => (
-  <div className="text-gray-600 text-right text-xs whitespace-pre-line">
-    {children}
-  </div>
-);
-
-export const TailwindListItem: React.FC<HTMLAttributes<HTMLLIElement>> = ({
-  children,
-  className,
-  ...props
-}) => {
-  return (
-    <li className="flex flex-row" {...props}>
-      <div
-        className={`select-none cursor-pointer flex flex-1 items-center px-4 py-2 hover:bg-gray-50 ${
-          className || ""
-        }`}
-      >
-        {children}
-      </div>
-    </li>
-  );
-};
-
-export const TailwindList: React.FC<{
+const List: React.FC<{
   className?: string;
   onClickShowAll?: () => void;
   showPagination?: boolean;
   showShowAll?: boolean;
 }> = ({ children, onClickShowAll, showPagination, showShowAll, className }) => (
   <>
-    <TailwindCardContent
+    <CardContent
       className={`flex flex-col mx-auto items-center justify-center ${
         className || ""
       }`}
     >
       <ul className="flex flex-col divide divide-y w-full">{children}</ul>
-    </TailwindCardContent>
+    </CardContent>
     {/* TODO PANU: use pagination */}
     {showPagination && (
       <div className="flex flex-col items-center mt-4 mb-2">
@@ -137,3 +87,5 @@ export const TailwindList: React.FC<{
     )}
   </>
 );
+
+export default List;

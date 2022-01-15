@@ -13,6 +13,7 @@ import { isEmpty } from "lodash";
 import { useHistory } from "react-router-dom";
 import { v4 as uuid } from "uuid";
 import Spinner from "./common/components/Spinner";
+import useConfirmLeave from "./common/hooks/useConfirmLeave";
 
 const getFileExtension = (filename: string) => {
   return filename.slice(((filename.lastIndexOf(".") - 1) >>> 0) + 2);
@@ -112,17 +113,7 @@ export const PlayEdit = (props: RouteComponentProps<any>) => {
    * If there are unsaved changes or a save is in progress, then
    * confirm any attempt to navigate away from the page.
    */
-  useEffect(() => {
-    if (shouldConfirmLeaving) {
-      const confirmLeave = (event: BeforeUnloadEvent) => {
-        // NOTE: Chrome always shows its own message
-        event.returnValue =
-          "You have unsaved changes. Are you sure you want to leave this page?";
-      };
-      window.addEventListener("beforeunload", confirmLeave);
-      return () => window.removeEventListener("beforeunload", confirmLeave);
-    }
-  }, [shouldConfirmLeaving]);
+  useConfirmLeave(shouldConfirmLeaving);
 
   if (!play) {
     return isLoadingPlay ? (

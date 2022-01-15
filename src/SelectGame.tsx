@@ -3,27 +3,34 @@ import { RouteComponentProps } from "react-router";
 import { TextField } from "@material-ui/core";
 import { Game, GameDefinition } from "./domain/game";
 import { useGames } from "./common/hooks/useGames";
-import { TailwindContainerTitle } from "./common/components/Container";
-import {
-  TailwindList,
-  TailwindListItem,
-  TailwindListItemIcon,
-  TailwindListItemText,
-} from "./common/components/List";
 import ViewContentLayout from "./common/components/ViewContentLayout";
 import { usePlays } from "./common/hooks/usePlays";
 import { orderBy } from "lodash";
+import Title from "./common/components/typography/Title";
+import List from "./common/components/lists/List";
+import ListItem from "./common/components/lists/ListItem";
+import ListItemIcon from "./common/components/lists/ListItemIcon";
+import ListItemText from "./common/components/lists/ListItemText";
 
 const maxRecentlyPlayedGames = 6;
 
 function useRecentlyPlayedGames(games: Game[]) {
   const [plays] = usePlays();
-  const sortedPlays = orderBy(plays, [(play) => play.getDate(), "created"], ["desc", "desc"]);
+  const sortedPlays = orderBy(
+    plays,
+    [(play) => play.getDate(), "created"],
+    ["desc", "desc"]
+  );
   const recentlyPlayedGames: Game[] = [];
-  for (let i = 0; i < sortedPlays.length && recentlyPlayedGames.length < maxRecentlyPlayedGames; i += 1) {
+  for (
+    let i = 0;
+    i < sortedPlays.length &&
+    recentlyPlayedGames.length < maxRecentlyPlayedGames;
+    i += 1
+  ) {
     const { gameId } = sortedPlays[i];
-    if (gameId && recentlyPlayedGames.every(g => g.id !== gameId)) {
-      const game = games.find(game => game.id === gameId);
+    if (gameId && recentlyPlayedGames.every((g) => g.id !== gameId)) {
+      const game = games.find((game) => game.id === gameId);
       if (game) {
         recentlyPlayedGames.push(game);
       }
@@ -47,22 +54,32 @@ export const SelectGame = (props: RouteComponentProps<{}>) => {
     return name1 === "generic game"
       ? -1
       : name2 === "generic game"
-        ? 1
-        : name1 > name2
-          ? 1
-          : name1 < name2
-            ? -1
-            : 0;
+      ? 1
+      : name1 > name2
+      ? 1
+      : name1 < name2
+      ? -1
+      : 0;
   });
   return (
     <ViewContentLayout>
-      <TailwindContainerTitle>Select game</TailwindContainerTitle>
+      <Title>Select game</Title>
 
       {!recentlyPlayedGames.length ? null : (
-        <div className={`p-3 grid grid-rows-1 grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-3 overflow-hidden`} style={{ gridAutoRows: 0 }}>
+        <div
+          className={`p-3 grid grid-rows-1 grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-3 overflow-hidden`}
+          style={{ gridAutoRows: 0 }}
+        >
           {recentlyPlayedGames.map((game) => (
-            <div className="aspect-square w-full h-full cursor-pointer hover:opacity-80" onClick={() => onSelectGame(game)}>
-              <img src={game.icon} alt={game.name} className="w-full h-full object-contain object-center" />
+            <div
+              className="aspect-square w-full h-full cursor-pointer hover:opacity-80"
+              onClick={() => onSelectGame(game)}
+            >
+              <img
+                src={game.icon}
+                alt={game.name}
+                className="w-full h-full object-contain object-center"
+              />
             </div>
           ))}
         </div>
@@ -77,22 +94,22 @@ export const SelectGame = (props: RouteComponentProps<{}>) => {
         />
       </div>
 
-      <TailwindList onClickShowAll={() => { }}>
+      <List onClickShowAll={() => {}}>
         {listedGames
           .filter((g) => g.lowercaseName.includes(searchTerm.toLowerCase()))
           .map((game) => (
-            <TailwindListItem onClick={() => onSelectGame(game)} key={game.id}>
-              <TailwindListItemIcon>
+            <ListItem onClick={() => onSelectGame(game)} key={game.id}>
+              <ListItemIcon>
                 <img
                   alt="gamepic"
                   src={game.icon}
                   className="mx-auto object-cover rounded-full h-10 w-10"
                 />
-              </TailwindListItemIcon>
-              <TailwindListItemText title={game.name} />
-            </TailwindListItem>
+              </ListItemIcon>
+              <ListItemText title={game.name} />
+            </ListItem>
           ))}
-      </TailwindList>
+      </List>
     </ViewContentLayout>
   );
 };

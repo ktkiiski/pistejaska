@@ -4,24 +4,20 @@ import { TextField } from "@material-ui/core";
 import { v4 as uuid } from "uuid";
 import { usePlayers } from "./common/hooks/usePlayers";
 import { useGames } from "./common/hooks/useGames";
-import { TailwindContainerTitle } from "./common/components/Container";
-import {
-  TailwindList,
-  TailwindListItem,
-  TailwindListItemIcon,
-  TailwindListItemText,
-} from "./common/components/List";
-import {
-  TailwindButton,
-  TailwindButtonPrimary,
-  TailwindCardButtonRow,
-} from "./common/components/Button";
 import ViewContentLayout from "./common/components/ViewContentLayout";
 import { LoadingSpinner } from "./common/components/LoadingSpinner";
 import { getFirestore, setDoc, doc } from "firebase/firestore";
 import { Game } from "./domain/game";
 import { app } from "./common/firebase";
 import { useHistory } from "react-router-dom";
+import CardButtonRow from "./common/components/buttons/CardButtonRow";
+import Button from "./common/components/buttons/Button";
+import PrimaryButton from "./common/components/buttons/PrimaryButton";
+import Title from "./common/components/typography/Title";
+import List from "./common/components/lists/List";
+import ListItem from "./common/components/lists/ListItem";
+import ListItemIcon from "./common/components/lists/ListItemIcon";
+import ListItemText from "./common/components/lists/ListItemText";
 
 function shiftRandomly<T>(values: T[]) {
   const offset = Math.floor(Math.random() * values.length);
@@ -45,8 +41,8 @@ async function createPlay(gameId: string, players: Player[]): Promise<Play> {
     created: new Date().toISOString(),
   });
 
-  const db = getFirestore(app)
-  await setDoc(doc(db, "plays-v1", playId), play.toDTO())
+  const db = getFirestore(app);
+  await setDoc(doc(db, "plays-v1", playId), play.toDTO());
   return play;
 }
 
@@ -143,9 +139,9 @@ const SelectPlayers = (props: {
   return (
     <ViewContentLayout
       footer={
-        <TailwindCardButtonRow>
+        <CardButtonRow>
           {game.simultaneousTurns ? null : (
-            <TailwindButton
+            <Button
               onClick={() => {
                 setPlayers(shiftRandomly(players));
                 setIsRandomizing(true);
@@ -153,18 +149,18 @@ const SelectPlayers = (props: {
               disabled={players.length < 2 || isRandomizing}
             >
               Random starting player
-            </TailwindButton>
+            </Button>
           )}
-          <TailwindButtonPrimary
+          <PrimaryButton
             onClick={onStartGame}
             disabled={players.length < 2 || isRandomizing}
           >
             Start
-          </TailwindButtonPrimary>
-        </TailwindCardButtonRow>
+          </PrimaryButton>
+        </CardButtonRow>
       }
     >
-      <TailwindContainerTitle>Select players</TailwindContainerTitle>
+      <Title>Select players</Title>
 
       <p>
         {`Add players to the new game of `}
@@ -178,14 +174,14 @@ const SelectPlayers = (props: {
           autoFocus
           onChange={(e) => onSearch(e.currentTarget.value)}
         />
-        <TailwindList>
+        <List>
           {visiblePlayers.map((player) => (
-            <TailwindListItem
+            <ListItem
               onClick={() => onSelectPlayer(player)}
               className="text-sm"
               key={player.id}
             >
-              <TailwindListItemIcon>
+              <ListItemIcon>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="18"
@@ -194,30 +190,24 @@ const SelectPlayers = (props: {
                 >
                   <path d="M9 1C4.58 1 1 4.58 1 9s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm0 2.75c1.24 0 2.25 1.01 2.25 2.25S10.24 8.25 9 8.25 6.75 7.24 6.75 6 7.76 3.75 9 3.75zM9 14.5c-1.86 0-3.49-.92-4.49-2.33C4.62 10.72 7.53 10 9 10c1.47 0 4.38.72 4.49 2.17-1 1.41-2.63 2.33-4.49 2.33z" />
                 </svg>
-              </TailwindListItemIcon>
-              <TailwindListItemText title={player.name} />
-            </TailwindListItem>
+              </ListItemIcon>
+              <ListItemText title={player.name} />
+            </ListItem>
           ))}
           {!showAllPlayers && selectablePlayers.length > 6 ? (
-            <TailwindListItem
-              onClick={() => setShowAllPlayers(true)}
-              key="showmore"
-            >
+            <ListItem onClick={() => setShowAllPlayers(true)} key="showmore">
               Show more...
-            </TailwindListItem>
+            </ListItem>
           ) : showAllPlayers && selectablePlayers.length > 6 ? (
-            <TailwindListItem
-              onClick={() => setShowAllPlayers(false)}
-              key="showless"
-            >
+            <ListItem onClick={() => setShowAllPlayers(false)} key="showless">
               Show less...
-            </TailwindListItem>
+            </ListItem>
           ) : (
             <></>
           )}
 
-          <TailwindListItem key="currentplayer">
-            <TailwindListItemIcon>
+          <ListItem key="currentplayer">
+            <ListItemIcon>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -226,21 +216,21 @@ const SelectPlayers = (props: {
               >
                 <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
               </svg>
-            </TailwindListItemIcon>
+            </ListItemIcon>
             <TextField
               value={currentPlayer}
               placeholder="New player"
               onChange={(e) => setCurrentPlayer(e.currentTarget.value)}
             />
-            <TailwindButton onClick={onAddPlayer}>Add</TailwindButton>
-          </TailwindListItem>
-        </TailwindList>
+            <Button onClick={onAddPlayer}>Add</Button>
+          </ListItem>
+        </List>
       </div>
 
-      <TailwindList className="mt-8">
+      <List className="mt-8">
         {players.map((player) => (
-          <TailwindListItem key={player.id}>
-            <TailwindListItemIcon>
+          <ListItem key={player.id}>
+            <ListItemIcon>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-5 w-5"
@@ -253,9 +243,9 @@ const SelectPlayers = (props: {
                   clipRule="evenodd"
                 />
               </svg>
-            </TailwindListItemIcon>
-            <TailwindListItemText title={player.name} />
-            <TailwindListItemIcon
+            </ListItemIcon>
+            <ListItemText title={player.name} />
+            <ListItemIcon
               onClick={() => onDeSelectPlayer(player)}
               className={isRandomizing ? "invisible" : ""}
             >
@@ -267,10 +257,10 @@ const SelectPlayers = (props: {
               >
                 <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" />
               </svg>
-            </TailwindListItemIcon>
-          </TailwindListItem>
+            </ListItemIcon>
+          </ListItem>
         ))}
-      </TailwindList>
+      </List>
     </ViewContentLayout>
   );
 };

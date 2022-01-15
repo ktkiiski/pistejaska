@@ -6,31 +6,25 @@ import { GameMiscFieldDefinition, Game } from "./domain/game";
 import { sortBy } from "lodash";
 import { getFirestore, deleteDoc, doc } from "firebase/firestore";
 import { Link } from "react-router-dom";
-import {
-  TailwindContainerTitle,
-  TailwindCardContent,
-} from "./common/components/Container";
-import {
-  TailwindTableHead,
-  TailwindTableHeadCell,
-  TailwindTableCell,
-  TailwindTableRow,
-  TailwindTableFooter,
-  TailwindTableBody,
-  TailwindTable,
-} from "./common/components/Table";
-import {
-  TailwindBackButton,
-  TailwindButton,
-  TailwindButtonDanger,
-  TailwindButtonPrimary,
-  TailwindCardButtonRow,
-} from "./common/components/Button";
 import { LoadingSpinner } from "./common/components/LoadingSpinner";
 import { app } from "./common/firebase";
 import { usePlay } from "./common/hooks/usePlay";
 import ViewContentLayout from "./common/components/ViewContentLayout";
 import { formatDuration, getPositionAsEmoji } from "./common/stringUtils";
+import BackButton from "./common/components/buttons/BackButton";
+import CardButtonRow from "./common/components/buttons/CardButtonRow";
+import PrimaryButton from "./common/components/buttons/PrimaryButton";
+import DangerButton from "./common/components/buttons/DangerButton";
+import Button from "./common/components/buttons/Button";
+import Title from "./common/components/typography/Title";
+import CardContent from "./common/components/CardContent";
+import Table from "./common/components/tables/Table";
+import TableHead from "./common/components/tables/TableHead";
+import TableRow from "./common/components/tables/TableRow";
+import TableHeadCell from "./common/components/tables/TableHeadCell";
+import TableCell from "./common/components/tables/TableCell";
+import TableBody from "./common/components/tables/TableBody";
+import TableFooter from "./common/components/tables/TableFooter";
 
 export const PlayView = (props: RouteComponentProps<any>) => {
   const [games] = useGames();
@@ -46,7 +40,7 @@ export const PlayView = (props: RouteComponentProps<any>) => {
 
   if (loading) {
     return (
-      <ViewContentLayout header={<TailwindBackButton onClick={onBack} />}>
+      <ViewContentLayout header={<BackButton onClick={onBack} />}>
         <LoadingSpinner />
       </ViewContentLayout>
     );
@@ -106,7 +100,7 @@ export const PlayView = (props: RouteComponentProps<any>) => {
           <></>
         )}
 
-        <TailwindContainerTitle>Images</TailwindContainerTitle>
+        <Title>Images</Title>
         {images.map((src) => (
           <div
             key={src}
@@ -127,24 +121,20 @@ export const PlayView = (props: RouteComponentProps<any>) => {
 
   return (
     <ViewContentLayout
-      header={<TailwindBackButton onClick={onBack} />}
+      header={<BackButton onClick={onBack} />}
       footer={
-        <TailwindCardButtonRow>
-          <TailwindButtonPrimary onClick={onEditPlay}>
-            Edit
-          </TailwindButtonPrimary>
-          <TailwindButtonDanger onClick={onDelete}>Delete</TailwindButtonDanger>
-          <TailwindButton onClick={onReplay}>
+        <CardButtonRow>
+          <PrimaryButton onClick={onEditPlay}>Edit</PrimaryButton>
+          <DangerButton onClick={onDelete}>Delete</DangerButton>
+          <Button onClick={onReplay}>
             <span className="hidden md:inline">Play</span>
             {" again"}
-          </TailwindButton>
-          <TailwindButton
-            onClick={() => props.history.push(`/games/${game.id}`)}
-          >
+          </Button>
+          <Button onClick={() => props.history.push(`/games/${game.id}`)}>
             <span className="hidden md:inline">Show</span>
             {" reports"}
-          </TailwindButton>
-        </TailwindCardButtonRow>
+          </Button>
+        </CardButtonRow>
       }
     >
       <div className="overflow-visible m-10 relative mx-auto bg-white shadow-lg ring-1 ring-black/5 rounded-xl flex items-center gap-6 ml-4 md:ml-6">
@@ -163,7 +153,7 @@ export const PlayView = (props: RouteComponentProps<any>) => {
         </div>
       </div>
 
-      <TailwindCardContent className="p-2 text-center">
+      <CardContent className="p-2 text-center">
         <div>Played on {play.getDate().toLocaleDateString()}</div>
         {game.hasExpansions() && (
           <div>
@@ -184,9 +174,9 @@ export const PlayView = (props: RouteComponentProps<any>) => {
                 : misc.data}
             </div>
           ))}
-      </TailwindCardContent>
+      </CardContent>
 
-      <TailwindContainerTitle>Scores</TailwindContainerTitle>
+      <Title>Scores</Title>
       <PlayTable game={game} play={play} {...props} />
 
       <PlayImages />
@@ -222,42 +212,40 @@ const PlayTable = (
   };
 
   return (
-    <TailwindCardContent className="text-center">
-      <TailwindTable>
-        <TailwindTableHead>
-          <TailwindTableRow key="1">
-            <TailwindTableHeadCell key="category">
-              Category
-            </TailwindTableHeadCell>
+    <CardContent className="text-center">
+      <Table>
+        <TableHead>
+          <TableRow key="1">
+            <TableHeadCell key="category">Category</TableHeadCell>
             {players.map((p) => (
-              <TailwindTableCell key={p.id}>
+              <TableCell key={p.id}>
                 {`${getPositionAsEmoji(play.getPosition(p.id))} `}
                 <Link to={"/players/" + p.id}>{`${formatName(p.name)}`}</Link>
-              </TailwindTableCell>
+              </TableCell>
             ))}
-          </TailwindTableRow>
-        </TailwindTableHead>
-        <TailwindTableBody>
-          <TailwindTableRow key="2">
-            <TailwindTableCell className="text-left" key="starting-order">
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          <TableRow key="2">
+            <TableCell className="text-left" key="starting-order">
               Starting order
-            </TailwindTableCell>
+            </TableCell>
             {players.map((f, idx) => (
-              <TailwindTableCell
+              <TableCell
                 key={f.id}
                 className={idx % 2 === 0 ? "bg-gray-50" : ""}
               >
                 {play.players.lastIndexOf(f) + 1}.
-              </TailwindTableCell>
+              </TableCell>
             ))}
-          </TailwindTableRow>
+          </TableRow>
           {scoreFields.map((f) => (
-            <TailwindTableRow key={f.id}>
-              <TailwindTableCell className="text-left" key="name">
+            <TableRow key={f.id}>
+              <TableCell className="text-left" key="name">
                 {f.name}
-              </TailwindTableCell>
+              </TableCell>
               {players.map((p, idx) => (
-                <TailwindTableCell
+                <TableCell
                   key={p.id}
                   className={idx % 2 === 0 ? "bg-gray-50" : ""}
                 >
@@ -268,25 +256,23 @@ const PlayTable = (
                       ) || ({} as any)
                     ).score
                   }
-                </TailwindTableCell>
+                </TableCell>
               ))}
-            </TailwindTableRow>
+            </TableRow>
           ))}
-        </TailwindTableBody>
+        </TableBody>
 
-        <TailwindTableFooter>
-          <TailwindTableRow key="footer">
-            <TailwindTableCell key="total" className="text-left">
+        <TableFooter>
+          <TableRow key="footer">
+            <TableCell key="total" className="text-left">
               𝚺
-            </TailwindTableCell>
+            </TableCell>
             {players.map((f, idx) => (
-              <TailwindTableCell key={f.id}>
-                {play.getTotal(f.id)}
-              </TailwindTableCell>
+              <TableCell key={f.id}>{play.getTotal(f.id)}</TableCell>
             ))}
-          </TailwindTableRow>
-        </TailwindTableFooter>
-      </TailwindTable>
-    </TailwindCardContent>
+          </TableRow>
+        </TableFooter>
+      </Table>
+    </CardContent>
   );
 };

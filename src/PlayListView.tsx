@@ -1,9 +1,9 @@
 import { usePlays } from "./common/hooks/usePlays";
-import { TailwindContainerTitle } from "./common/components/Container";
 import { SkeletonLoader } from "./common/components/SkeletonLoader";
 import ViewContentLayout from "./common/components/ViewContentLayout";
 import PlayList from "./PlayList";
 import { useGames } from "./common/hooks/useGames";
+import Title from "./common/components/typography/Title";
 
 export const PlayListView = () => {
   const [plays, loadingPlays, errorPlays] = usePlays();
@@ -19,8 +19,12 @@ export const PlayListView = () => {
 
   return (
     <ViewContentLayout>
-      <TailwindContainerTitle>Plays</TailwindContainerTitle>
-      {loadingPlays || loadingGames ? <SkeletonLoader /> : <PlayList plays={plays} games={games} />}
+      <Title>Plays</Title>
+      {loadingPlays || loadingGames ? (
+        <SkeletonLoader />
+      ) : (
+        <PlayList plays={plays} games={games} />
+      )}
     </ViewContentLayout>
   );
 };

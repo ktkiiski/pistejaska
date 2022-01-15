@@ -3,14 +3,12 @@ import { TablePagination } from "@material-ui/core";
 import { useHistory } from "react-router";
 import { Play } from "./domain/play";
 import { orderBy } from "lodash";
-import {
-  TailwindList,
-  TailwindListItem,
-  TailwindListItemDescription,
-  TailwindListItemIcon,
-  TailwindListItemText,
-} from "./common/components/List";
 import { Game } from "./domain/game";
+import List from "./common/components/lists/List";
+import ListItem from "./common/components/lists/ListItem";
+import ListItemIcon from "./common/components/lists/ListItemIcon";
+import ListItemText from "./common/components/lists/ListItemText";
+import ListItemDescription from "./common/components/lists/ListItemDescription";
 
 interface PlayListProps {
   plays: Play[];
@@ -43,7 +41,7 @@ const PlayList = (props: PlayListProps) => {
   );
   return (
     <>
-      <TailwindList onClickShowAll={() => setShowAll(!showAll)}>
+      <List onClickShowAll={() => setShowAll(!showAll)}>
         {(showAll ? data : currentData).map((play) => {
           const game = games.find((g) => g.id === play.gameId);
           const winners = play.rankings.filter(
@@ -53,8 +51,8 @@ const PlayList = (props: PlayListProps) => {
             .map((winner) => winner.player.name)
             .join(" / ");
           return (
-            <TailwindListItem key={play.id} onClick={() => onSelectPlay(play)}>
-              <TailwindListItemIcon>
+            <ListItem key={play.id} onClick={() => onSelectPlay(play)}>
+              <ListItemIcon>
                 {game ? (
                   <img
                     alt="gamepic"
@@ -64,20 +62,20 @@ const PlayList = (props: PlayListProps) => {
                 ) : (
                   <div className="mx-auto object-cover rounded-full h-14 w-14 background-gray" />
                 )}
-              </TailwindListItemIcon>
-              <TailwindListItemText
+              </ListItemIcon>
+              <ListItemText
                 title={play.getName() ?? ""}
                 description={game?.name}
               />
-              <TailwindListItemDescription>
+              <ListItemDescription>
                 {play.getDate().toLocaleDateString()}
                 <br />
                 <span className="text-gray-300">{winnerNames}</span>
-              </TailwindListItemDescription>
-            </TailwindListItem>
+              </ListItemDescription>
+            </ListItem>
           );
         })}
-      </TailwindList>
+      </List>
 
       <TablePagination
         component="div"

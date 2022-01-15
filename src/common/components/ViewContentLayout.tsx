@@ -1,4 +1,4 @@
-import { TailwindCard } from "./Container";
+import Card from "./Card";
 import styles from "./ViewContentLayout.module.css";
 
 interface ViewContentLayoutProps {
@@ -18,7 +18,7 @@ const ViewContentLayout: React.FC<ViewContentLayoutProps> = ({
       <div className={`p-2 container mx-auto ${className || ""}`}>
         {header && <div className="p-2">{header}</div>}
 
-        <TailwindCard className="text-sm p-0">
+        <Card className="text-sm p-0">
           <div className="p-2">{children}</div>
 
           {/* Desktop footer */}
@@ -29,7 +29,7 @@ const ViewContentLayout: React.FC<ViewContentLayoutProps> = ({
               </div>
             </div>
           )}
-        </TailwindCard>
+        </Card>
       </div>
 
       {/* Mobile footer */}

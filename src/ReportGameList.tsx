@@ -2,14 +2,6 @@ import { useHistory } from "react-router";
 import { groupBy, mapValues, orderBy } from "lodash";
 import { Game, GameDefinition } from "./domain/game";
 import { useGames } from "./common/hooks/useGames";
-import { TailwindContainerTitle } from "./common/components/Container";
-import {
-  TailwindList,
-  TailwindListItem,
-  TailwindListItemDescription,
-  TailwindListItemIcon,
-  TailwindListItemText,
-} from "./common/components/List";
 import ViewContentLayout from "./common/components/ViewContentLayout";
 import TabSet from "./common/components/tabs/TabSet";
 import TabLink from "./common/components/tabs/TabLink";
@@ -17,6 +9,12 @@ import { useState } from "react";
 import { usePlays } from "./common/hooks/usePlays";
 import { formatDuration, pluralize } from "./common/stringUtils";
 import { SkeletonLoader } from "./common/components/SkeletonLoader";
+import Title from "./common/components/typography/Title";
+import List from "./common/components/lists/List";
+import ListItem from "./common/components/lists/ListItem";
+import ListItemIcon from "./common/components/lists/ListItemIcon";
+import ListItemText from "./common/components/lists/ListItemText";
+import ListItemDescription from "./common/components/lists/ListItemDescription";
 
 type GameSortCriteriaId = "alphabetic" | "popular" | "shortest" | "longest";
 
@@ -106,7 +104,7 @@ export const ReportGameList = () => {
 
   return (
     <ViewContentLayout>
-      <TailwindContainerTitle>Games</TailwindContainerTitle>
+      <Title>Games</Title>
       <div className="flex flex-col items-center my-2">
         <TabSet>
           {sortTabIds.map((id) => (
@@ -123,23 +121,23 @@ export const ReportGameList = () => {
       {loadingGames ? (
         <SkeletonLoader />
       ) : (
-        <TailwindList>
+        <List>
           {sortedGameItems.map((game) => (
-            <TailwindListItem onClick={() => onSelectGame(game)} key={game.id}>
-              <TailwindListItemIcon>
+            <ListItem onClick={() => onSelectGame(game)} key={game.id}>
+              <ListItemIcon>
                 <img
                   alt={game.name}
                   src={game.icon}
                   className="mx-auto object-cover rounded-full h-10 w-10"
                 />
-              </TailwindListItemIcon>
-              <TailwindListItemText title={game.name} />
-              <TailwindListItemDescription>
+              </ListItemIcon>
+              <ListItemText title={game.name} />
+              <ListItemDescription>
                 {currentSortCriteria.getDetailLabel(game)}
-              </TailwindListItemDescription>
-            </TailwindListItem>
+              </ListItemDescription>
+            </ListItem>
           ))}
-        </TailwindList>
+        </List>
       )}
     </ViewContentLayout>
   );
