@@ -1,0 +1,20 @@
+import classNames from "classnames";
+import { HTMLAttributes } from "react";
+
+const Card: React.FC<HTMLAttributes<HTMLDivElement>> = ({
+  children,
+  className,
+  ...props
+}) => (
+  <div
+    className={classNames(
+      "container bg-gray-100 shadow rounded-xl mb-4 p-2",
+      className
+    )}
+    {...props}
+  >
+    {children}
+  </div>
+);
+
+export default Card;

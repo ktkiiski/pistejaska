@@ -1,5 +1,5 @@
 import React, { HTMLAttributes } from "react";
-import { TailwindCardContent } from "./Container";
+import CardContent from "./CardContent";
 
 export const TailwindListItemText: React.FC<{
   title: string;
@@ -57,13 +57,13 @@ export const TailwindList: React.FC<{
   showShowAll?: boolean;
 }> = ({ children, onClickShowAll, showPagination, showShowAll, className }) => (
   <>
-    <TailwindCardContent
+    <CardContent
       className={`flex flex-col mx-auto items-center justify-center ${
         className || ""
       }`}
     >
       <ul className="flex flex-col divide divide-y w-full">{children}</ul>
-    </TailwindCardContent>
+    </CardContent>
     {/* TODO PANU: use pagination */}
     {showPagination && (
       <div className="flex flex-col items-center mt-4 mb-2">

@@ -6,7 +6,6 @@ import { GameMiscFieldDefinition, Game } from "./domain/game";
 import { sortBy } from "lodash";
 import { getFirestore, deleteDoc, doc } from "firebase/firestore";
 import { Link } from "react-router-dom";
-import { TailwindCardContent } from "./common/components/Container";
 import {
   TailwindTableHead,
   TailwindTableHeadCell,
@@ -27,6 +26,7 @@ import PrimaryButton from "./common/components/buttons/PrimaryButton";
 import DangerButton from "./common/components/buttons/DangerButton";
 import Button from "./common/components/buttons/Button";
 import Title from "./common/components/typography/Title";
+import CardContent from "./common/components/CardContent";
 
 export const PlayView = (props: RouteComponentProps<any>) => {
   const [games] = useGames();
@@ -155,7 +155,7 @@ export const PlayView = (props: RouteComponentProps<any>) => {
         </div>
       </div>
 
-      <TailwindCardContent className="p-2 text-center">
+      <CardContent className="p-2 text-center">
         <div>Played on {play.getDate().toLocaleDateString()}</div>
         {game.hasExpansions() && (
           <div>
@@ -176,7 +176,7 @@ export const PlayView = (props: RouteComponentProps<any>) => {
                 : misc.data}
             </div>
           ))}
-      </TailwindCardContent>
+      </CardContent>
 
       <Title>Scores</Title>
       <PlayTable game={game} play={play} {...props} />
@@ -214,7 +214,7 @@ const PlayTable = (
   };
 
   return (
-    <TailwindCardContent className="text-center">
+    <CardContent className="text-center">
       <TailwindTable>
         <TailwindTableHead>
           <TailwindTableRow key="1">
@@ -279,6 +279,6 @@ const PlayTable = (
           </TailwindTableRow>
         </TailwindTableFooter>
       </TailwindTable>
-    </TailwindCardContent>
+    </CardContent>
   );
 };
