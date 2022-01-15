@@ -20,11 +20,9 @@ import map from "lodash/map";
 import { FormFocusGroup, FormFocusContextProvider } from "./utils/focus";
 import { TailwindContainerTitle } from "./common/components/Container";
 import ViewContentLayout from "./common/components/ViewContentLayout";
-import {
-  TailwindButton,
-  TailwindButtonPrimary,
-  TailwindCardButtonRow,
-} from "./common/components/Button";
+import CardButtonRow from "./common/components/buttons/CardButtonRow";
+import Button from "./common/components/buttons/Button";
+import PrimaryButton from "./common/components/buttons/PrimaryButton";
 
 const useStyles = makeStyles({
   heading: {
@@ -287,8 +285,8 @@ export const PlayForm = (props: {
       <ViewContentLayout
         className={className}
         footer={
-          <TailwindCardButtonRow>
-            <TailwindButton
+          <CardButtonRow>
+            <Button
               disabled={activeViewIndex <= 0}
               onClick={() =>
                 setActiveViewIndex(Math.max(activeViewIndex - 1, 0))
@@ -297,8 +295,8 @@ export const PlayForm = (props: {
               tabIndex={-1}
             >
               &lt; Previous
-            </TailwindButton>
-            <TailwindButtonPrimary
+            </Button>
+            <PrimaryButton
               color="primary"
               onClick={onDone}
               style={
@@ -307,8 +305,8 @@ export const PlayForm = (props: {
               }
             >
               Done
-            </TailwindButtonPrimary>
-            <TailwindButton
+            </PrimaryButton>
+            <Button
               disabled={activeViewIndex >= viewCount - 1}
               onClick={() =>
                 setActiveViewIndex(Math.min(activeViewIndex + 1, viewCount - 1))
@@ -317,8 +315,8 @@ export const PlayForm = (props: {
               tabIndex={-1}
             >
               Next &gt;
-            </TailwindButton>
-          </TailwindCardButtonRow>
+            </Button>
+          </CardButtonRow>
         }
       >
         <TailwindContainerTitle>{game.name}</TailwindContainerTitle>

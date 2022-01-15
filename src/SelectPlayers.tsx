@@ -11,17 +11,15 @@ import {
   TailwindListItemIcon,
   TailwindListItemText,
 } from "./common/components/List";
-import {
-  TailwindButton,
-  TailwindButtonPrimary,
-  TailwindCardButtonRow,
-} from "./common/components/Button";
 import ViewContentLayout from "./common/components/ViewContentLayout";
 import { LoadingSpinner } from "./common/components/LoadingSpinner";
 import { getFirestore, setDoc, doc } from "firebase/firestore";
 import { Game } from "./domain/game";
 import { app } from "./common/firebase";
 import { useHistory } from "react-router-dom";
+import CardButtonRow from "./common/components/buttons/CardButtonRow";
+import Button from "./common/components/buttons/Button";
+import PrimaryButton from "./common/components/buttons/PrimaryButton";
 
 function shiftRandomly<T>(values: T[]) {
   const offset = Math.floor(Math.random() * values.length);
@@ -45,8 +43,8 @@ async function createPlay(gameId: string, players: Player[]): Promise<Play> {
     created: new Date().toISOString(),
   });
 
-  const db = getFirestore(app)
-  await setDoc(doc(db, "plays-v1", playId), play.toDTO())
+  const db = getFirestore(app);
+  await setDoc(doc(db, "plays-v1", playId), play.toDTO());
   return play;
 }
 
@@ -143,9 +141,9 @@ const SelectPlayers = (props: {
   return (
     <ViewContentLayout
       footer={
-        <TailwindCardButtonRow>
+        <CardButtonRow>
           {game.simultaneousTurns ? null : (
-            <TailwindButton
+            <Button
               onClick={() => {
                 setPlayers(shiftRandomly(players));
                 setIsRandomizing(true);
@@ -153,15 +151,15 @@ const SelectPlayers = (props: {
               disabled={players.length < 2 || isRandomizing}
             >
               Random starting player
-            </TailwindButton>
+            </Button>
           )}
-          <TailwindButtonPrimary
+          <PrimaryButton
             onClick={onStartGame}
             disabled={players.length < 2 || isRandomizing}
           >
             Start
-          </TailwindButtonPrimary>
-        </TailwindCardButtonRow>
+          </PrimaryButton>
+        </CardButtonRow>
       }
     >
       <TailwindContainerTitle>Select players</TailwindContainerTitle>
@@ -232,7 +230,7 @@ const SelectPlayers = (props: {
               placeholder="New player"
               onChange={(e) => setCurrentPlayer(e.currentTarget.value)}
             />
-            <TailwindButton onClick={onAddPlayer}>Add</TailwindButton>
+            <Button onClick={onAddPlayer}>Add</Button>
           </TailwindListItem>
         </TailwindList>
       </div>

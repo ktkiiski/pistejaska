@@ -19,18 +19,16 @@ import {
   TailwindTableBody,
   TailwindTable,
 } from "./common/components/Table";
-import {
-  TailwindBackButton,
-  TailwindButton,
-  TailwindButtonDanger,
-  TailwindButtonPrimary,
-  TailwindCardButtonRow,
-} from "./common/components/Button";
 import { LoadingSpinner } from "./common/components/LoadingSpinner";
 import { app } from "./common/firebase";
 import { usePlay } from "./common/hooks/usePlay";
 import ViewContentLayout from "./common/components/ViewContentLayout";
 import { formatDuration, getPositionAsEmoji } from "./common/stringUtils";
+import BackButton from "./common/components/buttons/BackButton";
+import CardButtonRow from "./common/components/buttons/CardButtonRow";
+import PrimaryButton from "./common/components/buttons/PrimaryButton";
+import DangerButton from "./common/components/buttons/DangerButton";
+import Button from "./common/components/buttons/Button";
 
 export const PlayView = (props: RouteComponentProps<any>) => {
   const [games] = useGames();
@@ -46,7 +44,7 @@ export const PlayView = (props: RouteComponentProps<any>) => {
 
   if (loading) {
     return (
-      <ViewContentLayout header={<TailwindBackButton onClick={onBack} />}>
+      <ViewContentLayout header={<BackButton onClick={onBack} />}>
         <LoadingSpinner />
       </ViewContentLayout>
     );
@@ -127,24 +125,20 @@ export const PlayView = (props: RouteComponentProps<any>) => {
 
   return (
     <ViewContentLayout
-      header={<TailwindBackButton onClick={onBack} />}
+      header={<BackButton onClick={onBack} />}
       footer={
-        <TailwindCardButtonRow>
-          <TailwindButtonPrimary onClick={onEditPlay}>
-            Edit
-          </TailwindButtonPrimary>
-          <TailwindButtonDanger onClick={onDelete}>Delete</TailwindButtonDanger>
-          <TailwindButton onClick={onReplay}>
+        <CardButtonRow>
+          <PrimaryButton onClick={onEditPlay}>Edit</PrimaryButton>
+          <DangerButton onClick={onDelete}>Delete</DangerButton>
+          <Button onClick={onReplay}>
             <span className="hidden md:inline">Play</span>
             {" again"}
-          </TailwindButton>
-          <TailwindButton
-            onClick={() => props.history.push(`/games/${game.id}`)}
-          >
+          </Button>
+          <Button onClick={() => props.history.push(`/games/${game.id}`)}>
             <span className="hidden md:inline">Show</span>
             {" reports"}
-          </TailwindButton>
-        </TailwindCardButtonRow>
+          </Button>
+        </CardButtonRow>
       }
     >
       <div className="overflow-visible m-10 relative mx-auto bg-white shadow-lg ring-1 ring-black/5 rounded-xl flex items-center gap-6 ml-4 md:ml-6">
