@@ -3,16 +3,14 @@ import { RouteComponentProps } from "react-router";
 import { TextField } from "@material-ui/core";
 import { Game, GameDefinition } from "./domain/game";
 import { useGames } from "./common/hooks/useGames";
-import {
-  TailwindList,
-  TailwindListItem,
-  TailwindListItemIcon,
-  TailwindListItemText,
-} from "./common/components/List";
 import ViewContentLayout from "./common/components/ViewContentLayout";
 import { usePlays } from "./common/hooks/usePlays";
 import { orderBy } from "lodash";
 import Title from "./common/components/typography/Title";
+import List from "./common/components/lists/List";
+import ListItem from "./common/components/lists/ListItem";
+import ListItemIcon from "./common/components/lists/ListItemIcon";
+import ListItemText from "./common/components/lists/ListItemText";
 
 const maxRecentlyPlayedGames = 6;
 
@@ -96,22 +94,22 @@ export const SelectGame = (props: RouteComponentProps<{}>) => {
         />
       </div>
 
-      <TailwindList onClickShowAll={() => {}}>
+      <List onClickShowAll={() => {}}>
         {listedGames
           .filter((g) => g.lowercaseName.includes(searchTerm.toLowerCase()))
           .map((game) => (
-            <TailwindListItem onClick={() => onSelectGame(game)} key={game.id}>
-              <TailwindListItemIcon>
+            <ListItem onClick={() => onSelectGame(game)} key={game.id}>
+              <ListItemIcon>
                 <img
                   alt="gamepic"
                   src={game.icon}
                   className="mx-auto object-cover rounded-full h-10 w-10"
                 />
-              </TailwindListItemIcon>
-              <TailwindListItemText title={game.name} />
-            </TailwindListItem>
+              </ListItemIcon>
+              <ListItemText title={game.name} />
+            </ListItem>
           ))}
-      </TailwindList>
+      </List>
     </ViewContentLayout>
   );
 };
