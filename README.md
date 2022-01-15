@@ -87,20 +87,20 @@ If you need to perform data migrations, do this:
 
 ## TODO
 
-- save PlayForm state to session storage so that in case of bugs it is saved
-- CRA => esbuild?
+- Refactor Material UI away & replace it with custom-made Tailwind CSS components
+- Consider optimizing build with esbuild (replace create-react-app or part of it?)
 - change "misc score field" for unknown expansion scores to be the last field of the PlayForm
 - statistical analysis for strongest victory predictor (eg. start order (is starting player more likely to win), number of dwarfs in caverna, player, race used)
 - generic reports: games by plays, longest/shortest games, best ELO rating for all games etc
-- read support for everyone, write support for whitelisted emails
+- read support for everyone, write support for whitelisted emails. anonymous users only see anonymized player names.
 - normalize player names (firstname and first letter of surname)
 - celebration page on save to see the winner with konfetti animation
 
 ### Technical debt
 
-- denormalize players to their own root entity
+- normalize players to their own root entity in Firestore
 - better backups
-- automatic tests
+- automatic tests, e.g. playwright
 
 ## Known issues
 
