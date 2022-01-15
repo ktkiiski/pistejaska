@@ -4,7 +4,6 @@ import { TextField } from "@material-ui/core";
 import { v4 as uuid } from "uuid";
 import { usePlayers } from "./common/hooks/usePlayers";
 import { useGames } from "./common/hooks/useGames";
-import { TailwindContainerTitle } from "./common/components/Container";
 import {
   TailwindList,
   TailwindListItem,
@@ -20,6 +19,7 @@ import { useHistory } from "react-router-dom";
 import CardButtonRow from "./common/components/buttons/CardButtonRow";
 import Button from "./common/components/buttons/Button";
 import PrimaryButton from "./common/components/buttons/PrimaryButton";
+import Title from "./common/components/typography/Title";
 
 function shiftRandomly<T>(values: T[]) {
   const offset = Math.floor(Math.random() * values.length);
@@ -162,7 +162,7 @@ const SelectPlayers = (props: {
         </CardButtonRow>
       }
     >
-      <TailwindContainerTitle>Select players</TailwindContainerTitle>
+      <Title>Select players</Title>
 
       <p>
         {`Add players to the new game of `}

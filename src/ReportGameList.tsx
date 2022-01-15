@@ -2,7 +2,6 @@ import { useHistory } from "react-router";
 import { groupBy, mapValues, orderBy } from "lodash";
 import { Game, GameDefinition } from "./domain/game";
 import { useGames } from "./common/hooks/useGames";
-import { TailwindContainerTitle } from "./common/components/Container";
 import {
   TailwindList,
   TailwindListItem,
@@ -17,6 +16,7 @@ import { useState } from "react";
 import { usePlays } from "./common/hooks/usePlays";
 import { formatDuration, pluralize } from "./common/stringUtils";
 import { SkeletonLoader } from "./common/components/SkeletonLoader";
+import Title from "./common/components/typography/Title";
 
 type GameSortCriteriaId = "alphabetic" | "popular" | "shortest" | "longest";
 
@@ -106,7 +106,7 @@ export const ReportGameList = () => {
 
   return (
     <ViewContentLayout>
-      <TailwindContainerTitle>Games</TailwindContainerTitle>
+      <Title>Games</Title>
       <div className="flex flex-col items-center my-2">
         <TabSet>
           {sortTabIds.map((id) => (

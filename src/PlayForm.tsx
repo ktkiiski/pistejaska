@@ -18,11 +18,11 @@ import { PlayFormMiscField } from "./PlayFormMiscField";
 import groupBy from "lodash/groupBy";
 import map from "lodash/map";
 import { FormFocusGroup, FormFocusContextProvider } from "./utils/focus";
-import { TailwindContainerTitle } from "./common/components/Container";
 import ViewContentLayout from "./common/components/ViewContentLayout";
 import CardButtonRow from "./common/components/buttons/CardButtonRow";
 import Button from "./common/components/buttons/Button";
 import PrimaryButton from "./common/components/buttons/PrimaryButton";
+import Title from "./common/components/typography/Title";
 
 const useStyles = makeStyles({
   heading: {
@@ -319,7 +319,7 @@ export const PlayForm = (props: {
           </CardButtonRow>
         }
       >
-        <TailwindContainerTitle>{game.name}</TailwindContainerTitle>
+        <Title>{game.name}</Title>
         <SwipeableViews
           enableMouseEvents
           index={activeViewIndex}

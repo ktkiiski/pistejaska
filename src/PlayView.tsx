@@ -6,10 +6,7 @@ import { GameMiscFieldDefinition, Game } from "./domain/game";
 import { sortBy } from "lodash";
 import { getFirestore, deleteDoc, doc } from "firebase/firestore";
 import { Link } from "react-router-dom";
-import {
-  TailwindContainerTitle,
-  TailwindCardContent,
-} from "./common/components/Container";
+import { TailwindCardContent } from "./common/components/Container";
 import {
   TailwindTableHead,
   TailwindTableHeadCell,
@@ -29,6 +26,7 @@ import CardButtonRow from "./common/components/buttons/CardButtonRow";
 import PrimaryButton from "./common/components/buttons/PrimaryButton";
 import DangerButton from "./common/components/buttons/DangerButton";
 import Button from "./common/components/buttons/Button";
+import Title from "./common/components/typography/Title";
 
 export const PlayView = (props: RouteComponentProps<any>) => {
   const [games] = useGames();
@@ -104,7 +102,7 @@ export const PlayView = (props: RouteComponentProps<any>) => {
           <></>
         )}
 
-        <TailwindContainerTitle>Images</TailwindContainerTitle>
+        <Title>Images</Title>
         {images.map((src) => (
           <div
             key={src}
@@ -180,7 +178,7 @@ export const PlayView = (props: RouteComponentProps<any>) => {
           ))}
       </TailwindCardContent>
 
-      <TailwindContainerTitle>Scores</TailwindContainerTitle>
+      <Title>Scores</Title>
       <PlayTable game={game} play={play} {...props} />
 
       <PlayImages />
