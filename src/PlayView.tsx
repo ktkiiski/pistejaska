@@ -6,15 +6,6 @@ import { GameMiscFieldDefinition, Game } from "./domain/game";
 import { sortBy } from "lodash";
 import { getFirestore, deleteDoc, doc } from "firebase/firestore";
 import { Link } from "react-router-dom";
-import {
-  TailwindTableHead,
-  TailwindTableHeadCell,
-  TailwindTableCell,
-  TailwindTableRow,
-  TailwindTableFooter,
-  TailwindTableBody,
-  TailwindTable,
-} from "./common/components/Table";
 import { LoadingSpinner } from "./common/components/LoadingSpinner";
 import { app } from "./common/firebase";
 import { usePlay } from "./common/hooks/usePlay";
@@ -27,6 +18,13 @@ import DangerButton from "./common/components/buttons/DangerButton";
 import Button from "./common/components/buttons/Button";
 import Title from "./common/components/typography/Title";
 import CardContent from "./common/components/CardContent";
+import Table from "./common/components/tables/Table";
+import TableHead from "./common/components/tables/TableHead";
+import TableRow from "./common/components/tables/TableRow";
+import TableHeadCell from "./common/components/tables/TableHeadCell";
+import TableCell from "./common/components/tables/TableCell";
+import TableBody from "./common/components/tables/TableBody";
+import TableFooter from "./common/components/tables/TableFooter";
 
 export const PlayView = (props: RouteComponentProps<any>) => {
   const [games] = useGames();
@@ -215,41 +213,39 @@ const PlayTable = (
 
   return (
     <CardContent className="text-center">
-      <TailwindTable>
-        <TailwindTableHead>
-          <TailwindTableRow key="1">
-            <TailwindTableHeadCell key="category">
-              Category
-            </TailwindTableHeadCell>
+      <Table>
+        <TableHead>
+          <TableRow key="1">
+            <TableHeadCell key="category">Category</TableHeadCell>
             {players.map((p) => (
-              <TailwindTableCell key={p.id}>
+              <TableCell key={p.id}>
                 {`${getPositionAsEmoji(play.getPosition(p.id))} `}
                 <Link to={"/players/" + p.id}>{`${formatName(p.name)}`}</Link>
-              </TailwindTableCell>
+              </TableCell>
             ))}
-          </TailwindTableRow>
-        </TailwindTableHead>
-        <TailwindTableBody>
-          <TailwindTableRow key="2">
-            <TailwindTableCell className="text-left" key="starting-order">
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          <TableRow key="2">
+            <TableCell className="text-left" key="starting-order">
               Starting order
-            </TailwindTableCell>
+            </TableCell>
             {players.map((f, idx) => (
-              <TailwindTableCell
+              <TableCell
                 key={f.id}
                 className={idx % 2 === 0 ? "bg-gray-50" : ""}
               >
                 {play.players.lastIndexOf(f) + 1}.
-              </TailwindTableCell>
+              </TableCell>
             ))}
-          </TailwindTableRow>
+          </TableRow>
           {scoreFields.map((f) => (
-            <TailwindTableRow key={f.id}>
-              <TailwindTableCell className="text-left" key="name">
+            <TableRow key={f.id}>
+              <TableCell className="text-left" key="name">
                 {f.name}
-              </TailwindTableCell>
+              </TableCell>
               {players.map((p, idx) => (
-                <TailwindTableCell
+                <TableCell
                   key={p.id}
                   className={idx % 2 === 0 ? "bg-gray-50" : ""}
                 >
@@ -260,25 +256,23 @@ const PlayTable = (
                       ) || ({} as any)
                     ).score
                   }
-                </TailwindTableCell>
+                </TableCell>
               ))}
-            </TailwindTableRow>
+            </TableRow>
           ))}
-        </TailwindTableBody>
+        </TableBody>
 
-        <TailwindTableFooter>
-          <TailwindTableRow key="footer">
-            <TailwindTableCell key="total" className="text-left">
+        <TableFooter>
+          <TableRow key="footer">
+            <TableCell key="total" className="text-left">
               𝚺
-            </TailwindTableCell>
+            </TableCell>
             {players.map((f, idx) => (
-              <TailwindTableCell key={f.id}>
-                {play.getTotal(f.id)}
-              </TailwindTableCell>
+              <TableCell key={f.id}>{play.getTotal(f.id)}</TableCell>
             ))}
-          </TailwindTableRow>
-        </TailwindTableFooter>
-      </TailwindTable>
+          </TableRow>
+        </TableFooter>
+      </Table>
     </CardContent>
   );
 };
