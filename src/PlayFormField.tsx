@@ -4,7 +4,7 @@ import { TextField, Button, Box, makeStyles } from "@material-ui/core";
 import DurationCounter from "./DurationCounter";
 import { Play } from "./domain/play";
 import { useFormFieldRef } from "./utils/focus";
-import UploadButton from "./common/components/buttons/UploadButton";
+import ButtonUpload from "./common/components/buttons/UploadButton";
 import Spinner from "./common/components/Spinner";
 
 const useFieldStyles = makeStyles({
@@ -131,7 +131,7 @@ export function PlayFormField<
   return field.type === "images" ? (
     <>
       <h5>Images</h5>
-      <UploadButton
+      <ButtonUpload
         idleLabel="Select image"
         uploadingLabel={
           <>

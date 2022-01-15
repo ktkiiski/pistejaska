@@ -1,7 +1,7 @@
 import { ButtonHTMLAttributes } from "react";
 import ButtonBase from "./ButtonBase";
 
-const DangerButton: React.FC<ButtonHTMLAttributes<HTMLButtonElement>> = (
+const ButtonDanger: React.FC<ButtonHTMLAttributes<HTMLButtonElement>> = (
   props
 ) => (
   <ButtonBase
@@ -15,4 +15,4 @@ const DangerButton: React.FC<ButtonHTMLAttributes<HTMLButtonElement>> = (
   </ButtonBase>
 );
 
-export default DangerButton;
+export default ButtonDanger;

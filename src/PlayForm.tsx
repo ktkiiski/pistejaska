@@ -21,7 +21,7 @@ import { FormFocusGroup, FormFocusContextProvider } from "./utils/focus";
 import ViewContentLayout from "./common/components/ViewContentLayout";
 import CardButtonRow from "./common/components/buttons/CardButtonRow";
 import Button from "./common/components/buttons/Button";
-import PrimaryButton from "./common/components/buttons/PrimaryButton";
+import ButtonPrimary from "./common/components/buttons/PrimaryButton";
 import Title from "./common/components/typography/Title";
 
 const useStyles = makeStyles({
@@ -296,7 +296,7 @@ export const PlayForm = (props: {
             >
               &lt; Previous
             </Button>
-            <PrimaryButton
+            <ButtonPrimary
               color="primary"
               onClick={onDone}
               style={
@@ -305,7 +305,7 @@ export const PlayForm = (props: {
               }
             >
               Done
-            </PrimaryButton>
+            </ButtonPrimary>
             <Button
               disabled={activeViewIndex >= viewCount - 1}
               onClick={() =>

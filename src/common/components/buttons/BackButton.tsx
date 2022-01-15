@@ -1,7 +1,7 @@
 import { ButtonHTMLAttributes } from "react";
 import Button from "./Button";
 
-const BackButton: React.FC<ButtonHTMLAttributes<HTMLButtonElement>> = ({
+const ButtonBack: React.FC<ButtonHTMLAttributes<HTMLButtonElement>> = ({
   onClick,
 }) => (
   <Button onClick={onClick} className="px-4 py-4">
@@ -20,4 +20,4 @@ const BackButton: React.FC<ButtonHTMLAttributes<HTMLButtonElement>> = ({
   </Button>
 );
 
-export default BackButton;
+export default ButtonBack;

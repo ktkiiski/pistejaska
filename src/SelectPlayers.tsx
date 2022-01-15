@@ -12,7 +12,7 @@ import { app } from "./common/firebase";
 import { useHistory } from "react-router-dom";
 import CardButtonRow from "./common/components/buttons/CardButtonRow";
 import Button from "./common/components/buttons/Button";
-import PrimaryButton from "./common/components/buttons/PrimaryButton";
+import ButtonPrimary from "./common/components/buttons/PrimaryButton";
 import Title from "./common/components/typography/Title";
 import List from "./common/components/lists/List";
 import ListItem from "./common/components/lists/ListItem";
@@ -151,12 +151,12 @@ const SelectPlayers = (props: {
               Random starting player
             </Button>
           )}
-          <PrimaryButton
+          <ButtonPrimary
             onClick={onStartGame}
             disabled={players.length < 2 || isRandomizing}
           >
             Start
-          </PrimaryButton>
+          </ButtonPrimary>
         </CardButtonRow>
       }
     >

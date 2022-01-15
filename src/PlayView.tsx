@@ -11,10 +11,10 @@ import { app } from "./common/firebase";
 import { usePlay } from "./common/hooks/usePlay";
 import ViewContentLayout from "./common/components/ViewContentLayout";
 import { formatDuration, getPositionAsEmoji } from "./common/stringUtils";
-import BackButton from "./common/components/buttons/BackButton";
+import ButtonBack from "./common/components/buttons/BackButton";
 import CardButtonRow from "./common/components/buttons/CardButtonRow";
-import PrimaryButton from "./common/components/buttons/PrimaryButton";
-import DangerButton from "./common/components/buttons/DangerButton";
+import ButtonPrimary from "./common/components/buttons/PrimaryButton";
+import ButtonDanger from "./common/components/buttons/DangerButton";
 import Button from "./common/components/buttons/Button";
 import Title from "./common/components/typography/Title";
 import CardContent from "./common/components/CardContent";
@@ -40,7 +40,7 @@ export const PlayView = (props: RouteComponentProps<any>) => {
 
   if (loading) {
     return (
-      <ViewContentLayout header={<BackButton onClick={onBack} />}>
+      <ViewContentLayout header={<ButtonBack onClick={onBack} />}>
         <LoadingSpinner />
       </ViewContentLayout>
     );
@@ -121,11 +121,11 @@ export const PlayView = (props: RouteComponentProps<any>) => {
 
   return (
     <ViewContentLayout
-      header={<BackButton onClick={onBack} />}
+      header={<ButtonBack onClick={onBack} />}
       footer={
         <CardButtonRow>
-          <PrimaryButton onClick={onEditPlay}>Edit</PrimaryButton>
-          <DangerButton onClick={onDelete}>Delete</DangerButton>
+          <ButtonPrimary onClick={onEditPlay}>Edit</ButtonPrimary>
+          <ButtonDanger onClick={onDelete}>Delete</ButtonDanger>
           <Button onClick={onReplay}>
             <span className="hidden md:inline">Play</span>
             {" again"}

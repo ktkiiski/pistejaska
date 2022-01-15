@@ -1,7 +1,7 @@
 import { ButtonHTMLAttributes } from "react";
 import ButtonBase from "./ButtonBase";
 
-const PrimaryButton: React.FC<ButtonHTMLAttributes<HTMLButtonElement>> = (
+const ButtonPrimary: React.FC<ButtonHTMLAttributes<HTMLButtonElement>> = (
   props
 ) => (
   <ButtonBase
@@ -15,4 +15,4 @@ bg-purple-700 hover:bg-purple-800 ${
   </ButtonBase>
 );
 
-export default PrimaryButton;
+export default ButtonPrimary;

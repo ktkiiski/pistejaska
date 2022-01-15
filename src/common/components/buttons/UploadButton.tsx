@@ -9,7 +9,7 @@ interface UploadButtonProps {
   onUpload: (file: File) => Promise<void>;
 }
 
-function UploadButton({
+function ButtonUpload({
   idleLabel,
   uploadingLabel,
   disabled,
@@ -59,4 +59,4 @@ function UploadButton({
   );
 }
 
-export default UploadButton;
+export default ButtonUpload;

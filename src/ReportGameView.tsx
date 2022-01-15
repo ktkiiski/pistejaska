@@ -23,7 +23,7 @@ import PlayList from "./PlayList";
 import { useHistory } from "react-router-dom";
 import { LoadingSpinner } from "./common/components/LoadingSpinner";
 import CardButtonRow from "./common/components/buttons/CardButtonRow";
-import PrimaryButton from "./common/components/buttons/PrimaryButton";
+import ButtonPrimary from "./common/components/buttons/PrimaryButton";
 import Title from "./common/components/typography/Title";
 
 export const ReportGameView = (props: RouteComponentProps<any>) => {
@@ -60,13 +60,13 @@ export const ReportGameView = (props: RouteComponentProps<any>) => {
     <ViewContentLayout
       footer={
         <CardButtonRow>
-          <PrimaryButton
+          <ButtonPrimary
             onClick={() => {
               history.push(`/new/${gameId}`);
             }}
           >
             Start play
-          </PrimaryButton>
+          </ButtonPrimary>
         </CardButtonRow>
       }
     >

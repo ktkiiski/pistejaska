@@ -1,7 +1,7 @@
 import React from "react";
 import "./App.css";
 import { Login } from "./Login";
-import { NavBar } from "./NavBar";
+import { NavBar } from "./common/components/NavBar";
 import { BrowserRouter as Router, Redirect, Route } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { SelectGame } from "./SelectGame";
