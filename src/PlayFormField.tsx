@@ -4,7 +4,7 @@ import { TextField, Button, Box, makeStyles } from "@material-ui/core";
 import DurationCounter from "./DurationCounter";
 import { Play } from "./domain/play";
 import { useFormFieldRef } from "./utils/focus";
-import UploadButton from "./common/components/UploadButton";
+import UploadButton from "./common/components/buttons/UploadButton";
 import Spinner from "./common/components/Spinner";
 
 const useFieldStyles = makeStyles({

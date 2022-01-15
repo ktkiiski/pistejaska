@@ -1,5 +1,5 @@
 import { ReactNode, useReducer, useState } from "react";
-import { defaultButtonClasses } from "./buttons/ButtonBase";
+import { defaultButtonClasses } from "./ButtonBase";
 
 interface UploadButtonProps {
   idleLabel: ReactNode;
