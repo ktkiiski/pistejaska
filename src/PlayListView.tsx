@@ -3,7 +3,7 @@ import { SkeletonLoader } from "./common/components/SkeletonLoader";
 import ViewContentLayout from "./common/components/ViewContentLayout";
 import PlayList from "./PlayList";
 import { useGames } from "./common/hooks/useGames";
-import Title from "./common/components/typography/Title";
+import Heading1 from "./common/components/typography/Heading1";
 
 export const PlayListView = () => {
   const [plays, loadingPlays, errorPlays] = usePlays();
@@ -19,7 +19,7 @@ export const PlayListView = () => {
 
   return (
     <ViewContentLayout>
-      <Title>Plays</Title>
+      <Heading1>Plays</Heading1>
       {loadingPlays || loadingGames ? (
         <SkeletonLoader />
       ) : (

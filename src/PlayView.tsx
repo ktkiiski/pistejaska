@@ -16,7 +16,7 @@ import CardButtonRow from "./common/components/buttons/CardButtonRow";
 import ButtonPrimary from "./common/components/buttons/PrimaryButton";
 import ButtonDanger from "./common/components/buttons/DangerButton";
 import Button from "./common/components/buttons/Button";
-import Title from "./common/components/typography/Title";
+import Heading2 from "./common/components/typography/Heading2";
 import CardContent from "./common/components/CardContent";
 import Table from "./common/components/tables/Table";
 import TableHead from "./common/components/tables/TableHead";
@@ -100,7 +100,7 @@ export const PlayView = (props: RouteComponentProps<any>) => {
           <></>
         )}
 
-        <Title>Images</Title>
+        <Heading2>Images</Heading2>
         {images.map((src) => (
           <div
             key={src}
@@ -176,7 +176,7 @@ export const PlayView = (props: RouteComponentProps<any>) => {
           ))}
       </CardContent>
 
-      <Title>Scores</Title>
+      <Heading2>Scores</Heading2>
       <PlayTable game={game} play={play} {...props} />
 
       <PlayImages />

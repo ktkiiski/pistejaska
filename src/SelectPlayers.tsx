@@ -13,7 +13,7 @@ import { useHistory } from "react-router-dom";
 import CardButtonRow from "./common/components/buttons/CardButtonRow";
 import Button from "./common/components/buttons/Button";
 import ButtonPrimary from "./common/components/buttons/PrimaryButton";
-import Title from "./common/components/typography/Title";
+import Heading1 from "./common/components/typography/Heading1";
 import List from "./common/components/lists/List";
 import ListItem from "./common/components/lists/ListItem";
 import ListItemIcon from "./common/components/lists/ListItemIcon";
@@ -160,7 +160,7 @@ const SelectPlayers = (props: {
         </CardButtonRow>
       }
     >
-      <Title>Select players</Title>
+      <Heading1>Select players</Heading1>
 
       <p>
         {`Add players to the new game of `}

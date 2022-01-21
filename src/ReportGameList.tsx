@@ -9,7 +9,7 @@ import { useState } from "react";
 import { usePlays } from "./common/hooks/usePlays";
 import { formatDuration, pluralize } from "./common/stringUtils";
 import { SkeletonLoader } from "./common/components/SkeletonLoader";
-import Title from "./common/components/typography/Title";
+import Heading1 from "./common/components/typography/Heading1";
 import List from "./common/components/lists/List";
 import ListItem from "./common/components/lists/ListItem";
 import ListItemIcon from "./common/components/lists/ListItemIcon";
@@ -104,7 +104,7 @@ export const ReportGameList = () => {
 
   return (
     <ViewContentLayout>
-      <Title>Games</Title>
+      <Heading1>Games</Heading1>
       <div className="flex flex-col items-center my-2">
         <TabSet>
           {sortTabIds.map((id) => (

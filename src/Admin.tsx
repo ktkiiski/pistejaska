@@ -5,6 +5,7 @@ import AdminGameEditor from "./AdminGameEditor";
 import { useGames } from "./common/hooks/useGames";
 import { deleteDoc, doc, getFirestore, setDoc } from "firebase/firestore";
 import { app } from "./common/firebase";
+import Heading1 from "./common/components/typography/Heading1";
 
 const useStyles = makeStyles((theme) => ({
   edit: {
@@ -27,7 +28,7 @@ const defaultGameJson: GameDefinition = {
 function Admin() {
   const [gameId, setGameId] = useState<string | null>(null);
 
-  const [games] = useGames()
+  const [games] = useGames();
   const styles = useStyles();
   const initialGameJson = !games
     ? null
@@ -52,11 +53,11 @@ function Admin() {
           <MenuItem value="">(New game)</MenuItem>
         </Select>
       </FormControl>
-      <h3>
+      <Heading1>
         {gameId
           ? `Edit: ${initialGameJson?.name ?? gameId}`
           : "Create new game"}
-      </h3>
+      </Heading1>
       {!initialGameJson ? null : (
         <AdminGameEditor
           json={initialGameJson}
@@ -66,9 +67,9 @@ function Admin() {
               throw new Error("Missing game ID");
             }
 
-            const db = getFirestore(app)
-            await setDoc(doc(db, "games", id), json)
-            setGameId(id)
+            const db = getFirestore(app);
+            await setDoc(doc(db, "games", id), json);
+            setGameId(id);
           }}
           onDelete={
             !gameId
@@ -83,7 +84,7 @@ function Admin() {
                   ) {
                     return;
                   }
-                  const db = getFirestore(app)
+                  const db = getFirestore(app);
                   await deleteDoc(doc(db, "games", gameId));
                   setGameId(null);
                 }
