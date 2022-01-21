@@ -11,12 +11,12 @@ import { app } from "./common/firebase";
 import { usePlay } from "./common/hooks/usePlay";
 import ViewContentLayout from "./common/components/ViewContentLayout";
 import { formatDuration, getPositionAsEmoji } from "./common/stringUtils";
-import ButtonBack from "./common/components/buttons/BackButton";
+import ButtonBack from "./common/components/buttons/ButtonBack";
 import CardButtonRow from "./common/components/buttons/CardButtonRow";
-import ButtonPrimary from "./common/components/buttons/PrimaryButton";
-import ButtonDanger from "./common/components/buttons/DangerButton";
+import ButtonPrimary from "./common/components/buttons/ButtonPrimary";
+import ButtonDanger from "./common/components/buttons/ButtonDanger";
 import Button from "./common/components/buttons/Button";
-import Title from "./common/components/typography/Title";
+import Heading2 from "./common/components/typography/Heading2";
 import CardContent from "./common/components/CardContent";
 import Table from "./common/components/tables/Table";
 import TableHead from "./common/components/tables/TableHead";
@@ -100,7 +100,7 @@ export const PlayView = (props: RouteComponentProps<any>) => {
           <></>
         )}
 
-        <Title>Images</Title>
+        <Heading2>Images</Heading2>
         {images.map((src) => (
           <div
             key={src}
@@ -176,7 +176,7 @@ export const PlayView = (props: RouteComponentProps<any>) => {
           ))}
       </CardContent>
 
-      <Title>Scores</Title>
+      <Heading2>Scores</Heading2>
       <PlayTable game={game} play={play} {...props} />
 
       <PlayImages />
@@ -226,19 +226,21 @@ const PlayTable = (
           </TableRow>
         </TableHead>
         <TableBody>
-          <TableRow key="2">
-            <TableCell className="text-left" key="starting-order">
-              Starting order
-            </TableCell>
-            {players.map((f, idx) => (
-              <TableCell
-                key={f.id}
-                className={idx % 2 === 0 ? "bg-gray-50" : ""}
-              >
-                {play.players.lastIndexOf(f) + 1}.
+          {game.simultaneousTurns ? null : (
+            <TableRow key="2">
+              <TableCell className="text-left" key="starting-order">
+                Starting order
               </TableCell>
-            ))}
-          </TableRow>
+              {players.map((f, idx) => (
+                <TableCell
+                  key={f.id}
+                  className={idx % 2 === 0 ? "bg-gray-50" : ""}
+                >
+                  {play.players.lastIndexOf(f) + 1}.
+                </TableCell>
+              ))}
+            </TableRow>
+          )}
           {scoreFields.map((f) => (
             <TableRow key={f.id}>
               <TableCell className="text-left" key="name">

@@ -2,8 +2,20 @@ import { union } from "lodash";
 import { Play } from "./play";
 
 export interface ReportFilters {
+  /**
+   * Require a certain number of players (or null if doesn't matter).
+   */
   playerCount: null | number;
-  expansions: string[];
+  /**
+   * Require these expansions (IDs) to be in use.
+   * Empty array means that expansions do not matter.
+   * If the array contains a `null` value, it means the plays
+   * must NOT use ANY expansion.
+   */
+  expansions: (string | null)[];
+  /**
+   * The play must have these fields to contain these values.
+   */
   fieldValues: { [fieldId: string]: string[] };
 }
 
@@ -15,7 +27,7 @@ export const emptyFilters: ReportFilters = {
 
 export function addExpansionFilter(
   filters: ReportFilters,
-  expansionId: string
+  expansionId: string | null
 ): ReportFilters {
   const newExpansions = union(filters.expansions, [expansionId]);
   return { ...filters, expansions: newExpansions };
@@ -23,7 +35,7 @@ export function addExpansionFilter(
 
 export function removeExpansionFilter(
   filters: ReportFilters,
-  expansionId: string
+  expansionId: string | null
 ): ReportFilters {
   const newExpansions = filters.expansions.filter(
     (expId) => expId !== expansionId
@@ -33,7 +45,7 @@ export function removeExpansionFilter(
 
 export function toggleExpansionFilter(
   filters: ReportFilters,
-  expansionId: string
+  expansionId: string | null
 ): ReportFilters {
   return filters.expansions.includes(expansionId)
     ? removeExpansionFilter(filters, expansionId)
@@ -98,7 +110,13 @@ export function applyPlayFilters(allPlays: Play[], filters: ReportFilters) {
   // Filter by expansions
   let filteredPlays = expansions.reduce(
     (plays, expansionId) =>
-      plays.filter((play) => (expansionId === null && play.expansions.length === 0 ) || play.expansions.includes(expansionId)),
+      plays.filter((play) =>
+        expansionId === null
+          ? // No expansions used?
+            play.expansions.length === 0
+          : // This particular expansion is used?
+            play.expansions.includes(expansionId)
+      ),
     allPlays
   );
   // Filter by player count

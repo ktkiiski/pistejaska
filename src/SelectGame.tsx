@@ -6,7 +6,7 @@ import { useGames } from "./common/hooks/useGames";
 import ViewContentLayout from "./common/components/ViewContentLayout";
 import { usePlays } from "./common/hooks/usePlays";
 import { orderBy } from "lodash";
-import Title from "./common/components/typography/Title";
+import Heading1 from "./common/components/typography/Heading1";
 import List from "./common/components/lists/List";
 import ListItem from "./common/components/lists/ListItem";
 import ListItemIcon from "./common/components/lists/ListItemIcon";
@@ -63,7 +63,7 @@ export const SelectGame = (props: RouteComponentProps<{}>) => {
   });
   return (
     <ViewContentLayout>
-      <Title>Select game</Title>
+      <Heading1>Select game</Heading1>
 
       {!recentlyPlayedGames.length ? null : (
         <div

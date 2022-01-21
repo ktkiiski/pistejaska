@@ -11,6 +11,7 @@ import { useGames } from "./common/hooks/useGames";
 import ViewContentLayout from "./common/components/ViewContentLayout";
 import PlayList from "./PlayList";
 import { LoadingSpinner } from "./common/components/LoadingSpinner";
+import Heading1 from "./common/components/typography/Heading1";
 
 export const ReportPlayerView = (props: RouteComponentProps<any>) => {
   const playerId = props.match.params["playerId"];
@@ -43,7 +44,7 @@ export const ReportPlayerView = (props: RouteComponentProps<any>) => {
 
   return (
     <ViewContentLayout>
-      <h2>Reports: {player.name}</h2>
+      <Heading1>Reports: {player.name}</Heading1>
       <p>Based on {playerPlays.length} plays.</p>
       <PlayerGamesReport player={player} plays={plays}></PlayerGamesReport>
       <PlayList plays={playerPlays} games={games} />

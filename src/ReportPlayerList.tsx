@@ -6,7 +6,7 @@ import { usePlays } from "./common/hooks/usePlays";
 import { Player } from "./domain/play";
 import ViewContentLayout from "./common/components/ViewContentLayout";
 import { LoadingSpinner } from "./common/components/LoadingSpinner";
-import Title from "./common/components/typography/Title";
+import Heading1 from "./common/components/typography/Heading1";
 
 export const ReportPlayerList = (props: RouteComponentProps<{}>) => {
   const [plays, loading, error] = usePlays();
@@ -35,7 +35,7 @@ export const ReportPlayerList = (props: RouteComponentProps<{}>) => {
 
   return (
     <ViewContentLayout>
-      <Title>Players</Title>
+      <Heading1>Players</Heading1>
       <List component="nav">
         {Object.keys(players).map((playerId) => {
           const player = players[playerId][0];

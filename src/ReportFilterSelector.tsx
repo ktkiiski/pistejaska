@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Button,
   Chip,
@@ -67,6 +67,16 @@ function renderPlayerCount(playerCount: number | "" | null): React.ReactNode {
   return playerCount === 1 ? "1 player" : `${playerCount} players`;
 }
 
+interface ExpansionOption {
+  name: string;
+  id: string | null;
+}
+
+const noExpansionsOption: ExpansionOption = {
+  name: "No expansions",
+  id: null,
+};
+
 function ReportFilterSelector({
   game,
   plays,
@@ -79,17 +89,10 @@ function ReportFilterSelector({
   const [expansionsOpen, setExpansionsOpen] = useState(false);
   const [fieldsOpen, setFieldsOpen] = useState<Record<string, boolean>>({});
   const { expansions } = game;
-
-  useEffect(() => {
-    // Add "No expansions" filter category
-    const noExpansions = {
-      name: 'No expansions',
-      id: null as any
-    }
-    if (expansions && expansions?.length > 0) {
-      expansions.unshift(noExpansions)
-    }
-  }, [expansions])
+  // Add "No expansions" filter category
+  const expansionOptions: ExpansionOption[] = [noExpansionsOption].concat(
+    expansions || []
+  );
 
   const isFiltering = hasFilters(filters);
   // TODO: support expansion misc fields
@@ -111,13 +114,15 @@ function ReportFilterSelector({
             onClose={() => setExpansionsOpen(false)}
             onChange={(event) => {
               // Add the selected expansion to the filters
+              console.log(event.target.value);
               const newExpansions = event.target.value as string[];
               onChange({ ...filters, expansions: newExpansions });
               setExpansionsOpen(false);
             }}
             input={<Input />}
             renderValue={(value) => {
-              const expansionIds = value as string[];
+              // Convert '' back to null
+              const expansionIds = (value as string[]).map((id) => id || null);
               return (
                 <div className={classes.selection}>
                   {!expansionIds.length ? (
@@ -129,7 +134,8 @@ function ReportFilterSelector({
                         key={expansionId}
                         className={classes.chip}
                         label={
-                          expansions.find((exp) => exp.id === expansionId)?.name
+                          expansionOptions.find((exp) => exp.id === expansionId)
+                            ?.name
                         }
                       />
                     ))
@@ -138,18 +144,23 @@ function ReportFilterSelector({
               );
             }}
           >
-            {expansions.map((expansion) => {
+            {expansionOptions.map((expansion) => {
               const nestedFilters = toggleExpansionFilter(
                 filters,
                 expansion.id
               );
               const isSelected = filters.expansions.includes(expansion.id);
-              const nestedPlays = applyPlayFilters(plays, isSelected ? filters : nestedFilters);
-              
+              const nestedPlays = applyPlayFilters(
+                plays,
+                isSelected ? filters : nestedFilters
+              );
+
               return (
                 <MenuItem
                   key={expansion.id}
-                  value={expansion.id}
+                  // NOTE: MenuItem typing doesn't seem to accept null value, even though it seems to work with it.
+                  // To play nicely, we convert null to '' for this purpose (converting it back on onChange)
+                  value={expansion.id || ""}
                   disabled={!nestedPlays.length}
                   selected={isSelected}
                 >

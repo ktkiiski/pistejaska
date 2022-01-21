@@ -23,8 +23,9 @@ import PlayList from "./PlayList";
 import { useHistory } from "react-router-dom";
 import { LoadingSpinner } from "./common/components/LoadingSpinner";
 import CardButtonRow from "./common/components/buttons/CardButtonRow";
-import ButtonPrimary from "./common/components/buttons/PrimaryButton";
-import Title from "./common/components/typography/Title";
+import ButtonPrimary from "./common/components/buttons/ButtonPrimary";
+import Heading1 from "./common/components/typography/Heading1";
+import Heading2 from "./common/components/typography/Heading2";
 
 export const ReportGameView = (props: RouteComponentProps<any>) => {
   const history = useHistory();
@@ -70,7 +71,7 @@ export const ReportGameView = (props: RouteComponentProps<any>) => {
         </CardButtonRow>
       }
     >
-      <Title>Reports: {game.name}</Title>
+      <Heading1>Reports: {game.name}</Heading1>
 
       <ReportFilterSelector
         game={game}
@@ -96,7 +97,7 @@ export const ReportGameView = (props: RouteComponentProps<any>) => {
         );
         return (
           <React.Fragment key={x.id}>
-            <h4>{x.name}</h4>
+            <Heading2>{x.name}</Heading2>
             <p>Based on {playsWithDimension.length} plays.</p>
             <ReportDimensionReportTable
               plays={playsWithDimension}
@@ -106,7 +107,7 @@ export const ReportGameView = (props: RouteComponentProps<any>) => {
         );
       })}
 
-      <h4>Best players</h4>
+      <Heading2>Best players</Heading2>
       <ReportPlayers plays={gamePlays}></ReportPlayers>
 
       <p>
@@ -117,7 +118,7 @@ export const ReportGameView = (props: RouteComponentProps<any>) => {
         .
       </p>
 
-      <h4 className="mt-4 mb-3">Plays</h4>
+      <Heading2>Plays</Heading2>
       <PlayList games={games} plays={gamePlays} />
     </ViewContentLayout>
   );

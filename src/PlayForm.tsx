@@ -21,8 +21,9 @@ import { FormFocusGroup, FormFocusContextProvider } from "./utils/focus";
 import ViewContentLayout from "./common/components/ViewContentLayout";
 import CardButtonRow from "./common/components/buttons/CardButtonRow";
 import Button from "./common/components/buttons/Button";
-import ButtonPrimary from "./common/components/buttons/PrimaryButton";
-import Title from "./common/components/typography/Title";
+import ButtonPrimary from "./common/components/buttons/ButtonPrimary";
+import Heading1 from "./common/components/typography/Heading1";
+import Heading3 from "./common/components/typography/Heading3";
 
 const useStyles = makeStyles({
   heading: {
@@ -244,7 +245,7 @@ export const PlayForm = (props: {
   const views = [
     hasExpansions && (
       <div key="expansions" className={styles.view}>
-        <h3 className={styles.heading}>Used expansions</h3>
+        <Heading3>Used expansions</Heading3>
         <FormGroup>
           {(game.expansions || []).map((expansion) =>
             renderExpansionField(expansion)
@@ -256,14 +257,12 @@ export const PlayForm = (props: {
       const viewIndex = startViewIndex + groupIndex;
       return (
         <div key={viewId} className={styles.view}>
-          {group ? <h3 className={styles.heading}>{group}</h3> : null}
+          {group ? <Heading3>{group}</Heading3> : null}
           <FormFocusGroup focused={activeViewIndex === viewIndex}>
             {groupFields.map((item) => (
               <React.Fragment key={item.field.id}>
                 {item.type === "misc" && group ? null : (
-                  <h3 className={styles.heading} id={item.field.id}>
-                    {item.field.name}
-                  </h3>
+                  <Heading3 id={item.field.id}>{item.field.name}</Heading3>
                 )}
                 {item.field.description ? (
                   <p className={styles.description}>{item.field.description}</p>
@@ -319,7 +318,7 @@ export const PlayForm = (props: {
           </CardButtonRow>
         }
       >
-        <Title>{game.name}</Title>
+        <Heading1>{game.name}</Heading1>
         <SwipeableViews
           enableMouseEvents
           index={activeViewIndex}
