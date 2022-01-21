@@ -21,7 +21,7 @@ import { FormFocusGroup, FormFocusContextProvider } from "./utils/focus";
 import ViewContentLayout from "./common/components/ViewContentLayout";
 import CardButtonRow from "./common/components/buttons/CardButtonRow";
 import Button from "./common/components/buttons/Button";
-import ButtonPrimary from "./common/components/buttons/PrimaryButton";
+import ButtonPrimary from "./common/components/buttons/ButtonPrimary";
 import Heading1 from "./common/components/typography/Heading1";
 import Heading3 from "./common/components/typography/Heading3";
 

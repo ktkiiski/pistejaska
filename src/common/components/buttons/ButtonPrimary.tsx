@@ -2,7 +2,7 @@ import classNames from "classnames";
 import { ButtonHTMLAttributes } from "react";
 import ButtonBase from "./ButtonBase";
 
-const Button: React.FC<ButtonHTMLAttributes<HTMLButtonElement>> = ({
+const ButtonPrimary: React.FC<ButtonHTMLAttributes<HTMLButtonElement>> = ({
   className,
   children,
   ...props
@@ -11,8 +11,8 @@ const Button: React.FC<ButtonHTMLAttributes<HTMLButtonElement>> = ({
     {...props}
     className={classNames(
       props.disabled
-        ? "text-gray-400 bg-gray-300 hover:bg-gray-300"
-        : "bg-gray-500 hover:bg-gray-600",
+        ? "text-gray-400 bg-gray-300"
+        : "bg-purple-700 hover:bg-purple-800",
       className
     )}
   >
@@ -20,4 +20,4 @@ const Button: React.FC<ButtonHTMLAttributes<HTMLButtonElement>> = ({
   </ButtonBase>
 );
 
-export default Button;
+export default ButtonPrimary;

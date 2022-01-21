@@ -12,7 +12,7 @@ import { app } from "./common/firebase";
 import { useHistory } from "react-router-dom";
 import CardButtonRow from "./common/components/buttons/CardButtonRow";
 import Button from "./common/components/buttons/Button";
-import ButtonPrimary from "./common/components/buttons/PrimaryButton";
+import ButtonPrimary from "./common/components/buttons/ButtonPrimary";
 import Heading1 from "./common/components/typography/Heading1";
 import List from "./common/components/lists/List";
 import ListItem from "./common/components/lists/ListItem";

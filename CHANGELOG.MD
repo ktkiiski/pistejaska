@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Refactored game report play filtering typing
 - Refactored typography heading React components
+- Minor button component refactoring
 
 ## 2022-01-15
 

@@ -23,7 +23,7 @@ import PlayList from "./PlayList";
 import { useHistory } from "react-router-dom";
 import { LoadingSpinner } from "./common/components/LoadingSpinner";
 import CardButtonRow from "./common/components/buttons/CardButtonRow";
-import ButtonPrimary from "./common/components/buttons/PrimaryButton";
+import ButtonPrimary from "./common/components/buttons/ButtonPrimary";
 import Heading1 from "./common/components/typography/Heading1";
 import Heading2 from "./common/components/typography/Heading2";
 
