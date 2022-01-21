@@ -226,19 +226,21 @@ const PlayTable = (
           </TableRow>
         </TableHead>
         <TableBody>
-          <TableRow key="2">
-            <TableCell className="text-left" key="starting-order">
-              Starting order
-            </TableCell>
-            {players.map((f, idx) => (
-              <TableCell
-                key={f.id}
-                className={idx % 2 === 0 ? "bg-gray-50" : ""}
-              >
-                {play.players.lastIndexOf(f) + 1}.
+          {game.simultaneousTurns ? null : (
+            <TableRow key="2">
+              <TableCell className="text-left" key="starting-order">
+                Starting order
               </TableCell>
-            ))}
-          </TableRow>
+              {players.map((f, idx) => (
+                <TableCell
+                  key={f.id}
+                  className={idx % 2 === 0 ? "bg-gray-50" : ""}
+                >
+                  {play.players.lastIndexOf(f) + 1}.
+                </TableCell>
+              ))}
+            </TableRow>
+          )}
           {scoreFields.map((f) => (
             <TableRow key={f.id}>
               <TableCell className="text-left" key="name">
