@@ -114,7 +114,6 @@ function ReportFilterSelector({
             onClose={() => setExpansionsOpen(false)}
             onChange={(event) => {
               // Add the selected expansion to the filters
-              console.log(event.target.value);
               const newExpansions = event.target.value as string[];
               onChange({ ...filters, expansions: newExpansions });
               setExpansionsOpen(false);
