@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Play, Player } from "./domain/play";
-import { TextField } from "@material-ui/core";
+import { ButtonBase, TextField } from "@material-ui/core";
 import { v4 as uuid } from "uuid";
 import { usePlayers } from "./common/hooks/usePlayers";
 import { useGames } from "./common/hooks/useGames";
@@ -18,6 +18,8 @@ import List from "./common/components/lists/List";
 import ListItem from "./common/components/lists/ListItem";
 import ListItemIcon from "./common/components/lists/ListItemIcon";
 import ListItemText from "./common/components/lists/ListItemText";
+import { shuffle } from "lodash";
+import ButtonLight from "./common/components/buttons/ButtonLight";
 
 function shiftRandomly<T>(values: T[]) {
   const offset = Math.floor(Math.random() * values.length);
@@ -62,7 +64,9 @@ const SelectPlayers = (props: {
   const [isStarting, setIsStarting] = useState<boolean>(false);
   const [showAllPlayers, setShowAllPlayers] = useState<boolean>(false);
   const [currentPlayer, setCurrentPlayer] = useState<string>("");
-  const [isRandomizing, setIsRandomizing] = useState(false);
+  const [isRandomizingStarter, setIsRandomizingStarter] = useState(false);
+  const [isRandomizingOrder, setIsRandomizingOrder] = useState(false);
+  const isRandomizing = isRandomizingStarter || isRandomizingOrder;
 
   const selectablePlayers = allPlayers
     .filter(
@@ -105,6 +109,16 @@ const SelectPlayers = (props: {
     setShowAllPlayers(false);
   };
 
+  const randomizeStartingPlayer = () => {
+    setPlayers(shiftRandomly(players));
+    setIsRandomizingStarter(true);
+  };
+
+  const randomizeOrder = () => {
+    setPlayers(shuffle(players));
+    setIsRandomizingOrder(true);
+  };
+
   useEffect(() => {
     if (!isRandomizing) {
       return undefined;
@@ -113,7 +127,13 @@ const SelectPlayers = (props: {
     let animation = requestAnimationFrame(animate);
     function animate() {
       if (hasEnded) return;
-      setPlayers((oldPlayers) => shiftValues(oldPlayers, 1));
+      setPlayers(
+        isRandomizingStarter
+          ? // Animating random starting player: just shift players without changing order
+            (oldPlayers) => shiftValues(oldPlayers, 1)
+          : // Shuffle players
+            (oldPlayers) => shuffle(oldPlayers)
+      );
       animation = requestAnimationFrame(animate);
     }
     function endAnimation() {
@@ -122,12 +142,13 @@ const SelectPlayers = (props: {
       clearTimeout(timeout);
     }
     const timeout = setTimeout(() => {
-      setIsRandomizing(false);
+      setIsRandomizingOrder(false);
+      setIsRandomizingStarter(false);
       endAnimation();
     }, 1000);
 
     return endAnimation;
-  }, [isRandomizing]);
+  }, [isRandomizing, isRandomizingStarter]);
 
   if (isLoadingGames || isStarting) {
     return <LoadingSpinner />;
@@ -142,10 +163,7 @@ const SelectPlayers = (props: {
         <CardButtonRow>
           {game.simultaneousTurns ? null : (
             <Button
-              onClick={() => {
-                setPlayers(shiftRandomly(players));
-                setIsRandomizing(true);
-              }}
+              onClick={randomizeStartingPlayer}
               disabled={players.length < 2 || isRandomizing}
             >
               Random starting player
@@ -261,6 +279,16 @@ const SelectPlayers = (props: {
           </ListItem>
         ))}
       </List>
+      {!players.length ? null : (
+        <div className="mt-3 flex flex-row justify-center items-center space-x-2">
+          <ButtonLight
+            onClick={randomizeOrder}
+            disabled={players.length < 2 || isRandomizing}
+          >
+            Shuffle seat order
+          </ButtonLight>
+        </div>
+      )}
     </ViewContentLayout>
   );
 };

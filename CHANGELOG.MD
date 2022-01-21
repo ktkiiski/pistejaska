@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Added
+
+- Button for shuffling the player seat order when selecting players
+
 ### Fixed
 
 - Play results do not show player order if the game uses simultaneous turns
