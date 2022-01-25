@@ -88,11 +88,12 @@ function ReportFilterSelector({
   const playerCounts = sortBy(union(plays.map((play) => play.rankings.length)));
   const [expansionsOpen, setExpansionsOpen] = useState(false);
   const [fieldsOpen, setFieldsOpen] = useState<Record<string, boolean>>({});
-  const { expansions } = game;
+  const { expansions = [] } = game;
   // Add "No expansions" filter category
-  const expansionOptions: ExpansionOption[] = [noExpansionsOption].concat(
-    expansions || []
-  );
+  const expansionOptions: ExpansionOption[] = [
+    noExpansionsOption,
+    ...expansions,
+  ];
 
   const isFiltering = hasFilters(filters);
   // TODO: support expansion misc fields
@@ -102,7 +103,7 @@ function ReportFilterSelector({
     .filter((field) => field.options?.length);
   return (
     <div className={classes.root}>
-      {expansions && (
+      {!expansions.length ? null : (
         <FormControl className={classes.formControl}>
           <InputLabel shrink>Expansions</InputLabel>
           <Select
