@@ -15,6 +15,17 @@ interface PlayListProps {
   games: Game[];
 }
 
+function getPlayLabel(play: Play) {
+  if (!play.isResolved()) {
+    return "(Ongoing)";
+  }
+  const winners = play.getWinners();
+  if (winners.length !== 1) {
+    return `(Tied)`;
+  }
+  return winners[0].player.name;
+}
+
 const PlayList = (props: PlayListProps) => {
   const { plays, games } = props;
   const history = useHistory();
@@ -44,12 +55,6 @@ const PlayList = (props: PlayListProps) => {
       <List onClickShowAll={() => setShowAll(!showAll)}>
         {(showAll ? data : currentData).map((play) => {
           const game = games.find((g) => g.id === play.gameId);
-          const winners = play.rankings.filter(
-            (ranking) => ranking.position === 1
-          );
-          const winnerNames = winners
-            .map((winner) => winner.player.name)
-            .join(" / ");
           return (
             <ListItem key={play.id} onClick={() => onSelectPlay(play)}>
               <ListItemIcon>
@@ -70,7 +75,7 @@ const PlayList = (props: PlayListProps) => {
               <ListItemDescription>
                 {play.getDate().toLocaleDateString()}
                 <br />
-                <span className="text-gray-300">{winnerNames}</span>
+                <span className="text-gray-300">{getPlayLabel(play)}</span>
               </ListItemDescription>
             </ListItem>
           );

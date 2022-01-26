@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Unreleased
+
+### Added
+
+- Improvements when listing plays:
+  - Show "(Ongoing)" for plays that seem not to be resolved yet
+  - Show "(Tied)" for plays that have multiple winners, instead of listing tied players
+
 ## 2022-01-25
 
 ### Fixed
