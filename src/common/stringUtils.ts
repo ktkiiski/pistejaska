@@ -36,3 +36,19 @@ export function formatDuration(hours: number): string {
 export function pluralize(count: number, singular: string, plural: string) {
   return count === 1 ? `1 ${singular}` : `${count} ${plural}`;
 }
+
+export function formatNthNumber(num: number): string {
+  if (!Number.isFinite(num)) return "–";
+  const str = num.toString();
+  const lastDigit = str.charAt(str.length - 1);
+  switch (lastDigit) {
+    case "1":
+      return `${str}st`;
+    case "2":
+      return `${str}nd`;
+    case "3":
+      return `${str}rd`;
+    default:
+      return `${str}th`;
+  }
+}
