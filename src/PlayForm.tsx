@@ -24,6 +24,7 @@ import Button from "./common/components/buttons/Button";
 import ButtonPrimary from "./common/components/buttons/ButtonPrimary";
 import Heading1 from "./common/components/typography/Heading1";
 import Heading3 from "./common/components/typography/Heading3";
+import classNames from "classnames";
 
 const useStyles = makeStyles({
   heading: {
@@ -256,7 +257,7 @@ export const PlayForm = (props: {
     ...fieldGroups.map(({ group, fields: groupFields, viewId }, groupIndex) => {
       const viewIndex = startViewIndex + groupIndex;
       return (
-        <div key={viewId} className={styles.view}>
+        <div key={viewId} className={classNames("space-y-1", styles.view)}>
           {group ? <Heading3>{group}</Heading3> : null}
           <FormFocusGroup focused={activeViewIndex === viewIndex}>
             {groupFields.map((item) => (

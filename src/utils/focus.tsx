@@ -16,7 +16,7 @@ const FormFieldContext = createContext<FormFieldItem[] | null>(null);
 const FormFieldGroupContext = createContext<FormFieldItem[] | null>(null);
 
 export function useFormFieldRef(index: number) {
-  const ref = useRef<HTMLElement | null>(null);
+  const ref = useRef<HTMLInputElement | null>(null);
   const formFieldItems = useContext(FormFieldContext);
   const formFieldGroupItems = useContext(FormFieldGroupContext);
   if (!formFieldItems) {

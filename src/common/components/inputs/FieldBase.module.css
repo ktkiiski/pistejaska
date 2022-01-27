@@ -1,0 +1,54 @@
+.label {
+  position: absolute;
+  display: block;
+  pointer-events: none;
+  user-select: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition-property: color, left, top, font-size;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+.input {
+  background: transparent;
+  width: 100%;
+}
+.fieldset {
+  pointer-events: none;
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+}
+.legend {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  user-select: none;
+  width: 0;
+  font-size: 0.75rem;
+}
+.input:focus,
+.input:focus-visible {
+  outline: 1px solid transparent;
+}
+.hasValue .label,
+.input:focus ~ .label {
+  top: -0.1rem;
+  left: 0.8rem;
+  font-size: 0.75rem;
+}
+.input:focus ~ .label {
+  color: #3f51b1;
+}
+.input:focus ~ .fieldset .legend,
+.hasValue .fieldset .legend {
+  width: auto;
+  visibility: visible;
+}
+.input:focus ~ .fieldset {
+  border-color: #3f51b1;
+  border-width: 2px;
+}

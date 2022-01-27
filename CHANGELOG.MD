@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Show "(Ongoing)" for plays that seem not to be resolved yet
   - Show "(Tied)" for plays that have multiple winners, instead of listing tied players
 
+## Refactoring
+
+- Input field components are custom implementation instead of MUI
+
 ## 2022-01-25
 
 ### Fixed

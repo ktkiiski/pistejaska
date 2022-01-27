@@ -6,6 +6,8 @@ import { Play } from "./domain/play";
 import { useFormFieldRef } from "./utils/focus";
 import ButtonUpload from "./common/components/buttons/ButtonUpload";
 import Spinner from "./common/components/Spinner";
+import InputTextField from "./common/components/inputs/InputTextField";
+import InputNumberField from "./common/components/inputs/InputNumberField";
 
 const useFieldStyles = makeStyles({
   root: {
@@ -49,21 +51,8 @@ export function PlayFormField<
   const createdAt = play.getCreationDate();
   const createdToday =
     new Date().getTime() - createdAt.getTime() < 24 * 60 * 60 * 1000;
-  const inputProps = isNumeric
-    ? {
-        ref: inputRef,
-        min: field.minValue,
-        max: field.maxValue,
-        step: field.step,
-      }
-    : {
-        ref: inputRef,
-      };
 
-  const onValueChange = async (
-    event: React.ChangeEvent<{ value: unknown }>
-  ) => {
-    let value = event.currentTarget.value as number | string | null;
+  const onValueChange = async (value: number | string | null) => {
     if (value === "" || value === null) {
       // Chose a blank option
       value = null;
@@ -108,7 +97,9 @@ export function PlayFormField<
           select
           label={label}
           value={selectedValue}
-          onChange={onValueChange}
+          onChange={(event) =>
+            onValueChange(event.target.value as string | number | null)
+          }
           onFocus={onFocus}
           inputProps={{ ref: inputRef }}
           SelectProps={{ native: true }}
@@ -159,18 +150,28 @@ export function PlayFormField<
   ) : (
     <>
       <div>
-        <TextField
-          margin="dense"
-          inputProps={inputProps}
-          variant="outlined"
-          label={label}
-          onFocus={onFocus}
-          type={isNumeric ? "number" : "text"}
-          value={value === null ? "" : value}
-          onChange={onValueChange}
-          id={id}
-          classes={styles}
-        />
+        {isNumeric ? (
+          <InputNumberField
+            label={label}
+            value={value as number | null}
+            onChange={onValueChange}
+            id={id}
+            onFocus={onFocus}
+            inputRef={inputRef}
+            min={field.minValue}
+            max={field.maxValue}
+            step={field.step}
+          />
+        ) : (
+          <InputTextField
+            label={label}
+            value={value as string}
+            onChange={onValueChange}
+            id={id}
+            onFocus={onFocus}
+            inputRef={inputRef}
+          />
+        )}
       </div>
       {field.type !== "duration" || !createdToday ? null : (
         <Box my={2}>
