@@ -1,6 +1,5 @@
 import React from "react";
 import { GameFieldDefinition, GameFieldOption } from "./domain/game";
-import { Button, Box } from "@material-ui/core";
 import DurationCounter from "./DurationCounter";
 import { Play } from "./domain/play";
 import { useFormFieldRef } from "./utils/focus";
@@ -9,6 +8,7 @@ import Spinner from "./common/components/Spinner";
 import InputTextField from "./common/components/inputs/InputTextField";
 import InputNumberField from "./common/components/inputs/InputNumberField";
 import SelectField from "./common/components/inputs/SelectField";
+import ButtonLight from "./common/components/buttons/ButtonLight";
 
 interface PlayFormFieldProps<T, F extends GameFieldDefinition<T>> {
   value: T | null;
@@ -146,17 +146,20 @@ export function PlayFormField<
         )}
       </div>
       {field.type !== "duration" || !createdToday ? null : (
-        <Box my={2}>
-          <Button
+        <div className="w-56 max-w-full">
+          <ButtonLight
             onClick={onSetDurationFromStartClick}
-            variant="outlined"
             onFocus={onFocus}
+            className="w-full"
           >
-            <span>
-              Set from start (<DurationCounter startTime={createdAt} />)
-            </span>
-          </Button>
-        </Box>
+            {"Set from start "}
+            <small>
+              {"("}
+              <DurationCounter startTime={createdAt} />
+              {")"}
+            </small>
+          </ButtonLight>
+        </div>
       )}
     </>
   );
