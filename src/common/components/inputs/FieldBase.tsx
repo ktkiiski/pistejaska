@@ -16,11 +16,8 @@ interface InputBaseProps {
 
 let counter = 0;
 
-const labelClassName = classNames(
-  "text-base top-5 left-3 text-slate-500",
-  styles.label
-);
-const inputClassName = classNames("py-2 px-3 text-base", styles.input);
+const labelClassName = classNames("text-slate-500", styles.label);
+const inputClassName = classNames("text-slate-600", styles.input);
 const fieldsetClassName = classNames(
   "rounded-md border border-solid border-slate-400/40",
   styles.fieldset
@@ -42,7 +39,7 @@ const InputBase: VFC<InputBaseProps> = (props) => {
   return (
     <div
       className={classNames(
-        "pt-3 relative",
+        styles.container,
         className,
         hasValue && styles.hasValue
       )}

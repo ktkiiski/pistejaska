@@ -15,7 +15,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Refactoring
 
-- Input field components are custom implementation instead of MUI
+- Custom implementation of form components instead of MUI:
+  - Text/number input fields
+  - Select field
 
 ## 2022-01-25
 
