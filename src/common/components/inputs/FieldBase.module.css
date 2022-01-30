@@ -28,6 +28,9 @@
   width: 100%;
   margin: 0;
 }
+select.input {
+  cursor: pointer;
+}
 /* The <fieldset> providing the borders around the input/select element */
 .fieldset {
   pointer-events: none;
