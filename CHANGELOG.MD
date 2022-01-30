@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Improvements when listing plays:
   - Show "(Ongoing)" for plays that seem not to be resolved yet
   - Show "(Tied)" for plays that have multiple winners, instead of listing tied players
+- List the most common playmates in the player reports view
 - Show play count for each player in the player list
 
 ## Refactoring

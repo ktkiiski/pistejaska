@@ -1,8 +1,6 @@
-import React from "react";
-
 import { Play, Player } from "./domain/play";
 import { RouteComponentProps } from "react-router";
-import { sortBy, flatMap, groupBy, uniq, mean } from "lodash";
+import { sortBy, flatMap, groupBy, uniq, mean, orderBy } from "lodash";
 import { usePlays } from "./common/hooks/usePlays";
 import ReportTable from "./ReportTable";
 import { stringifyScore } from "./common/stringUtils";
@@ -12,12 +10,56 @@ import ViewContentLayout from "./common/components/ViewContentLayout";
 import PlayList from "./PlayList";
 import { LoadingSpinner } from "./common/components/LoadingSpinner";
 import Heading1 from "./common/components/typography/Heading1";
+import Table from "./common/components/tables/Table";
+import TableHead from "./common/components/tables/TableHead";
+import TableHeadCell from "./common/components/tables/TableHeadCell";
+import Heading3 from "./common/components/typography/Heading3";
+import TableBody from "./common/components/tables/TableBody";
+import TableRow from "./common/components/tables/TableRow";
+import TableCell from "./common/components/tables/TableCell";
+import { useHistory } from "react-router-dom";
+import { useReducer } from "react";
+
+interface Playmate {
+  player: Player;
+  plays: Play[];
+}
+
+function usePlaymates(playerId: string, playerPlays: Play[]): Playmate[] {
+  const playmatesById: Record<string, Playmate> = {};
+  playerPlays.forEach((play) => {
+    play.players.forEach((other) => {
+      const otherId = other.id;
+      if (otherId !== playerId) {
+        const playmate = playmatesById[otherId] ?? {
+          player: other,
+          plays: [],
+        };
+        playmatesById[otherId] = playmate;
+        playmate.plays.push(play);
+      }
+    });
+  });
+  return orderBy(playmatesById, (playMate) => playMate.plays.length, "desc");
+}
 
 export const ReportPlayerView = (props: RouteComponentProps<any>) => {
   const playerId = props.match.params["playerId"];
 
+  const history = useHistory();
   const [plays, loadingPlays, errorPlays] = usePlays();
   const [games, loadingGames, errorGames] = useGames();
+  const playerPlays = plays.filter((p) =>
+    p.players.find((x) => x.id === playerId)
+  );
+  const playmates = usePlaymates(playerId, playerPlays);
+  const [isEveryPlaymateVisible, showAllPlaymates] = useReducer(
+    () => true,
+    false
+  );
+  const visiblePlaymates = isEveryPlaymateVisible
+    ? playmates
+    : playmates.slice(0, 10);
 
   if (errorPlays || errorGames) {
     return (
@@ -34,10 +76,6 @@ export const ReportPlayerView = (props: RouteComponentProps<any>) => {
     (p) => p.id === playerId
   );
 
-  const playerPlays = plays.filter((p) =>
-    p.players.find((x) => x.id === playerId)
-  );
-
   if (!player) {
     return <>Error</>;
   }
@@ -46,6 +84,38 @@ export const ReportPlayerView = (props: RouteComponentProps<any>) => {
     <ViewContentLayout>
       <Heading1>Reports: {player.name}</Heading1>
       <p>Based on {playerPlays.length} plays.</p>
+      {!playmates.length ? null : (
+        <div className="my-4">
+          <Heading3>Most common playmates</Heading3>
+          <Table className="bg-white">
+            <TableHead>
+              <TableHeadCell>Playmate</TableHeadCell>
+              <TableHeadCell>Play count</TableHeadCell>
+            </TableHead>
+            <TableBody>
+              {visiblePlaymates.map((playMate) => (
+                <TableRow key={playMate.player.id}>
+                  <TableCell
+                    className="cursor-pointer"
+                    onClick={() =>
+                      history.push(`/players/${playMate.player.id}`)
+                    }
+                  >
+                    {playMate.player.name}
+                  </TableCell>
+                  <TableCell>{playMate.plays.length}</TableCell>
+                </TableRow>
+              ))}
+              {isEveryPlaymateVisible ||
+              visiblePlaymates.length >= playmates.length ? null : (
+                <TableRow className="cursor-pointer" onClick={showAllPlaymates}>
+                  <TableCell colSpan={2}>Show all playmates…</TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </div>
+      )}
       <PlayerGamesReport player={player} plays={plays}></PlayerGamesReport>
       <PlayList plays={playerPlays} games={games} />
     </ViewContentLayout>
