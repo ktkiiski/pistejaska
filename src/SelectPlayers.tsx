@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Play, Player } from "./domain/play";
-import { TextField } from "@material-ui/core";
 import { v4 as uuid } from "uuid";
 import { usePlayers } from "./common/hooks/usePlayers";
 import { useGames } from "./common/hooks/useGames";
@@ -20,6 +19,7 @@ import ListItemIcon from "./common/components/lists/ListItemIcon";
 import ListItemText from "./common/components/lists/ListItemText";
 import { shuffle } from "lodash";
 import ButtonLight from "./common/components/buttons/ButtonLight";
+import InputTextField from "./common/components/inputs/InputTextField";
 
 function shiftRandomly<T>(values: T[]) {
   const offset = Math.floor(Math.random() * values.length);
@@ -63,7 +63,7 @@ const SelectPlayers = (props: {
   const [players, setPlayers] = useState<Player[]>(initialPlayers);
   const [isStarting, setIsStarting] = useState<boolean>(false);
   const [showAllPlayers, setShowAllPlayers] = useState<boolean>(false);
-  const [currentPlayer, setCurrentPlayer] = useState<string>("");
+  const [currentPlayerName, setCurrentPlayerName] = useState<string>("");
   const [isRandomizingStarter, setIsRandomizingStarter] = useState(false);
   const [isRandomizingOrder, setIsRandomizingOrder] = useState(false);
   const isRandomizing = isRandomizingStarter || isRandomizingOrder;
@@ -90,8 +90,8 @@ const SelectPlayers = (props: {
   };
 
   const onAddPlayer = () => {
-    setPlayers([...players, { name: currentPlayer, id: uuid() }]);
-    setCurrentPlayer("");
+    setPlayers([...players, { name: currentPlayerName, id: uuid() }]);
+    setCurrentPlayerName("");
   };
 
   const onSelectPlayer = (player: Player) => {
@@ -186,11 +186,12 @@ const SelectPlayers = (props: {
         {game.simultaneousTurns ? "" : ` in the playing order.`}
       </p>
       <div>
-        <TextField
+        <InputTextField
+          className="my-3"
           label="Search..."
           value={searchTerm}
           autoFocus
-          onChange={(e) => onSearch(e.currentTarget.value)}
+          onChange={onSearch}
         />
         <List>
           {visiblePlayers.map((player) => (
@@ -235,12 +236,15 @@ const SelectPlayers = (props: {
                 <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
               </svg>
             </ListItemIcon>
-            <TextField
-              value={currentPlayer}
-              placeholder="New player"
-              onChange={(e) => setCurrentPlayer(e.currentTarget.value)}
+            <InputTextField
+              className="mb-2"
+              label="New player"
+              value={currentPlayerName}
+              onChange={setCurrentPlayerName}
             />
-            <Button onClick={onAddPlayer}>Add</Button>
+            <Button className="ml-4" onClick={onAddPlayer}>
+              Add
+            </Button>
           </ListItem>
         </List>
       </div>
