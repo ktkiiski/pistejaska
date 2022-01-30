@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Custom implementation of form components instead of MUI:
   - Text/number input fields
   - Select field
+  - Checkbox field
 
 ## 2022-01-25
 
