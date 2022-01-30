@@ -5,7 +5,7 @@ import {
   Ref,
   VFC,
 } from "react";
-import InputBase from "./FieldBase";
+import FieldBase from "./FieldBase";
 
 interface InputNumberFieldProps {
   label: string;
@@ -21,17 +21,27 @@ interface InputNumberFieldProps {
   min?: number;
   max?: number;
   step?: number;
+  autoFocus?: boolean;
 }
 
 const InputNumberField: VFC<InputNumberFieldProps> = (props) => {
-  const { id, label, value, className, onChange, onFocus, inputRef } = props;
+  const {
+    id,
+    label,
+    value,
+    className,
+    onChange,
+    onFocus,
+    inputRef,
+    autoFocus,
+  } = props;
   const onInputChange: ChangeEventHandler<HTMLInputElement> = (event) => {
     const value = event.target.value.trim();
     const numeric = value === "" ? null : +value;
     onChange(Number.isFinite(numeric) ? numeric : null, event);
   };
   return (
-    <InputBase className={className} label={label} hasValue={value != null}>
+    <FieldBase className={className} label={label} hasValue={value != null}>
       <input
         id={id}
         type="number"
@@ -39,8 +49,9 @@ const InputNumberField: VFC<InputNumberFieldProps> = (props) => {
         onChange={onInputChange}
         onFocus={onFocus}
         ref={inputRef}
+        autoFocus={autoFocus}
       />
-    </InputBase>
+    </FieldBase>
   );
 };
 

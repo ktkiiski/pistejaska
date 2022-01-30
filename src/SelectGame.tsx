@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { RouteComponentProps } from "react-router";
-import { TextField } from "@material-ui/core";
 import { Game, GameDefinition } from "./domain/game";
 import { useGames } from "./common/hooks/useGames";
 import ViewContentLayout from "./common/components/ViewContentLayout";
@@ -11,6 +10,7 @@ import List from "./common/components/lists/List";
 import ListItem from "./common/components/lists/ListItem";
 import ListItemIcon from "./common/components/lists/ListItemIcon";
 import ListItemText from "./common/components/lists/ListItemText";
+import InputTextField from "./common/components/inputs/InputTextField";
 
 const maxRecentlyPlayedGames = 6;
 
@@ -86,11 +86,11 @@ export const SelectGame = (props: RouteComponentProps<{}>) => {
       )}
 
       <div className="p-2">
-        <TextField
+        <InputTextField
           label="Search..."
           value={searchTerm}
           autoFocus
-          onChange={(e) => setSearchTerm(e.currentTarget.value)}
+          onChange={setSearchTerm}
         />
       </div>
 

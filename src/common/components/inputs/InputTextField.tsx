@@ -5,7 +5,7 @@ import {
   Ref,
   VFC,
 } from "react";
-import InputBase from "./FieldBase";
+import FieldBase from "./FieldBase";
 
 interface InputTextFieldProps {
   label: string;
@@ -15,16 +15,26 @@ interface InputTextFieldProps {
   inputRef?: Ref<HTMLInputElement>;
   value: string;
   onChange: (value: string, event: ChangeEvent<HTMLInputElement>) => void;
+  autoFocus?: boolean;
 }
 
 const InputTextField: VFC<InputTextFieldProps> = (props) => {
-  const { id, label, value, className, onChange, onFocus, inputRef } = props;
+  const {
+    id,
+    label,
+    value,
+    className,
+    onChange,
+    onFocus,
+    inputRef,
+    autoFocus,
+  } = props;
   const onInputChange: ChangeEventHandler<HTMLInputElement> = (event) => {
     const value = event.target.value;
     onChange(value, event);
   };
   return (
-    <InputBase className={className} label={label} hasValue={!!value}>
+    <FieldBase className={className} label={label} hasValue={!!value}>
       <input
         id={id}
         type="text"
@@ -32,8 +42,9 @@ const InputTextField: VFC<InputTextFieldProps> = (props) => {
         onChange={onInputChange}
         onFocus={onFocus}
         ref={inputRef}
+        autoFocus={autoFocus}
       />
-    </InputBase>
+    </FieldBase>
   );
 };
 
