@@ -75,7 +75,7 @@ export function PlayFormField<
     return (
       <div>
         <SelectField
-          className="w-56 max-w-full"
+          className="w-60 max-w-full"
           label={label}
           options={selectOptions}
           value={selectedValue}
@@ -120,7 +120,7 @@ export function PlayFormField<
       <div>
         {isNumeric ? (
           <InputNumberField
-            className="w-56 max-w-full"
+            className="w-60 max-w-full"
             label={label}
             value={value as number | null}
             onChange={(newValue) => onChange(newValue as T | null, field)}
@@ -133,7 +133,7 @@ export function PlayFormField<
           />
         ) : (
           <InputTextField
-            className="w-56 max-w-full"
+            className="w-60 max-w-full"
             label={label}
             value={value as string | ""}
             onChange={(newValue) =>
@@ -146,7 +146,7 @@ export function PlayFormField<
         )}
       </div>
       {field.type !== "duration" || !createdToday ? null : (
-        <div className="w-56 max-w-full">
+        <div className="w-60 max-w-full">
           <ButtonLight
             onClick={onSetDurationFromStartClick}
             onFocus={onFocus}
