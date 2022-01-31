@@ -1,18 +1,14 @@
 import React from "react";
 import { GameFieldDefinition, GameFieldOption } from "./domain/game";
-import { TextField, Button, Box, makeStyles } from "@material-ui/core";
 import DurationCounter from "./DurationCounter";
 import { Play } from "./domain/play";
 import { useFormFieldRef } from "./utils/focus";
 import ButtonUpload from "./common/components/buttons/ButtonUpload";
 import Spinner from "./common/components/Spinner";
-
-const useFieldStyles = makeStyles({
-  root: {
-    width: "25ch",
-    maxWidth: "100%",
-  },
-});
+import InputTextField from "./common/components/inputs/InputTextField";
+import InputNumberField from "./common/components/inputs/InputNumberField";
+import SelectField from "./common/components/inputs/SelectField";
+import ButtonLight from "./common/components/buttons/ButtonLight";
 
 interface PlayFormFieldProps<T, F extends GameFieldDefinition<T>> {
   value: T | null;
@@ -43,87 +39,50 @@ export function PlayFormField<
     onImageUpload,
     onImageRemove,
   } = props;
-  const styles = useFieldStyles();
   const inputRef = useFormFieldRef(fieldIndex);
   const isNumeric = field.type === "number" || field.type === "duration";
   const createdAt = play.getCreationDate();
   const createdToday =
     new Date().getTime() - createdAt.getTime() < 24 * 60 * 60 * 1000;
-  const inputProps = isNumeric
-    ? {
-        ref: inputRef,
-        min: field.minValue,
-        max: field.maxValue,
-        step: field.step,
-      }
-    : {
-        ref: inputRef,
-      };
-
-  const onValueChange = async (
-    event: React.ChangeEvent<{ value: unknown }>
-  ) => {
-    let value = event.currentTarget.value as number | string | null;
-    if (value === "" || value === null) {
-      // Chose a blank option
-      value = null;
-    } else if (isNumeric) {
-      value = typeof value === "string" ? parseFloat(value) : value;
-      if (Number.isNaN(value)) {
-        value = null;
-      }
-    } else {
-      value = String(value);
-    }
-    onChange(value as T | null, field);
-  };
 
   const onSetDurationFromStartClick = () => {
     const duration = play.getTimeInHoursSinceCreation();
     onChange(duration as T, field);
   };
 
-  let options = field.options as
-    | Array<GameFieldOption<string | number>>
-    | undefined;
+  let options = field.options as Array<GameFieldOption<T>> | undefined;
   if (field.type === "boolean") {
     options = [
       { value: "", label: "" },
       { value: "Yes", label: "Yes" },
       { value: "No", label: "No" },
-    ];
+    ] as GameFieldOption<T>[];
   }
   if (options) {
     // Only allow choosing from pre-defined options.
     // If 0 is one of the allowed options, then let the zero option be seem
     // to be selected by default. Otherwise a blank option is selected by default.
     const hasZeroOption = options.some((option) => option.value === 0);
-    const selectedValue = !value && hasZeroOption ? 0 : value || "";
-    const hasSelectedValidOption = options.some(
-      (option) => option.value === selectedValue
-    );
+    const selectedValue = !value && hasZeroOption ? (0 as T) : value;
+    // ATM always allow deselecting an option. Let's discuss how this should work.
+    const selectOptions = [
+      {
+        value: null,
+        label: "",
+      },
+      ...options,
+    ];
     return (
       <div>
-        <TextField
-          select
+        <SelectField
+          className="w-60 max-w-full"
           label={label}
+          options={selectOptions}
           value={selectedValue}
-          onChange={onValueChange}
+          onChange={(newValue) => onChange(newValue, field)}
           onFocus={onFocus}
-          inputProps={{ ref: inputRef }}
-          SelectProps={{ native: true }}
-          type="file"
-          margin="dense"
-          variant="outlined"
-          classes={styles}
-        >
-          {hasSelectedValidOption ? null : <option value="" />}
-          {options.map(({ value, label }) => (
-            <option value={value} key={value}>
-              {label}
-            </option>
-          ))}
-        </TextField>
+          inputRef={inputRef}
+        />
       </div>
     );
   }
@@ -159,31 +118,48 @@ export function PlayFormField<
   ) : (
     <>
       <div>
-        <TextField
-          margin="dense"
-          inputProps={inputProps}
-          variant="outlined"
-          label={label}
-          onFocus={onFocus}
-          type={isNumeric ? "number" : "text"}
-          value={value === null ? "" : value}
-          onChange={onValueChange}
-          id={id}
-          classes={styles}
-        />
+        {isNumeric ? (
+          <InputNumberField
+            className="w-60 max-w-full"
+            label={label}
+            value={value as number | null}
+            onChange={(newValue) => onChange(newValue as T | null, field)}
+            id={id}
+            onFocus={onFocus}
+            inputRef={inputRef}
+            min={field.minValue}
+            max={field.maxValue}
+            step={field.step}
+          />
+        ) : (
+          <InputTextField
+            className="w-60 max-w-full"
+            label={label}
+            value={value as string | ""}
+            onChange={(newValue) =>
+              onChange((newValue == null ? "" : newValue) as T | null, field)
+            }
+            id={id}
+            onFocus={onFocus}
+            inputRef={inputRef}
+          />
+        )}
       </div>
       {field.type !== "duration" || !createdToday ? null : (
-        <Box my={2}>
-          <Button
+        <div className="w-60 max-w-full">
+          <ButtonLight
             onClick={onSetDurationFromStartClick}
-            variant="outlined"
             onFocus={onFocus}
+            className="w-full"
           >
-            <span>
-              Set from start (<DurationCounter startTime={createdAt} />)
-            </span>
-          </Button>
-        </Box>
+            {"Set from start "}
+            <small>
+              {"("}
+              <DurationCounter startTime={createdAt} />
+              {")"}
+            </small>
+          </ButtonLight>
+        </div>
       )}
     </>
   );

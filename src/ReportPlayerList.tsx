@@ -7,6 +7,8 @@ import { Player } from "./domain/play";
 import ViewContentLayout from "./common/components/ViewContentLayout";
 import { LoadingSpinner } from "./common/components/LoadingSpinner";
 import Heading1 from "./common/components/typography/Heading1";
+import ListItemDescription from "./common/components/lists/ListItemDescription";
+import { pluralize } from "./common/stringUtils";
 
 export const ReportPlayerList = (props: RouteComponentProps<{}>) => {
   const [plays, loading, error] = usePlays();
@@ -39,6 +41,7 @@ export const ReportPlayerList = (props: RouteComponentProps<{}>) => {
       <List component="nav">
         {Object.keys(players).map((playerId) => {
           const player = players[playerId][0];
+          const playCount = players[playerId].length;
           return (
             <ListItem
               button
@@ -46,6 +49,9 @@ export const ReportPlayerList = (props: RouteComponentProps<{}>) => {
               key={player.id}
             >
               <ListItemText primary={player.name} />
+              <ListItemDescription>
+                {pluralize(playCount, "play", "plays")}
+              </ListItemDescription>
             </ListItem>
           );
         })}

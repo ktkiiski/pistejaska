@@ -1,7 +1,7 @@
 import classNames from "classnames";
-import { HTMLAttributes } from "react";
+import { TdHTMLAttributes } from "react";
 
-const TableHeadCell: React.FC<HTMLAttributes<HTMLTableCellElement>> = ({
+const TableHeadCell: React.FC<TdHTMLAttributes<HTMLTableCellElement>> = ({
   children,
   className,
   ...props

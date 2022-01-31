@@ -1,21 +1,12 @@
 import React, { useState } from "react";
 import { GameDefinition } from "./domain/game";
-import { FormControl, makeStyles, MenuItem, Select } from "@material-ui/core";
 import AdminGameEditor from "./AdminGameEditor";
 import { useGames } from "./common/hooks/useGames";
 import { deleteDoc, doc, getFirestore, setDoc } from "firebase/firestore";
 import { app } from "./common/firebase";
-import Heading1 from "./common/components/typography/Heading1";
-
-const useStyles = makeStyles((theme) => ({
-  edit: {
-    textAlign: "left",
-    padding: theme.spacing(4),
-  },
-  gameSelect: {
-    width: "100%",
-  },
-}));
+import Heading2 from "./common/components/typography/Heading2";
+import SelectField from "./common/components/inputs/SelectField";
+import ViewContentLayout from "./common/components/ViewContentLayout";
 
 const defaultGameJson: GameDefinition = {
   id: "",
@@ -29,35 +20,32 @@ function Admin() {
   const [gameId, setGameId] = useState<string | null>(null);
 
   const [games] = useGames();
-  const styles = useStyles();
   const initialGameJson = !games
     ? null
     : games.find((game) => game.id === gameId) || defaultGameJson;
   return (
-    <div className={styles.edit}>
-      <h2>Admin</h2>
-      <FormControl className={styles.gameSelect}>
-        <Select
-          labelId="admin-game-select"
-          value={gameId || ""}
-          displayEmpty
-          onChange={(event) => {
-            setGameId(event.target.value as string);
-          }}
-        >
-          {games?.map((game) => (
-            <MenuItem key={game.id} value={game.id}>
-              {game.name || game.id}
-            </MenuItem>
-          ))}
-          <MenuItem value="">(New game)</MenuItem>
-        </Select>
-      </FormControl>
-      <Heading1>
+    <ViewContentLayout>
+      <SelectField
+        className="w-full"
+        label="Edited game"
+        value={gameId}
+        onChange={setGameId}
+        options={[
+          ...games.map((game) => ({
+            value: game.id,
+            label: game.name || game.id,
+          })),
+          {
+            value: null,
+            label: "(New game)",
+          },
+        ]}
+      />
+      <Heading2>
         {gameId
-          ? `Edit: ${initialGameJson?.name ?? gameId}`
+          ? `Edit game: ${initialGameJson?.name ?? gameId}`
           : "Create new game"}
-      </Heading1>
+      </Heading2>
       {!initialGameJson ? null : (
         <AdminGameEditor
           json={initialGameJson}
@@ -92,7 +80,7 @@ function Admin() {
           submitButtonLabel={gameId ? "Update game" : "Create game"}
         />
       )}
-    </div>
+    </ViewContentLayout>
   );
 }
 

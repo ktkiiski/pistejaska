@@ -1,11 +1,6 @@
 import React, { useState } from "react";
 import SwipeableViews from "react-swipeable-views";
-import {
-  Checkbox,
-  FormControlLabel,
-  FormGroup,
-  makeStyles,
-} from "@material-ui/core";
+import { makeStyles } from "@material-ui/core";
 import { Player, Play, PlayDTO } from "./domain/play";
 import {
   Game,
@@ -24,6 +19,8 @@ import Button from "./common/components/buttons/Button";
 import ButtonPrimary from "./common/components/buttons/ButtonPrimary";
 import Heading1 from "./common/components/typography/Heading1";
 import Heading3 from "./common/components/typography/Heading3";
+import classNames from "classnames";
+import CheckboxField from "./common/components/inputs/CheckboxField";
 
 const useStyles = makeStyles({
   heading: {
@@ -171,15 +168,11 @@ export const PlayForm = (props: {
   };
 
   const renderExpansionField = (expansion: GameExpansionDefinition) => (
-    <FormControlLabel
+    <CheckboxField
       key={expansion.id}
+      checked={play.expansions.includes(expansion.id)}
+      onChange={(checked) => handleExpansionChange(expansion, checked)}
       label={expansion.name}
-      control={
-        <Checkbox
-          checked={play.expansions.includes(expansion.id)}
-          onChange={(_, checked) => handleExpansionChange(expansion, checked)}
-        />
-      }
     />
   );
 
@@ -246,17 +239,17 @@ export const PlayForm = (props: {
     hasExpansions && (
       <div key="expansions" className={styles.view}>
         <Heading3>Used expansions</Heading3>
-        <FormGroup>
+        <div className="flex flex-col items-stretch space-y-2">
           {(game.expansions || []).map((expansion) =>
             renderExpansionField(expansion)
           )}
-        </FormGroup>
+        </div>
       </div>
     ),
     ...fieldGroups.map(({ group, fields: groupFields, viewId }, groupIndex) => {
       const viewIndex = startViewIndex + groupIndex;
       return (
-        <div key={viewId} className={styles.view}>
+        <div key={viewId} className={classNames("space-y-1", styles.view)}>
           {group ? <Heading3>{group}</Heading3> : null}
           <FormFocusGroup focused={activeViewIndex === viewIndex}>
             {groupFields.map((item) => (

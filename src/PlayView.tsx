@@ -10,7 +10,11 @@ import { LoadingSpinner } from "./common/components/LoadingSpinner";
 import { app } from "./common/firebase";
 import { usePlay } from "./common/hooks/usePlay";
 import ViewContentLayout from "./common/components/ViewContentLayout";
-import { formatDuration, getPositionAsEmoji } from "./common/stringUtils";
+import {
+  formatDuration,
+  formatNthNumber,
+  getPositionAsEmoji,
+} from "./common/stringUtils";
 import ButtonBack from "./common/components/buttons/ButtonBack";
 import CardButtonRow from "./common/components/buttons/CardButtonRow";
 import ButtonPrimary from "./common/components/buttons/ButtonPrimary";
@@ -236,7 +240,7 @@ const PlayTable = (
                   key={f.id}
                   className={idx % 2 === 0 ? "bg-gray-50" : ""}
                 >
-                  {play.players.lastIndexOf(f) + 1}.
+                  {formatNthNumber(play.players.lastIndexOf(f) + 1)}
                 </TableCell>
               ))}
             </TableRow>

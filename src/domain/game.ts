@@ -391,8 +391,8 @@ export interface GameFieldDefinition<T> {
   // If defined, then only allow choosing one of these values
   options?: Array<GameFieldOption<T>>;
   // The min, max and step values for the value. Only meaninful for numeric fields
-  minValue?: T;
-  maxValue?: T;
+  minValue?: T & number;
+  maxValue?: T & number;
   step?: number;
 }
 

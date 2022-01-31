@@ -1,0 +1,77 @@
+/* The wrapper div for all the other elements */
+.container {
+  position: relative;
+  padding-top: 0.75rem;
+  padding-right: 0.5rem;
+}
+/* Label shown as a placeholder but shrinks up when there is a value */
+.label {
+  font-size: 1rem;
+  position: absolute;
+  top: 1.25rem;
+  left: 1rem;
+  display: block;
+  pointer-events: none;
+  user-select: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition-property: color, left, top, font-size;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+/* The input or select element */
+.input {
+  font-size: 1rem;
+  padding: 0.6rem 0.75rem;
+  background: transparent;
+  width: 100%;
+  margin: 0;
+}
+select.input {
+  cursor: pointer;
+}
+/* The <fieldset> providing the borders around the input/select element */
+.fieldset {
+  pointer-events: none;
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+}
+/* The <legend> that is used to hide part of the border of <fieldset> */
+.legend {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  user-select: none;
+  width: 0;
+  font-size: 0.75rem;
+}
+/* Hide browser-provided outline on focus */
+.input:focus,
+.input:focus-visible {
+  outline: 1px solid transparent;
+}
+/* Shrink the label to the top when there is a value or focus */
+.hasValue .label,
+.input:focus ~ .label {
+  top: -0.1rem;
+  font-size: 0.75rem;
+}
+/* Hide part of the border when there is a value or focus */
+.hasValue .fieldset .legend,
+.input:focus ~ .fieldset .legend {
+  width: auto;
+  visibility: visible;
+}
+/* Colorize the label on focus */
+.input:focus ~ .label {
+  color: #3f51b1;
+}
+/* Colorize the border on focus */
+.input:focus ~ .fieldset {
+  border-color: #3f51b1;
+  border-width: 2px;
+}

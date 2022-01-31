@@ -1,0 +1,64 @@
+.label {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  cursor: pointer;
+}
+.checkbox {
+  width: 2.4rem;
+  height: 2.4rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  margin: -0.4rem;
+}
+.input {
+  top: 0;
+  left: 0;
+  width: 100%;
+  cursor: inherit;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  padding: 0;
+  z-index: 1;
+  position: absolute;
+}
+.mark {
+  display: block;
+  width: 1.6rem;
+  height: 1.6rem;
+}
+.checkedMark,
+.uncheckedMark {
+  composes: mark;
+}
+.checkedMark {
+  color: #f50057;
+}
+.uncheckedMark {
+  color: #777;
+}
+.checkbox:before {
+  content: "";
+  display: block;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  right: 50%;
+  bottom: 50%;
+  border-radius: 50%;
+  background-color: transparent;
+  transition-property: background-color, left, top, right, bottom;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 50ms;
+}
+.label:hover .checkbox:before {
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(245, 0, 86, 0.1);
+}

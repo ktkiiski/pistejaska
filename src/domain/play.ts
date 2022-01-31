@@ -152,6 +152,10 @@ export class Play implements PlayDTO {
       .reduce((sum, s) => sum + (s.score || 0), 0);
   }
 
+  public getWinners(): PlayRanking[] {
+    return this.rankings.filter((ranking) => ranking.position === 1);
+  }
+
   public getWinnerScores(): number {
     return this.rankings[0]?.score || 0;
   }
@@ -267,5 +271,12 @@ export class Play implements PlayDTO {
     const hours = duration / (1000 * 60 * 60);
 
     return round(hours, 1);
+  }
+
+  /**
+   * Returns whether or not the play seems to be over.
+   */
+  public isResolved(): boolean {
+    return this.scores.some(({ score }) => score != null);
   }
 }

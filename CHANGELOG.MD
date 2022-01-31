@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2022-01-31
+
+### Added
+
+- Improvements when listing plays:
+  - Show "(Ongoing)" for plays that seem not to be resolved yet
+  - Show "(Tied)" for plays that have multiple winners, instead of listing tied players
+- List the most common playmates in the player reports view
+- Show play count for each player in the player list
+
+## Refactoring
+
+- Custom implementation of form components instead of MUI:
+  - Text/number input fields
+  - Select field
+  - Checkbox field
+
 ## 2022-01-25
 
 ### Fixed
