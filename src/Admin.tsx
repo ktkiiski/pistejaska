@@ -5,7 +5,7 @@ import { useGames } from "./common/hooks/useGames";
 import { deleteDoc, doc, getFirestore, setDoc } from "firebase/firestore";
 import { app } from "./common/firebase";
 import Heading2 from "./common/components/typography/Heading2";
-import SelectField from "./common/components/inputs/SelectField";
+import NativeSelectField from "./common/components/inputs/NativeSelectField";
 import ViewContentLayout from "./common/components/ViewContentLayout";
 
 const defaultGameJson: GameDefinition = {
@@ -25,7 +25,7 @@ function Admin() {
     : games.find((game) => game.id === gameId) || defaultGameJson;
   return (
     <ViewContentLayout>
-      <SelectField
+      <NativeSelectField
         className="w-full"
         label="Edited game"
         value={gameId}

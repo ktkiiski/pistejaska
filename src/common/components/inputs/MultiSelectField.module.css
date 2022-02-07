@@ -1,20 +1,29 @@
 .input {
   composes: input from "./FieldBase.module.css";
-  min-width: 10rem;
+  display: flex;
+  flex-direction: column;
+}
+.badges {
   display: flex;
   flex-direction: row;
+  gap: 0.25rem;
 }
 .badge {
   display: block;
   border-radius: 1rem;
-  padding: 0.15rem 0.5rem;
+  padding: 0 0.5rem;
   background: #ddd;
   color: black;
-  line-height: 1rem;
+  height: 1.3rem;
+  line-height: 1.3rem;
   font-size: 0.8rem;
-  margin-right: 0.25rem;
 }
 .placeholder {
-  composes: badge;
+  height: 1.3rem;
   visibility: hidden;
+}
+.minWidthFiller {
+  visibility: hidden;
+  height: 0px;
+  overflow: hidden;
 }

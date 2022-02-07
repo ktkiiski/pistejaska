@@ -1,15 +1,5 @@
 import React from "react";
 import {
-  FormControl,
-  Input,
-  InputLabel,
-  ListItemText,
-  makeStyles,
-  MenuItem,
-  Select,
-  useTheme,
-} from "@material-ui/core";
-import {
   applyPlayFilters,
   emptyFilters,
   hasFilters,
@@ -24,6 +14,7 @@ import { Game } from "./domain/game";
 import MultiSelectField from "./common/components/inputs/MultiSelectField";
 import { pluralize } from "./common/stringUtils";
 import ButtonDanger from "./common/components/buttons/ButtonDanger";
+import SelectField from "./common/components/inputs/SelectField";
 
 interface ReportFilterSelectorProps {
   game: Game;
@@ -31,35 +22,6 @@ interface ReportFilterSelectorProps {
   plays: Play[];
   onChange: (filters: ReportFilters) => void;
 }
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "flex-start",
-    flexWrap: "wrap",
-    textAlign: "left",
-  },
-  formControl: {
-    margin: theme.spacing(4),
-    minWidth: 160,
-    maxWidth: 300,
-  },
-  selection: {
-    minHeight: "28px",
-    display: "flex",
-    flexWrap: "wrap",
-    alignContent: "center",
-  },
-  chip: {
-    margin: 2,
-  },
-  clearButton: {
-    marginLeft: "1em",
-    marginTop: "20px",
-  },
-}));
 
 function renderPlayerCount(playerCount: number | "" | null): React.ReactNode {
   if (typeof playerCount !== "number") {
@@ -84,8 +46,6 @@ function ReportFilterSelector({
   filters,
   onChange,
 }: ReportFilterSelectorProps) {
-  const classes = useStyles();
-  const theme = useTheme();
   const playerCounts = sortBy(union(plays.map((play) => play.rankings.length)));
   const { expansions = [] } = game;
   // Add "No expansions" filter category
@@ -101,7 +61,7 @@ function ReportFilterSelector({
     // TODO: Support fields without pre-defined options
     .filter((field) => field.options?.length);
   return (
-    <div className="mb-4 flex flex-row items-center justify-start flex-wrap text-left space-x-2">
+    <div className="mb-4 flex flex-row items-center justify-start flex-wrap text-left gap-3">
       {!expansions.length ? null : (
         <MultiSelectField
           label="Expansions"
@@ -154,51 +114,27 @@ function ReportFilterSelector({
           }
         />
       ))}
-      <FormControl className={classes.formControl}>
-        <InputLabel shrink>Player count</InputLabel>
-        <Select
-          displayEmpty
-          value={filters.playerCount ?? ""}
-          onChange={(event) => {
-            const value = event.target.value as string | number;
-            const newPlayerCount = value === "" ? null : +value;
-            onChange({ ...filters, playerCount: newPlayerCount });
-          }}
-          input={<Input />}
-          renderValue={(playerCount) => (
-            <div className={classes.selection}>
-              {renderPlayerCount(playerCount as number)}
-            </div>
-          )}
-        >
-          {[null, ...playerCounts].map((playerCount) => {
-            const nestedFilters: ReportFilters = { ...filters, playerCount };
-            const nestedPlays = applyPlayFilters(plays, nestedFilters);
-            const isSelected = playerCount === filters.playerCount;
-            return (
-              <MenuItem
-                key={playerCount}
-                value={playerCount ?? ""}
-                disabled={!isSelected && !nestedPlays.length}
-                selected={isSelected}
-              >
-                <ListItemText
-                  primary={renderPlayerCount(playerCount)}
-                  secondary={`${nestedPlays.length} play(s)`}
-                  primaryTypographyProps={{
-                    style: {
-                      fontWeight: isSelected
-                        ? theme.typography.fontWeightMedium
-                        : theme.typography.fontWeightRegular,
-                    },
-                  }}
-                />
-              </MenuItem>
-            );
-          })}
-        </Select>
-      </FormControl>
+      <SelectField
+        label="Player count"
+        value={filters.playerCount}
+        onChange={(newPlayerCount) => {
+          onChange({ ...filters, playerCount: newPlayerCount });
+        }}
+        options={[null, ...playerCounts].map((playerCount) => {
+          const nestedFilters: ReportFilters = { ...filters, playerCount };
+          const nestedPlays = applyPlayFilters(plays, nestedFilters);
+          const isSelected = playerCount === filters.playerCount;
+          return {
+            value: playerCount,
+            disabled: !isSelected && !nestedPlays.length,
+            label: renderPlayerCount(playerCount),
+            description: pluralize(nestedPlays.length, "play", "plays"),
+            hideSelectedLabel: playerCount == null,
+          };
+        })}
+      />
       <ButtonDanger
+        className="mt-3"
         disabled={!isFiltering}
         onClick={() => onChange(emptyFilters)}
       >

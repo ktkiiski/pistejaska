@@ -62,14 +62,24 @@ function MultiSelectField<Value>(props: MultiSelectFieldProps<Value>) {
           className={styles.input}
           onClick={() => setIsDropdownOpen(true)}
         >
-          {selectedDropdownOptions.map((option) => (
-            <span className={styles.badge} key={option.encodedValue}>
-              {option.label}
-            </span>
-          ))}
-          {selectedDropdownOptions.length ? null : (
-            <span className={styles.placeholder}>&nbsp;</span>
-          )}
+          {/* This element makes sure that the input has a minimum size that fits the label text */}
+          <span
+            className={
+              selectedDropdownOptions.length
+                ? styles.minWidthFiller
+                : styles.placeholder
+            }
+            aria-hidden
+          >
+            {label}
+          </span>
+          <div className={styles.badges}>
+            {selectedDropdownOptions.map((option) => (
+              <span className={styles.badge} key={option.encodedValue}>
+                {option.label}
+              </span>
+            ))}
+          </div>
         </button>
       </DropdownMenu>
     </InputBase>
