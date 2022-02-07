@@ -12,33 +12,29 @@ import { createPortal } from "react-dom";
 import DropdownList from "./DropdownList";
 import DropdownListItem from "./DropdownListItem";
 
-interface DropdownMenuOption<Value> {
+export interface DropdownMenuOption {
   label: ReactNode;
   description?: ReactNode;
   selected?: boolean;
   disabled?: boolean;
-  value: Value;
+  value: unknown;
 }
 
-interface DropdownMenuProps<Value> {
-  options: DropdownMenuOption<Value>[];
+interface DropdownMenuProps<Option> {
+  options: Option[];
   isOpen: boolean;
-  onSelect: (
-    value: Value,
-    option: DropdownMenuOption<Value>,
-    event: SyntheticEvent
-  ) => void;
+  onSelect: (option: Option, event: SyntheticEvent) => void;
   onClose: (event: SyntheticEvent) => void;
   children: ReactElement;
 }
 
-function DropdownMenu<Value>({
+function DropdownMenu<Option extends DropdownMenuOption>({
   children,
   onClose,
   onSelect,
   options,
   isOpen,
-}: DropdownMenuProps<Value>) {
+}: DropdownMenuProps<Option>) {
   const anchorRef = useRef<HTMLElement | null>(null);
   const popoverRef = useRef<HTMLUListElement | null>(null);
   const leftRef = useRef<HTMLDivElement | null>(null);
@@ -90,7 +86,7 @@ function DropdownMenu<Value>({
               disabled={option.disabled}
               selected={option.selected}
               onClick={(event) => {
-                onSelect(option.value, option, event);
+                onSelect(option, event);
               }}
             />
           ))}
