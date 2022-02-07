@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - More custom implementation of form components instead of MUI:
   - Multi-select field (used in reporting filters)
+  - Re-usable dropdown menu component
 
 ## 2022-01-31
 

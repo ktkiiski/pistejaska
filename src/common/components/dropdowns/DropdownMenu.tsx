@@ -1,4 +1,3 @@
-import classNames from "classnames";
 import {
   Children,
   cloneElement,
@@ -10,6 +9,8 @@ import {
   useRef,
 } from "react";
 import { createPortal } from "react-dom";
+import DropdownList from "./DropdownList";
+import DropdownListItem from "./DropdownListItem";
 
 interface DropdownMenuOption<Value> {
   label: ReactNode;
@@ -80,37 +81,20 @@ function DropdownMenu<Value>({
       <div className="grow shrink-0 basis-2" ref={leftRef} />
       <div className="grow flex flex-col">
         <div className="grow shrink-0 basis-2" ref={topRef} />
-        <ul
-          className="shrink grow-0 w-40 min-w-fit overflow-y-auto overflow-x-hidden bg-white shadow-lg shadow-black/50 rounded"
-          ref={popoverRef}
-        >
+        <DropdownList ref={popoverRef}>
           {options.map((option) => (
-            <li
+            <DropdownListItem
               key={JSON.stringify(option.value)}
-              className={classNames(
-                "py-2 pl-3 pr-5 cursor-pointer",
-                option.disabled
-                  ? "text-slate-300"
-                  : "text-slate-800 hover:bg-slate-200",
-                option.selected
-                  ? "bg-slate-100 font-semibold text-black"
-                  : "font-light"
-              )}
+              label={option.label}
+              description={option.description}
+              disabled={option.disabled}
+              selected={option.selected}
               onClick={(event) => {
-                if (!option.disabled) {
-                  onSelect(option.value, option, event);
-                }
+                onSelect(option.value, option, event);
               }}
-            >
-              <span className="block text-md">{option.label}</span>
-              {option.description == null ? null : (
-                <span className="block text-xs opacity-70">
-                  {option.description}
-                </span>
-              )}
-            </li>
+            />
           ))}
-        </ul>
+        </DropdownList>
         <div className="grow shrink-0 basis-2" />
       </div>
       <div className="grow shrink-0 basis-2" />
