@@ -12,7 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - More custom implementation of form components instead of MUI:
   - Multi-select field (used in reporting filters)
   - Non-native single-select field (used in reporting filters)
-  - Re-usable dropdown menu component, used by select fields
+  - Re-usable dropdown menu component, used by select fields & the nav bar
 
 ## 2022-01-31
 

@@ -18,12 +18,13 @@ export interface DropdownMenuOption {
   selected?: boolean;
   disabled?: boolean;
   value: unknown;
+  onSelect?: (event: SyntheticEvent<HTMLLIElement>) => void;
 }
 
 interface DropdownMenuProps<Option> {
   options: Option[];
   isOpen: boolean;
-  onSelect: (option: Option, event: SyntheticEvent) => void;
+  onSelect?: (option: Option, event: SyntheticEvent<HTMLLIElement>) => void;
   onClose: (event: SyntheticEvent) => void;
   children: ReactElement;
 }
@@ -86,7 +87,8 @@ function DropdownMenu<Option extends DropdownMenuOption>({
               disabled={option.disabled}
               selected={option.selected}
               onClick={(event) => {
-                onSelect(option, event);
+                option.onSelect?.(event);
+                onSelect?.(option, event);
               }}
             />
           ))}
