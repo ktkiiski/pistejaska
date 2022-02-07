@@ -1,0 +1,20 @@
+.input {
+  composes: input from "./FieldBase.module.css";
+  min-width: 10rem;
+  display: flex;
+  flex-direction: row;
+}
+.badge {
+  display: block;
+  border-radius: 1rem;
+  padding: 0.15rem 0.5rem;
+  background: #ddd;
+  color: black;
+  line-height: 1rem;
+  font-size: 0.8rem;
+  margin-right: 0.25rem;
+}
+.placeholder {
+  composes: badge;
+  visibility: hidden;
+}

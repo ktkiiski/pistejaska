@@ -1,5 +1,7 @@
 import { ChangeEvent, ChangeEventHandler, FocusEventHandler, Ref } from "react";
+import useId from "../../hooks/useId";
 import InputBase from "./FieldBase";
+import fieldStyles from "./FieldBase.module.css";
 
 interface SelectFieldOption<Value> {
   value: Value;
@@ -21,6 +23,7 @@ interface SelectFieldProps<Value> {
 function SelectField<Value>(props: SelectFieldProps<Value>) {
   const { id, label, value, options, className, onChange, onFocus, inputRef } =
     props;
+  const inputId = useId("select-", id);
   const encodedOptions = options.map((option) => ({
     ...option,
     encodedValue: JSON.stringify(option.value),
@@ -42,10 +45,12 @@ function SelectField<Value>(props: SelectFieldProps<Value>) {
     <InputBase
       className={className}
       label={label}
+      labelFor={inputId}
       hasValue={selectedOption != null && !!selectedOption.label}
     >
       <select
-        id={id}
+        id={inputId}
+        className={fieldStyles.input}
         value={selectedEncodedValue}
         onChange={onSelectChange}
         onFocus={onFocus}

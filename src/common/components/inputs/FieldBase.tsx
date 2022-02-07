@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { cloneElement, ReactElement, useState, VFC } from "react";
+import { ReactElement, VFC } from "react";
 import styles from "./FieldBase.module.css";
 
 interface FieldElementProps {
@@ -9,15 +9,13 @@ interface FieldElementProps {
 
 interface InputBaseProps {
   label: string;
+  labelFor?: string;
   className?: string;
   children: ReactElement<FieldElementProps>;
   hasValue: boolean;
 }
 
-let counter = 0;
-
 const labelClassName = classNames("text-slate-500", styles.label);
-const inputClassName = classNames("text-slate-600", styles.input);
 const fieldsetClassName = classNames(
   "rounded-md border border-solid border-slate-400/40",
   styles.fieldset
@@ -28,14 +26,7 @@ const legendClassName = classNames("ml-2", styles.legend);
  * Low-level component for building consistently looking form input/select components.
  */
 const InputBase: VFC<InputBaseProps> = (props) => {
-  const { label, className, hasValue, children } = props;
-  const inputId = children.props.id;
-  const [staticId] = useState(() => `input-${counter++}`);
-  const id = inputId ?? staticId;
-  const inputElement = cloneElement(children, {
-    id,
-    className: classNames(inputClassName, children.props.className),
-  });
+  const { label, labelFor, className, hasValue, children } = props;
   return (
     <div
       className={classNames(
@@ -44,8 +35,8 @@ const InputBase: VFC<InputBaseProps> = (props) => {
         hasValue && styles.hasValue
       )}
     >
-      {inputElement}
-      <label className={labelClassName} htmlFor={inputId}>
+      {children}
+      <label className={labelClassName} htmlFor={labelFor}>
         {label}
       </label>
       <fieldset className={fieldsetClassName}>

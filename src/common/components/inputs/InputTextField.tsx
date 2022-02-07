@@ -5,7 +5,9 @@ import {
   Ref,
   VFC,
 } from "react";
+import useId from "../../hooks/useId";
 import FieldBase from "./FieldBase";
+import fieldStyles from "./FieldBase.module.css";
 
 interface InputTextFieldProps {
   label: string;
@@ -29,14 +31,21 @@ const InputTextField: VFC<InputTextFieldProps> = (props) => {
     inputRef,
     autoFocus,
   } = props;
+  const inputId = useId("input-text-", id);
   const onInputChange: ChangeEventHandler<HTMLInputElement> = (event) => {
     const value = event.target.value;
     onChange(value, event);
   };
   return (
-    <FieldBase className={className} label={label} hasValue={!!value}>
+    <FieldBase
+      className={className}
+      label={label}
+      labelFor={inputId}
+      hasValue={!!value}
+    >
       <input
-        id={id}
+        id={inputId}
+        className={fieldStyles.input}
         type="text"
         value={value == null ? "" : value.toString()}
         onChange={onInputChange}

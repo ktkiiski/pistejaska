@@ -1,7 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
 import {
-  Button,
-  Chip,
   FormControl,
   Input,
   InputLabel,
@@ -23,6 +21,9 @@ import {
 import { Play } from "./domain/play";
 import { sortBy, union } from "lodash";
 import { Game } from "./domain/game";
+import MultiSelectField from "./common/components/inputs/MultiSelectField";
+import { pluralize } from "./common/stringUtils";
+import ButtonDanger from "./common/components/buttons/ButtonDanger";
 
 interface ReportFilterSelectorProps {
   game: Game;
@@ -86,8 +87,6 @@ function ReportFilterSelector({
   const classes = useStyles();
   const theme = useTheme();
   const playerCounts = sortBy(union(plays.map((play) => play.rankings.length)));
-  const [expansionsOpen, setExpansionsOpen] = useState(false);
-  const [fieldsOpen, setFieldsOpen] = useState<Record<string, boolean>>({});
   const { expansions = [] } = game;
   // Add "No expansions" filter category
   const expansionOptions: ExpansionOption[] = [
@@ -102,126 +101,40 @@ function ReportFilterSelector({
     // TODO: Support fields without pre-defined options
     .filter((field) => field.options?.length);
   return (
-    <div className={classes.root}>
+    <div className="mb-4 flex flex-row items-center justify-start flex-wrap text-left space-x-2">
       {!expansions.length ? null : (
-        <FormControl className={classes.formControl}>
-          <InputLabel shrink>Expansions</InputLabel>
-          <Select
-            multiple
-            displayEmpty
-            value={filters.expansions}
-            open={expansionsOpen}
-            onOpen={() => setExpansionsOpen(true)}
-            onClose={() => setExpansionsOpen(false)}
-            onChange={(event) => {
-              // Add the selected expansion to the filters
-              const newExpansions = event.target.value as string[];
-              onChange({ ...filters, expansions: newExpansions });
-              setExpansionsOpen(false);
-            }}
-            input={<Input />}
-            renderValue={(value) => {
-              // Convert '' back to null
-              const expansionIds = (value as string[]).map((id) => id || null);
-              return (
-                <div className={classes.selection}>
-                  {!expansionIds.length ? (
-                    <em>Any expansions</em>
-                  ) : (
-                    expansionIds.map((expansionId) => (
-                      <Chip
-                        size="small"
-                        key={expansionId}
-                        className={classes.chip}
-                        label={
-                          expansionOptions.find((exp) => exp.id === expansionId)
-                            ?.name
-                        }
-                      />
-                    ))
-                  )}
-                </div>
-              );
-            }}
-          >
-            {expansionOptions.map((expansion) => {
-              const nestedFilters = toggleExpansionFilter(
-                filters,
-                expansion.id
-              );
-              const isSelected = filters.expansions.includes(expansion.id);
-              const nestedPlays = applyPlayFilters(
-                plays,
-                isSelected ? filters : nestedFilters
-              );
-
-              return (
-                <MenuItem
-                  key={expansion.id}
-                  // NOTE: MenuItem typing doesn't seem to accept null value, even though it seems to work with it.
-                  // To play nicely, we convert null to '' for this purpose (converting it back on onChange)
-                  value={expansion.id || ""}
-                  disabled={!nestedPlays.length}
-                  selected={isSelected}
-                >
-                  <ListItemText
-                    primary={expansion.name}
-                    secondary={`${nestedPlays.length} play(s)`}
-                    primaryTypographyProps={{
-                      style: {
-                        fontWeight: isSelected
-                          ? theme.typography.fontWeightMedium
-                          : theme.typography.fontWeightRegular,
-                      },
-                    }}
-                  />
-                </MenuItem>
-              );
-            })}
-          </Select>
-        </FormControl>
+        <MultiSelectField
+          label="Expansions"
+          values={filters.expansions}
+          onChange={(newExpansions) => {
+            onChange({ ...filters, expansions: newExpansions });
+          }}
+          options={expansionOptions.map((expansion) => {
+            const nestedFilters = toggleExpansionFilter(filters, expansion.id);
+            const isSelected = filters.expansions.includes(expansion.id);
+            const nestedPlays = applyPlayFilters(
+              plays,
+              isSelected ? filters : nestedFilters
+            );
+            return {
+              label: expansion.name,
+              description: pluralize(nestedPlays.length, "play", "plays"),
+              value: expansion.id,
+              disabled: !isSelected && !nestedPlays.length,
+            };
+          })}
+        />
       )}
       {reportFields.map((field) => (
-        <FormControl className={classes.formControl} key={field.id}>
-          <InputLabel shrink>{field.name} used</InputLabel>
-          <Select
-            multiple
-            displayEmpty
-            value={filters.fieldValues[field.id] ?? []}
-            open={!!fieldsOpen[field.id]}
-            onOpen={() => setFieldsOpen({ ...fieldsOpen, [field.id]: true })}
-            onClose={() => setFieldsOpen({ ...fieldsOpen, [field.id]: false })}
-            onChange={(event) => {
-              const newValues = event.target.value as string[];
-              onChange(setFieldValueFilter(filters, field.id, newValues));
-              setFieldsOpen({ ...fieldsOpen, [field.id]: false });
-            }}
-            input={<Input />}
-            renderValue={(renderValue) => {
-              const values = renderValue as string[];
-              return (
-                <div className={classes.selection}>
-                  {!values.length ? (
-                    <em>Anything</em>
-                  ) : (
-                    values.map((value) => (
-                      <Chip
-                        size="small"
-                        key={value}
-                        className={classes.chip}
-                        label={
-                          field.options?.find(
-                            (option) => option.value === value
-                          )?.label ?? value
-                        }
-                      />
-                    ))
-                  )}
-                </div>
-              );
-            }}
-          >
-            {field.options?.map((option) => {
+        <MultiSelectField
+          key={field.id}
+          label={field.name}
+          values={filters.fieldValues[field.id] ?? []}
+          onChange={(newValues) => {
+            onChange(setFieldValueFilter(filters, field.id, newValues));
+          }}
+          options={
+            field.options?.map((option) => {
               const nestedFilters = toggleFieldValueFilter(
                 filters,
                 field.id,
@@ -231,29 +144,15 @@ function ReportFilterSelector({
               const isSelected = !!filters.fieldValues[field.id]?.includes(
                 option.value
               );
-              return (
-                <MenuItem
-                  key={option.value}
-                  value={option.value}
-                  disabled={!nestedPlays.length}
-                  selected={isSelected}
-                >
-                  <ListItemText
-                    primary={option.label}
-                    secondary={`${nestedPlays.length} play(s)`}
-                    primaryTypographyProps={{
-                      style: {
-                        fontWeight: isSelected
-                          ? theme.typography.fontWeightMedium
-                          : theme.typography.fontWeightRegular,
-                      },
-                    }}
-                  />
-                </MenuItem>
-              );
-            })}
-          </Select>
-        </FormControl>
+              return {
+                label: option.label,
+                description: pluralize(nestedPlays.length, "play", "plays"),
+                value: option.value,
+                disabled: !isSelected && !nestedPlays.length,
+              };
+            }) ?? []
+          }
+        />
       ))}
       <FormControl className={classes.formControl}>
         <InputLabel shrink>Player count</InputLabel>
@@ -280,7 +179,7 @@ function ReportFilterSelector({
               <MenuItem
                 key={playerCount}
                 value={playerCount ?? ""}
-                disabled={!nestedPlays.length}
+                disabled={!isSelected && !nestedPlays.length}
                 selected={isSelected}
               >
                 <ListItemText
@@ -299,15 +198,12 @@ function ReportFilterSelector({
           })}
         </Select>
       </FormControl>
-      <Button
+      <ButtonDanger
         disabled={!isFiltering}
-        color="secondary"
-        variant={isFiltering ? "contained" : "outlined"}
         onClick={() => onChange(emptyFilters)}
-        className={classes.clearButton}
       >
         Clear filters
-      </Button>
+      </ButtonDanger>
     </div>
   );
 }
