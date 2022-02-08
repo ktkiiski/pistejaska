@@ -48,6 +48,7 @@ function MultiSelectField<Value>(props: MultiSelectFieldProps<Value>) {
         isOpen={isDropdownOpen}
         onClose={() => setIsDropdownOpen(false)}
         options={dropdownOptions}
+        overlaySelectedOption
         onSelect={(option) => {
           const newSelectedOptions = option.selected
             ? selectedDropdownOptions.filter((opt) => opt !== option)

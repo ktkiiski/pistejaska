@@ -46,6 +46,7 @@ function SelectField<Value>(props: SelectFieldProps<Value>) {
         isOpen={isDropdownOpen}
         onClose={() => setIsDropdownOpen(false)}
         options={dropdownOptions}
+        overlaySelectedOption
         onSelect={(option, event) => {
           onChange(option.value, event);
           setIsDropdownOpen(false);
