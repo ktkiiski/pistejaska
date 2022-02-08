@@ -15,7 +15,7 @@ const DropdownListItem = forwardRef<HTMLLIElement, DropdownListItemProps>(
       className={classNames(
         "py-2 pl-3 pr-5 cursor-pointer",
         disabled ? "text-slate-300" : "text-slate-800 hover:bg-slate-200",
-        selected ? "bg-slate-100 font-semibold text-black" : "font-light"
+        selected ? "bg-slate-100 font-medium text-black" : "font-normal"
       )}
       onClick={disabled ? undefined : onClick}
       ref={ref}

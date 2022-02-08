@@ -75,9 +75,9 @@ function DropdownMenu<Option extends DropdownMenuOption>({
       className="fixed inset-0 overflow-hidden flex flex-row items-stretch"
       onClick={onBackdropClick}
     >
-      <div className="grow shrink-0 basis-2" ref={leftRef} />
+      <div className="grow shrink-0 min-w-[0.5rem]" ref={leftRef} />
       <div className="grow-0 flex flex-col">
-        <div className="grow shrink-0 basis-2" ref={topRef} />
+        <div className="grow shrink-0 min-h-[0.5rem]" ref={topRef} />
         <DropdownList ref={popoverRef}>
           {options.map((option) => (
             <DropdownListItem
@@ -93,9 +93,9 @@ function DropdownMenu<Option extends DropdownMenuOption>({
             />
           ))}
         </DropdownList>
-        <div className="grow-0 shrink-0 basis-2" />
+        <div className="grow-0 shrink-0 min-h-[0.5rem]" />
       </div>
-      <div className="grow-0 shrink-0 basis-2" />
+      <div className="grow-0 shrink-0 min-w-[0.5rem]" />
     </div>
   );
   return (
