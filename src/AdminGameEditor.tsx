@@ -1,11 +1,13 @@
 import React, { useEffect, useReducer, useRef, useState } from "react";
 import { GameDefinition, schema } from "./domain/game";
-import { Button, makeStyles } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core";
 import JsonEditor from "jsoneditor";
 import Ajv from "ajv";
 import { isEqual } from "lodash";
 import "jsoneditor/dist/jsoneditor.css";
 import useConfirmLeave from "./common/hooks/useConfirmLeave";
+import ButtonDanger from "./common/components/buttons/ButtonDanger";
+import ButtonPrimary from "./common/components/buttons/ButtonPrimary";
 
 const ajv = new Ajv({ allErrors: true, verbose: true });
 
@@ -83,22 +85,15 @@ function AdminGameEditor({
     <>
       <div className={styles.editor} ref={editorRef} />
       <div>
-        <Button
-          variant="contained"
-          color="primary"
-          disabled={isSubmitDisabled}
-          onClick={onSubmitClick}
-        >
+        <ButtonPrimary disabled={isSubmitDisabled} onClick={onSubmitClick}>
           {submitButtonLabel}
-        </Button>
-        <Button
-          variant="outlined"
-          color="secondary"
+        </ButtonPrimary>
+        <ButtonDanger
           disabled={isDeleteDisabled}
           onClick={onDelete ?? undefined}
         >
           Delete game
-        </Button>
+        </ButtonDanger>
       </div>
     </>
   );
