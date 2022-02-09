@@ -7,7 +7,7 @@ import ButtonUpload from "./common/components/buttons/ButtonUpload";
 import Spinner from "./common/components/Spinner";
 import InputTextField from "./common/components/inputs/InputTextField";
 import InputNumberField from "./common/components/inputs/InputNumberField";
-import SelectField from "./common/components/inputs/SelectField";
+import NativeSelectField from "./common/components/inputs/NativeSelectField";
 import ButtonLight from "./common/components/buttons/ButtonLight";
 
 interface PlayFormFieldProps<T, F extends GameFieldDefinition<T>> {
@@ -74,7 +74,7 @@ export function PlayFormField<
     ];
     return (
       <div>
-        <SelectField
+        <NativeSelectField
           className="w-60 max-w-full"
           label={label}
           options={selectOptions}

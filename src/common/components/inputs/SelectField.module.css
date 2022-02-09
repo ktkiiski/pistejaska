@@ -1,0 +1,14 @@
+.input {
+  composes: input from "./FieldBase.module.css";
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.placeholder {
+  visibility: hidden;
+}
+.minWidthFiller {
+  composes: placeholder;
+  height: 0px;
+  overflow: hidden;
+}

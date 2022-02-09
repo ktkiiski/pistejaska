@@ -4,101 +4,69 @@ import {
   Typography,
   Button,
   IconButton,
-  Menu,
-  MenuItem,
-  makeStyles,
 } from "@material-ui/core";
-import React, { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useHistory } from "react-router-dom";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import { getAuth, signOut } from "firebase/auth";
+import DropdownMenu from "./dropdowns/DropdownMenu";
 
 const logout = () => {
-  signOut(getAuth())
+  signOut(getAuth());
 };
-
-const useStyles = makeStyles(() => ({
-  title: {
-    textAlign: "left",
-    flexGrow: 1,
-    cursor: "pointer",
-  },
-}));
 
 export function NavBar() {
   const history = useHistory();
-  const styles = useStyles();
-  const [menuAnchorElement, setMenuAnchorElement] =
-    useState<HTMLElement | null>(null);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const openMenu = useCallback(() => setIsDropdownOpen(true), []);
+  const closeMenu = useCallback(() => setIsDropdownOpen(false), []);
+  const menuOptions = useMemo(
+    () => [
+      {
+        value: "players" as const,
+        label: "Players",
+        onSelect: () => {
+          history.push("/players");
+        },
+      },
+      {
+        value: "changelog" as const,
+        label: "Changelog",
+        onSelect: () => {
+          history.push("/whatsnew");
+        },
+      },
+      {
+        value: "logout" as const,
+        label: "Log out",
+        onSelect: () => {
+          logout();
+        },
+      },
+    ],
+    [history]
+  );
   const menuIcon = useMemo(
     () => (
       <IconButton
         aria-label="More options"
         aria-controls="menu-appbar"
         aria-haspopup="true"
-        onClick={(event) => {
-          setMenuAnchorElement(event.currentTarget);
-        }}
+        onClick={openMenu}
         color="inherit"
       >
         <AccountCircle />
       </IconButton>
     ),
-    []
+    [openMenu]
   );
-  const menu = useMemo(() => {
-    const isMenuOpen = menuAnchorElement != null;
-    const closeMenu = () => setMenuAnchorElement(null);
-    return (
-      <Menu
-        id="menu-appbar"
-        anchorEl={menuAnchorElement}
-        anchorOrigin={{
-          vertical: "top",
-          horizontal: "right",
-        }}
-        keepMounted
-        transformOrigin={{
-          vertical: "top",
-          horizontal: "right",
-        }}
-        open={isMenuOpen}
-        onClose={closeMenu}
-      >
-        <MenuItem
-          onClick={() => {
-            history.push("/players");
-            closeMenu();
-          }}
-        >
-          Players
-        </MenuItem>
-        <MenuItem
-          onClick={() => {
-            history.push("/whatsnew");
-            closeMenu();
-          }}
-        >
-          Changelog
-        </MenuItem>
-        <MenuItem
-          onClick={() => {
-            closeMenu();
-            logout();
-          }}
-        >
-          Log out
-        </MenuItem>
-      </Menu>
-    );
-  }, [menuAnchorElement, history]);
   return (
     <div>
       <AppBar position="static">
         <Toolbar variant="dense">
           <Typography
             variant="h6"
-            className={styles.title}
+            className="text-left grow cursor-pointer"
             color="inherit"
             onClick={() => history.push("/")}
           >
@@ -113,10 +81,14 @@ export function NavBar() {
           <Button color="inherit" onClick={() => history.push("/games")}>
             Games
           </Button>
-          <div>
+          <DropdownMenu
+            isOpen={isDropdownOpen}
+            options={menuOptions}
+            onClose={closeMenu}
+            onSelect={closeMenu}
+          >
             {menuIcon}
-            {menu}
-          </div>
+          </DropdownMenu>
         </Toolbar>
       </AppBar>
     </div>

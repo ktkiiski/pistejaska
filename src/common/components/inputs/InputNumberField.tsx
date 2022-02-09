@@ -5,7 +5,9 @@ import {
   Ref,
   VFC,
 } from "react";
+import useId from "../../hooks/useId";
 import FieldBase from "./FieldBase";
+import fieldStyles from "./FieldBase.module.css";
 
 interface InputNumberFieldProps {
   label: string;
@@ -35,15 +37,22 @@ const InputNumberField: VFC<InputNumberFieldProps> = (props) => {
     inputRef,
     autoFocus,
   } = props;
+  const inputId = useId("input-number-", id);
   const onInputChange: ChangeEventHandler<HTMLInputElement> = (event) => {
     const value = event.target.value.trim();
     const numeric = value === "" ? null : +value;
     onChange(Number.isFinite(numeric) ? numeric : null, event);
   };
   return (
-    <FieldBase className={className} label={label} hasValue={value != null}>
+    <FieldBase
+      className={className}
+      label={label}
+      labelFor={inputId}
+      hasValue={value != null}
+    >
       <input
-        id={id}
+        id={inputId}
+        className={fieldStyles.input}
         type="number"
         value={value == null ? "" : value.toString()}
         onChange={onInputChange}

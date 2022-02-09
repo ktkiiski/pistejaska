@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2022-02-09
+
+### Refactoring
+
+- More custom implementation of form components instead of MUI:
+  - Multi-select field (used in reporting filters)
+  - Non-native single-select field (used in reporting filters)
+  - Re-usable dropdown menu component, used by select fields & the nav bar
+
 ## 2022-01-31
 
 ### Added
@@ -15,7 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - List the most common playmates in the player reports view
 - Show play count for each player in the player list
 
-## Refactoring
+### Refactoring
 
 - Custom implementation of form components instead of MUI:
   - Text/number input fields

@@ -1,69 +1,75 @@
-import { ChangeEvent, ChangeEventHandler, FocusEventHandler, Ref } from "react";
+import { FocusEventHandler, ReactNode, SyntheticEvent, useState } from "react";
+import useId from "../../hooks/useId";
+import DropdownMenu from "../dropdowns/DropdownMenu";
 import InputBase from "./FieldBase";
+import styles from "./SelectField.module.css";
 
 interface SelectFieldOption<Value> {
   value: Value;
-  label: string;
+  label: ReactNode;
+  description?: ReactNode;
   disabled?: boolean;
+  hideSelectedLabel?: boolean;
 }
 
 interface SelectFieldProps<Value> {
   label: string;
   className?: string;
   id?: string;
-  onFocus?: FocusEventHandler<HTMLSelectElement>;
-  inputRef?: Ref<HTMLSelectElement>;
+  onFocus?: FocusEventHandler<HTMLButtonElement>;
   value: Value;
   options: SelectFieldOption<Value>[];
-  onChange: (value: Value, event: ChangeEvent<HTMLSelectElement>) => void;
+  onChange: (value: Value, event: SyntheticEvent) => void;
 }
 
 function SelectField<Value>(props: SelectFieldProps<Value>) {
-  const { id, label, value, options, className, onChange, onFocus, inputRef } =
-    props;
-  const encodedOptions = options.map((option) => ({
-    ...option,
-    encodedValue: JSON.stringify(option.value),
-  }));
+  const { id, label, value, options, className, onChange, onFocus } = props;
+  const inputId = useId("select-", id);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const selectedEncodedValue = JSON.stringify(value);
-  const selectedOption = encodedOptions.find(
-    (option) => option.encodedValue === selectedEncodedValue
-  );
-  const onSelectChange: ChangeEventHandler<HTMLSelectElement> = (event) => {
-    const value = event.target.value;
-    const selectedEncodedOption = encodedOptions.find(
-      (option) => option.encodedValue === value
-    );
-    if (selectedEncodedOption) {
-      onChange(selectedEncodedOption.value, event);
-    }
-  };
+  const dropdownOptions = options.map((option) => ({
+    ...option,
+    selected: JSON.stringify(option.value) === selectedEncodedValue,
+  }));
+  const selectedOption = dropdownOptions.find((option) => option.selected);
+  const hideSelectedLabel = selectedOption?.hideSelectedLabel;
+  const selectedLabel = selectedOption?.label;
+  const hasVisibleLabel = !hideSelectedLabel && !!selectedLabel;
   return (
     <InputBase
       className={className}
       label={label}
-      hasValue={selectedOption != null && !!selectedOption.label}
+      labelFor={inputId}
+      hasValue={hasVisibleLabel}
     >
-      <select
-        id={id}
-        value={selectedEncodedValue}
-        onChange={onSelectChange}
-        onFocus={onFocus}
-        ref={inputRef}
+      <DropdownMenu
+        isOpen={isDropdownOpen}
+        onClose={() => setIsDropdownOpen(false)}
+        options={dropdownOptions}
+        overlaySelectedOption
+        onSelect={(option, event) => {
+          onChange(option.value, event);
+          setIsDropdownOpen(false);
+        }}
       >
-        {selectedOption ? null : (
-          <option value={selectedEncodedValue} disabled />
-        )}
-        {encodedOptions.map((option) => (
-          <option
-            key={option.encodedValue}
-            value={option.encodedValue}
-            disabled={option.disabled}
+        <button
+          id={inputId}
+          className={styles.input}
+          onClick={() => setIsDropdownOpen(true)}
+          onFocus={onFocus}
+        >
+          {/* This element makes sure that the input has a minimum size that fits the label text */}
+          <span
+            className={
+              hasVisibleLabel ? styles.minWidthFiller : styles.placeholder
+            }
+            aria-hidden
           >
-            {option.label}
-          </option>
-        ))}
-      </select>
+            {label}
+          </span>
+          {hasVisibleLabel && selectedLabel}
+        </button>
+      </DropdownMenu>
     </InputBase>
   );
 }
