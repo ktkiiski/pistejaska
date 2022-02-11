@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Refactoring
 
 - Nav bar is a custom non-MUI implementation
+- Do not use MUI circle spinner any more
 
 ## 2022-02-09
 

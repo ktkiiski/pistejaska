@@ -7,7 +7,6 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { SelectGame } from "./SelectGame";
 import { PlayEdit } from "./PlayEdit";
 import { PlayView } from "./PlayView";
-import { CircularProgress } from "@material-ui/core";
 import { MarkdownViewer } from "./MarkdownViewer";
 import { ThemeProvider } from "@material-ui/styles";
 import { createTheme } from "@material-ui/core/styles";
@@ -20,19 +19,14 @@ import { ReportPlayerView } from "./ReportPlayerView";
 import { ReportPlayerList } from "./ReportPlayerList";
 import Admin from "./Admin";
 import { getAuth } from "firebase/auth";
+import { LoadingSpinner } from "./common/components/LoadingSpinner";
 
-const center = {
-  position: "absolute" as any,
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-};
 const App = () => {
   const [user, loading] = useAuthState(getAuth());
   if (loading) {
     return (
-      <div style={center}>
-        <CircularProgress />
+      <div className="w-full h-screen flex flex-col items-center justify-center">
+        <LoadingSpinner />
       </div>
     );
   }
