@@ -9,12 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Refactoring
 
-- Nav bar is a custom non-MUI implementation
-- Do not use MUI circle spinner any more
-- Play list has simple "Show more" instead of MUI pagination
-- Player list uses custom non-MUI list components
-- All tables are custom non-MUI table components
-- All MUI styling is replaced by TailwindCSS
+- MaterialUI is no longer used!
+  - Nav bar is a custom non-MUI implementation
+  - Do not use MUI circle spinner any more
+  - Play list has simple "Show more" instead of MUI pagination
+  - Player list uses custom non-MUI list components
+  - All tables are custom non-MUI table components
+  - All MUI styling is replaced by TailwindCSS
+  - Removed `@material-ui` from dependencies
 
 ## 2022-02-09
 
