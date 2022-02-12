@@ -8,7 +8,7 @@ const Table: React.FC<HTMLAttributes<HTMLTableElement>> = ({
 }) => (
   <table
     className={classNames(
-      "border-collapse table-auto w-full lg:text-base text-xs",
+      "bg-white border-collapse table-auto w-full lg:text-base text-xs rounded overflow-hidden shadow",
       className
     )}
     {...props}

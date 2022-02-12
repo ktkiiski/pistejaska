@@ -86,10 +86,11 @@ export const ReportGameView = (props: RouteComponentProps<any>) => {
           : gamePlays.length}{" "}
         plays.
       </p>
-      <HighScoresReportTable game={game} plays={gamePlays} />
-
-      <GameScoreFieldReport game={game} plays={gamePlays} />
-      <ReportGameCorrelation game={game} plays={gamePlays} />
+      <div className="space-y-3">
+        <HighScoresReportTable game={game} plays={gamePlays} />
+        <GameScoreFieldReport game={game} plays={gamePlays} />
+        <ReportGameCorrelation game={game} plays={gamePlays} />
+      </div>
 
       {reportDimensions.map((x) => {
         const playsWithDimension = gamePlays.filter((p) =>
