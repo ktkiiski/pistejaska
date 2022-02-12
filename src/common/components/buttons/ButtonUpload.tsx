@@ -1,5 +1,5 @@
 import { ReactNode, useReducer, useState } from "react";
-import { defaultButtonClasses } from "./ButtonBase";
+import { buttonBaseClassName } from "./ButtonBase";
 
 interface UploadButtonProps {
   idleLabel: ReactNode;
@@ -42,7 +42,7 @@ function ButtonUpload({
     <label
       // Using ID to forcefully re-creating the file input on upload, to reset the selection
       key={id}
-      className={`${defaultButtonClasses} bg-purple-700 hover:bg-purple-800 ${
+      className={`${buttonBaseClassName} bg-purple-700 hover:bg-purple-800 ${
         isEnabled ? "" : "text-gray-400 bg-gray-300 hover:bg-gray-300"
       }`}
       {...props}
