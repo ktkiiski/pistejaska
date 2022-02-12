@@ -1,6 +1,5 @@
-import React, { useEffect, useReducer, useRef, useState } from "react";
+import { useEffect, useReducer, useRef, useState } from "react";
 import { GameDefinition, schema } from "./domain/game";
-import { makeStyles } from "@material-ui/core";
 import JsonEditor from "jsoneditor";
 import Ajv from "ajv";
 import { isEqual } from "lodash";
@@ -10,13 +9,6 @@ import ButtonDanger from "./common/components/buttons/ButtonDanger";
 import ButtonPrimary from "./common/components/buttons/ButtonPrimary";
 
 const ajv = new Ajv({ allErrors: true, verbose: true });
-
-const useStyles = makeStyles((theme) => ({
-  editor: {
-    marginBottom: "1em",
-    height: "600px",
-  },
-}));
 
 interface AdminGameEditorProps {
   json: GameDefinition;
@@ -38,7 +30,6 @@ function AdminGameEditor({
   onDelete,
   submitButtonLabel,
 }: AdminGameEditorProps) {
-  const styles = useStyles();
   const [inputJson, setInputJson] = useReducer(updateJson, json);
   const [outputJson, setOutputJson] = useState<GameDefinition | null>(null);
   const [isValid, setIsValid] = useState(true);
@@ -83,7 +74,7 @@ function AdminGameEditor({
 
   return (
     <>
-      <div className={styles.editor} ref={editorRef} />
+      <div className="h-[600px] mb-2" ref={editorRef} />
       <div>
         <ButtonPrimary disabled={isSubmitDisabled} onClick={onSubmitClick}>
           {submitButtonLabel}
