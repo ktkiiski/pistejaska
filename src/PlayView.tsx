@@ -216,8 +216,8 @@ const PlayTable = (
   };
 
   return (
-    <CardContent className="text-center">
-      <Table>
+    <>
+      <Table className="text-center">
         <TableHead>
           <TableRow key="1">
             <TableHeadCell key="category">Category</TableHeadCell>
@@ -279,6 +279,6 @@ const PlayTable = (
           </TableRow>
         </TableFooter>
       </Table>
-    </CardContent>
+    </>
   );
 };

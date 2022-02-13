@@ -1,9 +1,9 @@
 import React from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Link } from "react-router-dom";
-import { Button } from "@material-ui/core";
 import { getAuth, GoogleAuthProvider, signInWithRedirect } from "firebase/auth";
 import { LoadingSpinner } from "./common/components/LoadingSpinner";
+import ButtonPrimary from "./common/components/buttons/ButtonPrimary";
 
 export const Login = () => {
   const center = {
@@ -43,14 +43,9 @@ export const Login = () => {
   }
   return (
     <>
-      <Button
-        style={center}
-        onClick={login}
-        variant="contained"
-        color="primary"
-      >
+      <ButtonPrimary style={center} onClick={login}>
         Log in
-      </Button>
+      </ButtonPrimary>
       3rd party cookies must be enabled
     </>
   );

@@ -21,12 +21,19 @@ const ReportDimensionReportTable = (props: {
 
   const columns = [
     { name: dimension.name },
-    { name: "Win percentage" },
-    { name: "Use percentage" },
     {
-      name: "Average normalized rank",
+      name: "Wins",
+      tooltip: "Percentage of wins (or tied wins) of all the times used.",
+    },
+    {
+      name: "Usage",
       tooltip:
-        '100% = only wins, 0% = only losses, 50% =  "middle" position (e.g. 2nd in 3-player play)',
+        "Percentage and the number of all plays where this has been used.",
+    },
+    {
+      name: "Normalized rank",
+      tooltip:
+        'Average normalized rank in all of times this was used. 100% = only wins, 0% = only losses, 50% =  "middle" position (e.g. 2nd in 3-player play)',
     },
   ];
 

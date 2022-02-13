@@ -1,5 +1,3 @@
-import React from "react";
-import { List, ListItem, ListItemText } from "@material-ui/core";
 import { RouteComponentProps } from "react-router";
 import { flatMap, groupBy, orderBy } from "lodash";
 import { usePlays } from "./common/hooks/usePlays";
@@ -9,6 +7,9 @@ import { LoadingSpinner } from "./common/components/LoadingSpinner";
 import Heading1 from "./common/components/typography/Heading1";
 import ListItemDescription from "./common/components/lists/ListItemDescription";
 import { pluralize } from "./common/stringUtils";
+import List from "./common/components/lists/List";
+import ListItem from "./common/components/lists/ListItem";
+import ListItemText from "./common/components/lists/ListItemText";
 
 export const ReportPlayerList = (props: RouteComponentProps<{}>) => {
   const [plays, loading, error] = usePlays();
@@ -38,17 +39,13 @@ export const ReportPlayerList = (props: RouteComponentProps<{}>) => {
   return (
     <ViewContentLayout>
       <Heading1>Players</Heading1>
-      <List component="nav">
+      <List>
         {Object.keys(players).map((playerId) => {
           const player = players[playerId][0];
           const playCount = players[playerId].length;
           return (
-            <ListItem
-              button
-              onClick={() => onSelectPlayer(player)}
-              key={player.id}
-            >
-              <ListItemText primary={player.name} />
+            <ListItem onClick={() => onSelectPlayer(player)} key={player.id}>
+              <ListItemText title={player.name} />
               <ListItemDescription>
                 {pluralize(playCount, "play", "plays")}
               </ListItemDescription>

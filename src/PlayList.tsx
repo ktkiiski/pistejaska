@@ -1,5 +1,4 @@
-import { useState, useMemo, useCallback } from "react";
-import { TablePagination } from "@material-ui/core";
+import { useMemo, useCallback, useReducer } from "react";
 import { useHistory } from "react-router";
 import { Play } from "./domain/play";
 import { orderBy } from "lodash";
@@ -9,6 +8,7 @@ import ListItem from "./common/components/lists/ListItem";
 import ListItemIcon from "./common/components/lists/ListItemIcon";
 import ListItemText from "./common/components/lists/ListItemText";
 import ListItemDescription from "./common/components/lists/ListItemDescription";
+import ButtonTextOnly from "./common/components/buttons/ButtonTextOnly";
 
 interface PlayListProps {
   plays: Play[];
@@ -36,15 +36,9 @@ const PlayList = (props: PlayListProps) => {
     [plays]
   );
 
-  const [itemsPerPage, setItemsPerPage] = useState(10);
-  const [currentPage, setCurrentPage] = useState(0);
-
-  const currentData = useMemo(() => {
-    const offset = currentPage * itemsPerPage;
-    return data.slice(offset, offset + itemsPerPage);
-  }, [currentPage, data, itemsPerPage]);
-
-  const [showAll, setShowAll] = useState(false);
+  const [limit, increaseLimit] = useReducer((oldLimit) => oldLimit * 2, 10);
+  const currentData = data.slice(0, limit);
+  const hasMore = limit < data.length;
 
   const onSelectPlay = useCallback(
     (play: Play) => history.push("/view/" + play.id),
@@ -52,8 +46,8 @@ const PlayList = (props: PlayListProps) => {
   );
   return (
     <>
-      <List onClickShowAll={() => setShowAll(!showAll)}>
-        {(showAll ? data : currentData).map((play) => {
+      <List>
+        {currentData.map((play) => {
           const game = games.find((g) => g.id === play.gameId);
           return (
             <ListItem key={play.id} onClick={() => onSelectPlay(play)}>
@@ -81,27 +75,11 @@ const PlayList = (props: PlayListProps) => {
           );
         })}
       </List>
-
-      <TablePagination
-        component="div"
-        count={data.length}
-        rowsPerPage={itemsPerPage}
-        page={currentPage}
-        backIconButtonProps={{
-          "aria-label": "Previous Page",
-        }}
-        nextIconButtonProps={{
-          "aria-label": "Next Page",
-        }}
-        onPageChange={(e, page) => {
-          setCurrentPage(page);
-        }}
-        onChangeRowsPerPage={(e) => {
-          setCurrentPage(0);
-          setItemsPerPage((e as any).target.value);
-        }}
-        rowsPerPageOptions={[10, 25, 50, 100, 1000]}
-      />
+      {hasMore && (
+        <div className="mt-1 flex flex-col items-center">
+          <ButtonTextOnly onClick={increaseLimit}>Show more</ButtonTextOnly>
+        </div>
+      )}
     </>
   );
 };

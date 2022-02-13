@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import SwipeableViews from "react-swipeable-views";
-import { makeStyles } from "@material-ui/core";
 import { Player, Play, PlayDTO } from "./domain/play";
 import {
   Game,
@@ -19,25 +18,7 @@ import Button from "./common/components/buttons/Button";
 import ButtonPrimary from "./common/components/buttons/ButtonPrimary";
 import Heading1 from "./common/components/typography/Heading1";
 import Heading3 from "./common/components/typography/Heading3";
-import classNames from "classnames";
 import CheckboxField from "./common/components/inputs/CheckboxField";
-
-const useStyles = makeStyles({
-  heading: {
-    margin: "0.5em 2em",
-  },
-  view: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    textAlign: "left",
-    paddingBottom: "1em",
-  },
-  description: {
-    margin: "1em 2em",
-    textAlign: "center",
-  },
-});
 
 export const PlayForm = (props: {
   game: Game;
@@ -52,7 +33,6 @@ export const PlayForm = (props: {
 
   const [activeViewIndex, setActiveViewIndex] = useState(0);
   const hasExpansions = game.hasExpansions();
-  const styles = useStyles();
 
   let isSwitchingHack = false;
 
@@ -237,7 +217,10 @@ export const PlayForm = (props: {
 
   const views = [
     hasExpansions && (
-      <div key="expansions" className={styles.view}>
+      <div
+        key="expansions"
+        className="flex flex-col items-center text-left pb-2"
+      >
         <Heading3>Used expansions</Heading3>
         <div className="flex flex-col items-stretch space-y-2">
           {(game.expansions || []).map((expansion) =>
@@ -249,7 +232,10 @@ export const PlayForm = (props: {
     ...fieldGroups.map(({ group, fields: groupFields, viewId }, groupIndex) => {
       const viewIndex = startViewIndex + groupIndex;
       return (
-        <div key={viewId} className={classNames("space-y-1", styles.view)}>
+        <div
+          key={viewId}
+          className="space-y-1 flex flex-col items-center text-left pb-2"
+        >
           {group ? <Heading3>{group}</Heading3> : null}
           <FormFocusGroup focused={activeViewIndex === viewIndex}>
             {groupFields.map((item) => (
@@ -258,7 +244,9 @@ export const PlayForm = (props: {
                   <Heading3 id={item.field.id}>{item.field.name}</Heading3>
                 )}
                 {item.field.description ? (
-                  <p className={styles.description}>{item.field.description}</p>
+                  <p className="my-2 mx-2 text-center">
+                    {item.field.description}
+                  </p>
                 ) : null}
 
                 {item.type === "misc"

@@ -3,6 +3,7 @@ import CardContent from "../CardContent";
 const List: React.FC<{
   className?: string;
   onClickShowAll?: () => void;
+  // TODO: These are not in use. Remove or use?
   showPagination?: boolean;
   showShowAll?: boolean;
 }> = ({ children, onClickShowAll, showPagination, showShowAll, className }) => (

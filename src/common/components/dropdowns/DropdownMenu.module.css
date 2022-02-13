@@ -1,0 +1,68 @@
+.backdrop {
+  position: fixed;
+  z-index: 30;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  transition: opacity 150ms ease-out;
+}
+.column {
+  flex-grow: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+.leftFill {
+  flex-grow: 1;
+  flex-shrink: 0;
+  min-width: 0.5rem;
+}
+.rightFill {
+  flex-grow: 0;
+  flex-shrink: 0;
+  min-width: 0.5rem;
+}
+.topFill {
+  flex-grow: 1;
+  flex-shrink: 0;
+  min-height: 0.5rem;
+}
+.bottomFill {
+  flex-grow: 0;
+  flex-shrink: 0;
+  min-height: 0.5rem;
+}
+.menu {
+  transition: transform 100ms ease-out;
+  transform-origin: 50% 0%;
+}
+.enter {
+  opacity: 0;
+}
+.enter .menu {
+  transform: scale(0.5);
+}
+.enterActive {
+  opacity: 1;
+}
+.enterActive .menu {
+  transform: scale(1);
+}
+.exit {
+  opacity: 1;
+}
+.exit .menu {
+  transform: scale(1);
+}
+.exitActive {
+  opacity: 0;
+  pointer-events: none;
+}
+.exitActive .menu {
+  transform: scale(0.5);
+}

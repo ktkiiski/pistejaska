@@ -9,8 +9,17 @@ import {
   useRef,
 } from "react";
 import { createPortal } from "react-dom";
+import { CSSTransition } from "react-transition-group";
 import DropdownList from "./DropdownList";
 import DropdownListItem from "./DropdownListItem";
+import styles from "./DropdownMenu.module.css";
+
+const animationClassNames = {
+  enter: styles.enter,
+  enterActive: styles.enterActive,
+  exit: styles.exit,
+  exitActive: styles.exitActive,
+};
 
 export interface DropdownMenuOption {
   label: ReactNode;
@@ -39,7 +48,7 @@ function DropdownMenu<Option extends DropdownMenuOption>({
   overlaySelectedOption,
 }: DropdownMenuProps<Option>) {
   const anchorRef = useRef<HTMLElement | null>(null);
-  const popoverRef = useRef<HTMLUListElement | null>(null);
+  const listRef = useRef<HTMLUListElement | null>(null);
   const leftRef = useRef<HTMLDivElement | null>(null);
   const topRef = useRef<HTMLDivElement | null>(null);
   const firstSelectedOptionRef = useRef<HTMLLIElement | null>(null);
@@ -48,7 +57,7 @@ function DropdownMenu<Option extends DropdownMenuOption>({
     (option) => option.selected
   );
   const onBackdropClick: MouseEventHandler<HTMLDivElement> = (event) => {
-    if (!popoverRef.current?.contains(event.target as Node)) {
+    if (!listRef.current?.contains(event.target as Node)) {
       onClose(event);
     }
   };
@@ -85,38 +94,43 @@ function DropdownMenu<Option extends DropdownMenuOption>({
       }
     }
   });
-  const dropdown = isOpen && (
-    <div
-      className="fixed z-30 inset-0 overflow-hidden flex flex-row items-stretch"
-      onClick={onBackdropClick}
+  const dropdown = (
+    <CSSTransition
+      in={isOpen}
+      timeout={100}
+      classNames={animationClassNames}
+      mountOnEnter
+      unmountOnExit
     >
-      <div className="grow shrink-0 min-w-[0.5rem]" ref={leftRef} />
-      <div className="grow-0 flex flex-col">
-        <div className="grow shrink-0 min-h-[0.5rem]" ref={topRef} />
-        <DropdownList ref={popoverRef}>
-          {options.map((option, index) => (
-            <DropdownListItem
-              key={JSON.stringify(option.value)}
-              label={option.label}
-              description={option.description}
-              disabled={option.disabled}
-              selected={option.selected}
-              onClick={(event) => {
-                option.onSelect?.(event);
-                onSelect?.(option, event);
-              }}
-              ref={
-                index === firstSelectedOptionIndex
-                  ? firstSelectedOptionRef
-                  : null
-              }
-            />
-          ))}
-        </DropdownList>
-        <div className="grow-0 shrink-0 min-h-[0.5rem]" />
+      <div className={styles.backdrop} onClick={onBackdropClick}>
+        <div className={styles.leftFill} ref={leftRef} />
+        <div className={styles.column}>
+          <div className={styles.topFill} ref={topRef} />
+          <DropdownList ref={listRef} className={styles.menu}>
+            {options.map((option, index) => (
+              <DropdownListItem
+                key={JSON.stringify(option.value)}
+                label={option.label}
+                description={option.description}
+                disabled={option.disabled}
+                selected={option.selected}
+                onClick={(event) => {
+                  option.onSelect?.(event);
+                  onSelect?.(option, event);
+                }}
+                ref={
+                  index === firstSelectedOptionIndex
+                    ? firstSelectedOptionRef
+                    : null
+                }
+              />
+            ))}
+          </DropdownList>
+          <div className={styles.bottomFill} />
+        </div>
+        <div className={styles.rightFill} />
       </div>
-      <div className="grow-0 shrink-0 min-w-[0.5rem]" />
-    </div>
+    </CSSTransition>
   );
   return (
     <>

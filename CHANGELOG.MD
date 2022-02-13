@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2022-02-13
+
+### Refactoring
+
+- MaterialUI is no longer used!
+  - Nav bar is a custom non-MUI implementation
+  - Do not use MUI circle spinner any more
+  - Play list has simple "Show more" instead of MUI pagination
+  - Player list uses custom non-MUI list components
+  - All tables are custom non-MUI table components
+  - All MUI styling is replaced by TailwindCSS
+  - Removed `@material-ui` from dependencies
+
 ## 2022-02-09
 
 ### Refactoring

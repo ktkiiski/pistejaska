@@ -1,19 +1,25 @@
-import {
-  AppBar,
-  Toolbar,
-  Typography,
-  Button,
-  IconButton,
-} from "@material-ui/core";
 import { useCallback, useMemo, useState } from "react";
-import { useHistory } from "react-router-dom";
-import AccountCircle from "@material-ui/icons/AccountCircle";
+import { Link, useHistory } from "react-router-dom";
 import { getAuth, signOut } from "firebase/auth";
 import DropdownMenu from "./dropdowns/DropdownMenu";
 
 const logout = () => {
   signOut(getAuth());
 };
+
+const navBarLinkClassName =
+  "block py-2 px-3 rounded text-sm font-medium uppercase hover:bg-black/10";
+
+const menuIconSvg = (
+  <svg
+    className="inline-block w-6 h-6 fill-current"
+    focusable="false"
+    viewBox="0 0 24 24"
+    aria-hidden="true"
+  >
+    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"></path>
+  </svg>
+);
 
 export function NavBar() {
   const history = useHistory();
@@ -46,51 +52,39 @@ export function NavBar() {
     ],
     [history]
   );
-  const menuIcon = useMemo(
-    () => (
-      <IconButton
-        aria-label="More options"
-        aria-controls="menu-appbar"
-        aria-haspopup="true"
-        onClick={openMenu}
-        color="inherit"
-      >
-        <AccountCircle />
-      </IconButton>
-    ),
-    [openMenu]
-  );
   return (
     <div>
-      <AppBar position="static">
-        <Toolbar variant="dense">
-          <Typography
-            variant="h6"
-            className="text-left grow cursor-pointer"
-            color="inherit"
-            onClick={() => history.push("/")}
-          >
-            Pistejaska
-          </Typography>
-          <Button color="inherit" onClick={() => history.push("/")}>
+      <header className="bg-blue-800 h-12 flex flex-row items-center text-white shadow-lg">
+        <h1 className="grow px-3 text-left text-2xl font-bold cursor-pointer">
+          Pistejaska
+        </h1>
+        <div className="flex flex-row items-center grow-0 shrink-0">
+          <Link className={navBarLinkClassName} to="/">
             Plays
-          </Button>
-          <Button color="inherit" onClick={() => history.push("/new")}>
+          </Link>
+          <Link className={navBarLinkClassName} to="/new">
             New
-          </Button>
-          <Button color="inherit" onClick={() => history.push("/games")}>
+          </Link>
+          <Link className={navBarLinkClassName} to="/games">
             Games
-          </Button>
+          </Link>
           <DropdownMenu
             isOpen={isDropdownOpen}
             options={menuOptions}
             onClose={closeMenu}
             onSelect={closeMenu}
           >
-            {menuIcon}
+            <button
+              className={navBarLinkClassName}
+              aria-label="More options"
+              aria-haspopup
+              onClick={openMenu}
+            >
+              {menuIconSvg}
+            </button>
           </DropdownMenu>
-        </Toolbar>
-      </AppBar>
+        </div>
+      </header>
     </div>
   );
 }

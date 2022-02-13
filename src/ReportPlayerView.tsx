@@ -87,7 +87,7 @@ export const ReportPlayerView = (props: RouteComponentProps<any>) => {
       {!playmates.length ? null : (
         <div className="my-4">
           <Heading3>Most common playmates</Heading3>
-          <Table className="bg-white">
+          <Table>
             <TableHead>
               <TableHeadCell>Playmate</TableHeadCell>
               <TableHeadCell>Play count</TableHeadCell>

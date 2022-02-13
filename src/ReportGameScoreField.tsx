@@ -90,7 +90,7 @@ function GameScoreFieldReport(props: { game: Game; plays: Play[] }) {
       name: "Score category",
     },
     {
-      name: "Average score of winners",
+      name: "Avg. score of winners",
     },
     {
       name: "Correlation with ranking",
