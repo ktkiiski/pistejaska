@@ -22,7 +22,6 @@
     "react-transition-group": "^4.4.2",
     "recharts": "^1.8.5",
     "ts-trueskill": "^3.2.2",
-    "use-key-hook": "^1.5.0",
     "uuid": "^8.3.2"
   },
   "scripts": {
@@ -45,7 +44,6 @@
   "devDependencies": {
     "@google-cloud/firestore": "^4.15.1",
     "@types/classnames": "^2.3.1",
-    "@types/elo-rank": "^1.0.1",
     "@types/jest": "26.0.15",
     "@types/jsoneditor": "^8.6.2",
     "@types/lodash": "^4.14.178",
@@ -55,6 +53,7 @@
     "@types/react-router-dom": "5.1.6",
     "@types/react-swipeable-views": "^0.13.1",
     "@types/react-tooltip": "^4.2.4",
+    "@types/react-transition-group": "^4.4.4",
     "@types/recharts": "^1.8.23",
     "@types/uuid": "^8.3.3",
     "@types/webpack-env": "^1.16.3",
