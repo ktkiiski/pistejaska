@@ -123,6 +123,86 @@ export const PlayView = (props: RouteComponentProps<any>) => {
       <></>
     );
 
+  const MiscFields = () => (
+    <>
+      Played on {play.getDate().toLocaleDateString()}
+      {game.hasExpansions() && (
+        <div>
+          <span className="text-slate-500">Used expansions: </span>
+          {(game.expansions || [])
+            .filter(({ id }) => play.expansions.includes(id))
+            .map(({ name }) => name)
+            .join(", ") || "None"}
+        </div>
+      )}
+      {play.misc
+        .filter(
+          (x) =>
+            x.fieldId !== "images" &&
+            x.fieldId !== "name" &&
+            x.fieldId !== "date"
+        )
+        .map((misc, idx) => (
+          <div key={idx}>
+            <span className="text-slate-500">{getFieldName(misc)}: </span>
+            {misc.fieldId === "duration"
+              ? formatDuration(misc.data as number)
+              : misc.data}
+          </div>
+        ))}
+    </>
+  );
+
+  const MobileHeader = () => (
+    <div className="block md:hidden">
+      <div className="flex shadow-lg -mt-2 -ml-2 -mr-2 mb-4 rounded-t-xl p-2 bg-gradient-to-l from-slate-300 to-white">
+        <img
+          className="object-cover object-top  w-24 h-24 rounded-full shadow-lg"
+          alt={game.name}
+          src={game.icon}
+        />
+        <div className="flex flex-col py-5 pl-4">
+          <strong className="text-slate-900 text-xl font-medium text-left">
+            Play: {game.name}
+          </strong>
+          <div className="text-slate-500 font-medium text-sm sm:text-base leading-tight truncate text-left">
+            {play.getName()}
+          </div>
+        </div>
+      </div>
+
+      <CardContent className="p-2">
+        <MiscFields></MiscFields>
+      </CardContent>
+    </div>
+  );
+
+  const DesktopHeader = () => (
+    <div className="hidden md:block">
+      <div className="flex bg-white rounded-xl -mt-2 -ml-2 -mr-2">
+        <div className="flex-none w-64 relative">
+          <img
+            className="absolute inset-0 w-full h-full rounded-tl-xl"
+            alt={game.name}
+            src={game.icon}
+          />
+        </div>
+        <div className="flex-auto p-6 shadow-xl">
+          <strong className="text-gray-900 text-2xl font-medium text-left">
+            Play: {game.name}
+          </strong>
+          <div className="text-gray-500 font-medium text-sm sm:text-base leading-tight truncate text-left">
+            {play.getName()}
+          </div>
+
+          <div className="mt-8 opacity-60">
+            <MiscFields></MiscFields>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
   return (
     <ViewContentLayout
       header={<ButtonBack onClick={onBack} />}
@@ -141,52 +221,8 @@ export const PlayView = (props: RouteComponentProps<any>) => {
         </CardButtonRow>
       }
     >
-      <div className="flex shadow-lg -mt-2 -ml-2 -mr-2 mb-4 rounded-t-xl p-2 bg-gradient-to-l from-slate-300 to-white">
-        <img
-          className="object-cover object-top  w-24 h-24 rounded-full shadow-lg"
-          alt={game.name}
-          src={game.icon}
-        />
-        <div className="flex flex-col py-5 pl-4">
-          <strong className="text-slate-900 text-xl font-medium text-left">
-            Play: {game.name}
-          </strong>
-          <div className="text-slate-500 font-medium text-sm sm:text-base leading-tight truncate text-left">
-            {play.getName()}
-          </div>
-        </div>
-      </div>
-
-      <CardContent className="p-2">
-        <div className="pb-2">
-          Played on {play.getDate().toLocaleDateString()}
-        </div>
-        {game.hasExpansions() && (
-          <div>
-            <span className="text-slate-500">Used expansions: </span>
-            {(game.expansions || [])
-              .filter(({ id }) => play.expansions.includes(id))
-              .map(({ name }) => name)
-              .join(", ") || "None"}
-          </div>
-        )}
-        {play.misc
-          .filter(
-            (x) =>
-              x.fieldId !== "images" &&
-              x.fieldId !== "name" &&
-              x.fieldId !== "date"
-          )
-          .map((misc, idx) => (
-            <div key={idx}>
-              <span className="text-slate-500">{getFieldName(misc)}: </span>
-              {misc.fieldId === "duration"
-                ? formatDuration(misc.data as number)
-                : misc.data}
-            </div>
-          ))}
-      </CardContent>
-
+      <MobileHeader />
+      <DesktopHeader />
       <Heading2>Scores</Heading2>
       <PlayTable game={game} play={play} {...props} />
 

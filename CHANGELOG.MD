@@ -24,7 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- New design to play view
+- New design to play view. Separate designs for mobile & desktop.
 - Gray color to slate color in all views
 
 ## 2022-02-09
