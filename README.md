@@ -18,7 +18,7 @@ Using the app requires Google login with whitelisted email. Emails are whitelist
 
 This project uses Firebase's authentication & Firestore as database. Admin is panu.vuorinen@gmail.com.
 
-The major libraries used in this project: React.js, Firebase, Material UI, Tailwind CSS.
+The major libraries used in this project: React.js, Firebase, Tailwind CSS.
 
 ## Developing
 
@@ -87,7 +87,9 @@ If you need to perform data migrations, do this:
 
 ## TODO
 
-- Refactor Material UI away & replace it with custom-made Tailwind CSS components
+- Add pagination to list views
+- Add commenting to plays
+- Add notifications
 - Consider optimizing build with esbuild (replace create-react-app or part of it?)
 - change "misc score field" for unknown expansion scores to be the last field of the PlayForm
 - statistical analysis for strongest victory predictor (eg. start order (is starting player more likely to win), number of dwarfs in caverna, player, race used)
