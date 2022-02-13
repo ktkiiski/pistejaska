@@ -22,6 +22,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Link to front page from app name in navbar
 
+### Changed
+
+- New design to play view
+
 ## 2022-02-09
 
 ### Refactoring

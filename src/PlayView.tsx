@@ -141,13 +141,13 @@ export const PlayView = (props: RouteComponentProps<any>) => {
         </CardButtonRow>
       }
     >
-      <div className="overflow-visible m-10 relative mx-auto bg-white shadow-lg ring-1 ring-black/5 rounded-xl flex items-center gap-6 ml-4 md:ml-6">
+      <div className="flex shadow-lg -mt-2 -ml-2 -mr-2 mb-4 rounded-t-xl p-2 bg-gradient-to-l from-slate-300 to-white">
         <img
-          className="object-cover object-top absolute -left-4 md:-left-6 w-24 h-24 md:w-28 md:h-28 rounded-full shadow-lg"
+          className="object-cover object-top  w-24 h-24 rounded-full shadow-lg"
           alt={game.name}
           src={game.icon}
         />
-        <div className="flex flex-col py-5 pl-24">
+        <div className="flex flex-col py-5 pl-4">
           <strong className="text-gray-900 text-xl font-medium text-left">
             Play: {game.name}
           </strong>
@@ -157,11 +157,13 @@ export const PlayView = (props: RouteComponentProps<any>) => {
         </div>
       </div>
 
-      <CardContent className="p-2 text-center">
-        <div>Played on {play.getDate().toLocaleDateString()}</div>
+      <CardContent className="p-2">
+        <div className="pb-2">
+          Played on {play.getDate().toLocaleDateString()}
+        </div>
         {game.hasExpansions() && (
           <div>
-            Used expansions:{" "}
+            <span className="text-gray-500">Used expansions: </span>
             {(game.expansions || [])
               .filter(({ id }) => play.expansions.includes(id))
               .map(({ name }) => name)
@@ -169,10 +171,15 @@ export const PlayView = (props: RouteComponentProps<any>) => {
           </div>
         )}
         {play.misc
-          .filter((x) => x.fieldId !== "images")
+          .filter(
+            (x) =>
+              x.fieldId !== "images" &&
+              x.fieldId !== "name" &&
+              x.fieldId !== "date"
+          )
           .map((misc, idx) => (
             <div key={idx}>
-              {getFieldName(misc)}:{" "}
+              <span className="text-gray-500">{getFieldName(misc)}: </span>
               {misc.fieldId === "duration"
                 ? formatDuration(misc.data as number)
                 : misc.data}
