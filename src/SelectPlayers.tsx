@@ -8,7 +8,6 @@ import { LoadingSpinner } from "./common/components/LoadingSpinner";
 import { getFirestore, setDoc, doc } from "firebase/firestore";
 import { Game } from "./domain/game";
 import { app } from "./common/firebase";
-import { useHistory } from "react-router-dom";
 import CardButtonRow from "./common/components/buttons/CardButtonRow";
 import Button from "./common/components/buttons/Button";
 import ButtonPrimary from "./common/components/buttons/ButtonPrimary";
@@ -20,6 +19,7 @@ import ListItemText from "./common/components/lists/ListItemText";
 import { shuffle } from "lodash";
 import ButtonLight from "./common/components/buttons/ButtonLight";
 import InputTextField from "./common/components/inputs/InputTextField";
+import { useNavigate } from "react-router-dom";
 
 function shiftRandomly<T>(values: T[]) {
   const offset = Math.floor(Math.random() * values.length);
@@ -52,7 +52,7 @@ const SelectPlayers = (props: {
   gameId: string;
   initialPlayers?: Player[];
 }) => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [games, isLoadingGames] = useGames();
   const { gameId, initialPlayers = [] } = props;
   const game = games?.find((g) => g.id === gameId);
@@ -82,7 +82,7 @@ const SelectPlayers = (props: {
     setIsStarting(true);
     try {
       const play = await createPlay(gameId, players);
-      history.push(`/edit/${play.id}`);
+      navigate(`/edit/${play.id}`);
     } catch (error) {
       console.error(error);
       setIsStarting(false);

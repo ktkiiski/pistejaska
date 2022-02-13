@@ -1,4 +1,3 @@
-import { RouteComponentProps } from "react-router";
 import { flatMap, groupBy, orderBy } from "lodash";
 import { usePlays } from "./common/hooks/usePlays";
 import { Player } from "./domain/play";
@@ -10,9 +9,11 @@ import { pluralize } from "./common/stringUtils";
 import List from "./common/components/lists/List";
 import ListItem from "./common/components/lists/ListItem";
 import ListItemText from "./common/components/lists/ListItemText";
+import { useNavigate } from "react-router-dom";
 
-export const ReportPlayerList = (props: RouteComponentProps<{}>) => {
+export const ReportPlayerList = () => {
   const [plays, loading, error] = usePlays();
+  const navigate = useNavigate();
 
   if (error) {
     return (
@@ -25,8 +26,7 @@ export const ReportPlayerList = (props: RouteComponentProps<{}>) => {
     return <LoadingSpinner />;
   }
 
-  const onSelectPlayer = (player: Player) =>
-    props.history.push("/players/" + player.id);
+  const onSelectPlayer = (player: Player) => navigate(`/players/${player.id}`);
 
   const players = groupBy(
     orderBy(

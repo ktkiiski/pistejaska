@@ -1,4 +1,3 @@
-import { useHistory } from "react-router";
 import { groupBy, mapValues, orderBy } from "lodash";
 import { Game, GameDefinition } from "./domain/game";
 import { useGames } from "./common/hooks/useGames";
@@ -15,6 +14,7 @@ import ListItem from "./common/components/lists/ListItem";
 import ListItemIcon from "./common/components/lists/ListItemIcon";
 import ListItemText from "./common/components/lists/ListItemText";
 import ListItemDescription from "./common/components/lists/ListItemDescription";
+import { useNavigate } from "react-router-dom";
 
 type GameSortCriteriaId = "alphabetic" | "popular" | "shortest" | "longest";
 
@@ -56,7 +56,7 @@ function useGameStats() {
 }
 
 export const ReportGameList = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [games, loadingGames] = useGames();
   const gameStats = useGameStats();
   const sortCriterias: Record<GameSortCriteriaId, GameSortCriteria> = {
@@ -93,7 +93,7 @@ export const ReportGameList = () => {
   const [sortCriteria, setSortCriteria] =
     useState<GameSortCriteriaId>("alphabetic");
   const onSelectGame = (game: GameDefinition) => {
-    history.push("/games/" + game.id);
+    navigate(`/games/${game.id}`);
   };
   const currentSortCriteria = sortCriterias[sortCriteria];
   const sortedGameItems = orderBy(

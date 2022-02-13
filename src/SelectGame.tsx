@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { RouteComponentProps } from "react-router";
+import { FC, useState } from "react";
 import { Game, GameDefinition } from "./domain/game";
 import { useGames } from "./common/hooks/useGames";
 import ViewContentLayout from "./common/components/ViewContentLayout";
@@ -11,6 +10,7 @@ import ListItem from "./common/components/lists/ListItem";
 import ListItemIcon from "./common/components/lists/ListItemIcon";
 import ListItemText from "./common/components/lists/ListItemText";
 import InputTextField from "./common/components/inputs/InputTextField";
+import { useNavigate } from "react-router-dom";
 
 const maxRecentlyPlayedGames = 6;
 
@@ -39,11 +39,11 @@ function useRecentlyPlayedGames(games: Game[]) {
   return recentlyPlayedGames;
 }
 
-export const SelectGame = (props: RouteComponentProps<{}>) => {
+export const SelectGame: FC = () => {
   const [games] = useGames();
+  const navigate = useNavigate();
   const recentlyPlayedGames = useRecentlyPlayedGames(games);
-  const onSelectGame = (game: GameDefinition) =>
-    props.history.push("/new/" + game.id);
+  const onSelectGame = (game: GameDefinition) => navigate(`/new/${game.id}`);
 
   const [searchTerm, setSearchTerm] = useState("");
   const listedGames = (games || []).map((game) => ({

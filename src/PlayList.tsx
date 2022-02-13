@@ -1,5 +1,4 @@
 import { useMemo, useCallback, useReducer } from "react";
-import { useHistory } from "react-router";
 import { Play } from "./domain/play";
 import { orderBy } from "lodash";
 import { Game } from "./domain/game";
@@ -9,6 +8,7 @@ import ListItemIcon from "./common/components/lists/ListItemIcon";
 import ListItemText from "./common/components/lists/ListItemText";
 import ListItemDescription from "./common/components/lists/ListItemDescription";
 import ButtonTextOnly from "./common/components/buttons/ButtonTextOnly";
+import { useNavigate } from "react-router-dom";
 
 interface PlayListProps {
   plays: Play[];
@@ -28,7 +28,7 @@ function getPlayLabel(play: Play) {
 
 const PlayList = (props: PlayListProps) => {
   const { plays, games } = props;
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const data = useMemo(
     () =>
@@ -41,8 +41,8 @@ const PlayList = (props: PlayListProps) => {
   const hasMore = limit < data.length;
 
   const onSelectPlay = useCallback(
-    (play: Play) => history.push("/view/" + play.id),
-    [history]
+    (play: Play) => navigate(`/view/${play.id}`),
+    [navigate]
   );
   return (
     <>

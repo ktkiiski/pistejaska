@@ -1,4 +1,4 @@
-import { RouteComponentProps } from "react-router";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
 import { Play, PlayDTO } from "./domain/play";
 import { PlayForm } from "./PlayForm";
@@ -10,7 +10,6 @@ import { getFirestore, doc, updateDoc } from "firebase/firestore";
 import { LoadingSpinner } from "./common/components/LoadingSpinner";
 import ViewContentLayout from "./common/components/ViewContentLayout";
 import { isEmpty } from "lodash";
-import { useHistory } from "react-router-dom";
 import { v4 as uuid } from "uuid";
 import Spinner from "./common/components/Spinner";
 import useConfirmLeave from "./common/hooks/useConfirmLeave";
@@ -32,9 +31,9 @@ async function updatePlay(playId: string, changes: Partial<PlayDTO>) {
 // Wait for 5 seconds until to save automatically
 const autoSaveInterval = 5000;
 
-export const PlayEdit = (props: RouteComponentProps<any>) => {
-  const history = useHistory();
-  const playId = props.match.params["playId"];
+export const PlayEdit = () => {
+  const navigate = useNavigate();
+  const playId = useParams().playId as string;
   const [games, isLoadingGames] = useGames();
   const [loadedPlay, isLoadingPlay] = usePlay(playId);
   const [unsavedChanges, setUnsavedChanges] = useState<Partial<PlayDTO>>({});
@@ -89,9 +88,9 @@ export const PlayEdit = (props: RouteComponentProps<any>) => {
   useEffect(() => {
     if (isDone && !isSaving && !isSaveTriggered && !hasUnsavedChanges) {
       // When done and everything saved, redirect to view the play
-      history.push(`/view/${playId}`);
+      navigate(`/view/${playId}`);
     }
-  }, [history, isDone, isSaving, hasUnsavedChanges, playId, isSaveTriggered]);
+  }, [navigate, isDone, isSaving, hasUnsavedChanges, playId, isSaveTriggered]);
 
   /**
    * Wait for a certain time whenever there is something to save

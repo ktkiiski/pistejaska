@@ -1,11 +1,10 @@
-import { RouteComponentProps } from "react-router";
-import { useState } from "react";
+import { FC, useState } from "react";
 import { Play, MiscDataDTO } from "./domain/play";
 import { useGames } from "./common/hooks/useGames";
 import { GameMiscFieldDefinition, Game } from "./domain/game";
 import { sortBy } from "lodash";
 import { getFirestore, deleteDoc, doc } from "firebase/firestore";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { LoadingSpinner } from "./common/components/LoadingSpinner";
 import { app } from "./common/firebase";
 import { usePlay } from "./common/hooks/usePlay";
@@ -30,9 +29,10 @@ import TableCell from "./common/components/tables/TableCell";
 import TableBody from "./common/components/tables/TableBody";
 import TableFooter from "./common/components/tables/TableFooter";
 
-export const PlayView = (props: RouteComponentProps<any>) => {
+export const PlayView: FC = () => {
   const [games] = useGames();
-  const playId = props.match.params["playId"];
+  const playId = useParams().playId!;
+  const navigate = useNavigate();
 
   const [play, loading, error] = usePlay(playId);
 
@@ -40,7 +40,7 @@ export const PlayView = (props: RouteComponentProps<any>) => {
 
   if (error) return <>Error: {error}</>;
 
-  const onBack = () => props.history.push("/");
+  const onBack = () => navigate("/");
 
   if (loading) {
     return (
@@ -56,9 +56,9 @@ export const PlayView = (props: RouteComponentProps<any>) => {
   const game = games?.find((g) => g.id === play.gameId);
   if (!game) return <>Game not found!</>;
 
-  const onEditPlay = () => props.history.push("/edit/" + play.id);
+  const onEditPlay = () => navigate("/edit/" + play.id);
 
-  const onReplay = () => props.history.push(`/replay/${playId}`);
+  const onReplay = () => navigate(`/replay/${playId}`);
 
   const onDelete = async () => {
     const reallyDelete = await window.confirm(
@@ -68,7 +68,7 @@ export const PlayView = (props: RouteComponentProps<any>) => {
     const db = getFirestore(app);
     await deleteDoc(doc(db, "plays-v1", playId));
 
-    props.history.push("/");
+    navigate("/");
   };
 
   const getFieldName = (misc: MiscDataDTO): string => {
@@ -214,7 +214,7 @@ export const PlayView = (props: RouteComponentProps<any>) => {
             <span className="hidden md:inline">Play</span>
             {" again"}
           </Button>
-          <Button onClick={() => props.history.push(`/games/${game.id}`)}>
+          <Button onClick={() => navigate(`/games/${game.id}`)}>
             <span className="hidden md:inline">Show</span>
             {" reports"}
           </Button>
@@ -224,16 +224,14 @@ export const PlayView = (props: RouteComponentProps<any>) => {
       <MobileHeader />
       <DesktopHeader />
       <Heading2>Scores</Heading2>
-      <PlayTable game={game} play={play} {...props} />
+      <PlayTable game={game} play={play} />
 
       <PlayImages />
     </ViewContentLayout>
   );
 };
 
-const PlayTable = (
-  props: { game: Game; play: Play } & RouteComponentProps<{}>
-) => {
+const PlayTable = (props: { game: Game; play: Play }) => {
   const { game, play } = props;
   const hasTieBreaker =
     play.scores.filter((x) => x.fieldId === "tie-breaker" && x.score).length >
