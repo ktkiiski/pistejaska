@@ -11,7 +11,7 @@ const ButtonPrimary: React.FC<ButtonHTMLAttributes<HTMLButtonElement>> = ({
     {...props}
     className={classNames(
       props.disabled
-        ? "text-gray-400 bg-gray-300"
+        ? "text-slate-400 bg-slate-300"
         : "bg-purple-700 hover:bg-purple-800",
       className
     )}

@@ -8,7 +8,7 @@ const TableCell: React.FC<TdHTMLAttributes<HTMLTableCellElement>> = ({
 }) => (
   <td
     className={classNames(
-      "border-b border-gray-200 p-1 text-gray-700",
+      "border-b border-slate-200 p-1 text-slate-700",
       className
     )}
     {...props}

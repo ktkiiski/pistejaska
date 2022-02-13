@@ -12,7 +12,7 @@ const ButtonLight: React.FC<ButtonHTMLAttributes<HTMLButtonElement>> = ({
     className={classNames(
       "bg-white",
       props.disabled
-        ? "text-gray-300"
+        ? "text-slate-300"
         : "text-blue-500 hover:text-blue-600 hover:bg-blue-100",
       className
     )}

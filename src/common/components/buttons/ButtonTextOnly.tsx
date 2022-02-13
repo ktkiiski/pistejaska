@@ -12,7 +12,7 @@ const ButtonTextOnly: React.FC<ButtonHTMLAttributes<HTMLButtonElement>> = ({
     className={classNames(
       "shadow-transparent bg-transparent",
       props.disabled
-        ? "text-gray-300"
+        ? "text-slate-300"
         : "text-blue-500 hover:text-blue-600 hover:bg-blue-400/10",
       className
     )}

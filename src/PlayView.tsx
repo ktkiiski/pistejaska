@@ -148,10 +148,10 @@ export const PlayView = (props: RouteComponentProps<any>) => {
           src={game.icon}
         />
         <div className="flex flex-col py-5 pl-4">
-          <strong className="text-gray-900 text-xl font-medium text-left">
+          <strong className="text-slate-900 text-xl font-medium text-left">
             Play: {game.name}
           </strong>
-          <div className="text-gray-500 font-medium text-sm sm:text-base leading-tight truncate text-left">
+          <div className="text-slate-500 font-medium text-sm sm:text-base leading-tight truncate text-left">
             {play.getName()}
           </div>
         </div>
@@ -163,7 +163,7 @@ export const PlayView = (props: RouteComponentProps<any>) => {
         </div>
         {game.hasExpansions() && (
           <div>
-            <span className="text-gray-500">Used expansions: </span>
+            <span className="text-slate-500">Used expansions: </span>
             {(game.expansions || [])
               .filter(({ id }) => play.expansions.includes(id))
               .map(({ name }) => name)
@@ -179,7 +179,7 @@ export const PlayView = (props: RouteComponentProps<any>) => {
           )
           .map((misc, idx) => (
             <div key={idx}>
-              <span className="text-gray-500">{getFieldName(misc)}: </span>
+              <span className="text-slate-500">{getFieldName(misc)}: </span>
               {misc.fieldId === "duration"
                 ? formatDuration(misc.data as number)
                 : misc.data}
@@ -245,7 +245,7 @@ const PlayTable = (
               {players.map((f, idx) => (
                 <TableCell
                   key={f.id}
-                  className={idx % 2 === 0 ? "bg-gray-50" : ""}
+                  className={idx % 2 === 0 ? "bg-slate-50" : ""}
                 >
                   {formatNthNumber(play.players.lastIndexOf(f) + 1)}
                 </TableCell>
@@ -260,7 +260,7 @@ const PlayTable = (
               {players.map((p, idx) => (
                 <TableCell
                   key={p.id}
-                  className={idx % 2 === 0 ? "bg-gray-50" : ""}
+                  className={idx % 2 === 0 ? "bg-slate-50" : ""}
                 >
                   {
                     (

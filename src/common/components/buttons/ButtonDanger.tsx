@@ -11,7 +11,7 @@ const ButtonDanger: React.FC<ButtonHTMLAttributes<HTMLButtonElement>> = ({
     {...props}
     className={classNames(
       props.disabled
-        ? "text-gray-400 bg-gray-300"
+        ? "text-slate-400 bg-slate-300"
         : "bg-red-600 hover:bg-red-700",
       className
     )}

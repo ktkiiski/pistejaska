@@ -8,7 +8,7 @@ const Heading2: React.FC<HTMLAttributes<HTMLHeadingElement>> = ({
 }) => (
   <h2
     className={classNames(
-      "text-center text-xl font-bold text-gray-500 mt-4 mb-2",
+      "text-center text-xl font-bold text-slate-500 mt-4 mb-2",
       className
     )}
     {...props}

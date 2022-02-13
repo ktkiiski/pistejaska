@@ -18,8 +18,8 @@ const List: React.FC<{
     {/* TODO PANU: use pagination */}
     {showPagination && (
       <div className="flex flex-col items-center mt-4 mb-2">
-        <div className="flex text-gray-700">
-          <div className="h-8 w-8 mr-1 flex justify-center items-center rounded-full bg-gray-200 cursor-pointer">
+        <div className="flex text-slate-700">
+          <div className="h-8 w-8 mr-1 flex justify-center items-center rounded-full bg-slate-200 cursor-pointer">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="100%"
@@ -35,7 +35,7 @@ const List: React.FC<{
               <polyline points="15 18 9 12 15 6"></polyline>
             </svg>
           </div>
-          <div className="flex h-8 font-medium rounded-full bg-gray-200">
+          <div className="flex h-8 font-medium rounded-full bg-slate-200">
             <div className="w-8 flex justify-center items-center   cursor-pointer leading-5 transition duration-150 ease-in  rounded-full  ">
               1
             </div>
@@ -59,7 +59,7 @@ const List: React.FC<{
             </div>
           </div>
 
-          <div className="h-8 w-8 ml-1 flex justify-center items-center rounded-full bg-gray-200 cursor-pointer">
+          <div className="h-8 w-8 ml-1 flex justify-center items-center rounded-full bg-slate-200 cursor-pointer">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="100%"
@@ -80,7 +80,7 @@ const List: React.FC<{
     )}
 
     {showShowAll && (
-      <div className="text-gray-600 text-xs w-100 text-right">
+      <div className="text-slate-600 text-xs w-100 text-right">
         <div onClick={onClickShowAll} className="cursor-pointer">
           Show all
         </div>

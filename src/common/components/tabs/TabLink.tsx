@@ -15,7 +15,7 @@ const TabLink: FC<TabProps> = ({ children, className, active, ...props }) => {
           "block cursor-pointer py-2 px-4 border-b-8 flex flex-col items-center justify-center text-center",
           active
             ? "text-blue-500 border-blue-500"
-            : "text-gray-500 hover:text-gray-600 border-gray-200",
+            : "text-slate-500 hover:text-slate-600 border-slate-200",
           className
         )}
         {...props}

@@ -69,7 +69,7 @@ const PlayList = (props: PlayListProps) => {
               <ListItemDescription>
                 {play.getDate().toLocaleDateString()}
                 <br />
-                <span className="text-gray-300">{getPlayLabel(play)}</span>
+                <span className="text-slate-300">{getPlayLabel(play)}</span>
               </ListItemDescription>
             </ListItem>
           );

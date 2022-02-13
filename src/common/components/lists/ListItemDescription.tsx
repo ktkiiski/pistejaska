@@ -1,5 +1,5 @@
 const ListItemDescription: React.FC = ({ children }) => (
-  <p className="text-gray-600 text-right text-xs whitespace-pre-line">
+  <p className="text-slate-600 text-right text-xs whitespace-pre-line">
     {children}
   </p>
 );

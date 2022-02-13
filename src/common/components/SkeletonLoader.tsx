@@ -11,17 +11,18 @@ export const SkeletonLoader: React.FC = () => {
       {items.map((x) => (
         <div
           key={x}
-          className={`bg-white p-4 ring-1 ring-gray-900/5  shadow-lg w-full ${isFirst(x) ? "rounded-t-lg" : isLast(x) ? "rounded-b-lg" : ""
-            }`}
+          className={`bg-white p-4 ring-1 ring-slate-900/5  shadow-lg w-full ${
+            isFirst(x) ? "rounded-t-lg" : isLast(x) ? "rounded-b-lg" : ""
+          }`}
         >
           <div className="flex space-x-4 animate-pulse w-full">
-            <div className="rounded-full bg-gray-200 h-14 w-14"></div>
+            <div className="rounded-full bg-slate-200 h-14 w-14"></div>
             <div className="flex-1 space-y-6 py-1 w-80">
-              <div className="h-2 bg-gray-200 rounded"></div>
+              <div className="h-2 bg-slate-200 rounded"></div>
               <div className="space-y-3">
                 <div className="grid grid-cols-3 gap-4">
-                  <div className="h-2 bg-gray-200 rounded col-span-2"></div>
-                  <div className="h-2 bg-gray-200 rounded col-span-1"></div>
+                  <div className="h-2 bg-slate-200 rounded col-span-2"></div>
+                  <div className="h-2 bg-slate-200 rounded col-span-1"></div>
                 </div>
               </div>
             </div>
