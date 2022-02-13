@@ -55,8 +55,8 @@ export function NavBar() {
   return (
     <div>
       <header className="bg-blue-800 h-12 flex flex-row items-center text-white shadow-lg">
-        <h1 className="grow px-3 text-left text-2xl font-bold cursor-pointer">
-          Pistejaska
+        <h1 className="grow px-3 text-left text-xl font-bold cursor-pointer">
+          <Link to="/">Pistejaska</Link>
         </h1>
         <div className="flex flex-row items-center grow-0 shrink-0">
           <Link className={navBarLinkClassName} to="/">

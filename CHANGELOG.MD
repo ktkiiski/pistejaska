@@ -18,6 +18,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - All MUI styling is replaced by TailwindCSS
   - Removed `@material-ui` from dependencies
 
+### Fixed
+
+- Link to front page from app name in navbar
+
 ## 2022-02-09
 
 ### Refactoring
