@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Fixes
+
+- Fixed the input focus effect on Safari
+
 ### Refactoring
 
 - Upgraded `react-router-dom` to version 6. This was a major update, so needed to change the code accordingly.
