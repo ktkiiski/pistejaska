@@ -1,6 +1,5 @@
-import { useHistory } from "react-router";
 import { groupBy, mapValues, orderBy } from "lodash";
-import { Game, GameDefinition } from "./domain/game";
+import { Game } from "./domain/game";
 import { useGames } from "./common/hooks/useGames";
 import ViewContentLayout from "./common/components/ViewContentLayout";
 import TabSet from "./common/components/tabs/TabSet";
@@ -11,10 +10,10 @@ import { formatDuration, pluralize } from "./common/stringUtils";
 import { SkeletonLoader } from "./common/components/SkeletonLoader";
 import Heading1 from "./common/components/typography/Heading1";
 import List from "./common/components/lists/List";
-import ListItem from "./common/components/lists/ListItem";
 import ListItemIcon from "./common/components/lists/ListItemIcon";
 import ListItemText from "./common/components/lists/ListItemText";
 import ListItemDescription from "./common/components/lists/ListItemDescription";
+import ListLinkItem from "./common/components/lists/ListLinkItem";
 
 type GameSortCriteriaId = "alphabetic" | "popular" | "shortest" | "longest";
 
@@ -56,7 +55,6 @@ function useGameStats() {
 }
 
 export const ReportGameList = () => {
-  const history = useHistory();
   const [games, loadingGames] = useGames();
   const gameStats = useGameStats();
   const sortCriterias: Record<GameSortCriteriaId, GameSortCriteria> = {
@@ -92,9 +90,6 @@ export const ReportGameList = () => {
   };
   const [sortCriteria, setSortCriteria] =
     useState<GameSortCriteriaId>("alphabetic");
-  const onSelectGame = (game: GameDefinition) => {
-    history.push("/games/" + game.id);
-  };
   const currentSortCriteria = sortCriterias[sortCriteria];
   const sortedGameItems = orderBy(
     games,
@@ -123,7 +118,7 @@ export const ReportGameList = () => {
       ) : (
         <List>
           {sortedGameItems.map((game) => (
-            <ListItem onClick={() => onSelectGame(game)} key={game.id}>
+            <ListLinkItem to={`/games/${game.id}`} key={game.id}>
               <ListItemIcon>
                 <img
                   alt={game.name}
@@ -135,7 +130,7 @@ export const ReportGameList = () => {
               <ListItemDescription>
                 {currentSortCriteria.getDetailLabel(game)}
               </ListItemDescription>
-            </ListItem>
+            </ListLinkItem>
           ))}
         </List>
       )}

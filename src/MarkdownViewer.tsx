@@ -29,6 +29,6 @@ const markdownWrapper = (fileName: string) => (
   </div>
 );
 
-export const MarkdownViewer = (props: { fileName: string }) => {
+export const MarkdownViewer = (props: { fileName?: string }) => {
   return <div>{markdownWrapper(props.fileName || "CHANGELOG")}</div>;
 };

@@ -1,10 +1,11 @@
-import React from "react";
+import { FC } from "react";
 import SelectPlayers from "./SelectPlayers";
 import { usePlay } from "./common/hooks/usePlay";
 import { LoadingSpinner } from "./common/components/LoadingSpinner";
+import { useParams } from "react-router-dom";
 
-function SelectPlayersFromPlay(props: { playId: string }) {
-  const { playId } = props;
+const ReplayView: FC = () => {
+  const playId = useParams().playId!;
   const [play, loading] = usePlay(playId);
   if (loading) {
     return <LoadingSpinner />;
@@ -13,6 +14,6 @@ function SelectPlayersFromPlay(props: { playId: string }) {
     return <div>Play not found</div>;
   }
   return <SelectPlayers gameId={play.gameId} initialPlayers={play?.players} />;
-}
+};
 
-export default SelectPlayersFromPlay;
+export default ReplayView;

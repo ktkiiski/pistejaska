@@ -1,5 +1,4 @@
 import { Play, Player } from "./domain/play";
-import { RouteComponentProps } from "react-router";
 import { sortBy, flatMap, groupBy, uniq, mean, orderBy } from "lodash";
 import { usePlays } from "./common/hooks/usePlays";
 import ReportTable from "./ReportTable";
@@ -17,8 +16,9 @@ import Heading3 from "./common/components/typography/Heading3";
 import TableBody from "./common/components/tables/TableBody";
 import TableRow from "./common/components/tables/TableRow";
 import TableCell from "./common/components/tables/TableCell";
-import { useHistory } from "react-router-dom";
-import { useReducer } from "react";
+import { FC, useReducer } from "react";
+import { useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 interface Playmate {
   player: Player;
@@ -43,10 +43,8 @@ function usePlaymates(playerId: string, playerPlays: Play[]): Playmate[] {
   return orderBy(playmatesById, (playMate) => playMate.plays.length, "desc");
 }
 
-export const ReportPlayerView = (props: RouteComponentProps<any>) => {
-  const playerId = props.match.params["playerId"];
-
-  const history = useHistory();
+export const ReportPlayerView: FC = () => {
+  const playerId = useParams().playerId!;
   const [plays, loadingPlays, errorPlays] = usePlays();
   const [games, loadingGames, errorGames] = useGames();
   const playerPlays = plays.filter((p) =>
@@ -95,13 +93,13 @@ export const ReportPlayerView = (props: RouteComponentProps<any>) => {
             <TableBody>
               {visiblePlaymates.map((playMate) => (
                 <TableRow key={playMate.player.id}>
-                  <TableCell
-                    className="cursor-pointer"
-                    onClick={() =>
-                      history.push(`/players/${playMate.player.id}`)
-                    }
-                  >
-                    {playMate.player.name}
+                  <TableCell>
+                    <Link
+                      className="cursor-pointer hover:text-black"
+                      to={`/players/${playMate.player.id}`}
+                    >
+                      {playMate.player.name}
+                    </Link>
                   </TableCell>
                   <TableCell>{playMate.plays.length}</TableCell>
                 </TableRow>

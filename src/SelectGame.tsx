@@ -1,16 +1,16 @@
-import { useState } from "react";
-import { RouteComponentProps } from "react-router";
-import { Game, GameDefinition } from "./domain/game";
+import { FC, useState } from "react";
+import { Game } from "./domain/game";
 import { useGames } from "./common/hooks/useGames";
 import ViewContentLayout from "./common/components/ViewContentLayout";
 import { usePlays } from "./common/hooks/usePlays";
 import { orderBy } from "lodash";
 import Heading1 from "./common/components/typography/Heading1";
 import List from "./common/components/lists/List";
-import ListItem from "./common/components/lists/ListItem";
 import ListItemIcon from "./common/components/lists/ListItemIcon";
 import ListItemText from "./common/components/lists/ListItemText";
 import InputTextField from "./common/components/inputs/InputTextField";
+import ListLinkItem from "./common/components/lists/ListLinkItem";
+import { Link } from "react-router-dom";
 
 const maxRecentlyPlayedGames = 6;
 
@@ -39,11 +39,9 @@ function useRecentlyPlayedGames(games: Game[]) {
   return recentlyPlayedGames;
 }
 
-export const SelectGame = (props: RouteComponentProps<{}>) => {
+export const SelectGame: FC = () => {
   const [games] = useGames();
   const recentlyPlayedGames = useRecentlyPlayedGames(games);
-  const onSelectGame = (game: GameDefinition) =>
-    props.history.push("/new/" + game.id);
 
   const [searchTerm, setSearchTerm] = useState("");
   const listedGames = (games || []).map((game) => ({
@@ -71,16 +69,16 @@ export const SelectGame = (props: RouteComponentProps<{}>) => {
           style={{ gridAutoRows: 0 }}
         >
           {recentlyPlayedGames.map((game) => (
-            <div
-              className="aspect-square w-full h-full cursor-pointer hover:opacity-80"
-              onClick={() => onSelectGame(game)}
+            <Link
+              className="block aspect-square w-full h-full cursor-pointer hover:opacity-80"
+              to={`/new/${game.id}`}
             >
               <img
                 src={game.icon}
                 alt={game.name}
                 className="w-full h-full object-contain object-center"
               />
-            </div>
+            </Link>
           ))}
         </div>
       )}
@@ -98,7 +96,7 @@ export const SelectGame = (props: RouteComponentProps<{}>) => {
         {listedGames
           .filter((g) => g.lowercaseName.includes(searchTerm.toLowerCase()))
           .map((game) => (
-            <ListItem onClick={() => onSelectGame(game)} key={game.id}>
+            <ListLinkItem to={`/new/${game.id}`} key={game.id}>
               <ListItemIcon>
                 <img
                   alt="gamepic"
@@ -107,7 +105,7 @@ export const SelectGame = (props: RouteComponentProps<{}>) => {
                 />
               </ListItemIcon>
               <ListItemText title={game.name} />
-            </ListItem>
+            </ListLinkItem>
           ))}
       </List>
     </ViewContentLayout>

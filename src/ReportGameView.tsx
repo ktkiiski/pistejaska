@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React, { FC, useState } from "react";
 import { Play } from "./domain/play";
-import { RouteComponentProps } from "react-router";
 import { usePlays } from "./common/hooks/usePlays";
 import { calculateEloForPlayers } from "./domain/ratings";
 import { Game, GameMiscFieldDefinition } from "./domain/game";
@@ -20,17 +19,17 @@ import {
 } from "./domain/filters";
 import ViewContentLayout from "./common/components/ViewContentLayout";
 import PlayList from "./PlayList";
-import { useHistory } from "react-router-dom";
 import { LoadingSpinner } from "./common/components/LoadingSpinner";
 import CardButtonRow from "./common/components/buttons/CardButtonRow";
 import ButtonPrimary from "./common/components/buttons/ButtonPrimary";
 import Heading1 from "./common/components/typography/Heading1";
 import Heading2 from "./common/components/typography/Heading2";
+import { useNavigate, useParams } from "react-router-dom";
 
-export const ReportGameView = (props: RouteComponentProps<any>) => {
-  const history = useHistory();
+export const ReportGameView: FC = () => {
   const [games] = useGames();
-  const gameId = props.match.params["gameId"];
+  const gameId = useParams().gameId!;
+  const navigate = useNavigate();
 
   const [allPlays, loading, error] = usePlays();
   const [filters, setFilters] = useState<ReportFilters>(emptyFilters);
@@ -61,11 +60,7 @@ export const ReportGameView = (props: RouteComponentProps<any>) => {
     <ViewContentLayout
       footer={
         <CardButtonRow>
-          <ButtonPrimary
-            onClick={() => {
-              history.push(`/new/${gameId}`);
-            }}
-          >
+          <ButtonPrimary onClick={() => navigate(`/new/${gameId}`)}>
             Start play
           </ButtonPrimary>
         </CardButtonRow>

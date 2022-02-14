@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { getAuth, signOut } from "firebase/auth";
 import DropdownMenu from "./dropdowns/DropdownMenu";
 
@@ -22,7 +22,7 @@ const menuIconSvg = (
 );
 
 export function NavBar() {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const openMenu = useCallback(() => setIsDropdownOpen(true), []);
   const closeMenu = useCallback(() => setIsDropdownOpen(false), []);
@@ -32,14 +32,14 @@ export function NavBar() {
         value: "players" as const,
         label: "Players",
         onSelect: () => {
-          history.push("/players");
+          navigate("/players");
         },
       },
       {
         value: "changelog" as const,
         label: "Changelog",
         onSelect: () => {
-          history.push("/whatsnew");
+          navigate("/whatsnew");
         },
       },
       {
@@ -50,7 +50,7 @@ export function NavBar() {
         },
       },
     ],
-    [history]
+    [navigate]
   );
   return (
     <div>
