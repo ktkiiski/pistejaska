@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Refactoring
 
 - Upgraded `react-router-dom` to version 6. This was a major update, so needed to change the code accordingly.
+- Navigation happens primarily via actual link elements, instead of "if clicked then navigate browser" logic
 
 ## 2022-02-13
 

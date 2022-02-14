@@ -17,7 +17,8 @@ import TableBody from "./common/components/tables/TableBody";
 import TableRow from "./common/components/tables/TableRow";
 import TableCell from "./common/components/tables/TableCell";
 import { FC, useReducer } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 interface Playmate {
   player: Player;
@@ -44,7 +45,6 @@ function usePlaymates(playerId: string, playerPlays: Play[]): Playmate[] {
 
 export const ReportPlayerView: FC = () => {
   const playerId = useParams().playerId!;
-  const navigate = useNavigate();
   const [plays, loadingPlays, errorPlays] = usePlays();
   const [games, loadingGames, errorGames] = useGames();
   const playerPlays = plays.filter((p) =>
@@ -93,11 +93,13 @@ export const ReportPlayerView: FC = () => {
             <TableBody>
               {visiblePlaymates.map((playMate) => (
                 <TableRow key={playMate.player.id}>
-                  <TableCell
-                    className="cursor-pointer"
-                    onClick={() => navigate(`/players/${playMate.player.id}`)}
-                  >
-                    {playMate.player.name}
+                  <TableCell>
+                    <Link
+                      className="cursor-pointer hover:text-black"
+                      to={`/players/${playMate.player.id}`}
+                    >
+                      {playMate.player.name}
+                    </Link>
                   </TableCell>
                   <TableCell>{playMate.plays.length}</TableCell>
                 </TableRow>

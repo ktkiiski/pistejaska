@@ -52,17 +52,23 @@ const ReportTable = ({ rows, columns }: ReportTableProps) => {
         <TableBody>
           {rows.map((row) => (
             <TableRow key={row[0].value}>
-              {columns.map((column, columnIdx) => (
-                <TableCell scope="row" key={`${row[0].value}:${column.name}`}>
-                  {row[columnIdx]?.link !== undefined ? (
-                    <Link to={row[columnIdx]?.link ?? ""}>
-                      {row[columnIdx]?.value}
-                    </Link>
-                  ) : (
-                    <>{row[columnIdx]?.value}</>
-                  )}
-                </TableCell>
-              ))}
+              {columns.map((column, columnIdx) => {
+                const link = row[columnIdx]?.link;
+                return (
+                  <TableCell scope="row" key={`${row[0].value}:${column.name}`}>
+                    {link != null ? (
+                      <Link
+                        className="cursor-pointer hover:text-black"
+                        to={link}
+                      >
+                        {row[columnIdx]?.value}
+                      </Link>
+                    ) : (
+                      row[columnIdx]?.value
+                    )}
+                  </TableCell>
+                );
+              })}
             </TableRow>
           ))}
         </TableBody>

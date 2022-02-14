@@ -195,11 +195,7 @@ const SelectPlayers = (props: {
         />
         <List>
           {visiblePlayers.map((player) => (
-            <ListItem
-              onClick={() => onSelectPlayer(player)}
-              className="text-sm"
-              key={player.id}
-            >
+            <ListItem onClick={() => onSelectPlayer(player)} key={player.id}>
               <ListItemIcon>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

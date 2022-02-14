@@ -1,14 +1,13 @@
-import { useMemo, useCallback, useReducer } from "react";
+import { useMemo, useReducer } from "react";
 import { Play } from "./domain/play";
 import { orderBy } from "lodash";
 import { Game } from "./domain/game";
 import List from "./common/components/lists/List";
-import ListItem from "./common/components/lists/ListItem";
 import ListItemIcon from "./common/components/lists/ListItemIcon";
 import ListItemText from "./common/components/lists/ListItemText";
 import ListItemDescription from "./common/components/lists/ListItemDescription";
 import ButtonTextOnly from "./common/components/buttons/ButtonTextOnly";
-import { useNavigate } from "react-router-dom";
+import ListLinkItem from "./common/components/lists/ListLinkItem";
 
 interface PlayListProps {
   plays: Play[];
@@ -28,7 +27,6 @@ function getPlayLabel(play: Play) {
 
 const PlayList = (props: PlayListProps) => {
   const { plays, games } = props;
-  const navigate = useNavigate();
 
   const data = useMemo(
     () =>
@@ -40,17 +38,13 @@ const PlayList = (props: PlayListProps) => {
   const currentData = data.slice(0, limit);
   const hasMore = limit < data.length;
 
-  const onSelectPlay = useCallback(
-    (play: Play) => navigate(`/view/${play.id}`),
-    [navigate]
-  );
   return (
     <>
       <List>
         {currentData.map((play) => {
           const game = games.find((g) => g.id === play.gameId);
           return (
-            <ListItem key={play.id} onClick={() => onSelectPlay(play)}>
+            <ListLinkItem key={play.id} to={`/view/${play.id}`}>
               <ListItemIcon>
                 {game ? (
                   <img
@@ -71,7 +65,7 @@ const PlayList = (props: PlayListProps) => {
                 <br />
                 <span className="text-slate-300">{getPlayLabel(play)}</span>
               </ListItemDescription>
-            </ListItem>
+            </ListLinkItem>
           );
         })}
       </List>
