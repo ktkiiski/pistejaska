@@ -28,7 +28,7 @@ import TableHeadCell from "./common/components/tables/TableHeadCell";
 import TableCell from "./common/components/tables/TableCell";
 import TableBody from "./common/components/tables/TableBody";
 import TableFooter from "./common/components/tables/TableFooter";
-import ImageOverlay from "./common/components/gallery/ImageOverlay";
+import GalleryOverlay from "./common/components/gallery/GalleryOverlay";
 
 export const PlayView: FC = () => {
   const [games] = useGames();
@@ -37,7 +37,7 @@ export const PlayView: FC = () => {
 
   const [play, loading, error] = usePlay(playId);
 
-  const [fullScreenImageSrc, setFullScreenImageSrc] = useState("");
+  const [fullScreenImageIndex, setFullScreenImageIndex] = useState(0);
   const [isImageOverlayOpen, setIsImageOverlayOpen] = useState(false);
   const [sourceImageRect, setSourceImageRect] = useState<DOMRect | null>(null);
 
@@ -196,14 +196,14 @@ export const PlayView: FC = () => {
       {images.length > 0 && (
         <>
           <Heading2>Images</Heading2>
-          {images.map((src) => (
+          {images.map((src, index) => (
             <div key={src} className="flex justify-center">
               <img
                 src={src}
                 alt={src}
                 className="max-h-80 cursor-pointer"
                 onClick={(event) => {
-                  setFullScreenImageSrc(src);
+                  setFullScreenImageIndex(index);
                   setIsImageOverlayOpen(true);
                   const clientRect =
                     event.currentTarget.getBoundingClientRect();
@@ -214,8 +214,10 @@ export const PlayView: FC = () => {
           ))}
         </>
       )}
-      <ImageOverlay
-        src={fullScreenImageSrc ?? images[0]}
+      <GalleryOverlay
+        images={images}
+        index={fullScreenImageIndex}
+        onIndexChange={setFullScreenImageIndex}
         visible={isImageOverlayOpen}
         onClose={() => setIsImageOverlayOpen(false)}
         sourceRect={sourceImageRect}

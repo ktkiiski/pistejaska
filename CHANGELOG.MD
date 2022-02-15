@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Animated image view overlay when clicking an image from a play
+- Clicking an image from a play opens a swipeable gallery overlay with a nice transition animations
 
 ## 2022-02-14
 
