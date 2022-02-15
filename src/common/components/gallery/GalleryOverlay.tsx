@@ -1,10 +1,10 @@
-import { MouseEventHandler, VFC } from "react";
+import { VFC } from "react";
 import OverlayModal from "./OverlayModal";
 import SwipeableGallery from "./SwipeableGallery";
 
 interface ImageOverlayProps {
   visible: boolean;
-  onClose: MouseEventHandler;
+  onClose: () => void;
   images: string[];
   index: number;
   onIndexChange: (index: number) => void;
@@ -20,7 +20,7 @@ const GalleryOverlay: VFC<ImageOverlayProps> = ({
   sourceRect,
 }) => {
   return (
-    <OverlayModal visible={visible} onClose={onClose} sourceRect={sourceRect}>
+    <OverlayModal visible={visible} sourceRect={sourceRect} onClose={onClose}>
       <SwipeableGallery
         images={images}
         index={index}

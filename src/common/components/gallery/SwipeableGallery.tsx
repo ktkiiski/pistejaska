@@ -20,12 +20,15 @@ const SwipeableGallery: VFC<SwipeableGalleryProps> = ({
   return (
     <BindKeyboardSwipeableViews
       index={index}
+      className="cursor-pointer no-select"
       onChangeIndex={onIndexChange}
       slideClassName="w-full h-full flex justify-center items-center"
       containerStyle={swipeableContainerStyle}
+      onClick={() => onIndexChange((index + 1) % images.length)}
     >
-      {images.map((src) => (
+      {images.map((src, index) => (
         <img
+          key={index}
           className="max-w-full max-h-full shadow-lg object-contain"
           src={src}
           alt={src}
