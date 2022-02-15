@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC } from "react";
 import { Play, MiscDataDTO } from "./domain/play";
 import { useGames } from "./common/hooks/useGames";
 import { GameMiscFieldDefinition, Game } from "./domain/game";
@@ -28,7 +28,7 @@ import TableHeadCell from "./common/components/tables/TableHeadCell";
 import TableCell from "./common/components/tables/TableCell";
 import TableBody from "./common/components/tables/TableBody";
 import TableFooter from "./common/components/tables/TableFooter";
-import GalleryOverlay from "./common/components/gallery/GalleryOverlay";
+import GalleryList from "./common/components/gallery/GalleryList";
 
 export const PlayView: FC = () => {
   const [games] = useGames();
@@ -36,10 +36,6 @@ export const PlayView: FC = () => {
   const navigate = useNavigate();
 
   const [play, loading, error] = usePlay(playId);
-
-  const [fullScreenImageIndex, setFullScreenImageIndex] = useState(0);
-  const [isImageOverlayOpen, setIsImageOverlayOpen] = useState(false);
-  const [sourceImageRect, setSourceImageRect] = useState<DOMRect | null>(null);
 
   if (error) return <>Error: {error}</>;
 
@@ -196,32 +192,9 @@ export const PlayView: FC = () => {
       {images.length > 0 && (
         <>
           <Heading2>Images</Heading2>
-          {images.map((src, index) => (
-            <div key={src} className="flex justify-center">
-              <img
-                src={src}
-                alt={src}
-                className="max-h-80 cursor-pointer"
-                onClick={(event) => {
-                  setFullScreenImageIndex(index);
-                  setIsImageOverlayOpen(true);
-                  const clientRect =
-                    event.currentTarget.getBoundingClientRect();
-                  setSourceImageRect(clientRect);
-                }}
-              />
-            </div>
-          ))}
+          <GalleryList images={images} />
         </>
       )}
-      <GalleryOverlay
-        images={images}
-        index={fullScreenImageIndex}
-        onIndexChange={setFullScreenImageIndex}
-        visible={isImageOverlayOpen}
-        onClose={() => setIsImageOverlayOpen(false)}
-        sourceRect={sourceImageRect}
-      />
     </ViewContentLayout>
   );
 };
@@ -309,7 +282,7 @@ const PlayTable = (props: { game: Game; play: Play }) => {
             <TableCell key="total" className="text-left">
               𝚺
             </TableCell>
-            {players.map((f, idx) => (
+            {players.map((f) => (
               <TableCell key={f.id}>{play.getTotal(f.id)}</TableCell>
             ))}
           </TableRow>
