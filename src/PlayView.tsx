@@ -28,6 +28,7 @@ import TableHeadCell from "./common/components/tables/TableHeadCell";
 import TableCell from "./common/components/tables/TableCell";
 import TableBody from "./common/components/tables/TableBody";
 import TableFooter from "./common/components/tables/TableFooter";
+import ImageOverlay from "./common/components/gallery/ImageOverlay";
 
 export const PlayView: FC = () => {
   const [games] = useGames();
@@ -37,6 +38,8 @@ export const PlayView: FC = () => {
   const [play, loading, error] = usePlay(playId);
 
   const [fullScreenImageSrc, setFullScreenImageSrc] = useState("");
+  const [isImageOverlayOpen, setIsImageOverlayOpen] = useState(false);
+  const [sourceImageRect, setSourceImageRect] = useState<DOMRect | null>(null);
 
   if (error) return <>Error: {error}</>;
 
@@ -86,42 +89,6 @@ export const PlayView: FC = () => {
   };
 
   const images = play.getImageUrls();
-  const PlayImages = () =>
-    images.length > 0 ? (
-      <>
-        {fullScreenImageSrc ? (
-          <div
-            className="backdrop-blur-lg top-0 left-0 fixed w-full h-full z-10 flex justify-center"
-            onClick={() => setFullScreenImageSrc("")}
-          >
-            <img
-              src={fullScreenImageSrc}
-              className="object-contain"
-              alt={fullScreenImageSrc}
-            />
-          </div>
-        ) : (
-          <></>
-        )}
-
-        <Heading2>Images</Heading2>
-        {images.map((src) => (
-          <div
-            key={src}
-            className="flex justify-center"
-            onClick={() =>
-              fullScreenImageSrc
-                ? setFullScreenImageSrc("")
-                : setFullScreenImageSrc(src)
-            }
-          >
-            <img src={src} alt={src} className="max-h-80" />
-          </div>
-        ))}
-      </>
-    ) : (
-      <></>
-    );
 
   const MiscFields = () => (
     <>
@@ -226,7 +193,33 @@ export const PlayView: FC = () => {
       <Heading2>Scores</Heading2>
       <PlayTable game={game} play={play} />
 
-      <PlayImages />
+      {images.length > 0 && (
+        <>
+          <Heading2>Images</Heading2>
+          {images.map((src) => (
+            <div key={src} className="flex justify-center">
+              <img
+                src={src}
+                alt={src}
+                className="max-h-80 cursor-pointer"
+                onClick={(event) => {
+                  setFullScreenImageSrc(src);
+                  setIsImageOverlayOpen(true);
+                  const clientRect =
+                    event.currentTarget.getBoundingClientRect();
+                  setSourceImageRect(clientRect);
+                }}
+              />
+            </div>
+          ))}
+        </>
+      )}
+      <ImageOverlay
+        src={fullScreenImageSrc ?? images[0]}
+        visible={isImageOverlayOpen}
+        onClose={() => setIsImageOverlayOpen(false)}
+        sourceRect={sourceImageRect}
+      />
     </ViewContentLayout>
   );
 };
