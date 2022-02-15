@@ -9,7 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Clicking an image from a play opens a swipeable gallery overlay with a nice transition animations
+- Play list view shows a gallery of the images from the plays
+- Clicking any image opens a swipeable gallery overlay with a nice transition animations
 
 ## 2022-02-14
 

@@ -1,22 +1,29 @@
+import classNames from "classnames";
 import { useState, VFC } from "react";
 import GalleryOverlay from "./GalleryOverlay";
 
-interface GalleryListProps {
+interface GalleryStripeProps {
+  className?: string;
   images: string[];
 }
 
-const GalleryList: VFC<GalleryListProps> = ({ images }) => {
+const GalleryStripe: VFC<GalleryStripeProps> = ({ className, images }) => {
   const [fullScreenImageIndex, setFullScreenImageIndex] = useState(0);
   const [isImageOverlayOpen, setIsImageOverlayOpen] = useState(false);
   const [sourceImageRect, setSourceImageRect] = useState<DOMRect | null>(null);
   return (
-    <div className="flex flex-col items-center space-y-1">
+    <div
+      className={classNames(
+        "flex flex-row items-stretch h-40 space-x-0.5 overflow-x-auto",
+        className
+      )}
+    >
       {images.map((src, index) => (
         <img
-          key={index}
+          key={src}
           src={src}
           alt={src}
-          className="max-w-full max-h-80 cursor-pointer shadow hover:opacity-90 transition-opacity"
+          className="max-h-full cursor-pointer hover:opacity-90 transition-opacity"
           onClick={(event) => {
             setFullScreenImageIndex(index);
             setIsImageOverlayOpen(true);
@@ -37,4 +44,4 @@ const GalleryList: VFC<GalleryListProps> = ({ images }) => {
   );
 };
 
-export default GalleryList;
+export default GalleryStripe;
