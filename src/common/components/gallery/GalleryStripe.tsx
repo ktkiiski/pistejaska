@@ -4,10 +4,11 @@ import { CSSTransition } from "react-transition-group";
 import GalleryOverlay from "./GalleryOverlay";
 import styles from "./GalleryStripe.module.css";
 import { CSSTransitionClassNames } from "react-transition-group/CSSTransition";
+import { GalleryItem } from "./SwipeableGallery";
 
 interface GalleryStripeProps {
   className?: string;
-  images: string[];
+  images: GalleryItem[];
 }
 
 const imageTransitionClassNames: CSSTransitionClassNames = {
@@ -63,7 +64,7 @@ const GalleryStripe: VFC<GalleryStripeProps> = ({ className, images }) => {
       )}
       ref={containerRef}
     >
-      {images.slice(0, renderCount).map((src, index) => (
+      {images.slice(0, renderCount).map(({ src, title }, index) => (
         <CSSTransition
           in={index < visibleCount}
           key={src}
@@ -81,7 +82,7 @@ const GalleryStripe: VFC<GalleryStripeProps> = ({ className, images }) => {
               setSourceImageRect(clientRect);
             }}
             src={src}
-            alt={src}
+            alt={title}
           />
         </CSSTransition>
       ))}

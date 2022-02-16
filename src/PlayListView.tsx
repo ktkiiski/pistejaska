@@ -7,17 +7,25 @@ import Heading1 from "./common/components/typography/Heading1";
 import { useMemo } from "react";
 import { orderBy } from "lodash";
 import GalleryStripe from "./common/components/gallery/GalleryStripe";
+import { GalleryItem } from "./common/components/gallery/SwipeableGallery";
 
 export const PlayListView = () => {
   const [plays, loadingPlays, errorPlays] = usePlays();
   const [games, loadingGames, errorGames] = useGames();
 
-  const imageUrls = useMemo(() => {
-    const srcs: string[] = [];
+  const images = useMemo(() => {
+    const items: GalleryItem[] = [];
     orderBy(plays, (play) => play.getDate(), "desc").forEach((play) => {
-      srcs.push(...play.getImageUrls());
+      play.getImageUrls().forEach((src) => {
+        items.push({
+          src,
+          title: play.getDisplayName(),
+          date: play.getDate(),
+          link: `/view/${play.id}`,
+        });
+      });
     });
-    return srcs;
+    return items;
   }, [plays]);
 
   if (errorPlays || errorGames) {
@@ -31,7 +39,7 @@ export const PlayListView = () => {
   return (
     <ViewContentLayout>
       <Heading1>Plays</Heading1>
-      <GalleryStripe className="mb-2" images={imageUrls} />
+      <GalleryStripe className="mb-2" images={images} />
       {loadingPlays || loadingGames ? (
         <SkeletonLoader />
       ) : (

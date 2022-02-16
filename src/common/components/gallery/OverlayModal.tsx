@@ -1,14 +1,14 @@
-import { FC, useCallback, useRef } from "react";
+import { FC, ReactNode, useCallback, useRef } from "react";
 import { createPortal } from "react-dom";
 import { CSSTransition } from "react-transition-group";
 import useDisableWindowScroll from "../../hooks/useDisableWindowScroll";
 import useKeyPressHandler from "../../hooks/useKeyPressHandler";
-import OverlayCloseButton from "./OverlayCloseButton";
 
 interface OverlayModalProps {
   visible: boolean;
   sourceRect?: DOMRect | null;
   onClose?: () => void;
+  controls?: ReactNode;
 }
 
 function getContentShrinkTransform(sourceRect?: DOMRect | null) {
@@ -31,10 +31,10 @@ const OverlayModal: FC<OverlayModalProps> = ({
   sourceRect,
   children,
   onClose,
+  controls,
 }) => {
   const innerOverlayRef = useRef<HTMLDivElement | null>(null);
   const backgroundRef = useRef<HTMLDivElement | null>(null);
-  const closeButtonRef = useRef<HTMLButtonElement | null>(null);
 
   useDisableWindowScroll(visible);
   useKeyPressHandler("keydown", "Escape", onClose);
@@ -43,13 +43,11 @@ const OverlayModal: FC<OverlayModalProps> = ({
     innerOverlayRef.current!.style.transform =
       getContentShrinkTransform(sourceRect);
     backgroundRef.current!.style.opacity = "0";
-    closeButtonRef.current!.style.opacity = "0";
   }, [sourceRect]);
 
   const setElementInStyles = useCallback(() => {
     innerOverlayRef.current!.style.transform = "translate(0, 0) scale(1)";
     backgroundRef.current!.style.opacity = "1";
-    closeButtonRef.current!.style.opacity = "1";
   }, []);
 
   const element = (
@@ -63,24 +61,17 @@ const OverlayModal: FC<OverlayModalProps> = ({
       onExit={setElementInStyles}
       onExiting={setElementOutStyles}
     >
-      <div className="fixed inset-0 z-10">
-        <div
-          className="absolute inset-0 transition-opacity backdrop-blur-lg bg-white/10"
-          ref={backgroundRef}
-        ></div>
+      <div
+        className="fixed inset-0 z-10 transition-opacity backdrop-blur-lg"
+        ref={backgroundRef}
+      >
         <div
           className="absolute inset-0 transition-transform flex flex-col items-center justify-center"
           ref={innerOverlayRef}
         >
           {children}
         </div>
-        {onClose && (
-          <OverlayCloseButton
-            ref={closeButtonRef}
-            onClick={onClose}
-            className="absolute top-1 right-1 transition-opacity"
-          />
-        )}
+        {controls}
       </div>
     </CSSTransition>
   );

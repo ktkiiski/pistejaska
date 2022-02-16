@@ -184,8 +184,7 @@ export class Play implements PlayDTO {
   public getDisplayName(): string {
     const nameValue = this.getMiscFieldValue(nameField);
     const locationValue = this.getMiscFieldValue(locationField);
-    const name = nameValue ?? locationValue ?? "";
-    return `${this.getDate().toLocaleDateString()} ${name}`;
+    return nameValue ?? locationValue ?? "";
   }
 
   public getLocation(): string {

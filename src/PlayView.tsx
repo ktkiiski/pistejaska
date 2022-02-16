@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useMemo } from "react";
 import { Play, MiscDataDTO } from "./domain/play";
 import { useGames } from "./common/hooks/useGames";
 import { GameMiscFieldDefinition, Game } from "./domain/game";
@@ -29,6 +29,7 @@ import TableCell from "./common/components/tables/TableCell";
 import TableBody from "./common/components/tables/TableBody";
 import TableFooter from "./common/components/tables/TableFooter";
 import GalleryList from "./common/components/gallery/GalleryList";
+import { GalleryItem } from "./common/components/gallery/SwipeableGallery";
 
 export const PlayView: FC = () => {
   const [games] = useGames();
@@ -36,6 +37,16 @@ export const PlayView: FC = () => {
   const navigate = useNavigate();
 
   const [play, loading, error] = usePlay(playId);
+
+  const images = useMemo((): GalleryItem[] => {
+    if (!play) return [];
+    return play.getImageUrls().map((src) => ({
+      src,
+      title: play.getDisplayName(),
+      date: play.getDate(),
+      link: `/view/${play.id}`,
+    }));
+  }, [play]);
 
   if (error) return <>Error: {error}</>;
 
@@ -83,8 +94,6 @@ export const PlayView: FC = () => {
     }
     return field.field.name;
   };
-
-  const images = play.getImageUrls();
 
   const MiscFields = () => (
     <>
