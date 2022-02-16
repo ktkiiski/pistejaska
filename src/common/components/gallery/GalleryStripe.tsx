@@ -23,7 +23,7 @@ const GalleryStripe: VFC<GalleryStripeProps> = ({ className, images }) => {
   const [renderCount, setRenderCount] = useState(1);
   const [imageIndex, setImageIndex] = useState(0);
   const [isOverlayOpen, setIsOverlayOpen] = useState(false);
-  const [sourceImageRect, setSourceImageRect] = useState<DOMRect | null>(null);
+  const sourceElementRef = useRef<HTMLImageElement | null>(null);
   const placeholderRef = useRef<HTMLDivElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const onImageLoad = useCallback(() => {
@@ -75,14 +75,20 @@ const GalleryStripe: VFC<GalleryStripeProps> = ({ className, images }) => {
             className={styles.image}
             onLoad={onImageLoad}
             onError={onImageLoad}
-            onClick={(event) => {
+            onClick={() => {
               setImageIndex(index);
               setIsOverlayOpen(true);
-              const clientRect = event.currentTarget.getBoundingClientRect();
-              setSourceImageRect(clientRect);
             }}
             src={src}
             alt={title}
+            // Keep track of the image HTML element that is currently "active"
+            ref={
+              index !== imageIndex
+                ? null
+                : (el) => {
+                    sourceElementRef.current = el;
+                  }
+            }
           />
         </CSSTransition>
       ))}
@@ -95,7 +101,7 @@ const GalleryStripe: VFC<GalleryStripeProps> = ({ className, images }) => {
         onIndexChange={setImageIndex}
         visible={isOverlayOpen}
         onClose={() => setIsOverlayOpen(false)}
-        sourceRect={sourceImageRect}
+        sourceElementRef={sourceElementRef}
       />
     </div>
   );

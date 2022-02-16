@@ -1,4 +1,11 @@
-import { FC, ReactNode, useCallback, useRef } from "react";
+import {
+  FC,
+  ReactNode,
+  RefObject,
+  useCallback,
+  useEffect,
+  useRef,
+} from "react";
 import { createPortal } from "react-dom";
 import { CSSTransition } from "react-transition-group";
 import useDisableWindowScroll from "../../hooks/useDisableWindowScroll";
@@ -6,11 +13,16 @@ import useKeyPressHandler from "../../hooks/useKeyPressHandler";
 
 interface OverlayModalProps {
   visible: boolean;
-  sourceRect?: DOMRect | null;
+  sourceElementRef?: RefObject<HTMLElement | null>;
   onClose?: () => void;
   controls?: ReactNode;
 }
 
+/**
+ * Calculates a transform for a full-sized element so that it
+ * seems to be placed at the top of the source bounding client rectangle
+ * and have approximately the same size.
+ */
 function getContentShrinkTransform(sourceRect?: DOMRect | null) {
   const windowWidth = window.innerWidth;
   const windowHeight = window.innerHeight;
@@ -28,26 +40,44 @@ function getContentShrinkTransform(sourceRect?: DOMRect | null) {
 
 const OverlayModal: FC<OverlayModalProps> = ({
   visible,
-  sourceRect,
+  sourceElementRef,
   children,
   onClose,
   controls,
 }) => {
   const innerOverlayRef = useRef<HTMLDivElement | null>(null);
   const backgroundRef = useRef<HTMLDivElement | null>(null);
+  const sourceRectRef = useRef<DOMRect>();
 
   useDisableWindowScroll(visible);
   useKeyPressHandler("keydown", "Escape", onClose);
 
+  /**
+   * Keep track of the bounding client rectangle of the source
+   * image element. This is done on an animation frame so that
+   * we won't trigger forced redraws in the middle of React lifecycles.
+   *
+   * Note that we use refs instead of states to avoid React re-rendering,
+   * which are not needed here.
+   */
+  useEffect(() => {
+    const request = requestAnimationFrame(() => {
+      sourceRectRef.current =
+        sourceElementRef?.current?.getBoundingClientRect();
+    });
+    return () => cancelAnimationFrame(request);
+  });
+
   const setElementOutStyles = useCallback(() => {
-    innerOverlayRef.current!.style.transform =
-      getContentShrinkTransform(sourceRect);
     backgroundRef.current!.style.opacity = "0";
-  }, [sourceRect]);
+    innerOverlayRef.current!.style.transform = getContentShrinkTransform(
+      sourceRectRef.current
+    );
+  }, []);
 
   const setElementInStyles = useCallback(() => {
-    innerOverlayRef.current!.style.transform = "translate(0, 0) scale(1)";
     backgroundRef.current!.style.opacity = "1";
+    innerOverlayRef.current!.style.transform = "translate(0, 0) scale(1)";
   }, []);
 
   const element = (

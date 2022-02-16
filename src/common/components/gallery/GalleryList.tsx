@@ -1,4 +1,4 @@
-import { useState, VFC } from "react";
+import { useRef, useState, VFC } from "react";
 import GalleryOverlay from "./GalleryOverlay";
 import { GalleryItem } from "./SwipeableGallery";
 
@@ -9,7 +9,7 @@ interface GalleryListProps {
 const GalleryList: VFC<GalleryListProps> = ({ images }) => {
   const [imageIndex, setImageIndex] = useState(0);
   const [isOverlayOpen, setIsOverlayOpen] = useState(false);
-  const [sourceImageRect, setSourceImageRect] = useState<DOMRect | null>(null);
+  const sourceElementRef = useRef<HTMLImageElement | null>(null);
   return (
     <div className="flex flex-row items-center justify-center flex-wrap gap-1">
       {images.map(({ src, title }, index) => (
@@ -18,11 +18,17 @@ const GalleryList: VFC<GalleryListProps> = ({ images }) => {
           src={src}
           alt={title}
           className="max-w-full max-h-80 shrink-0 cursor-pointer shadow hover:opacity-90 transition-opacity"
-          onClick={(event) => {
+          // Keep track of the image HTML element that is currently "active"
+          ref={
+            index !== imageIndex
+              ? null
+              : (el) => {
+                  sourceElementRef.current = el;
+                }
+          }
+          onClick={() => {
             setImageIndex(index);
             setIsOverlayOpen(true);
-            const clientRect = event.currentTarget.getBoundingClientRect();
-            setSourceImageRect(clientRect);
           }}
         />
       ))}
@@ -32,7 +38,7 @@ const GalleryList: VFC<GalleryListProps> = ({ images }) => {
         onIndexChange={setImageIndex}
         visible={isOverlayOpen}
         onClose={() => setIsOverlayOpen(false)}
-        sourceRect={sourceImageRect}
+        sourceElementRef={sourceElementRef}
       />
     </div>
   );

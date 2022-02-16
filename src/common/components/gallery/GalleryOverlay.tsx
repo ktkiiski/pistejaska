@@ -1,4 +1,4 @@
-import { VFC } from "react";
+import { RefObject, VFC } from "react";
 import OverlayCloseButton from "./OverlayCloseButton";
 import OverlayInfo from "./OverlayInfo";
 import OverlayModal from "./OverlayModal";
@@ -10,7 +10,7 @@ interface ImageOverlayProps {
   images: GalleryItem[];
   index: number;
   onIndexChange: (index: number) => void;
-  sourceRect?: DOMRect | null;
+  sourceElementRef?: RefObject<HTMLElement | null>;
 }
 
 const GalleryOverlay: VFC<ImageOverlayProps> = ({
@@ -19,13 +19,13 @@ const GalleryOverlay: VFC<ImageOverlayProps> = ({
   onIndexChange,
   visible,
   onClose,
-  sourceRect,
+  sourceElementRef,
 }) => {
   const image = images[index];
   return (
     <OverlayModal
       visible={visible}
-      sourceRect={sourceRect}
+      sourceElementRef={sourceElementRef}
       onClose={onClose}
       controls={
         <>
