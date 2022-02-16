@@ -20,7 +20,8 @@ const loadThreshold = 100;
 
 function scrollIntoViewHorizontally(element?: HTMLElement | null): void {
   if (!element) return;
-  const parent = element.parentElement!;
+  const parent = element.parentElement;
+  if (!parent) return;
   const { offsetLeft, clientWidth } = element;
   const { scrollLeft, clientWidth: parentClientWidth } = parent;
   if (offsetLeft < scrollLeft) {
@@ -68,19 +69,6 @@ const GalleryStripe: VFC<GalleryStripeProps> = ({ className, images }) => {
     return () => container.removeEventListener("scroll", checkLoadMore);
   });
 
-  useEffect(() => {
-    // Increase the render count as we navigate inside the overlay
-    setRenderCount((count) => Math.max(count, imageIndex));
-    /**
-     * Whenever an active image index changes, ensure that the HTML element
-     * of the active image is visible on the scrollable container.
-     */
-    const request = requestAnimationFrame(() => {
-      scrollIntoViewHorizontally(sourceElementRef.current);
-    });
-    return () => cancelAnimationFrame(request);
-  }, [imageIndex]);
-
   return (
     <div
       className={classNames(
@@ -123,7 +111,18 @@ const GalleryStripe: VFC<GalleryStripeProps> = ({ className, images }) => {
       <GalleryOverlay
         images={images}
         index={imageIndex}
-        onIndexChange={setImageIndex}
+        onIndexChange={(newIndex) => {
+          setImageIndex(newIndex);
+          // Increase the render count as we navigate inside the overlay
+          setRenderCount((count) => Math.max(count, newIndex));
+          /**
+           * Whenever an active image index changes, ensure that the HTML element
+           * of the active image is visible on the scrollable container.
+           */
+          requestAnimationFrame(() => {
+            scrollIntoViewHorizontally(sourceElementRef.current);
+          });
+        }}
         visible={isOverlayOpen}
         onClose={() => setIsOverlayOpen(false)}
         sourceElementRef={sourceElementRef}
