@@ -18,6 +18,18 @@ const imageTransitionClassNames: CSSTransitionClassNames = {
 
 const loadThreshold = 100;
 
+function scrollIntoViewHorizontally(element?: HTMLElement | null): void {
+  if (!element) return;
+  const parent = element.parentElement!;
+  const { offsetLeft, clientWidth } = element;
+  const { scrollLeft, clientWidth: parentClientWidth } = parent;
+  if (offsetLeft < scrollLeft) {
+    parent.scrollLeft = offsetLeft;
+  } else if (offsetLeft + clientWidth > scrollLeft + parentClientWidth) {
+    parent.scrollLeft = offsetLeft + clientWidth - parentClientWidth;
+  }
+}
+
 const GalleryStripe: VFC<GalleryStripeProps> = ({ className, images }) => {
   const [visibleCount, setVisibleCount] = useState(0);
   const [renderCount, setRenderCount] = useState(1);
@@ -37,7 +49,7 @@ const GalleryStripe: VFC<GalleryStripeProps> = ({ className, images }) => {
       const { scrollLeft, clientWidth } = container;
       const offsetLeft = placeholder?.offsetLeft ?? 0;
       if (scrollLeft + clientWidth + loadThreshold >= offsetLeft) {
-        setRenderCount(visibleCount + 1);
+        setRenderCount((count) => Math.max(count, visibleCount + 1));
       }
     }
   }, [visibleCount]);
@@ -55,6 +67,19 @@ const GalleryStripe: VFC<GalleryStripeProps> = ({ className, images }) => {
     container.addEventListener("scroll", checkLoadMore);
     return () => container.removeEventListener("scroll", checkLoadMore);
   });
+
+  useEffect(() => {
+    // Increase the render count as we navigate inside the overlay
+    setRenderCount((count) => Math.max(count, imageIndex));
+    /**
+     * Whenever an active image index changes, ensure that the HTML element
+     * of the active image is visible on the scrollable container.
+     */
+    const request = requestAnimationFrame(() => {
+      scrollIntoViewHorizontally(sourceElementRef.current);
+    });
+    return () => cancelAnimationFrame(request);
+  }, [imageIndex]);
 
   return (
     <div
