@@ -1,11 +1,4 @@
-import {
-  FC,
-  ReactNode,
-  RefObject,
-  useCallback,
-  useEffect,
-  useRef,
-} from "react";
+import { FC, ReactNode, RefObject, useCallback, useRef } from "react";
 import { createPortal } from "react-dom";
 import { CSSTransition } from "react-transition-group";
 import useDisableWindowScroll from "../../hooks/useDisableWindowScroll";
@@ -47,38 +40,30 @@ const OverlayModal: FC<OverlayModalProps> = ({
 }) => {
   const innerOverlayRef = useRef<HTMLDivElement | null>(null);
   const backgroundRef = useRef<HTMLDivElement | null>(null);
-  const sourceRectRef = useRef<DOMRect>();
 
   useDisableWindowScroll(visible);
   useKeyPressHandler("keydown", "Escape", onClose);
 
-  /**
-   * Keep track of the bounding client rectangle of the source
-   * image element. This is done on an animation frame so that
-   * we won't trigger forced redraws in the middle of React lifecycles.
-   *
-   * Note that we use refs instead of states to avoid React re-rendering,
-   * which are not needed here.
-   */
-  useEffect(() => {
-    const request = requestAnimationFrame(() => {
-      sourceRectRef.current =
-        sourceElementRef?.current?.getBoundingClientRect();
-    });
-    return () => cancelAnimationFrame(request);
-  });
-
   const setElementOutStyles = useCallback(() => {
     backgroundRef.current!.style.opacity = "0";
+    // NOTE: Calling getBoundingClientRect here will force a redraw,
+    // which messes up the enter transition animation. Therefore
+    // the `onEntering` callback needs to use `setTimeout`
     innerOverlayRef.current!.style.transform = getContentShrinkTransform(
-      sourceRectRef.current
+      sourceElementRef?.current?.getBoundingClientRect()
     );
-  }, []);
+  }, [sourceElementRef]);
 
   const setElementInStyles = useCallback(() => {
     backgroundRef.current!.style.opacity = "1";
     innerOverlayRef.current!.style.transform = "translate(0, 0) scale(1)";
   }, []);
+
+  const onEntering = useCallback(() => {
+    // NOTE: `setTimeout` is needed because we forced a redraw with
+    // `getBoundingClientRect` on `onEnter` callback.
+    setTimeout(setElementInStyles, 0);
+  }, [setElementInStyles]);
 
   const element = (
     <CSSTransition
@@ -87,7 +72,7 @@ const OverlayModal: FC<OverlayModalProps> = ({
       unmountOnExit
       timeout={150}
       onEnter={setElementOutStyles}
-      onEntering={setElementInStyles}
+      onEntering={onEntering}
       onExit={setElementInStyles}
       onExiting={setElementOutStyles}
     >

@@ -110,8 +110,8 @@ const GalleryStripe: VFC<GalleryStripeProps> = ({ className, images }) => {
             ref={
               index !== imageIndex
                 ? null
-                : (el) => {
-                    sourceElementRef.current = el;
+                : (imageElement) => {
+                    sourceElementRef.current = imageElement;
                   }
             }
           />
