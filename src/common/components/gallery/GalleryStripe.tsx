@@ -66,7 +66,11 @@ const GalleryStripe: VFC<GalleryStripeProps> = ({ className, images }) => {
     checkLoadMore();
     const container = containerRef.current!;
     container.addEventListener("scroll", checkLoadMore);
-    return () => container.removeEventListener("scroll", checkLoadMore);
+    window.addEventListener("resize", checkLoadMore);
+    return () => {
+      container.removeEventListener("scroll", checkLoadMore);
+      window.removeEventListener("resize", checkLoadMore);
+    };
   });
 
   return (
