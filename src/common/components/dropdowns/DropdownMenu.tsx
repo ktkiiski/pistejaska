@@ -10,6 +10,7 @@ import {
 } from "react";
 import { createPortal } from "react-dom";
 import { CSSTransition } from "react-transition-group";
+import useDisableWindowScroll from "../../hooks/useDisableWindowScroll";
 import DropdownList from "./DropdownList";
 import DropdownListItem from "./DropdownListItem";
 import styles from "./DropdownMenu.module.css";
@@ -64,14 +65,7 @@ function DropdownMenu<Option extends DropdownMenuOption>({
   /**
    * Make the main browser window unscrollable while open.
    */
-  useEffect(() => {
-    const { classList } = document.body;
-    if (isOpen) {
-      classList.add("overflow-hidden");
-    } else {
-      classList.remove("overflow-hidden");
-    }
-  }, [isOpen]);
+  useDisableWindowScroll(isOpen);
   /**
    * Position the dropdown menu according to the child element.
    */

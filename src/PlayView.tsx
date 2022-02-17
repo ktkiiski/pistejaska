@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useMemo } from "react";
 import { Play, MiscDataDTO } from "./domain/play";
 import { useGames } from "./common/hooks/useGames";
 import { GameMiscFieldDefinition, Game } from "./domain/game";
@@ -28,6 +28,8 @@ import TableHeadCell from "./common/components/tables/TableHeadCell";
 import TableCell from "./common/components/tables/TableCell";
 import TableBody from "./common/components/tables/TableBody";
 import TableFooter from "./common/components/tables/TableFooter";
+import ImageGalleryList from "./common/components/gallery/ImageGalleryList";
+import { ImageGalleryItem } from "./common/components/gallery/ImageGallerySwipeView";
 
 export const PlayView: FC = () => {
   const [games] = useGames();
@@ -36,7 +38,15 @@ export const PlayView: FC = () => {
 
   const [play, loading, error] = usePlay(playId);
 
-  const [fullScreenImageSrc, setFullScreenImageSrc] = useState("");
+  const images = useMemo((): ImageGalleryItem[] => {
+    if (!play) return [];
+    return play.getImageUrls().map((src) => ({
+      src,
+      title: play.getDisplayName(),
+      date: play.getDate(),
+      link: `/view/${play.id}`,
+    }));
+  }, [play]);
 
   if (error) return <>Error: {error}</>;
 
@@ -84,44 +94,6 @@ export const PlayView: FC = () => {
     }
     return field.field.name;
   };
-
-  const images = play.getImageUrls();
-  const PlayImages = () =>
-    images.length > 0 ? (
-      <>
-        {fullScreenImageSrc ? (
-          <div
-            className="backdrop-blur-lg top-0 left-0 fixed w-full h-full z-10 flex justify-center"
-            onClick={() => setFullScreenImageSrc("")}
-          >
-            <img
-              src={fullScreenImageSrc}
-              className="object-contain"
-              alt={fullScreenImageSrc}
-            />
-          </div>
-        ) : (
-          <></>
-        )}
-
-        <Heading2>Images</Heading2>
-        {images.map((src) => (
-          <div
-            key={src}
-            className="flex justify-center"
-            onClick={() =>
-              fullScreenImageSrc
-                ? setFullScreenImageSrc("")
-                : setFullScreenImageSrc(src)
-            }
-          >
-            <img src={src} alt={src} className="max-h-80" />
-          </div>
-        ))}
-      </>
-    ) : (
-      <></>
-    );
 
   const MiscFields = () => (
     <>
@@ -226,7 +198,12 @@ export const PlayView: FC = () => {
       <Heading2>Scores</Heading2>
       <PlayTable game={game} play={play} />
 
-      <PlayImages />
+      {images.length > 0 && (
+        <>
+          <Heading2>Images</Heading2>
+          <ImageGalleryList images={images} />
+        </>
+      )}
     </ViewContentLayout>
   );
 };
@@ -314,7 +291,7 @@ const PlayTable = (props: { game: Game; play: Play }) => {
             <TableCell key="total" className="text-left">
               𝚺
             </TableCell>
-            {players.map((f, idx) => (
+            {players.map((f) => (
               <TableCell key={f.id}>{play.getTotal(f.id)}</TableCell>
             ))}
           </TableRow>
