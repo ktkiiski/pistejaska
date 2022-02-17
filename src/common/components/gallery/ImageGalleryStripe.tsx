@@ -1,14 +1,14 @@
 import classNames from "classnames";
 import { useCallback, useEffect, useRef, useState, VFC } from "react";
 import { CSSTransition } from "react-transition-group";
-import GalleryOverlay from "./GalleryOverlay";
-import styles from "./GalleryStripe.module.css";
+import ImageGalleryOverlay from "./ImageGalleryOverlay";
+import styles from "./ImageGalleryStripe.module.css";
 import { CSSTransitionClassNames } from "react-transition-group/CSSTransition";
-import { GalleryItem } from "./SwipeableGallery";
+import { ImageGalleryItem } from "./ImageGallerySwipeView";
 
-interface GalleryStripeProps {
+interface ImageGalleryStripeProps {
   className?: string;
-  images: GalleryItem[];
+  images: ImageGalleryItem[];
 }
 
 const imageTransitionClassNames: CSSTransitionClassNames = {
@@ -31,7 +31,10 @@ function scrollIntoViewHorizontally(element?: HTMLElement | null): void {
   }
 }
 
-const GalleryStripe: VFC<GalleryStripeProps> = ({ className, images }) => {
+const ImageGalleryStripe: VFC<ImageGalleryStripeProps> = ({
+  className,
+  images,
+}) => {
   const [visibleCount, setVisibleCount] = useState(0);
   const [renderCount, setRenderCount] = useState(1);
   const [imageIndex, setImageIndex] = useState(0);
@@ -112,7 +115,7 @@ const GalleryStripe: VFC<GalleryStripeProps> = ({ className, images }) => {
       {renderCount < images.length && (
         <div className="w-40 shrink-0" ref={placeholderRef} />
       )}
-      <GalleryOverlay
+      <ImageGalleryOverlay
         images={images}
         index={imageIndex}
         onIndexChange={(newIndex) => {
@@ -135,4 +138,4 @@ const GalleryStripe: VFC<GalleryStripeProps> = ({ className, images }) => {
   );
 };
 
-export default GalleryStripe;
+export default ImageGalleryStripe;

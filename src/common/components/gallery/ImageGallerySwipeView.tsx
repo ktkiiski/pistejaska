@@ -4,22 +4,22 @@ import { bindKeyboard } from "react-swipeable-views-utils";
 
 const BindKeyboardSwipeableViews = bindKeyboard(SwipeableViews);
 
-export interface GalleryItem {
+export interface ImageGalleryItem {
   src: string;
   date: Date;
   title: string;
   link: string;
 }
 
-interface SwipeableGalleryProps {
-  images: GalleryItem[];
+interface ImageGallerySwipeViewProps {
+  images: ImageGalleryItem[];
   index: number;
   onIndexChange: (newIndex: number) => void;
 }
 
 const swipeableContainerStyle = { width: "100%", height: "100%" };
 
-const SwipeableGallery: VFC<SwipeableGalleryProps> = ({
+const ImageGallerySwipeView: VFC<ImageGallerySwipeViewProps> = ({
   images,
   index,
   onIndexChange,
@@ -45,4 +45,4 @@ const SwipeableGallery: VFC<SwipeableGalleryProps> = ({
   );
 };
 
-export default SwipeableGallery;
+export default ImageGallerySwipeView;

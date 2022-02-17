@@ -28,8 +28,8 @@ import TableHeadCell from "./common/components/tables/TableHeadCell";
 import TableCell from "./common/components/tables/TableCell";
 import TableBody from "./common/components/tables/TableBody";
 import TableFooter from "./common/components/tables/TableFooter";
-import GalleryList from "./common/components/gallery/GalleryList";
-import { GalleryItem } from "./common/components/gallery/SwipeableGallery";
+import ImageGalleryList from "./common/components/gallery/ImageGalleryList";
+import { ImageGalleryItem } from "./common/components/gallery/ImageGallerySwipeView";
 
 export const PlayView: FC = () => {
   const [games] = useGames();
@@ -38,7 +38,7 @@ export const PlayView: FC = () => {
 
   const [play, loading, error] = usePlay(playId);
 
-  const images = useMemo((): GalleryItem[] => {
+  const images = useMemo((): ImageGalleryItem[] => {
     if (!play) return [];
     return play.getImageUrls().map((src) => ({
       src,
@@ -201,7 +201,7 @@ export const PlayView: FC = () => {
       {images.length > 0 && (
         <>
           <Heading2>Images</Heading2>
-          <GalleryList images={images} />
+          <ImageGalleryList images={images} />
         </>
       )}
     </ViewContentLayout>

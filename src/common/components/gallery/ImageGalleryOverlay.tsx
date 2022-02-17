@@ -2,18 +2,20 @@ import { RefObject, VFC } from "react";
 import OverlayCloseButton from "./OverlayCloseButton";
 import OverlayInfo from "./OverlayInfo";
 import OverlayModal from "./OverlayModal";
-import SwipeableGallery, { GalleryItem } from "./SwipeableGallery";
+import ImageGallerySwipeView, {
+  ImageGalleryItem,
+} from "./ImageGallerySwipeView";
 
-interface ImageOverlayProps {
+interface ImageGalleryOverlayProps {
   visible: boolean;
   onClose: () => void;
-  images: GalleryItem[];
+  images: ImageGalleryItem[];
   index: number;
   onIndexChange: (index: number) => void;
   sourceElementRef?: RefObject<HTMLElement | null>;
 }
 
-const GalleryOverlay: VFC<ImageOverlayProps> = ({
+const ImageGalleryOverlay: VFC<ImageGalleryOverlayProps> = ({
   images,
   index,
   onIndexChange,
@@ -43,7 +45,7 @@ const GalleryOverlay: VFC<ImageOverlayProps> = ({
         </>
       }
     >
-      <SwipeableGallery
+      <ImageGallerySwipeView
         images={images}
         index={index}
         onIndexChange={onIndexChange}
@@ -52,4 +54,4 @@ const GalleryOverlay: VFC<ImageOverlayProps> = ({
   );
 };
 
-export default GalleryOverlay;
+export default ImageGalleryOverlay;

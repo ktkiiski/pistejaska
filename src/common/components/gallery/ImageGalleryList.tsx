@@ -1,12 +1,12 @@
 import { useRef, useState, VFC } from "react";
-import GalleryOverlay from "./GalleryOverlay";
-import { GalleryItem } from "./SwipeableGallery";
+import ImageGalleryOverlay from "./ImageGalleryOverlay";
+import { ImageGalleryItem } from "./ImageGallerySwipeView";
 
-interface GalleryListProps {
-  images: GalleryItem[];
+interface ImageGalleryListProps {
+  images: ImageGalleryItem[];
 }
 
-const GalleryList: VFC<GalleryListProps> = ({ images }) => {
+const ImageGalleryList: VFC<ImageGalleryListProps> = ({ images }) => {
   const [imageIndex, setImageIndex] = useState(0);
   const [isOverlayOpen, setIsOverlayOpen] = useState(false);
   const sourceElementRef = useRef<HTMLImageElement | null>(null);
@@ -32,7 +32,7 @@ const GalleryList: VFC<GalleryListProps> = ({ images }) => {
           }}
         />
       ))}
-      <GalleryOverlay
+      <ImageGalleryOverlay
         images={images}
         index={imageIndex}
         onIndexChange={setImageIndex}
@@ -44,4 +44,4 @@ const GalleryList: VFC<GalleryListProps> = ({ images }) => {
   );
 };
 
-export default GalleryList;
+export default ImageGalleryList;
