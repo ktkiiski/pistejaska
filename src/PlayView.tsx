@@ -152,9 +152,9 @@ export const PlayView: FC = () => {
   const DesktopHeader = () => (
     <div className="hidden md:block">
       <div className="flex bg-white rounded-xl -mt-2 -ml-2 -mr-2">
-        <div className="flex-none w-64 relative">
+        <div>
           <img
-            className="absolute inset-0 w-full h-full rounded-tl-xl"
+            className="max-h-72 rounded-tl-xl"
             alt={game.name}
             src={game.icon}
           />
