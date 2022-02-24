@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Moved tie breaker and misc score fields to be the last ones on play edit
 
+### Fixed
+
+- Fixed broken native select field look on Safari
+
 ## 2022-02-22
 
 ### Fixed

@@ -1,0 +1,15 @@
+.input {
+  composes: input from "./FieldBase.module.css";
+  appearance: none;
+  cursor: pointer;
+  padding-right: 1.25rem;
+}
+.caret {
+  display: block;
+  color: inherit;
+  position: absolute;
+  right: 0.6rem;
+  bottom: 0.75rem;
+  pointer-events: none;
+  user-select: none;
+}
