@@ -1,17 +1,11 @@
 import classNames from "classnames";
-import { ReactElement, VFC } from "react";
+import { FC } from "react";
 import styles from "./FieldBase.module.css";
-
-interface FieldElementProps {
-  id?: string;
-  className?: string;
-}
 
 interface InputBaseProps {
   label: string;
   labelFor?: string;
   className?: string;
-  children: ReactElement<FieldElementProps>;
   hasValue: boolean;
 }
 
@@ -25,7 +19,7 @@ const legendClassName = classNames("ml-2", styles.legend);
 /**
  * Low-level component for building consistently looking form input/select components.
  */
-const InputBase: VFC<InputBaseProps> = (props) => {
+const InputBase: FC<InputBaseProps> = (props) => {
   const { label, labelFor, className, hasValue, children } = props;
   return (
     <div

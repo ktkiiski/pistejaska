@@ -2,7 +2,6 @@
 .container {
   position: relative;
   padding-top: 0.75rem;
-  padding-right: 0.5rem;
 }
 /* Label shown as a placeholder but shrinks up when there is a value */
 .label {
@@ -29,9 +28,6 @@
   margin: 0;
   color: #475569;
   text-align: left;
-}
-select.input {
-  cursor: pointer;
 }
 /* The <fieldset> providing the borders around the input/select element */
 .fieldset {

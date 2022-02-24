@@ -1,7 +1,7 @@
 import { ChangeEvent, ChangeEventHandler, FocusEventHandler, Ref } from "react";
 import useId from "../../hooks/useId";
 import InputBase from "./FieldBase";
-import fieldStyles from "./FieldBase.module.css";
+import styles from "./NativeSelectField.module.css";
 
 interface NativeSelectFieldOption<Value> {
   value: Value;
@@ -50,7 +50,7 @@ function NativeSelectField<Value>(props: NativeSelectFieldProps<Value>) {
     >
       <select
         id={inputId}
-        className={fieldStyles.input}
+        className={styles.input}
         value={selectedEncodedValue}
         onChange={onSelectChange}
         onFocus={onFocus}
@@ -69,6 +69,7 @@ function NativeSelectField<Value>(props: NativeSelectFieldProps<Value>) {
           </option>
         ))}
       </select>
+      <span className={styles.caret}>⌵</span>
     </InputBase>
   );
 }
