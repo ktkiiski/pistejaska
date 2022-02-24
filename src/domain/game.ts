@@ -1,6 +1,7 @@
 import { getTodayAsString } from "../common/dateUtils";
 import { MiscDataDTO } from "./play";
 import { JSONSchema7 } from "json-schema";
+import { sortBy } from "lodash";
 
 const fieldIdSchema: JSONSchema7 = {
   title: "Field ID",
@@ -290,13 +291,15 @@ export class Game implements GameDefinition {
   public getScoreFields(expansionIds: string[] = []): GameFieldItem[] {
     const { scoreFields, expansions = [] } = this;
     return [
-      ...scoreFields.map((field) => ({ field, type: "score" } as const)),
+      ...scoreFields.map(
+        (field) => ({ field, type: "score", order: 1 } as const)
+      ),
       ...expansions
         .filter(({ id }) => expansionIds.includes(id))
         .flatMap((expansion) => expansion.scoreFields || [])
-        .map((field) => ({ field, type: "score" } as const)),
+        .map((field) => ({ field, type: "score", order: 2 } as const)),
       ...Game.getDefaultScoreFields().map(
-        (field) => ({ field, type: "score" } as const)
+        (field) => ({ field, type: "score", order: 9999 } as const)
       ),
     ];
   }
@@ -304,20 +307,25 @@ export class Game implements GameDefinition {
   public getMiscFields(expansionIds: string[] = []): GameFieldItem[] {
     const { miscFields = [], expansions = [] } = this;
     return [
-      ...miscFields.map((field) => ({ field, type: "misc" } as const)),
+      ...miscFields.map(
+        (field) => ({ field, type: "misc", order: 3 } as const)
+      ),
       ...expansions
         .filter(({ id }) => expansionIds.includes(id))
         .flatMap((expansion) => expansion.miscFields || [])
-        .map((field) => ({ field, type: "misc" } as const)),
+        .map((field) => ({ field, type: "misc", order: 4 } as const)),
       ...Game.getDefaultMiscFields().map(
-        (field) => ({ field, type: "misc" } as const)
+        (field) => ({ field, type: "misc", order: 5 } as const)
       ),
     ];
   }
 
   public getFields(expansionIds: string[] = []): GameFieldItem[] {
-    return this.getScoreFields(expansionIds).concat(
-      this.getMiscFields(expansionIds)
+    return sortBy(
+      this.getScoreFields(expansionIds).concat(
+        this.getMiscFields(expansionIds)
+      ),
+      (x) => x.order
     );
   }
 
@@ -364,10 +372,12 @@ export type GameDefinition = {
 type GameFieldItem =
   | {
       type: "score";
+      order: number;
       field: GameScoreFieldDefinition;
     }
   | {
       type: "misc";
+      order: number;
       field: GameMiscFieldDefinition;
     };
 
