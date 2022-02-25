@@ -1,5 +1,6 @@
 import { User } from "firebase/auth";
 
-const adminEmails = ["panu.vuorinen@gmail.com", "kimmo.kiiski@gmail.com"];
+const adminEmails = process.env.REACT_APP_ADMIN_EMAILS?.split(",") ?? [];
+
 export const isAdmin = (user: User): boolean =>
   user.emailVerified && adminEmails.find((x) => x === user.email) !== undefined;

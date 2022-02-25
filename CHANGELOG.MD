@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fixed "What's new" view to show the contents of the CHANGELOG.md file correctly
 
+### Changed
+
+- Allow users to only delete plays they have created. Admins can still delete any play.
+
 ## 2022-02-24
 
 ### Changed
