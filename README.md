@@ -88,6 +88,7 @@ If you need to perform data migrations, do this:
 ## TODO
 
 - Edit or delete comments
+- Allow users to change their display name in comments and in plays
 - Denormalize players from plays to their own root entity & link player to user
 - Add pagination to list views
 - Add notifications
