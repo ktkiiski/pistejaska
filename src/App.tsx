@@ -12,7 +12,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { SelectGame } from "./SelectGame";
 import { PlayEdit } from "./PlayEdit";
 import { PlayView } from "./PlayView";
-import { MarkdownViewer } from "./MarkdownViewer";
+import WhatsNewView from "./WhatsNewView";
 import { ReportGameView } from "./ReportGameView";
 import { PlayListView } from "./PlayListView";
 import { ReportGameList } from "./ReportGameList";
@@ -46,7 +46,7 @@ const App = () => {
       <Route path="/replay/:playId" element={<ReplayView />} />
       <Route path="/new" element={<SelectGame />} />
       <Route path="/admin" element={<Admin />} />
-      <Route path="/whatsnew" element={<MarkdownViewer />} />
+      <Route path="/whatsnew" element={<WhatsNewView />} />
       <Route path="/reports" element={<Navigate to="/games" />} />
     </Routes>
   );
