@@ -87,6 +87,7 @@ If you need to perform data migrations, do this:
 
 ## TODO
 
+- Edit or delete comments
 - Denormalize players from plays to their own root entity & link player to user
 - Add pagination to list views
 - Add notifications

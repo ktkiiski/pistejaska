@@ -3,7 +3,6 @@ import ListItem from "./common/components/lists/ListItem";
 import ListItemDescription from "./common/components/lists/ListItemDescription";
 import ListItemIcon from "./common/components/lists/ListItemIcon";
 import ListItemText from "./common/components/lists/ListItemText";
-import ListLinkItem from "./common/components/lists/ListLinkItem";
 import { LoadingSpinner } from "./common/components/LoadingSpinner";
 import ViewContentLayout from "./common/components/ViewContentLayout";
 import { useComments } from "./common/hooks/useComments";

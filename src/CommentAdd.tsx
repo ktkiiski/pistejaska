@@ -6,7 +6,6 @@ import ButtonPrimary from "./common/components/buttons/ButtonPrimary";
 import { User } from "firebase/auth";
 import { addComment } from "./common/hooks/useComments";
 import { v4 as uuid } from "uuid";
-import Heading3 from "./common/components/typography/Heading3";
 
 export const CommentAdd = (props: { playId: string; user: User }) => {
   const { playId, user } = props;
