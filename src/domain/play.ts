@@ -26,6 +26,7 @@ export type PlayDTO = {
   players: Player[];
   misc: MiscDataDTO[];
   created: string;
+  createdBy: string;
 };
 
 export type MiscDataDTO = {
@@ -78,6 +79,7 @@ export class Play implements PlayDTO {
   scores: { playerId: string; fieldId: string; score: number }[];
   players: Player[];
   created: string;
+  createdBy: string; // user.uid
   date?: string | null;
   rankings: PlayRanking[];
 
@@ -90,6 +92,7 @@ export class Play implements PlayDTO {
     this.players = play.players || [];
     this.misc = play.misc || [];
     this.created = play.created || new Date().toISOString();
+    this.createdBy = play.createdBy;
 
     // temporary values
     this.date = this.getMiscFieldValue(dateField);
@@ -112,6 +115,7 @@ export class Play implements PlayDTO {
       players: this.players,
       misc: this.misc,
       created: this.created,
+      createdBy: this.createdBy,
     };
   }
 

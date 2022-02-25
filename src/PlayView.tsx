@@ -30,9 +30,13 @@ import TableBody from "./common/components/tables/TableBody";
 import TableFooter from "./common/components/tables/TableFooter";
 import ImageGalleryList from "./common/components/gallery/ImageGalleryList";
 import { ImageGalleryItem } from "./common/components/gallery/ImageGallerySwipeView";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { getAuth } from "firebase/auth";
+import { isAdmin } from "./auth/auth";
 
 export const PlayView: FC = () => {
   const [games] = useGames();
+  const [user] = useAuthState(getAuth());
   const playId = useParams().playId!;
   const navigate = useNavigate();
 
@@ -60,6 +64,9 @@ export const PlayView: FC = () => {
     );
   }
 
+  if (!user) {
+    return <></>;
+  }
   if (!play) {
     return <>Play not found!</>;
   }
@@ -175,13 +182,16 @@ export const PlayView: FC = () => {
     </div>
   );
 
+  const showDelete = play.createdBy === user.uid || isAdmin(user);
   return (
     <ViewContentLayout
       header={<ButtonBack onClick={onBack} />}
       footer={
         <CardButtonRow>
           <ButtonPrimary onClick={onEditPlay}>Edit</ButtonPrimary>
-          <ButtonDanger onClick={onDelete}>Delete</ButtonDanger>
+          {showDelete && (
+            <ButtonDanger onClick={onDelete}>Delete</ButtonDanger>
+          )}{" "}
           <Button onClick={onReplay}>
             <span className="hidden md:inline">Play</span>
             {" again"}

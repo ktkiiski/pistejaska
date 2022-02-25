@@ -20,6 +20,8 @@ import { shuffle } from "lodash";
 import ButtonLight from "./common/components/buttons/ButtonLight";
 import InputTextField from "./common/components/inputs/InputTextField";
 import { useNavigate } from "react-router-dom";
+import { getAuth } from "firebase/auth";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 function shiftRandomly<T>(values: T[]) {
   const offset = Math.floor(Math.random() * values.length);
@@ -31,7 +33,11 @@ function shiftValues<T>(values: T[], offset: number) {
   return [...values.slice(shift), ...values.slice(0, shift)];
 }
 
-async function createPlay(gameId: string, players: Player[]): Promise<Play> {
+async function createPlay(
+  gameId: string,
+  players: Player[],
+  userId: string
+): Promise<Play> {
   const playId = `${gameId}-${uuid()}`;
   const play = new Play({
     gameId: gameId,
@@ -41,6 +47,7 @@ async function createPlay(gameId: string, players: Player[]): Promise<Play> {
     scores: [],
     misc: Game.getDefaultMiscFieldValues(),
     created: new Date().toISOString(),
+    createdBy: userId,
   });
 
   const db = getFirestore(app);
@@ -56,6 +63,8 @@ const SelectPlayers = (props: {
   const [games, isLoadingGames] = useGames();
   const { gameId, initialPlayers = [] } = props;
   const game = games?.find((g) => g.id === gameId);
+  const auth = getAuth();
+  const [user] = useAuthState(auth);
 
   const [allPlayers] = usePlayers();
 
@@ -78,10 +87,10 @@ const SelectPlayers = (props: {
     ? selectablePlayers
     : selectablePlayers.slice(0, 6);
 
-  const onStartGame = async () => {
+  const onStartGame = async (userId: string) => {
     setIsStarting(true);
     try {
-      const play = await createPlay(gameId, players);
+      const play = await createPlay(gameId, players, userId);
       navigate(`/edit/${play.id}`);
     } catch (error) {
       console.error(error);
@@ -157,6 +166,10 @@ const SelectPlayers = (props: {
     return <ViewContentLayout>Unknown game!</ViewContentLayout>;
   }
 
+  if (!user) {
+    return <></>;
+  }
+
   return (
     <ViewContentLayout
       footer={
@@ -170,7 +183,7 @@ const SelectPlayers = (props: {
             </Button>
           )}
           <ButtonPrimary
-            onClick={onStartGame}
+            onClick={() => onStartGame(user.uid)}
             disabled={players.length < 2 || isRandomizing}
           >
             Start
