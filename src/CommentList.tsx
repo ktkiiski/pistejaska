@@ -53,7 +53,8 @@ export const CommentList = (props: { playId: string }) => {
                 description={comment.comment}
               />
               <ListItemDescription>
-                {comment.createdOn.toLocaleDateString()}{" "}
+                {comment.createdOn.toLocaleDateString()}
+                <br />
                 {comment.createdOn.toLocaleTimeString()}
               </ListItemDescription>
             </ListItem>
