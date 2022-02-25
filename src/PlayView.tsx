@@ -33,6 +33,8 @@ import { ImageGalleryItem } from "./common/components/gallery/ImageGallerySwipeV
 import { useAuthState } from "react-firebase-hooks/auth";
 import { getAuth } from "firebase/auth";
 import { isAdmin } from "./auth/auth";
+import { CommentList } from "./CommentList";
+import { CommentAdd } from "./CommentAdd";
 
 export const PlayView: FC = () => {
   const [games] = useGames();
@@ -214,6 +216,10 @@ export const PlayView: FC = () => {
           <ImageGalleryList images={images} />
         </>
       )}
+
+      <Heading2>Comments</Heading2>
+      <CommentList playId={play.id}></CommentList>
+      <CommentAdd playId={play.id} user={user}></CommentAdd>
     </ViewContentLayout>
   );
 };

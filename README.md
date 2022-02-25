@@ -87,8 +87,8 @@ If you need to perform data migrations, do this:
 
 ## TODO
 
+- Denormalize players from plays to their own root entity & link player to user
 - Add pagination to list views
-- Add commenting to plays
 - Add notifications
 - Consider optimizing build with esbuild (replace create-react-app or part of it?)
 - change "misc score field" for unknown expansion scores to be the last field of the PlayForm
