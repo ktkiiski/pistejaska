@@ -9,6 +9,7 @@ import InputTextField from "./common/components/inputs/InputTextField";
 import InputNumberField from "./common/components/inputs/InputNumberField";
 import NativeSelectField from "./common/components/inputs/NativeSelectField";
 import ButtonLight from "./common/components/buttons/ButtonLight";
+import { Temporal } from "@js-temporal/polyfill";
 
 interface PlayFormFieldProps<T, F extends GameFieldDefinition<T>> {
   value: T | null;
@@ -42,8 +43,10 @@ export function PlayFormField<
   const inputRef = useFormFieldRef(fieldIndex);
   const isNumeric = field.type === "number" || field.type === "duration";
   const createdAt = play.getCreationDate();
-  const createdToday =
-    new Date().getTime() - createdAt.getTime() < 24 * 60 * 60 * 1000;
+  const timeZone = Temporal.Now.timeZone();
+  const createdToday = Temporal.Now.plainDateISO(timeZone).equals(
+    Temporal.PlainDate.from(createdAt.toString({ timeZone: timeZone }))
+  );
 
   const onSetDurationFromStartClick = () => {
     const duration = play.getTimeInHoursSinceCreation();
@@ -155,7 +158,7 @@ export function PlayFormField<
             {"Set from start "}
             <small>
               {"("}
-              <DurationCounter startTime={createdAt} />
+              <DurationCounter startTime={createdAt.epochSeconds} />
               {")"}
             </small>
           </ButtonLight>

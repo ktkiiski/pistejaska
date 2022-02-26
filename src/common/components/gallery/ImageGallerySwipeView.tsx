@@ -1,12 +1,13 @@
 import { VFC } from "react";
 import SwipeableViews from "react-swipeable-views";
 import { bindKeyboard } from "react-swipeable-views-utils";
+import { Temporal } from "@js-temporal/polyfill";
 
 const BindKeyboardSwipeableViews = bindKeyboard(SwipeableViews);
 
 export interface ImageGalleryItem {
   src: string;
-  date: Date;
+  date: Temporal.Instant;
   title: string;
   link: string;
 }

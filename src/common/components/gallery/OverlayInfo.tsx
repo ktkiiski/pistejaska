@@ -1,11 +1,13 @@
 import classNames from "classnames";
 import React, { VFC } from "react";
 import { Link } from "react-router-dom";
+import { Temporal } from "@js-temporal/polyfill";
+import { convertToLocaleDateString } from "../../dateUtils";
 
 interface OverlayInfoProps {
   className?: string;
   title: string;
-  date: Date;
+  date: Temporal.Instant;
   link: string;
 }
 
@@ -24,7 +26,7 @@ const OverlayInfo: VFC<OverlayInfoProps> = ({
       )}
     >
       <span className="block">{title}</span>
-      <span className="block ml-auto">{date?.toLocaleDateString()}</span>
+      <span className="block ml-auto">{convertToLocaleDateString(date)}</span>
     </Link>
   );
 };

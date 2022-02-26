@@ -15,16 +15,18 @@ export const PlayListView = () => {
 
   const images = useMemo(() => {
     const items: ImageGalleryItem[] = [];
-    orderBy(plays, (play) => play.getDate(), "desc").forEach((play) => {
-      play.getImageUrls().forEach((src) => {
-        items.push({
-          src,
-          title: play.getDisplayName(),
-          date: play.getDate(),
-          link: `/view/${play.id}`,
+    orderBy(plays, (play) => play.getDate().epochSeconds, "desc").forEach(
+      (play) => {
+        play.getImageUrls().forEach((src) => {
+          items.push({
+            src,
+            title: play.getDisplayName(),
+            date: play.getDate(),
+            link: `/view/${play.id}`,
+          });
         });
-      });
-    });
+      }
+    );
     return items;
   }, [plays]);
 

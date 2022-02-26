@@ -7,6 +7,8 @@ import {
 } from "./game";
 import { rankScores } from "../common/rankings";
 import { round } from "lodash";
+import { Temporal } from "@js-temporal/polyfill";
+import { convertToLocaleDateString } from "../common/dateUtils";
 
 export type Player = {
   name: string;
@@ -91,8 +93,10 @@ export class Play implements PlayDTO {
     this.scores = play.scores || [];
     this.players = play.players || [];
     this.misc = play.misc || [];
-    this.created = play.created || new Date().toISOString();
     this.createdBy = play.createdBy;
+    this.created =
+      play.created ||
+      Temporal.Now.instant().toString({ fractionalSecondDigits: 3 });
 
     // temporary values
     this.date = this.getMiscFieldValue(dateField);
@@ -164,23 +168,25 @@ export class Play implements PlayDTO {
     return this.rankings[0]?.score || 0;
   }
 
-  public getDate(): Date {
+  public getDate(): Temporal.Instant {
     const dateField = this.misc.find((m) => m.fieldId === "date");
-    return (
-      (dateField && new Date(dateField.data as string)) ||
-      new Date("1900/01/01")
-    );
+
+    return dateField
+      ? Temporal.Instant.fromEpochMilliseconds(
+          Date.parse(dateField.data as string)
+        )
+      : Temporal.Instant.from("1900-01-01 00:00:00Z");
   }
 
-  public getCreationDate(): Date {
-    return new Date(this.created);
+  public getCreationDate(): Temporal.Instant {
+    return Temporal.Instant.from(this.created);
   }
 
   public getName(): string | null {
     const nameValue = this.getMiscFieldValue(nameField);
     const locationValue = this.getMiscFieldValue(locationField);
     const name =
-      nameValue || locationValue || this.getDate().toLocaleDateString();
+      nameValue || locationValue || convertToLocaleDateString(this.getDate());
 
     return name;
   }
@@ -270,8 +276,11 @@ export class Play implements PlayDTO {
   }
 
   public getTimeInHoursSinceCreation(): number {
-    const duration = new Date().getTime() - this.getCreationDate().getTime();
-    const hours = duration / (1000 * 60 * 60);
+    const duration = Temporal.Now.instant().since(this.getCreationDate(), {
+      largestUnit: "minute",
+    });
+
+    const hours = duration.minutes / 60;
 
     return round(hours, 1);
   }

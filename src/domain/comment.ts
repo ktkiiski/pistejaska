@@ -1,3 +1,4 @@
+import { Temporal } from "@js-temporal/polyfill";
 import { UserDTO } from "./user";
 
 export type CommentDTO = {
@@ -11,7 +12,7 @@ export type CommentDTO = {
 export class Comment {
   constructor(comment: CommentDTO, users: UserDTO[]) {
     this.comment = comment.comment;
-    this.createdOn = new Date(comment.createdOn);
+    this.createdOn = Temporal.Instant.from(comment.createdOn);
     this.id = comment.id;
     this.playId = comment.playId;
     this.userId = comment.userId;
@@ -29,7 +30,7 @@ export class Comment {
   public id: string;
   public playId: string;
   public comment: string;
-  public createdOn: Date;
+  public createdOn: Temporal.Instant;
   public userId: string;
   public userPhotoURL?: string | null;
   public userDisplayName?: string;
