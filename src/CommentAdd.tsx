@@ -6,6 +6,7 @@ import ButtonPrimary from "./common/components/buttons/ButtonPrimary";
 import { User } from "firebase/auth";
 import { addComment } from "./common/hooks/useComments";
 import { v4 as uuid } from "uuid";
+import { Temporal } from "@js-temporal/polyfill";
 
 export const CommentAdd = (props: { playId: string; user: User }) => {
   const { playId, user } = props;
@@ -19,7 +20,7 @@ export const CommentAdd = (props: { playId: string; user: User }) => {
       playId: playId,
       comment: comment,
       userId: user.uid,
-      createdOn: new Date().toISOString(),
+      createdOn: Temporal.Now.instant().toString({ fractionalSecondDigits: 3 }),
     };
     await addComment(commentDto, user);
     setComment("");

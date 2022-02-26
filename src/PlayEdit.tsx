@@ -13,6 +13,7 @@ import { isEmpty } from "lodash";
 import { v4 as uuid } from "uuid";
 import Spinner from "./common/components/Spinner";
 import useConfirmLeave from "./common/hooks/useConfirmLeave";
+import { getTodayAsString } from "./common/dateUtils";
 
 const getFileExtension = (filename: string) => {
   return filename.slice(((filename.lastIndexOf(".") - 1) >>> 0) + 2);
@@ -136,7 +137,7 @@ export const PlayEdit = () => {
 
   const onImageUpload = async (fieldId: string, file: File) => {
     const storage = getStorage(app);
-    const dateString = new Date().toISOString().substring(0, 10);
+    const dateString = getTodayAsString();
     const extension = getFileExtension(file.name);
     const filename = `${dateString}--${playId}--${uuid()}.${extension}`;
     const storageRef = ref(storage, "play-images/" + filename);
