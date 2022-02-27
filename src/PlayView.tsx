@@ -1,19 +1,15 @@
-import { FC, useMemo } from "react";
-import { Play, MiscDataDTO } from "./domain/play";
+import React, { FC, useMemo, VFC } from "react";
+import { Play } from "./domain/play";
 import { useGames } from "./common/hooks/useGames";
-import { GameMiscFieldDefinition, Game } from "./domain/game";
-import { sortBy } from "lodash";
+import { Game } from "./domain/game";
+import { orderBy, sortBy } from "lodash";
 import { getFirestore, deleteDoc, doc } from "firebase/firestore";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { LoadingSpinner } from "./common/components/LoadingSpinner";
 import { app } from "./common/firebase";
 import { usePlay } from "./common/hooks/usePlay";
 import ViewContentLayout from "./common/components/ViewContentLayout";
-import {
-  formatDuration,
-  formatNthNumber,
-  getPositionAsEmoji,
-} from "./common/stringUtils";
+import { formatNthNumber, getPositionAsEmoji } from "./common/stringUtils";
 import ButtonBack from "./common/components/buttons/ButtonBack";
 import CardButtonRow from "./common/components/buttons/CardButtonRow";
 import ButtonPrimary from "./common/components/buttons/ButtonPrimary";
@@ -36,6 +32,51 @@ import { isAdmin } from "./auth/auth";
 import { CommentList } from "./CommentList";
 import { CommentAdd } from "./CommentAdd";
 import { convertToLocaleDateString } from "./common/dateUtils";
+
+const hiddenMiscFields = ["images", "name", "date"];
+
+const PlayMiscFields: VFC<{ game: Game; play: Play }> = ({ game, play }) => {
+  const date = play.getDate();
+  const expansionIds = play.expansions;
+  const visibleFields = orderBy(
+    game.getMiscFields(expansionIds),
+    "order"
+  ).filter(({ field }) => !hiddenMiscFields.includes(field.id));
+  return (
+    <>
+      Played on {convertToLocaleDateString(date)}
+      {game.hasExpansions() && (
+        <div>
+          <span className="text-slate-500">Used expansions: </span>
+          {(game.expansions || [])
+            .filter(({ id }) => play.expansions.includes(id))
+            .map(({ name }) => name)
+            .join(", ") || "None"}
+        </div>
+      )}
+      {visibleFields.map(({ field }, idx) => {
+        if (field.valuePerPlayer) {
+          return (
+            <React.Fragment key={field.id}>
+              {play.players.map((player) => (
+                <div key={player.id}>
+                  <span className="text-slate-500">{`${field.name} (${player.name}): `}</span>
+                  {play.getMiscFieldDisplayValue(field, player.id)}
+                </div>
+              ))}
+            </React.Fragment>
+          );
+        }
+        return (
+          <div key={field.id}>
+            <span className="text-slate-500">{`${field.name}: `}</span>
+            {play.getMiscFieldDisplayValue(field)}
+          </div>
+        );
+      })}
+    </>
+  );
+};
 
 export const PlayView: FC = () => {
   const [games] = useGames();
@@ -91,50 +132,6 @@ export const PlayView: FC = () => {
     navigate("/");
   };
 
-  const getFieldName = (misc: MiscDataDTO): string => {
-    const field = game
-      .getFields(play.expansions)
-      .find((f) => f.field.id === misc.fieldId);
-    if (!field) return "";
-    if ((field.field as GameMiscFieldDefinition).valuePerPlayer === true) {
-      const playerName = (
-        play.players.find((p) => p.id === misc.playerId) || ({} as any)
-      ).name;
-      return `${field.field.name} (${playerName})`;
-    }
-    return field.field.name;
-  };
-
-  const MiscFields = () => (
-    <>
-      Played on {convertToLocaleDateString(play.getDate())}
-      {game.hasExpansions() && (
-        <div>
-          <span className="text-slate-500">Used expansions: </span>
-          {(game.expansions || [])
-            .filter(({ id }) => play.expansions.includes(id))
-            .map(({ name }) => name)
-            .join(", ") || "None"}
-        </div>
-      )}
-      {play.misc
-        .filter(
-          (x) =>
-            x.fieldId !== "images" &&
-            x.fieldId !== "name" &&
-            x.fieldId !== "date"
-        )
-        .map((misc, idx) => (
-          <div key={idx}>
-            <span className="text-slate-500">{getFieldName(misc)}: </span>
-            {misc.fieldId === "duration"
-              ? formatDuration(misc.data as number)
-              : misc.data}
-          </div>
-        ))}
-    </>
-  );
-
   const MobileHeader = () => (
     <div className="block md:hidden">
       <div className="flex shadow-lg -mt-2 -ml-2 -mr-2 mb-4 rounded-t-xl p-2 bg-gradient-to-l from-slate-300 to-white">
@@ -154,7 +151,7 @@ export const PlayView: FC = () => {
       </div>
 
       <CardContent className="p-2">
-        <MiscFields></MiscFields>
+        <PlayMiscFields play={play} game={game} />
       </CardContent>
     </div>
   );
@@ -178,7 +175,7 @@ export const PlayView: FC = () => {
           </div>
 
           <div className="mt-8 opacity-60">
-            <MiscFields></MiscFields>
+            <PlayMiscFields play={play} game={game} />
           </div>
         </div>
       </div>

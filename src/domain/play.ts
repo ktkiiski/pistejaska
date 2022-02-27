@@ -9,6 +9,7 @@ import { rankScores } from "../common/rankings";
 import { round } from "lodash";
 import { Temporal } from "@js-temporal/polyfill";
 import { convertToLocaleDateString } from "../common/dateUtils";
+import { formatDuration } from "../common/stringUtils";
 
 export type Player = {
   name: string;
@@ -214,7 +215,7 @@ export class Play implements PlayDTO {
     if (value == null) {
       return value;
     }
-    if (field.type === "number") {
+    if (field.type === "number" || field.type === "duration") {
       const numberValue = typeof value === "string" ? parseFloat(value) : value;
       return Number.isFinite(numberValue) ? (numberValue as T) : null;
     }
@@ -222,6 +223,26 @@ export class Play implements PlayDTO {
       return (value as T) ?? ([] as any);
     }
     return String(value) as T;
+  }
+
+  public getMiscFieldDisplayValue(
+    field: GameMiscFieldDefinition,
+    playerId?: string
+  ): string {
+    const value = this.getMiscFieldValue(field, playerId);
+    // If this is a selected option, show the option label instead of the value ("id")
+    const option = field.options?.find((option) => option.value === value);
+    if (option) {
+      return option.label;
+    }
+    // Format durations as hours & minutes
+    if (field.type === "duration") {
+      return formatDuration(value as number);
+    }
+    if (value == null) {
+      return "–";
+    }
+    return String(value);
   }
 
   public hasMiscFieldValue(
