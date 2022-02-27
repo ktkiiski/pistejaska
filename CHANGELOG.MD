@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## 2022-02-27
+
+### Changed
+
+- Replace Date API with Temporal API (https://tc39.es/proposal-temporal/)
+
 ## 2022-02-25
 
 ### Added
