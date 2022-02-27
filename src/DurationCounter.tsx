@@ -1,30 +1,30 @@
 import React, { useEffect, useState } from "react";
+import { Temporal } from "@js-temporal/polyfill";
 
 interface DurationCounterProps {
-  startTime: Date;
+  startTime: number;
 }
 
 function DurationCounter({ startTime }: DurationCounterProps) {
-  const [renderDate, setRenderDate] = useState(new Date());
+  const [renderDate, setRenderDate] = useState(
+    Temporal.Now.instant().epochSeconds
+  );
   useEffect(() => {
     const interval = setInterval(() => {
-      setRenderDate(new Date());
+      setRenderDate(Temporal.Now.instant().epochSeconds);
     });
     return () => clearInterval(interval);
   }, []);
 
-  const duration = Math.max(renderDate.getTime() - startTime.getTime(), 0);
-  const seconds = Math.floor(duration / 1000);
-  const minutes = Math.floor(seconds / 60);
-  const hours = Math.floor(minutes / 60);
-  const hoursStr = String(hours).padStart(2, "0");
-  const minutesStr = String(minutes % 60).padStart(2, "0");
-  const secondsStr = String(seconds % 60).padStart(2, "0");
-  return (
-    <span>
-      {hoursStr}:{minutesStr}:{secondsStr}
-    </span>
+  const duration = Temporal.Instant.fromEpochSeconds(renderDate).since(
+    Temporal.Instant.fromEpochSeconds(startTime),
+    { largestUnit: "hour" }
   );
-}
 
+  const durations = [duration.hours, duration.minutes, duration.seconds].map(
+    (unit) => String(unit).padStart(2, "0")
+  );
+
+  return <span>{durations.join(":")}</span>;
+}
 export default DurationCounter;

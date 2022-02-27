@@ -5,6 +5,10 @@ import ListItemIcon from "./common/components/lists/ListItemIcon";
 import ListItemText from "./common/components/lists/ListItemText";
 import { LoadingSpinner } from "./common/components/LoadingSpinner";
 import ViewContentLayout from "./common/components/ViewContentLayout";
+import {
+  convertToLocaleDateString,
+  convertToLocaleTimeString,
+} from "./common/dateUtils";
 import { useComments } from "./common/hooks/useComments";
 
 export const CommentList = (props: { playId: string }) => {
@@ -53,9 +57,9 @@ export const CommentList = (props: { playId: string }) => {
                 description={comment.comment}
               />
               <ListItemDescription>
-                {comment.createdOn.toLocaleDateString()}
+                {convertToLocaleDateString(comment.createdOn)}
                 <br />
-                {comment.createdOn.toLocaleTimeString()}
+                {convertToLocaleTimeString(comment.createdOn)}
               </ListItemDescription>
             </ListItem>
           );

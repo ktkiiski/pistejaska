@@ -8,6 +8,7 @@ import ListItemText from "./common/components/lists/ListItemText";
 import ListItemDescription from "./common/components/lists/ListItemDescription";
 import ButtonTextOnly from "./common/components/buttons/ButtonTextOnly";
 import ListLinkItem from "./common/components/lists/ListLinkItem";
+import { convertToLocaleDateString } from "./common/dateUtils";
 
 interface PlayListProps {
   plays: Play[];
@@ -30,7 +31,11 @@ const PlayList = (props: PlayListProps) => {
 
   const data = useMemo(
     () =>
-      orderBy(plays, [(play) => play.getDate(), "created"], ["desc", "desc"]),
+      orderBy(
+        plays,
+        [(play) => play.getDate().epochSeconds, "created"],
+        ["desc", "desc"]
+      ),
     [plays]
   );
 
@@ -61,7 +66,7 @@ const PlayList = (props: PlayListProps) => {
                 description={game?.name}
               />
               <ListItemDescription>
-                {play.getDate().toLocaleDateString()}
+                {convertToLocaleDateString(play.getDate())}
                 <br />
                 <span className="text-slate-300">{getPlayLabel(play)}</span>
               </ListItemDescription>

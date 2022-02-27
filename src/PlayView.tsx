@@ -35,6 +35,7 @@ import { getAuth } from "firebase/auth";
 import { isAdmin } from "./auth/auth";
 import { CommentList } from "./CommentList";
 import { CommentAdd } from "./CommentAdd";
+import { convertToLocaleDateString } from "./common/dateUtils";
 
 export const PlayView: FC = () => {
   const [games] = useGames();
@@ -106,7 +107,7 @@ export const PlayView: FC = () => {
 
   const MiscFields = () => (
     <>
-      Played on {play.getDate().toLocaleDateString()}
+      Played on {convertToLocaleDateString(play.getDate())}
       {game.hasExpansions() && (
         <div>
           <span className="text-slate-500">Used expansions: </span>

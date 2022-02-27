@@ -22,6 +22,7 @@ import InputTextField from "./common/components/inputs/InputTextField";
 import { useNavigate } from "react-router-dom";
 import { getAuth } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
+import { Temporal } from "@js-temporal/polyfill";
 
 function shiftRandomly<T>(values: T[]) {
   const offset = Math.floor(Math.random() * values.length);
@@ -46,8 +47,10 @@ async function createPlay(
     expansions: [],
     scores: [],
     misc: Game.getDefaultMiscFieldValues(),
-    created: new Date().toISOString(),
     createdBy: userId,
+    created: Temporal.Now.instant().toString({
+      fractionalSecondDigits: 3,
+    }),
   });
 
   const db = getFirestore(app);
