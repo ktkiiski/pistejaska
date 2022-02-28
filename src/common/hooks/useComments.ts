@@ -38,9 +38,7 @@ export const useComments = (
   return [
     loading || !datas
       ? []
-      : sortBy(datas, (x) => x.createdOn)
-          .reverse()
-          .map((x) => new Comment(x, users)),
+      : sortBy(datas, (x) => x.createdOn).map((x) => new Comment(x, users)),
     loading,
     error,
   ];

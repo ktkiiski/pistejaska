@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## Unreleased
 
+### Changed
+
+- Change comment ordering to oldest first
+
 ### Fixed
 
 - Show play dimension values from option fields as option labels instead of values (option IDs)
