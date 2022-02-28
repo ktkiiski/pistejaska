@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## Unreleased
 
+### Added
+
+- Comments support Markdown syntax and any URLs are automatically made links
+
 ### Changed
 
 - Change comment ordering to oldest first

@@ -4,6 +4,7 @@ import ListItemDescription from "./common/components/lists/ListItemDescription";
 import ListItemIcon from "./common/components/lists/ListItemIcon";
 import ListItemText from "./common/components/lists/ListItemText";
 import { LoadingSpinner } from "./common/components/LoadingSpinner";
+import Markdown from "./common/components/Markdown";
 import ViewContentLayout from "./common/components/ViewContentLayout";
 import {
   convertToLocaleDateString,
@@ -54,7 +55,7 @@ export const CommentList = (props: { playId: string }) => {
               </ListItemIcon>
               <ListItemText
                 title={comment.userDisplayName ?? ""}
-                description={comment.comment}
+                description={<Markdown>{comment.comment}</Markdown>}
               />
               <ListItemDescription>
                 {convertToLocaleDateString(comment.createdOn)}

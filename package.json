@@ -21,6 +21,7 @@
     "react-tooltip": "^4.2.21",
     "react-transition-group": "^4.4.2",
     "recharts": "^1.8.5",
+    "remark-gfm": "^3.0.1",
     "ts-trueskill": "^3.2.2",
     "uuid": "^8.3.2"
   },
