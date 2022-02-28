@@ -4,7 +4,7 @@ const ListItemText: React.VFC<{
 }> = ({ title, description }) => (
   <div className="flex-1 pl-1 mr-8">
     <div className="font-medium">{title}</div>
-    <div className="text-slate-600 text-sm">{description}</div>
+    <div className="text-slate-600 text-sm break-word">{description}</div>
   </div>
 );
 

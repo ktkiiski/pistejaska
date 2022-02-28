@@ -12,6 +12,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Fixed
 
+- Fixed comment list layout on long message words, e.g. URLs
 - Show play dimension values from option fields as option labels instead of values (option IDs)
 
 ## 2022-02-27

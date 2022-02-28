@@ -8,7 +8,7 @@ const ListItemIcon: React.FC<HTMLAttributes<HTMLDivElement>> = ({
 }) => (
   <div
     className={classNames(
-      "flex flex-col justify-center items-center mr-4",
+      "flex flex-col justify-center items-center mr-4 shrink-0",
       className
     )}
     {...props}
