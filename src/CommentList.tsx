@@ -1,16 +1,56 @@
-import List from "./common/components/lists/List";
-import ListItem from "./common/components/lists/ListItem";
-import ListItemDescription from "./common/components/lists/ListItemDescription";
-import ListItemIcon from "./common/components/lists/ListItemIcon";
-import ListItemText from "./common/components/lists/ListItemText";
+import { Temporal } from "@js-temporal/polyfill";
+import { last } from "lodash";
+import { Fragment } from "react";
+import ReactTooltip from "react-tooltip";
 import { LoadingSpinner } from "./common/components/LoadingSpinner";
-import Markdown from "./common/components/Markdown";
+import Message from "./common/components/messages/Message";
+import MessageGroup from "./common/components/messages/MessageGroup";
 import ViewContentLayout from "./common/components/ViewContentLayout";
 import {
   convertToLocaleDateString,
   convertToLocaleTimeString,
 } from "./common/dateUtils";
 import { useComments } from "./common/hooks/useComments";
+import { Comment } from "./domain/comment";
+
+interface CommentGroup {
+  date: Temporal.Instant;
+  messageGroups: {
+    userId: string;
+    userPhotoURL?: string | null;
+    userDisplayName?: string;
+    comments: Comment[];
+  }[];
+}
+
+function groupComments(comments: Comment[]): CommentGroup[] {
+  const groups: CommentGroup[] = [];
+  comments.forEach((comment) => {
+    const { userId, userPhotoURL, userDisplayName, createdOn } = comment;
+    let group = last(groups);
+    if (
+      !group ||
+      createdOn.since(group.date, { largestUnit: "minute" }).minutes > 5
+    ) {
+      // Start a new group
+      group = { date: createdOn, messageGroups: [] };
+      groups.push(group);
+    }
+    let messageGroup = last(group.messageGroups);
+    if (!messageGroup || messageGroup.userId !== userId) {
+      // Start a new message group
+      messageGroup = {
+        userId,
+        userPhotoURL,
+        userDisplayName,
+        comments: [],
+      };
+      group.messageGroups.push(messageGroup);
+    }
+    messageGroup.comments.push(comment);
+  });
+  return groups;
+}
 
 export const CommentList = (props: { playId: string }) => {
   const { playId } = props;
@@ -36,36 +76,33 @@ export const CommentList = (props: { playId: string }) => {
     );
   }
 
+  const groups = groupComments(comments);
+
   return (
-    <>
-      <List>
-        {comments.map((comment) => {
-          return (
-            <ListItem key={comment.id}>
-              <ListItemIcon>
-                {comment.userPhotoURL ? (
-                  <img
-                    alt="gamepic"
-                    src={comment.userPhotoURL}
-                    className="mx-auto object-cover rounded-full h-14 w-14 "
-                  />
-                ) : (
-                  <div className="mx-auto object-cover rounded-full h-14 w-14 background-gray" />
-                )}
-              </ListItemIcon>
-              <ListItemText
-                title={comment.userDisplayName ?? ""}
-                description={<Markdown>{comment.comment}</Markdown>}
-              />
-              <ListItemDescription>
-                {convertToLocaleDateString(comment.createdOn)}
-                <br />
-                {convertToLocaleTimeString(comment.createdOn)}
-              </ListItemDescription>
-            </ListItem>
-          );
-        })}
-      </List>
-    </>
+    <div className="space-y-2 px-2">
+      <ReactTooltip />
+      {groups.map((group, groupIdx) => (
+        <Fragment key={groupIdx}>
+          <div className="p-1 text-slate-400 text-xs text-center">{`${convertToLocaleDateString(
+            group.date
+          )} ${convertToLocaleTimeString(group.date)}`}</div>
+          {group.messageGroups.map(
+            ({ userDisplayName, userPhotoURL, comments }, idx) => (
+              <MessageGroup
+                key={idx}
+                userDisplayName={userDisplayName}
+                userPhotoURL={userPhotoURL}
+              >
+                {comments.map((comment, messageIdx) => (
+                  <Message date={comment.createdOn} key={messageIdx}>
+                    {comment.comment}
+                  </Message>
+                ))}
+              </MessageGroup>
+            )
+          )}
+        </Fragment>
+      ))}
+    </div>
   );
 };

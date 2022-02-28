@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 
+- Redesigned the comment lists. The new design is inspired by Facebook Messenger.
 - Comments support Markdown syntax and any URLs are automatically made links
 
 ### Changed
