@@ -1,21 +1,18 @@
 import { Temporal } from "@js-temporal/polyfill";
 import { last } from "lodash";
-import { Fragment } from "react";
-import ReactTooltip from "react-tooltip";
 import { LoadingSpinner } from "./common/components/LoadingSpinner";
-import Message from "./common/components/messages/Message";
-import MessageGroup from "./common/components/messages/MessageGroup";
+import CommentItem from "./common/components/comments/CommentItem";
+import CommentSenderGroup from "./common/components/comments/CommentSenderGroup";
 import ViewContentLayout from "./common/components/ViewContentLayout";
-import {
-  convertToLocaleDateString,
-  convertToLocaleTimeString,
-} from "./common/dateUtils";
 import { useComments } from "./common/hooks/useComments";
 import { Comment } from "./domain/comment";
+import CommentListContainer from "./common/components/comments/CommentListContainer";
+import CommentTimeGroup from "./common/components/comments/CommentTimeGroup";
+import ReactTooltip from "react-tooltip";
 
 interface CommentGroup {
   date: Temporal.Instant;
-  messageGroups: {
+  senderGroups: {
     userId: string;
     userPhotoURL?: string | null;
     userDisplayName?: string;
@@ -33,21 +30,21 @@ function groupComments(comments: Comment[]): CommentGroup[] {
       createdOn.since(group.date, { largestUnit: "minute" }).minutes > 5
     ) {
       // Start a new group
-      group = { date: createdOn, messageGroups: [] };
+      group = { date: createdOn, senderGroups: [] };
       groups.push(group);
     }
-    let messageGroup = last(group.messageGroups);
-    if (!messageGroup || messageGroup.userId !== userId) {
+    let senderGroup = last(group.senderGroups);
+    if (!senderGroup || senderGroup.userId !== userId) {
       // Start a new message group
-      messageGroup = {
+      senderGroup = {
         userId,
         userPhotoURL,
         userDisplayName,
         comments: [],
       };
-      group.messageGroups.push(messageGroup);
+      group.senderGroups.push(senderGroup);
     }
-    messageGroup.comments.push(comment);
+    senderGroup.comments.push(comment);
   });
   return groups;
 }
@@ -79,30 +76,27 @@ export const CommentList = (props: { playId: string }) => {
   const groups = groupComments(comments);
 
   return (
-    <div className="space-y-2 px-2">
+    <CommentListContainer className="mx-2">
       <ReactTooltip />
       {groups.map((group, groupIdx) => (
-        <Fragment key={groupIdx}>
-          <div className="p-1 text-slate-400 text-xs text-center">{`${convertToLocaleDateString(
-            group.date
-          )} ${convertToLocaleTimeString(group.date)}`}</div>
-          {group.messageGroups.map(
+        <CommentTimeGroup key={groupIdx} date={group.date}>
+          {group.senderGroups.map(
             ({ userDisplayName, userPhotoURL, comments }, idx) => (
-              <MessageGroup
+              <CommentSenderGroup
                 key={idx}
                 userDisplayName={userDisplayName}
                 userPhotoURL={userPhotoURL}
               >
                 {comments.map((comment, messageIdx) => (
-                  <Message date={comment.createdOn} key={messageIdx}>
+                  <CommentItem date={comment.createdOn} key={messageIdx}>
                     {comment.comment}
-                  </Message>
+                  </CommentItem>
                 ))}
-              </MessageGroup>
+              </CommentSenderGroup>
             )
           )}
-        </Fragment>
+        </CommentTimeGroup>
       ))}
-    </div>
+    </CommentListContainer>
   );
 };

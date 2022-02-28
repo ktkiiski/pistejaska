@@ -1,11 +1,11 @@
 import { FC } from "react";
 
-interface MessageGroupProps {
+interface CommentSenderGroupProps {
   userPhotoURL: string | null | undefined;
   userDisplayName: string | undefined;
 }
 
-const MessageGroup: FC<MessageGroupProps> = ({
+const CommentSenderGroup: FC<CommentSenderGroupProps> = ({
   children,
   userPhotoURL,
   userDisplayName,
@@ -29,4 +29,4 @@ const MessageGroup: FC<MessageGroupProps> = ({
   </div>
 );
 
-export default MessageGroup;
+export default CommentSenderGroup;

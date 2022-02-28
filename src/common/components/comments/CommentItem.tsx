@@ -2,12 +2,12 @@ import { Temporal } from "@js-temporal/polyfill";
 import { VFC } from "react";
 import Markdown from "../Markdown";
 
-interface MessageProps {
+interface CommentItemProps {
   children: string;
   date: Temporal.Instant;
 }
 
-const Message: VFC<MessageProps> = ({ children, date }) => {
+const CommentItem: VFC<CommentItemProps> = ({ children, date }) => {
   return (
     <div
       className="py-2 px-3 rounded-l rounded-r-2xl first:rounded-tl-2xl last:rounded-bl-2xl mr-4 bg-white shadow"
@@ -19,4 +19,4 @@ const Message: VFC<MessageProps> = ({ children, date }) => {
   );
 };
 
-export default Message;
+export default CommentItem;
