@@ -4,13 +4,10 @@ import {
   getFirestore,
   collection,
   FirestoreDataConverter,
-  doc,
   query,
   where,
-  setDoc,
 } from "firebase/firestore";
-import { User } from "firebase/auth";
-import { addOrUpdateUser, useUsers } from "./useUsers";
+import { useUsers } from "./useUsers";
 import { sortBy } from "lodash";
 import { Comment, CommentDTO } from "../../domain/comment";
 
@@ -42,11 +39,4 @@ export const useComments = (
     loading,
     error,
   ];
-};
-
-export const addComment = async (comment: CommentDTO, user: User) => {
-  const db = getFirestore(app);
-
-  await addOrUpdateUser(db, user);
-  await setDoc(doc(db, "comments-v1", comment.id), comment);
 };

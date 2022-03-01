@@ -9,6 +9,8 @@ import { Comment } from "./domain/comment";
 import CommentListContainer from "./common/components/comments/CommentListContainer";
 import CommentTimeGroup from "./common/components/comments/CommentTimeGroup";
 import ReactTooltip from "react-tooltip";
+import { deleteComment } from "./actions/deleteComment";
+import useCurrentUser from "./common/hooks/useCurrentUser";
 
 interface CommentGroup {
   date: Temporal.Instant;
@@ -50,6 +52,7 @@ function groupComments(comments: Comment[]): CommentGroup[] {
 }
 
 export const CommentList = (props: { playId: string }) => {
+  const [user] = useCurrentUser();
   const { playId } = props;
   const [comments, loading, error] = useComments(playId);
 
@@ -88,7 +91,17 @@ export const CommentList = (props: { playId: string }) => {
                 userPhotoURL={userPhotoURL}
               >
                 {comments.map((comment, messageIdx) => (
-                  <CommentItem date={comment.createdOn} key={messageIdx}>
+                  <CommentItem
+                    date={comment.createdOn}
+                    key={messageIdx}
+                    onDelete={
+                      comment.userId === user?.uid
+                        ? () => {
+                            deleteComment(comment.id);
+                          }
+                        : null
+                    }
+                  >
                     {comment.comment}
                   </CommentItem>
                 ))}

@@ -26,12 +26,11 @@ import TableBody from "./common/components/tables/TableBody";
 import TableFooter from "./common/components/tables/TableFooter";
 import ImageGalleryList from "./common/components/gallery/ImageGalleryList";
 import { ImageGalleryItem } from "./common/components/gallery/ImageGallerySwipeView";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { getAuth } from "firebase/auth";
 import { isAdmin } from "./auth/auth";
 import { CommentList } from "./CommentList";
 import { CommentAdd } from "./CommentAdd";
 import { convertToLocaleDateString } from "./common/dateUtils";
+import useCurrentUser from "./common/hooks/useCurrentUser";
 
 const hiddenMiscFields = ["images", "name", "date"];
 
@@ -80,7 +79,7 @@ const PlayMiscFields: VFC<{ game: Game; play: Play }> = ({ game, play }) => {
 
 export const PlayView: FC = () => {
   const [games] = useGames();
-  const [user] = useAuthState(getAuth());
+  const [user] = useCurrentUser();
   const playId = useParams().playId!;
   const navigate = useNavigate();
 

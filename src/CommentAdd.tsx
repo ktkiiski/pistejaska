@@ -4,9 +4,9 @@ import { LoadingSpinner } from "./common/components/LoadingSpinner";
 import InputTextField from "./common/components/inputs/InputTextField";
 import ButtonPrimary from "./common/components/buttons/ButtonPrimary";
 import { User } from "firebase/auth";
-import { addComment } from "./common/hooks/useComments";
 import { v4 as uuid } from "uuid";
 import { Temporal } from "@js-temporal/polyfill";
+import { addComment } from "./actions/addComment";
 
 export const CommentAdd = (props: { playId: string; user: User }) => {
   const { playId, user } = props;
