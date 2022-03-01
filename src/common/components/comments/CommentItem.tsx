@@ -33,7 +33,7 @@ const CommentItem: VFC<CommentItemProps> = ({ children, date, onDelete }) => {
   return (
     <div className="flex flex-row items-center group">
       <div
-        className="py-2 px-3 rounded-l rounded-r-2xl first:rounded-tl-2xl last:rounded-bl-2xl bg-white active:bg-gray-200 transition shadow"
+        className="py-2 px-3 rounded-l rounded-r-2xl group-first:rounded-tl-2xl group-last:rounded-bl-2xl bg-white active:bg-gray-200 transition shadow"
         data-tip={date.toLocaleString()}
         data-delay-show={500}
         {...longPressEventHandlers}
