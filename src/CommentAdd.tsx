@@ -32,17 +32,21 @@ export const CommentAdd = (props: { playId: string; user: User }) => {
       {isSaving ? <LoadingSpinner /> : null}
       {isSaving === false ? (
         <>
-          <div className="flex w-full justify-center mt-4">
+          <form className="flex flex-row w-full justify-center items-center mt-4">
             <InputTextField
-              className="w-60 max-w-full"
+              className="w-60 max-w-full mb-2"
               label={"Comment"}
               value={comment ?? ""}
               onChange={(newValue) => setComment(newValue)}
             />
-            <ButtonPrimary className="float-right" onClick={onSave}>
-              Post
+            <ButtonPrimary
+              className="shrink-0 ml-1"
+              onClick={onSave}
+              type="submit"
+            >
+              Send
             </ButtonPrimary>
-          </div>
+          </form>
         </>
       ) : (
         <></>

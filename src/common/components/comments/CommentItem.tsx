@@ -58,7 +58,7 @@ const CommentItem: VFC<CommentItemProps> = ({ children, date, onDelete }) => {
       >
         <button
           className={classNames(
-            "ml-2 hover:text-slate-500 hover:bg-gray-200 w-7 h-7 flex items-center justify-center cursor-pointer rounded-full shrink-0 group-hover:visible",
+            "ml-2 hover:text-slate-500 hover:bg-gray-200 w-7 h-7 flex items-center justify-center cursor-pointer rounded-full shrink-0 grow-0 group-hover:visible",
             isDropdownOpen
               ? "visible text-slate-500 bg-gray-200"
               : "invisible text-slate-300"

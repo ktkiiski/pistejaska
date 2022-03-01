@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Redesigned the comment lists
 - Ability to remove own comments
 - Comments support Markdown syntax and any URLs are automatically made links
+- Pressing enter sends the typed comment
 
 ### Changed
 
