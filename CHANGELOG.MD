@@ -4,7 +4,9 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## Unreleased
+## 2022-03-01
+
+![Improved commenting UI](https://bitbucket.org/repo/eyyL58g/images/1832721718-Screenshot%202022-03-01%20at%2015.11.50.png)
 
 ### Added
 
