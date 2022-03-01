@@ -13,12 +13,14 @@ const ButtonBase: React.FC<ButtonHTMLAttributes<HTMLButtonElement>> = ({
   onClick,
   className,
   disabled,
+  type,
   ...props
 }) => (
   <button
     className={`${buttonBaseClassName} ${className}
     `}
-    onClick={disabled || !onClick ? () => {} : onClick}
+    onClick={!disabled ? onClick : undefined}
+    type={type ?? "button"}
     {...props}
   >
     {children}

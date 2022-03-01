@@ -4,6 +4,26 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## 2022-03-01
+
+![Improved commenting UI](https://bitbucket.org/repo/eyyL58g/images/1832721718-Screenshot%202022-03-01%20at%2015.11.50.png)
+
+### Added
+
+- Redesigned the comment lists
+- Ability to remove own comments
+- Comments support Markdown syntax and any URLs are automatically made links
+- Pressing enter sends the typed comment
+
+### Changed
+
+- Change comment ordering to oldest first
+
+### Fixed
+
+- Fixed comment list layout on long message words, e.g. URLs
+- Show play dimension values from option fields as option labels instead of values (option IDs)
+
 ## 2022-02-27
 
 ### Changed

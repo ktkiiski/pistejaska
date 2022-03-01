@@ -4,9 +4,9 @@ import { LoadingSpinner } from "./common/components/LoadingSpinner";
 import InputTextField from "./common/components/inputs/InputTextField";
 import ButtonPrimary from "./common/components/buttons/ButtonPrimary";
 import { User } from "firebase/auth";
-import { addComment } from "./common/hooks/useComments";
 import { v4 as uuid } from "uuid";
 import { Temporal } from "@js-temporal/polyfill";
+import { addComment } from "./actions/addComment";
 
 export const CommentAdd = (props: { playId: string; user: User }) => {
   const { playId, user } = props;
@@ -32,17 +32,21 @@ export const CommentAdd = (props: { playId: string; user: User }) => {
       {isSaving ? <LoadingSpinner /> : null}
       {isSaving === false ? (
         <>
-          <div className="flex w-full justify-center mt-4">
+          <form className="flex flex-row w-full justify-center items-center mt-4">
             <InputTextField
-              className="w-60 max-w-full"
+              className="w-60 max-w-full mb-2"
               label={"Comment"}
               value={comment ?? ""}
               onChange={(newValue) => setComment(newValue)}
             />
-            <ButtonPrimary className="float-right" onClick={onSave}>
-              Post
+            <ButtonPrimary
+              className="shrink-0 ml-1"
+              onClick={onSave}
+              type="submit"
+            >
+              Send
             </ButtonPrimary>
-          </div>
+          </form>
         </>
       ) : (
         <></>

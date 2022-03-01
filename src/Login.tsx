@@ -1,9 +1,8 @@
-import React from "react";
-import { useAuthState } from "react-firebase-hooks/auth";
 import { Link } from "react-router-dom";
 import { getAuth, GoogleAuthProvider, signInWithRedirect } from "firebase/auth";
 import { LoadingSpinner } from "./common/components/LoadingSpinner";
 import ButtonPrimary from "./common/components/buttons/ButtonPrimary";
+import useCurrentUser from "./common/hooks/useCurrentUser";
 
 export const Login = () => {
   const center = {
@@ -13,7 +12,7 @@ export const Login = () => {
     transform: "translate(-50%, -50%)",
   };
   const auth = getAuth();
-  const [user, loading] = useAuthState(auth);
+  const [user, loading] = useCurrentUser();
   const login = async () => {
     // NOTE: could change implementation, this requires 3rd party cookies
     const provider = new GoogleAuthProvider();

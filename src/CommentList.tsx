@@ -1,17 +1,54 @@
-import List from "./common/components/lists/List";
-import ListItem from "./common/components/lists/ListItem";
-import ListItemDescription from "./common/components/lists/ListItemDescription";
-import ListItemIcon from "./common/components/lists/ListItemIcon";
-import ListItemText from "./common/components/lists/ListItemText";
+import { groupBy, last, map } from "lodash";
 import { LoadingSpinner } from "./common/components/LoadingSpinner";
+import CommentItem from "./common/components/comments/CommentItem";
+import CommentSenderGroup from "./common/components/comments/CommentSenderGroup";
 import ViewContentLayout from "./common/components/ViewContentLayout";
-import {
-  convertToLocaleDateString,
-  convertToLocaleTimeString,
-} from "./common/dateUtils";
 import { useComments } from "./common/hooks/useComments";
+import { Comment } from "./domain/comment";
+import CommentListContainer from "./common/components/comments/CommentListContainer";
+import CommentDateGroup from "./common/components/comments/CommentDateGroup";
+import ReactTooltip from "react-tooltip";
+import { deleteComment } from "./actions/deleteComment";
+import useCurrentUser from "./common/hooks/useCurrentUser";
+import { convertToLocaleDateString } from "./common/dateUtils";
+
+interface CommentGroup {
+  heading: string;
+  senderGroups: {
+    userId: string;
+    userPhotoURL?: string | null;
+    userDisplayName?: string;
+    comments: Comment[];
+  }[];
+}
+
+function groupComments(comments: Comment[]): CommentGroup[] {
+  const commentsByDate = groupBy(comments, (comment) =>
+    convertToLocaleDateString(comment.createdOn)
+  );
+  return map(commentsByDate, (dateComments, heading): CommentGroup => {
+    const senderGroups: CommentGroup["senderGroups"] = [];
+    dateComments.forEach((comment) => {
+      const { userId, userPhotoURL, userDisplayName } = comment;
+      let senderGroup = last(senderGroups);
+      if (!senderGroup || senderGroup.userId !== userId) {
+        // Start a new message group
+        senderGroup = {
+          userId,
+          userPhotoURL,
+          userDisplayName,
+          comments: [],
+        };
+        senderGroups.push(senderGroup);
+      }
+      senderGroup.comments.push(comment);
+    });
+    return { heading, senderGroups };
+  });
+}
 
 export const CommentList = (props: { playId: string }) => {
+  const [user] = useCurrentUser();
   const { playId } = props;
   const [comments, loading, error] = useComments(playId);
 
@@ -35,36 +72,40 @@ export const CommentList = (props: { playId: string }) => {
     );
   }
 
+  const groups = groupComments(comments);
+
   return (
-    <>
-      <List>
-        {comments.map((comment) => {
-          return (
-            <ListItem key={comment.id}>
-              <ListItemIcon>
-                {comment.userPhotoURL ? (
-                  <img
-                    alt="gamepic"
-                    src={comment.userPhotoURL}
-                    className="mx-auto object-cover rounded-full h-14 w-14 "
-                  />
-                ) : (
-                  <div className="mx-auto object-cover rounded-full h-14 w-14 background-gray" />
-                )}
-              </ListItemIcon>
-              <ListItemText
-                title={comment.userDisplayName ?? ""}
-                description={comment.comment}
-              />
-              <ListItemDescription>
-                {convertToLocaleDateString(comment.createdOn)}
-                <br />
-                {convertToLocaleTimeString(comment.createdOn)}
-              </ListItemDescription>
-            </ListItem>
-          );
-        })}
-      </List>
-    </>
+    <CommentListContainer className="mx-2">
+      <ReactTooltip />
+      {groups.map((group, groupIdx) => (
+        <CommentDateGroup key={groupIdx} heading={group.heading}>
+          {group.senderGroups.map(
+            ({ userDisplayName, userPhotoURL, comments }, idx) => (
+              <CommentSenderGroup
+                key={idx}
+                userDisplayName={userDisplayName}
+                userPhotoURL={userPhotoURL}
+              >
+                {comments.map((comment, messageIdx) => (
+                  <CommentItem
+                    date={comment.createdOn}
+                    key={messageIdx}
+                    onDelete={
+                      comment.userId === user?.uid
+                        ? () => {
+                            deleteComment(comment.id);
+                          }
+                        : null
+                    }
+                  >
+                    {comment.comment}
+                  </CommentItem>
+                ))}
+              </CommentSenderGroup>
+            )
+          )}
+        </CommentDateGroup>
+      ))}
+    </CommentListContainer>
   );
 };

@@ -1,4 +1,3 @@
-import React from "react";
 import { Login } from "./Login";
 import { NavBar } from "./common/components/NavBar";
 import {
@@ -7,7 +6,6 @@ import {
   Route,
   Routes,
 } from "react-router-dom";
-import { useAuthState } from "react-firebase-hooks/auth";
 import { SelectGame } from "./SelectGame";
 import { PlayEdit } from "./PlayEdit";
 import { PlayView } from "./PlayView";
@@ -19,12 +17,12 @@ import ReplayView from "./SelectPlayersFromPlay";
 import { ReportPlayerView } from "./ReportPlayerView";
 import { ReportPlayerList } from "./ReportPlayerList";
 import Admin from "./Admin";
-import { getAuth } from "firebase/auth";
 import { LoadingSpinner } from "./common/components/LoadingSpinner";
 import NewPlayView from "./NewPlayView";
+import useCurrentUser from "./common/hooks/useCurrentUser";
 
 const App = () => {
-  const [user, loading] = useAuthState(getAuth());
+  const [user, loading] = useCurrentUser();
   if (loading) {
     return (
       <div className="w-full h-screen flex flex-col items-center justify-center">

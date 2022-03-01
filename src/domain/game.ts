@@ -288,7 +288,7 @@ export class Game implements GameDefinition {
     ];
   }
 
-  public getScoreFields(expansionIds: string[] = []): GameFieldItem[] {
+  public getScoreFields(expansionIds: string[] = []): GameScoreFieldItem[] {
     const { scoreFields, expansions = [] } = this;
     return [
       ...scoreFields.map(
@@ -304,7 +304,7 @@ export class Game implements GameDefinition {
     ];
   }
 
-  public getMiscFields(expansionIds: string[] = []): GameFieldItem[] {
+  public getMiscFields(expansionIds: string[] = []): GameMiscFieldItem[] {
     const { miscFields = [], expansions = [] } = this;
     return [
       ...miscFields.map(
@@ -322,9 +322,10 @@ export class Game implements GameDefinition {
 
   public getFields(expansionIds: string[] = []): GameFieldItem[] {
     return sortBy(
-      this.getScoreFields(expansionIds).concat(
-        this.getMiscFields(expansionIds)
-      ),
+      [
+        ...this.getScoreFields(expansionIds),
+        ...this.getMiscFields(expansionIds),
+      ],
       (x) => x.order
     );
   }
@@ -369,17 +370,19 @@ export type GameDefinition = {
   expansions?: GameExpansionDefinition[];
 };
 
-type GameFieldItem =
-  | {
-      type: "score";
-      order: number;
-      field: GameScoreFieldDefinition;
-    }
-  | {
-      type: "misc";
-      order: number;
-      field: GameMiscFieldDefinition;
-    };
+type GameScoreFieldItem = {
+  type: "score";
+  order: number;
+  field: GameScoreFieldDefinition;
+};
+
+type GameMiscFieldItem = {
+  type: "misc";
+  order: number;
+  field: GameMiscFieldDefinition;
+};
+
+type GameFieldItem = GameScoreFieldItem | GameMiscFieldItem;
 
 export interface GameFieldOption<T> {
   value: T;

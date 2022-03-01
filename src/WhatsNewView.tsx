@@ -3,7 +3,7 @@ import "github-markdown-css";
 import changelogMarkdownUrl from "./CHANGELOG.md";
 import { LoadingSpinner } from "./common/components/LoadingSpinner";
 import ViewContentLayout from "./common/components/ViewContentLayout";
-import ReactMarkdown from "react-markdown";
+import Markdown from "./common/components/Markdown";
 
 async function loadText(url: string): Promise<string> {
   const response = await fetch(url);
@@ -21,9 +21,7 @@ export default function WhatsNewView() {
   }
   return (
     <ViewContentLayout>
-      <ReactMarkdown className="markdown-body p-4" linkTarget="_blank">
-        {markdown}
-      </ReactMarkdown>
+      <Markdown className="markdown-body p-4">{markdown}</Markdown>
     </ViewContentLayout>
   );
 }
