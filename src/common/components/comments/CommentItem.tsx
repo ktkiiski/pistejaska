@@ -1,6 +1,7 @@
 import { Temporal } from "@js-temporal/polyfill";
 import classNames from "classnames";
 import { useState, VFC } from "react";
+import { convertToLocaleTimeString } from "../../dateUtils";
 import DropdownMenu from "../dropdowns/DropdownMenu";
 import Markdown from "../Markdown";
 
@@ -9,6 +10,19 @@ interface CommentItemProps {
   date: Temporal.Instant;
   onDelete: (() => void) | null;
 }
+
+const actionMenuIcon = (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 29.96 122.88"
+    className="w-3/6 h-3/6"
+  >
+    <path
+      fill="currentColor"
+      d="M15,0A15,15,0,1,1,0,15,15,15,0,0,1,15,0Zm0,92.93a15,15,0,1,1-15,15,15,15,0,0,1,15-15Zm0-46.47a15,15,0,1,1-15,15,15,15,0,0,1,15-15Z"
+    />
+  </svg>
+);
 
 const CommentItem: VFC<CommentItemProps> = ({ children, date, onDelete }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -21,10 +35,10 @@ const CommentItem: VFC<CommentItemProps> = ({ children, date, onDelete }) => {
         data-tip={date.toLocaleString()}
         data-delay-show={500}
       >
-        <Markdown>{children}</Markdown>
-        <div className="float-right text-xs text-slate-300">
-          {date.toLocaleString()}
+        <div className="float-right text-xs text-slate-300 mt-0.5 ml-3 mb-2">
+          {convertToLocaleTimeString(date, { timeStyle: "short" })}
         </div>
+        <Markdown>{children}</Markdown>
       </div>
       <DropdownMenu
         isOpen={isDropdownOpen}
@@ -48,16 +62,7 @@ const CommentItem: VFC<CommentItemProps> = ({ children, date, onDelete }) => {
           )}
           onClick={openDropdown}
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 29.96 122.88"
-            className="w-3/6 h-3/6"
-          >
-            <path
-              fill="currentColor"
-              d="M15,0A15,15,0,1,1,0,15,15,15,0,0,1,15,0Zm0,92.93a15,15,0,1,1-15,15,15,15,0,0,1,15-15Zm0-46.47a15,15,0,1,1-15,15,15,15,0,0,1,15-15Z"
-            />
-          </svg>
+          {actionMenuIcon}
         </button>
       </DropdownMenu>
     </div>
