@@ -1,7 +1,8 @@
 import { Temporal } from "@js-temporal/polyfill";
 import classNames from "classnames";
-import { useState, VFC } from "react";
+import { useCallback, useState, VFC } from "react";
 import { convertToLocaleTimeString } from "../../dateUtils";
+import useLongPress from "../../hooks/useLongPress";
 import DropdownMenu from "../dropdowns/DropdownMenu";
 import Markdown from "../Markdown";
 
@@ -26,14 +27,16 @@ const actionMenuIcon = (
 
 const CommentItem: VFC<CommentItemProps> = ({ children, date, onDelete }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const openDropdown = () => setIsDropdownOpen(true);
-  const closeDropdown = () => setIsDropdownOpen(false);
+  const openDropdown = useCallback(() => setIsDropdownOpen(true), []);
+  const closeDropdown = useCallback(() => setIsDropdownOpen(false), []);
+  const longPressEventHandlers = useLongPress<HTMLDivElement>(openDropdown);
   return (
     <div className="flex flex-row items-center group">
       <div
-        className="py-2 px-3 rounded-l rounded-r-2xl first:rounded-tl-2xl last:rounded-bl-2xl bg-white shadow"
+        className="py-2 px-3 rounded-l rounded-r-2xl first:rounded-tl-2xl last:rounded-bl-2xl bg-white active:bg-gray-200 transition shadow"
         data-tip={date.toLocaleString()}
         data-delay-show={500}
+        {...longPressEventHandlers}
       >
         <div className="float-right text-xs text-slate-300 mt-0.5 ml-3 mb-2">
           {convertToLocaleTimeString(date, { timeStyle: "short" })}
