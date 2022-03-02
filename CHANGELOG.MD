@@ -16,6 +16,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Confirm deleting a comment
 - A comment can be long-pressed only by touching, not with a mouse. You may use desktop browser developer tools to simulate touches.
 - When a comment is long-pressed, the dropdown opens directly below the comment itself, instead of the icon
+- Changed the timestamp positioning in the comments to the bottom right
 
 ## 2022-03-01
 

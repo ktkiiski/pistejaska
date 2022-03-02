@@ -43,7 +43,7 @@ const CommentItem: VFC<CommentItemProps> = ({ children, date, onDelete }) => {
       >
         <div
           className={classNames(
-            "py-2 px-3 rounded-l rounded-r-2xl group-first:rounded-tl-2xl group-last:rounded-bl-2xl transition shadow",
+            "py-2 px-3 flex flex-row items-end gap-x-3 rounded-l rounded-r-2xl group-first:rounded-tl-2xl group-last:rounded-bl-2xl transition shadow",
             isPressing || dropdownState === "bubble"
               ? "bg-gray-200"
               : "bg-white"
@@ -53,10 +53,10 @@ const CommentItem: VFC<CommentItemProps> = ({ children, date, onDelete }) => {
           data-tip-disable={dropdownState != null}
           {...longPressEventHandlers}
         >
-          <div className="float-right text-xs text-slate-300 mt-0.5 ml-3 mb-2">
+          <Markdown className="grow">{children}</Markdown>
+          <div className="grow-0 shrink-0 text-xs leading-5 text-slate-300">
             {convertToLocaleTimeString(date, { timeStyle: "short" })}
           </div>
-          <Markdown>{children}</Markdown>
         </div>
       </CommentItemActionMenu>
       <CommentItemActionMenu
