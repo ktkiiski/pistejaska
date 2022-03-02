@@ -8,11 +8,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Fixed
 
-- Do not show tooltip on comment that is being long-tapped
+- Long-press on a comment does not occur while scrolling
+- Tooltip is not shown on a comment that has been long-pressed
 
 ### Changed
 
-- Comment action dropdown opens from the message bubble when long-tapped, instead of the icon
+- A comment can be long-pressed only by touching, not with a mouse. You may use desktop browser developer tools to simulate touches.
+- When a comment is long-pressed, the dropdown opens directly below the comment itself, instead of the icon
 
 ## 2022-03-01
 

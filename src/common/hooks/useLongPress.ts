@@ -1,87 +1,77 @@
 import {
-  MouseEvent,
-  MouseEventHandler,
-  TouchEvent,
   TouchEventHandler,
   useCallback,
+  useEffect,
   useRef,
   useState,
 } from "react";
 
 interface LongPressEventHandlers<Element> {
-  onMouseDown: MouseEventHandler<Element>;
   onTouchStart: TouchEventHandler<Element>;
-  onMouseUp: MouseEventHandler<Element>;
-  onMouseLeave: MouseEventHandler<Element>;
   onTouchEnd: TouchEventHandler<Element>;
 }
 
-interface LongPressOptions<Element> {
-  onClick?: (event: MouseEvent<Element> | TouchEvent<Element>) => void;
-  shouldPreventDefault?: boolean;
-  delay?: number;
-}
-
-const isTouchEvent = (event: Event): event is Event & TouchEvent =>
-  "touches" in event;
-
-const preventDefault = (event: Event) => {
-  if (isTouchEvent(event) && event.touches.length < 2 && event.preventDefault) {
-    event.preventDefault();
-  }
-};
+const defaultLongPressDelay = 300;
 
 export default function useLongPress<Element>(
-  onLongPress: MouseEventHandler<Element>,
-  {
-    shouldPreventDefault = true,
-    delay = 300,
-    onClick,
-  }: LongPressOptions<Element> = {}
-): LongPressEventHandlers<Element> {
-  const [longPressTriggered, setLongPressTriggered] = useState(false);
-  const timeout = useRef<ReturnType<typeof setTimeout>>();
-  const target = useRef<EventTarget>();
+  onLongPress: (event: TouchEvent) => void,
+  delay = defaultLongPressDelay
+): [boolean, LongPressEventHandlers<Element>] {
+  const [pressEvent, setPressEvent] = useState<TouchEvent>();
+  const [isLongPressed, setIsLongPressed] = useState(false);
+  // In case the callback function is re-created on every render,
+  // use a ref to avoid restarting the long press delay on every render.
+  const longPressTriggerRef = useRef(onLongPress);
+  longPressTriggerRef.current = onLongPress;
 
-  const start = useCallback(
+  // Saves the touch event when touch starts
+  const onTouchStart = useCallback<TouchEventHandler<Element>>((event) => {
+    setIsLongPressed(false);
+    setPressEvent(event.nativeEvent);
+  }, []);
+
+  // Whenever the touch ends, prevent the event default if long press has occured
+  const onTouchEnd = useCallback<TouchEventHandler<Element>>(
     (event) => {
-      if (shouldPreventDefault && event.target) {
-        event.target.addEventListener("touchend", preventDefault, {
-          passive: false,
-        });
-        target.current = event.target;
+      if (isLongPressed) {
+        // Long press has occured during this touch, so prevent any click etc. from occurring
+        event.preventDefault();
       }
-      timeout.current = setTimeout(() => {
-        onLongPress(event);
-        setLongPressTriggered(true);
-      }, delay);
+      // Ensure long press is cancelled
+      setPressEvent(undefined);
     },
-    [onLongPress, delay, shouldPreventDefault]
+    [isLongPressed]
   );
 
-  const clear = useCallback(
-    (
-      event: TouchEvent<Element> | MouseEvent<Element>,
-      shouldTriggerClick = true
-    ) => {
-      if (timeout.current) {
-        clearTimeout(timeout.current);
-      }
-      if (shouldTriggerClick && !longPressTriggered && onClick) {
-        onClick(event);
-      }
-      setLongPressTriggered(false);
-      if (shouldPreventDefault && target.current) {
-        target.current.removeEventListener("touchend", preventDefault);
-      }
+  useEffect(() => {
+    if (!pressEvent) return undefined;
+
+    // Cancels the long press
+    const stopTouch = () => setPressEvent(undefined);
+
+    // Whenever touch move occurs (e.g. scroll) cancel the long press
+    window.addEventListener("touchmove", stopTouch);
+
+    // After the certain delay perform the long press
+    const timeout = setTimeout(() => {
+      longPressTriggerRef.current(pressEvent);
+      setIsLongPressed(true);
+      stopTouch();
+    }, delay);
+
+    return () => {
+      // Reset the long press timeout
+      clearTimeout(timeout);
+      // Stop listening
+      window.removeEventListener("touchmove", stopTouch);
+    };
+  }, [delay, pressEvent]);
+
+  return [
+    pressEvent != null && !isLongPressed,
+    {
+      onTouchStart,
+      onTouchEnd,
     },
-    [shouldPreventDefault, onClick, longPressTriggered]
-  );
-  return {
-    onMouseDown: (e) => start(e),
-    onTouchStart: (e) => start(e),
-    onMouseUp: (e) => clear(e),
-    onMouseLeave: (e) => clear(e, false),
-    onTouchEnd: (e) => clear(e),
-  };
+  ];
 }

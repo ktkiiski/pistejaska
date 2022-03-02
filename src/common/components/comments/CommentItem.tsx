@@ -32,7 +32,7 @@ const CommentItem: VFC<CommentItemProps> = ({ children, date, onDelete }) => {
   const openIconDropdown = useCallback(() => setDropdownState("icon"), []);
   const openBubbleDropdown = useCallback(() => setDropdownState("bubble"), []);
   const closeDropdown = useCallback(() => setDropdownState(null), []);
-  const longPressEventHandlers =
+  const [isPressing, longPressEventHandlers] =
     useLongPress<HTMLDivElement>(openBubbleDropdown);
   return (
     <div className="flex flex-row items-center group">
@@ -42,7 +42,12 @@ const CommentItem: VFC<CommentItemProps> = ({ children, date, onDelete }) => {
         onDelete={onDelete}
       >
         <div
-          className="py-2 px-3 rounded-l rounded-r-2xl group-first:rounded-tl-2xl group-last:rounded-bl-2xl bg-white active:bg-gray-200 transition shadow"
+          className={classNames(
+            "py-2 px-3 rounded-l rounded-r-2xl group-first:rounded-tl-2xl group-last:rounded-bl-2xl transition shadow",
+            isPressing || dropdownState === "bubble"
+              ? "bg-gray-200"
+              : "bg-white"
+          )}
           data-tip={date.toLocaleString()}
           data-delay-show={500}
           data-tip-disable={dropdownState != null}
