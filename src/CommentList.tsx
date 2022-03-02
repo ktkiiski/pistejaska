@@ -74,6 +74,13 @@ export const CommentList = (props: { playId: string }) => {
 
   const groups = groupComments(comments);
 
+  const onCommentDelete = (commentId: string) => {
+    // eslint-disable-next-line no-restricted-globals
+    if (confirm(`Are you sure you want to permanently delete your comment?`)) {
+      deleteComment(commentId);
+    }
+  };
+
   return (
     <CommentListContainer className="mx-2">
       <ReactTooltip />
@@ -92,9 +99,7 @@ export const CommentList = (props: { playId: string }) => {
                     key={messageIdx}
                     onDelete={
                       comment.userId === user?.uid
-                        ? () => {
-                            deleteComment(comment.id);
-                          }
+                        ? () => onCommentDelete(comment.id)
                         : null
                     }
                   >

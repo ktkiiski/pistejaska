@@ -3,8 +3,9 @@ import classNames from "classnames";
 import { useCallback, useState, VFC } from "react";
 import { convertToLocaleTimeString } from "../../dateUtils";
 import useLongPress from "../../hooks/useLongPress";
-import DropdownMenu from "../dropdowns/DropdownMenu";
+import { containsJustEmojis } from "../../stringUtils";
 import Markdown from "../Markdown";
+import CommentItemActionMenu from "./CommentItemActionMenu";
 
 interface CommentItemProps {
   children: string;
@@ -26,48 +27,58 @@ const actionMenuIcon = (
 );
 
 const CommentItem: VFC<CommentItemProps> = ({ children, date, onDelete }) => {
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const openDropdown = useCallback(() => setIsDropdownOpen(true), []);
-  const closeDropdown = useCallback(() => setIsDropdownOpen(false), []);
-  const longPressEventHandlers = useLongPress<HTMLDivElement>(openDropdown);
+  const [dropdownState, setDropdownState] = useState<null | "bubble" | "icon">(
+    null
+  );
+  const openIconDropdown = useCallback(() => setDropdownState("icon"), []);
+  const openBubbleDropdown = useCallback(() => setDropdownState("bubble"), []);
+  const closeDropdown = useCallback(() => setDropdownState(null), []);
+  const [isPressing, longPressEventHandlers] =
+    useLongPress<HTMLDivElement>(openBubbleDropdown);
+  const justEmojis = containsJustEmojis(children);
   return (
     <div className="flex flex-row items-center group">
-      <div
-        className="py-2 px-3 rounded-l rounded-r-2xl group-first:rounded-tl-2xl group-last:rounded-bl-2xl bg-white active:bg-gray-200 transition shadow"
-        data-tip={date.toLocaleString()}
-        data-delay-show={500}
-        {...longPressEventHandlers}
-      >
-        <div className="float-right text-xs text-slate-300 mt-0.5 ml-3 mb-2">
-          {convertToLocaleTimeString(date, { timeStyle: "short" })}
-        </div>
-        <Markdown>{children}</Markdown>
-      </div>
-      <DropdownMenu
-        isOpen={isDropdownOpen}
+      <CommentItemActionMenu
+        isOpen={dropdownState === "bubble"}
         onClose={closeDropdown}
-        onSelect={closeDropdown}
-        options={[
-          {
-            label: "Delete",
-            value: "delete",
-            disabled: onDelete == null,
-            onSelect: onDelete ?? undefined,
-          },
-        ]}
+        onDelete={onDelete}
+      >
+        <div
+          className={classNames(
+            "py-2 px-3 flex flex-row items-end gap-x-3 rounded-l rounded-r-2xl group-first:rounded-tl-2xl group-last:rounded-bl-2xl transition shadow",
+            justEmojis ? "text-3xl" : "text-sm",
+            isPressing || dropdownState === "bubble"
+              ? "bg-gray-200"
+              : "bg-white"
+          )}
+          data-tip={date.toLocaleString()}
+          data-delay-show={500}
+          data-tip-disable={dropdownState != null}
+          {...longPressEventHandlers}
+        >
+          <Markdown className="grow">{children}</Markdown>
+          <div className="grow-0 shrink-0 text-xs leading-5 text-slate-300">
+            {convertToLocaleTimeString(date, { timeStyle: "short" })}
+          </div>
+        </div>
+      </CommentItemActionMenu>
+      <CommentItemActionMenu
+        isOpen={dropdownState === "icon"}
+        onClose={closeDropdown}
+        onDelete={onDelete}
       >
         <button
           className={classNames(
             "ml-2 hover:text-slate-500 hover:bg-gray-200 w-7 h-7 flex items-center justify-center cursor-pointer rounded-full shrink-0 grow-0 group-hover:visible",
-            isDropdownOpen
+            dropdownState === "icon"
               ? "visible text-slate-500 bg-gray-200"
               : "invisible text-slate-300"
           )}
-          onClick={openDropdown}
+          onClick={openIconDropdown}
         >
           {actionMenuIcon}
         </button>
-      </DropdownMenu>
+      </CommentItemActionMenu>
     </div>
   );
 };

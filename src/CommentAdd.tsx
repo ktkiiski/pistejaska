@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { FormEventHandler, useState } from "react";
 
 import { LoadingSpinner } from "./common/components/LoadingSpinner";
 import InputTextField from "./common/components/inputs/InputTextField";
@@ -13,7 +13,8 @@ export const CommentAdd = (props: { playId: string; user: User }) => {
   const [isSaving, setIsSaving] = useState(false);
   const [comment, setComment] = useState("");
 
-  const onSave = async () => {
+  const onSave: FormEventHandler = async (event) => {
+    event.preventDefault();
     setIsSaving(true);
     const commentDto = {
       id: uuid(),
@@ -32,18 +33,17 @@ export const CommentAdd = (props: { playId: string; user: User }) => {
       {isSaving ? <LoadingSpinner /> : null}
       {isSaving === false ? (
         <>
-          <form className="flex flex-row w-full justify-center items-center mt-4">
+          <form
+            className="flex flex-row w-full justify-center items-center mt-4"
+            onSubmit={onSave}
+          >
             <InputTextField
               className="w-60 max-w-full mb-2"
               label={"Comment"}
               value={comment ?? ""}
               onChange={(newValue) => setComment(newValue)}
             />
-            <ButtonPrimary
-              className="shrink-0 ml-1"
-              onClick={onSave}
-              type="submit"
-            >
+            <ButtonPrimary className="shrink-0 ml-1" type="submit">
               Send
             </ButtonPrimary>
           </form>
