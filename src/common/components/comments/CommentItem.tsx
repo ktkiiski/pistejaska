@@ -3,6 +3,7 @@ import classNames from "classnames";
 import { useCallback, useState, VFC } from "react";
 import { convertToLocaleTimeString } from "../../dateUtils";
 import useLongPress from "../../hooks/useLongPress";
+import { containsJustEmojis } from "../../stringUtils";
 import Markdown from "../Markdown";
 import CommentItemActionMenu from "./CommentItemActionMenu";
 
@@ -34,6 +35,7 @@ const CommentItem: VFC<CommentItemProps> = ({ children, date, onDelete }) => {
   const closeDropdown = useCallback(() => setDropdownState(null), []);
   const [isPressing, longPressEventHandlers] =
     useLongPress<HTMLDivElement>(openBubbleDropdown);
+  const justEmojis = containsJustEmojis(children);
   return (
     <div className="flex flex-row items-center group">
       <CommentItemActionMenu
@@ -44,6 +46,7 @@ const CommentItem: VFC<CommentItemProps> = ({ children, date, onDelete }) => {
         <div
           className={classNames(
             "py-2 px-3 flex flex-row items-end gap-x-3 rounded-l rounded-r-2xl group-first:rounded-tl-2xl group-last:rounded-bl-2xl transition shadow",
+            justEmojis ? "text-3xl" : "text-sm",
             isPressing || dropdownState === "bubble"
               ? "bg-gray-200"
               : "bg-white"

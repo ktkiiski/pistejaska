@@ -4,7 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## 2022-03-02
+## 2022-03-03
+
+### Added
+
+- Confirm deleting a comment
+- Comments containing only emojis have larger font size
 
 ### Fixed
 
@@ -13,7 +18,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Changed
 
-- Confirm deleting a comment
 - A comment can be long-pressed only by touching, not with a mouse. You may use desktop browser developer tools to simulate touches.
 - When a comment is long-pressed, the dropdown opens directly below the comment itself, instead of the icon
 - Changed the timestamp positioning in the comments to the bottom right

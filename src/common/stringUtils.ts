@@ -52,3 +52,15 @@ export function formatNthNumber(num: number): string {
       return `${str}th`;
   }
 }
+
+// Regexp that tests if the string contains just "emojis" and nothing else
+let containsJustEmojisRegexp: RegExp | undefined;
+try {
+  containsJustEmojisRegexp = /^\p{Extended_Pictographic}+$/u;
+} catch {
+  // Browser does not support this kind of modern regexp
+}
+
+export function containsJustEmojis(str: string) {
+  return containsJustEmojisRegexp?.test(str);
+}
