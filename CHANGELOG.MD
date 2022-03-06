@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## 2022-03-06
+
+### Changed
+
+- Added some darkness to photo gallery overlay background, so that the backdrop looks good on browsers that do not support blur effect (e.g. Firefox Mobile)
+
 ## 2022-03-03
 
 ### Added

@@ -77,7 +77,7 @@ const OverlayModal: FC<OverlayModalProps> = ({
       onExiting={setElementOutStyles}
     >
       <div
-        className="fixed inset-0 z-10 transition-opacity backdrop-blur-lg"
+        className="fixed inset-0 z-10 transition-opacity bg-gray-900/90 backdrop-blur-lg"
         ref={backgroundRef}
       >
         <div
