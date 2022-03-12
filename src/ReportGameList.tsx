@@ -1,4 +1,4 @@
-import { groupBy, mapValues, orderBy } from "lodash";
+import { groupBy, last, mapValues, orderBy, sortBy } from "lodash";
 import { Game } from "./domain/game";
 import { useGames } from "./common/hooks/useGames";
 import ViewContentLayout from "./common/components/ViewContentLayout";
@@ -15,7 +15,12 @@ import ListItemText from "./common/components/lists/ListItemText";
 import ListItemDescription from "./common/components/lists/ListItemDescription";
 import ListLinkItem from "./common/components/lists/ListLinkItem";
 
-type GameSortCriteriaId = "alphabetic" | "popular" | "shortest" | "longest";
+type GameSortCriteriaId =
+  | "recentlyPlayed"
+  | "alphabetic"
+  | "popular"
+  | "shortest"
+  | "longest";
 
 interface GameSortCriteria {
   name: string;
@@ -25,6 +30,7 @@ interface GameSortCriteria {
 }
 
 const sortTabIds: GameSortCriteriaId[] = [
+  "recentlyPlayed",
   "alphabetic",
   "popular",
   "shortest",
@@ -40,6 +46,7 @@ function useGameStats() {
       durationSum: 0,
       durationCount: 0,
       durationAverage: null as null | number,
+      latestPlayOn: null as null | undefined | string,
     };
     plays.forEach((play) => {
       stats.count += 1;
@@ -50,14 +57,28 @@ function useGameStats() {
         stats.durationAverage = stats.durationSum / stats.durationCount;
       }
     });
+
+    stats.latestPlayOn = last(sortBy(plays, (x) => x.getDate().toString()))
+      ?.getDate()
+      .toString();
+
     return stats;
   });
 }
 
 export const ReportGameList = () => {
   const [games, loadingGames] = useGames();
+
   const gameStats = useGameStats();
+
   const sortCriterias: Record<GameSortCriteriaId, GameSortCriteria> = {
+    recentlyPlayed: {
+      name: "Recently played",
+      getSortKey: (game: Game) =>
+        gameStats[game.id]?.latestPlayOn ?? "1900-01-01",
+      direction: "desc" as const,
+      getDetailLabel: () => null,
+    },
     alphabetic: {
       name: "By name",
       getSortKey: (game: Game) => game.name.toLowerCase(),
@@ -89,7 +110,7 @@ export const ReportGameList = () => {
     },
   };
   const [sortCriteria, setSortCriteria] =
-    useState<GameSortCriteriaId>("alphabetic");
+    useState<GameSortCriteriaId>("recentlyPlayed");
   const currentSortCriteria = sortCriterias[sortCriteria];
   const sortedGameItems = orderBy(
     games,
