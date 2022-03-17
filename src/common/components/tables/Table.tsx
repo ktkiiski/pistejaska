@@ -6,15 +6,17 @@ const Table: React.FC<HTMLAttributes<HTMLTableElement>> = ({
   className,
   ...props
 }) => (
-  <table
-    className={classNames(
-      "bg-white border-collapse table-auto w-full lg:text-base text-xs rounded overflow-hidden shadow",
-      className
-    )}
-    {...props}
-  >
-    {children}
-  </table>
+  <div className="overflow-x-auto">
+    <table
+      className={classNames(
+        "bg-white border-collapse table-auto lg:text-base text-xs rounded w-full shadow",
+        className
+      )}
+      {...props}
+    >
+      {children}
+    </table>
+  </div>
 );
 
 export default Table;

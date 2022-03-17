@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## 2022-03-17
+
+### Fixed
+
+- Player view games list
+
+### Changed
+
+- Overflowing tables are now side-scrollable
+
 ## 2022-03-12
 
 ### Added

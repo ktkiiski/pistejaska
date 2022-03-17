@@ -19,6 +19,7 @@ import TableCell from "./common/components/tables/TableCell";
 import { FC, useReducer } from "react";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { Game } from "./domain/game";
 
 interface Playmate {
   player: Player;
@@ -50,14 +51,6 @@ export const ReportPlayerView: FC = () => {
   const playerPlays = plays.filter((p) =>
     p.players.find((x) => x.id === playerId)
   );
-  const playmates = usePlaymates(playerId, playerPlays);
-  const [isEveryPlaymateVisible, showAllPlaymates] = useReducer(
-    () => true,
-    false
-  );
-  const visiblePlaymates = isEveryPlaymateVisible
-    ? playmates
-    : playmates.slice(0, 10);
 
   if (errorPlays || errorGames) {
     return (
@@ -82,47 +75,85 @@ export const ReportPlayerView: FC = () => {
     <ViewContentLayout>
       <Heading1>Reports: {player.name}</Heading1>
       <p>Based on {playerPlays.length} plays.</p>
-      {!playmates.length ? null : (
-        <div className="my-4">
+
+      <div className="grid gap-4">
+        <div>
           <Heading3>Most common playmates</Heading3>
-          <Table>
-            <TableHead>
-              <TableHeadCell>Playmate</TableHeadCell>
-              <TableHeadCell>Play count</TableHeadCell>
-            </TableHead>
-            <TableBody>
-              {visiblePlaymates.map((playMate) => (
-                <TableRow key={playMate.player.id}>
-                  <TableCell>
-                    <Link
-                      className="cursor-pointer hover:text-black"
-                      to={`/players/${playMate.player.id}`}
-                    >
-                      {playMate.player.name}
-                    </Link>
-                  </TableCell>
-                  <TableCell>{playMate.plays.length}</TableCell>
-                </TableRow>
-              ))}
-              {isEveryPlaymateVisible ||
-              visiblePlaymates.length >= playmates.length ? null : (
-                <TableRow className="cursor-pointer" onClick={showAllPlaymates}>
-                  <TableCell colSpan={2}>Show all playmates…</TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
+          <Playmates player={player} playerPlays={playerPlays}></Playmates>
         </div>
-      )}
-      <PlayerGamesReport player={player} plays={plays}></PlayerGamesReport>
-      <PlayList plays={playerPlays} games={games} />
+
+        <div>
+          <Heading3>Games</Heading3>
+          <PlayerGamesReport
+            player={player}
+            plays={plays}
+            games={games}
+          ></PlayerGamesReport>
+        </div>
+
+        <div>
+          <Heading3>Plays</Heading3>
+          <PlayList plays={playerPlays} games={games} />
+        </div>
+      </div>
     </ViewContentLayout>
   );
 };
 
-const PlayerGamesReport = (props: { player: Player; plays: Play[] }) => {
-  const [games] = useGames();
-  const { player, plays } = props;
+const Playmates = (props: { player: Player; playerPlays: Play[] }) => {
+  const { player, playerPlays } = props;
+  const playmates = usePlaymates(player.id, playerPlays);
+  const [isEveryPlaymateVisible, showAllPlaymates] = useReducer(
+    () => true,
+    false
+  );
+  const visiblePlaymates = isEveryPlaymateVisible
+    ? playmates
+    : playmates.slice(0, 10);
+
+  return !playmates.length ? (
+    <></>
+  ) : (
+    <>
+      <Table>
+        <TableHead>
+          <tr>
+            <TableHeadCell>Playmate</TableHeadCell>
+            <TableHeadCell>Play count</TableHeadCell>
+          </tr>
+        </TableHead>
+        <TableBody>
+          {visiblePlaymates.map((playMate) => (
+            <TableRow key={playMate.player.id}>
+              <TableCell>
+                <Link
+                  className="cursor-pointer hover:text-black"
+                  to={`/players/${playMate.player.id}`}
+                >
+                  {playMate.player.name}
+                </Link>
+              </TableCell>
+              <TableCell>{playMate.plays.length}</TableCell>
+            </TableRow>
+          ))}
+          {isEveryPlaymateVisible ||
+          visiblePlaymates.length >= playmates.length ? null : (
+            <TableRow className="cursor-pointer" onClick={showAllPlaymates}>
+              <TableCell colSpan={2}>Show all playmates…</TableCell>
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+    </>
+  );
+};
+
+const PlayerGamesReport = (props: {
+  player: Player;
+  plays: Play[];
+  games: Game[];
+}) => {
+  const { player, plays, games } = props;
   const playerPlays = plays.filter((p) =>
     p.players.find((x) => x.id === player.id)
   );
@@ -133,7 +164,7 @@ const PlayerGamesReport = (props: { player: Player; plays: Play[] }) => {
     { name: "Max points" },
     { name: "Best position" },
     {
-      name: "Trueskill percentile",
+      name: "Trueskill",
       tooltip:
         "The skill level percentile of player according to TrueSkill algorithm. Higher is better. If 90%, then the player estimated to be among the best 10% of players.",
     },
@@ -141,11 +172,6 @@ const PlayerGamesReport = (props: { player: Player; plays: Play[] }) => {
     { name: "# of plays" },
     { name: "Time well spent" },
   ];
-
-  if (!games) {
-    // Still loading games
-    return <LoadingSpinner />;
-  }
 
   const rows = playerGames.concat(["all"]).map((g) => {
     const gamePlays =
