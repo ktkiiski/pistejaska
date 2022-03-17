@@ -76,26 +76,18 @@ export const ReportPlayerView: FC = () => {
       <Heading1>Reports: {player.name}</Heading1>
       <p>Based on {playerPlays.length} plays.</p>
 
-      <div className="grid gap-4">
-        <div>
-          <Heading3>Most common playmates</Heading3>
-          <Playmates player={player} playerPlays={playerPlays}></Playmates>
-        </div>
+      <Heading3>Most common playmates</Heading3>
+      <Playmates player={player} playerPlays={playerPlays}></Playmates>
 
-        <div>
-          <Heading3>Games</Heading3>
-          <PlayerGamesReport
-            player={player}
-            plays={plays}
-            games={games}
-          ></PlayerGamesReport>
-        </div>
+      <Heading3>Games</Heading3>
+      <PlayerGamesReport
+        player={player}
+        plays={plays}
+        games={games}
+      ></PlayerGamesReport>
 
-        <div>
-          <Heading3>Plays</Heading3>
-          <PlayList plays={playerPlays} games={games} />
-        </div>
-      </div>
+      <Heading3>Plays</Heading3>
+      <PlayList plays={playerPlays} games={games} />
     </ViewContentLayout>
   );
 };

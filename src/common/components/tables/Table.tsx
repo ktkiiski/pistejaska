@@ -6,10 +6,10 @@ const Table: React.FC<HTMLAttributes<HTMLTableElement>> = ({
   className,
   ...props
 }) => (
-  <div className="overflow-x-auto">
+  <div className="overflow-x-scroll">
     <table
       className={classNames(
-        "bg-white border-collapse table-auto lg:text-base text-xs rounded w-full shadow",
+        "bg-white border-collapse table-auto lg:text-base text-xs rounded shadow w-full",
         className
       )}
       {...props}

@@ -73,7 +73,7 @@ export const ReportGameList = () => {
 
   const sortCriterias: Record<GameSortCriteriaId, GameSortCriteria> = {
     recentlyPlayed: {
-      name: "Recently played",
+      name: "Last played",
       getSortKey: (game: Game) =>
         gameStats[game.id]?.latestPlayOn ?? "1900-01-01",
       direction: "desc" as const,
