@@ -187,7 +187,7 @@ const SelectPlayers = (props: {
           )}
           <ButtonPrimary
             onClick={() => onStartGame(user.uid)}
-            disabled={players.length < 2 || isRandomizing}
+            disabled={players.length < 1 || isRandomizing}
           >
             Start
           </ButtonPrimary>
