@@ -1,10 +1,5 @@
 import classNames from "classnames";
-import {
-  CSSProperties,
-  FocusEventHandler,
-  MouseEventHandler,
-  ReactNode,
-} from "react";
+import { ButtonHTMLAttributes } from "react";
 
 export const buttonBaseClassName = `inline-block px-4 py-3
 text-sm font-semibold text-center
@@ -14,15 +9,7 @@ shadow-md
 rounded-full
 cursor-pointer`.replace(/\s+/g, " ");
 
-export interface ButtonProps {
-  className?: string;
-  style?: CSSProperties;
-  children: ReactNode;
-  disabled?: boolean;
-  type?: "button" | "submit";
-  onClick?: MouseEventHandler<HTMLButtonElement>;
-  onFocus?: FocusEventHandler<HTMLButtonElement>;
-  tabIndex?: number;
+export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   connectLeft?: boolean;
   connectRight?: boolean;
 }

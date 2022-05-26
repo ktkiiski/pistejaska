@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## 2022-05-26
+
+### Changed
+
+- Moved “Shuffle seat order” to a new “dropdown” that can be opened next to the “Random starting player” button
+- The player list sorts first players who have played most together with the ones already selected to the play. This speeds up starting a new play with a familiar group of players.
+
 ## 2022-04-07
 
 ### Changed
