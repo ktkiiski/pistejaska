@@ -40,6 +40,7 @@
 .menu {
   transition: transform 100ms ease-out;
   transform-origin: 50% 0%;
+  min-width: 10rem;
 }
 .enter {
   opacity: 0;

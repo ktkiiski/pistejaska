@@ -1,8 +1,7 @@
 import classNames from "classnames";
-import { ButtonHTMLAttributes } from "react";
-import ButtonBase from "./ButtonBase";
+import ButtonBase, { ButtonProps } from "./ButtonBase";
 
-const ButtonLight: React.FC<ButtonHTMLAttributes<HTMLButtonElement>> = ({
+const ButtonLight: React.FC<ButtonProps> = ({
   className,
   children,
   ...props

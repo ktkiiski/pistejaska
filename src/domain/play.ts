@@ -312,4 +312,8 @@ export class Play implements PlayDTO {
   public isResolved(): boolean {
     return this.scores.some(({ score }) => score != null);
   }
+
+  public hasPlayer(playerId: string): boolean {
+    return this.players.some((player) => player.id === playerId);
+  }
 }
