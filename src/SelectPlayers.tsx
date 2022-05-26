@@ -16,13 +16,14 @@ import List from "./common/components/lists/List";
 import ListItem from "./common/components/lists/ListItem";
 import ListItemIcon from "./common/components/lists/ListItemIcon";
 import ListItemText from "./common/components/lists/ListItemText";
-import { shuffle } from "lodash";
+import { orderBy, shuffle } from "lodash";
 import InputTextField from "./common/components/inputs/InputTextField";
 import { useNavigate } from "react-router-dom";
 import { getAuth } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Temporal } from "@js-temporal/polyfill";
 import SelectPlayersRandomizerButton from "./SelectPlayersRandomizerButton";
+import usePlaysByPlayerId from "./common/hooks/usePlaysByPlayerId";
 
 function shiftRandomly<T>(values: T[]) {
   const offset = Math.floor(Math.random() * values.length);
@@ -69,6 +70,7 @@ const SelectPlayers = (props: {
   const auth = getAuth();
   const [user] = useAuthState(auth);
 
+  const [playsByPlayerId] = usePlaysByPlayerId();
   const [allPlayers] = usePlayers();
 
   const [searchTerm, setSearchTerm] = useState("");
@@ -80,12 +82,24 @@ const SelectPlayers = (props: {
   const [isRandomizingOrder, setIsRandomizingOrder] = useState(false);
   const isRandomizing = isRandomizingStarter || isRandomizingOrder;
 
-  const selectablePlayers = allPlayers
-    .filter(
-      (p) =>
-        players.find((selectPlayer) => selectPlayer.id === p.id) === undefined
-    )
-    .filter((p) => p.name.toLowerCase().includes(searchTerm.toLowerCase()));
+  const selectablePlayers = orderBy(
+    allPlayers
+      .filter((p) => players.every((selectPlayer) => selectPlayer.id !== p.id))
+      .filter((p) => p.name.toLowerCase().includes(searchTerm.toLowerCase())),
+    // Sort by the number of plays in which this player has played together
+    // with every player selected so far.
+    ({ id }) => {
+      const playerPlays = playsByPlayerId[id] ?? [];
+      return playerPlays.reduce(
+        (count, play) =>
+          players.every((other) => play.hasPlayer(other.id))
+            ? count + 1
+            : count,
+        0
+      );
+    },
+    "desc"
+  );
   const visiblePlayers = showAllPlayers
     ? selectablePlayers
     : selectablePlayers.slice(0, 6);
