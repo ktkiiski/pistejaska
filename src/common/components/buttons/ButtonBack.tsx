@@ -1,9 +1,11 @@
-import { ButtonHTMLAttributes } from "react";
+import { MouseEventHandler } from "react";
 import Button from "./Button";
 
-const ButtonBack: React.FC<ButtonHTMLAttributes<HTMLButtonElement>> = ({
-  onClick,
-}) => (
+interface ButtonBackProps {
+  onClick?: MouseEventHandler<HTMLButtonElement>;
+}
+
+const ButtonBack: React.FC<ButtonBackProps> = ({ onClick }) => (
   <Button onClick={onClick} className="px-4 py-4">
     <svg
       xmlns="http://www.w3.org/2000/svg"

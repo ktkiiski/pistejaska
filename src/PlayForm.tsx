@@ -277,7 +277,6 @@ export const PlayForm = (props: {
               &lt; Previous
             </Button>
             <ButtonPrimary
-              color="primary"
               onClick={onDone}
               style={
                 // TODO: Better visual effect to highlight the "Save" button when done

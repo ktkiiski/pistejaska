@@ -17,12 +17,12 @@ import ListItem from "./common/components/lists/ListItem";
 import ListItemIcon from "./common/components/lists/ListItemIcon";
 import ListItemText from "./common/components/lists/ListItemText";
 import { shuffle } from "lodash";
-import ButtonLight from "./common/components/buttons/ButtonLight";
 import InputTextField from "./common/components/inputs/InputTextField";
 import { useNavigate } from "react-router-dom";
 import { getAuth } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Temporal } from "@js-temporal/polyfill";
+import SelectPlayersRandomizerButton from "./SelectPlayersRandomizerButton";
 
 function shiftRandomly<T>(values: T[]) {
   const offset = Math.floor(Math.random() * values.length);
@@ -178,12 +178,11 @@ const SelectPlayers = (props: {
       footer={
         <CardButtonRow>
           {game.simultaneousTurns ? null : (
-            <Button
-              onClick={randomizeStartingPlayer}
+            <SelectPlayersRandomizerButton
+              onRandomizeStartingPlayer={randomizeStartingPlayer}
+              onRandomizeOrder={randomizeOrder}
               disabled={players.length < 2 || isRandomizing}
-            >
-              Random starting player
-            </Button>
+            />
           )}
           <ButtonPrimary
             onClick={() => onStartGame(user.uid)}
@@ -295,16 +294,6 @@ const SelectPlayers = (props: {
           </ListItem>
         ))}
       </List>
-      {!players.length ? null : (
-        <div className="mt-3 flex flex-row justify-center items-center space-x-2">
-          <ButtonLight
-            onClick={randomizeOrder}
-            disabled={players.length < 2 || isRandomizing}
-          >
-            Shuffle seat order
-          </ButtonLight>
-        </div>
-      )}
     </ViewContentLayout>
   );
 };
