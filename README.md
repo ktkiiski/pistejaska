@@ -14,11 +14,14 @@ Using the app requires Google login with whitelisted email. Emails are whitelist
 
 1. node.js (14 or newer)
 
-## Technology
+## Technologies and why we use them
 
-This project uses Firebase's authentication & Firestore as database. Admin is panu.vuorinen@gmail.com.
-
-The major libraries used in this project: React.js, Firebase, Tailwind CSS.
+- `React` as a front-end library for productivity due to good composability and large ecosystem
+- `Tailwind CSS` as a CSS utility library for productivity and easy visuals as the app is designed by developers, not designers
+- `Typescript` as a language for productivity due to great tooling (like auto-complete due to static types)
+- `lodash` as a base library, as JavaScript's base library is lacking and of poor quality
+- `Firebase authentication & Firestore` as a backend for productivity, real-time database and (practically) free hosting. Admin is panu.vuorinen@gmail.com.
+- `Netlify` as a hosting platform due to free price and easy-to-setup continuous delivery
 
 ## Developing
 
@@ -87,7 +90,6 @@ If you need to perform data migrations, do this:
 
 ## TODO
 
-- Edit or delete comments
 - Allow users to change their display name in comments and in plays
 - Denormalize players from plays to their own root entity & link player to user
 - Add pagination to list views
