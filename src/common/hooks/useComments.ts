@@ -17,13 +17,15 @@ const commentConverter: FirestoreDataConverter<CommentDTO> = {
 };
 
 export const useComments = (
-  playId: string
+  playId?: string
 ): [Comment[], boolean, Error | undefined] => {
   const firestore = getFirestore(app);
   const allComments = collection(firestore, "comments-v1").withConverter(
     commentConverter
   );
-  const q = query(allComments, where("playId", "==", playId));
+  const q = playId
+    ? query(allComments, where("playId", "==", playId))
+    : query(allComments);
 
   const [users, isLoading, isError] = useUsers();
   const [datas, loading, error] = useCollectionData(q);

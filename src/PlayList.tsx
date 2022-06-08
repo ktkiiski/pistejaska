@@ -9,10 +9,12 @@ import ListItemDescription from "./common/components/lists/ListItemDescription";
 import ButtonTextOnly from "./common/components/buttons/ButtonTextOnly";
 import ListLinkItem from "./common/components/lists/ListLinkItem";
 import { convertToLocaleDateString } from "./common/dateUtils";
+import { Comment } from "./domain/comment";
 
 interface PlayListProps {
   plays: Play[];
   games: Game[];
+  comments: Comment[];
 }
 
 function getPlayLabel(play: Play) {
@@ -27,7 +29,7 @@ function getPlayLabel(play: Play) {
 }
 
 const PlayList = (props: PlayListProps) => {
-  const { plays, games } = props;
+  const { plays, games, comments } = props;
 
   const data = useMemo(
     () =>
@@ -43,11 +45,30 @@ const PlayList = (props: PlayListProps) => {
   const currentData = data.slice(0, limit);
   const hasMore = limit < data.length;
 
+  const commentsIcon = (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      className="h-6 w-6 inline"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      strokeWidth={2}
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+      />
+    </svg>
+  );
+
   return (
     <>
       <List>
         {currentData.map((play) => {
           const game = games.find((g) => g.id === play.gameId);
+          const noOfplayComments =
+            comments?.filter((x) => x.playId === play.id)?.length ?? 0;
           return (
             <ListLinkItem key={play.id} to={`/view/${play.id}`}>
               <ListItemIcon>
@@ -69,6 +90,15 @@ const PlayList = (props: PlayListProps) => {
                 {convertToLocaleDateString(play.getDate())}
                 <br />
                 <span className="text-slate-300">{getPlayLabel(play)}</span>
+                {noOfplayComments > 0 ? (
+                  <>
+                    <div className="flex-col text-slate-400">
+                      {commentsIcon} {noOfplayComments}
+                    </div>
+                  </>
+                ) : (
+                  <></>
+                )}
               </ListItemDescription>
             </ListLinkItem>
           );
