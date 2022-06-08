@@ -51,8 +51,8 @@ const PlayList = (props: PlayListProps) => {
       <List>
         {currentData.map((play) => {
           const game = games.find((g) => g.id === play.gameId);
-          const noOfplayComments =
-            comments?.filter((x) => x.playId === play.id)?.length ?? 0;
+          const noOfPlayComments =
+            comments.filter((x) => x.playId === play.id)?.length ?? 0;
           return (
             <ListLinkItem key={play.id} to={`/view/${play.id}`}>
               <ListItemIcon>
@@ -74,11 +74,11 @@ const PlayList = (props: PlayListProps) => {
                 {convertToLocaleDateString(play.getDate())}
                 <br />
                 <span className="text-slate-300">{getPlayLabel(play)}</span>
-                {noOfplayComments > 0 ? (
+                {noOfPlayComments > 0 ? (
                   <>
                     <div className="flex-col text-slate-400">
                       <IconComment className="h-6 w-6 inline" />
-                      {noOfplayComments}
+                      {noOfPlayComments}
                     </div>
                   </>
                 ) : (
