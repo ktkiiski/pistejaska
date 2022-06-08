@@ -24,6 +24,9 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { Temporal } from "@js-temporal/polyfill";
 import SelectPlayersRandomizerButton from "./SelectPlayersRandomizerButton";
 import usePlaysByPlayerId from "./common/hooks/usePlaysByPlayerId";
+import { IconPerson } from "./common/components/icons/IconPerson";
+import { IconSmileyFace } from "./common/components/icons/IconSmileyFace";
+import { IconPlus } from "./common/components/icons/IconPlus";
 
 function shiftRandomly<T>(values: T[]) {
   const offset = Math.floor(Math.random() * values.length);
@@ -226,14 +229,7 @@ const SelectPlayers = (props: {
           {visiblePlayers.map((player) => (
             <ListItem onClick={() => onSelectPlayer(player)} key={player.id}>
               <ListItemIcon>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="18"
-                  height="18"
-                  viewBox="0 0 18 18"
-                >
-                  <path d="M9 1C4.58 1 1 4.58 1 9s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm0 2.75c1.24 0 2.25 1.01 2.25 2.25S10.24 8.25 9 8.25 6.75 7.24 6.75 6 7.76 3.75 9 3.75zM9 14.5c-1.86 0-3.49-.92-4.49-2.33C4.62 10.72 7.53 10 9 10c1.47 0 4.38.72 4.49 2.17-1 1.41-2.63 2.33-4.49 2.33z" />
-                </svg>
+                <IconPerson />
               </ListItemIcon>
               <ListItemText title={player.name} />
             </ListItem>
@@ -252,14 +248,7 @@ const SelectPlayers = (props: {
 
           <ListItem key="currentplayer">
             <ListItemIcon>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-              >
-                <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
-              </svg>
+              <IconPlus />
             </ListItemIcon>
             <InputTextField
               className="mb-2"
@@ -278,18 +267,7 @@ const SelectPlayers = (props: {
         {players.map((player) => (
           <ListItem key={player.id}>
             <ListItemIcon>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9a1 1 0 100-2 1 1 0 000 2zm7-1a1 1 0 11-2 0 1 1 0 012 0zm-.464 5.535a1 1 0 10-1.415-1.414 3 3 0 01-4.242 0 1 1 0 00-1.415 1.414 5 5 0 007.072 0z"
-                  clipRule="evenodd"
-                />
-              </svg>
+              <IconSmileyFace />
             </ListItemIcon>
             <ListItemText title={player.name} />
             <ListItemIcon
