@@ -9,10 +9,13 @@ import ListItemDescription from "./common/components/lists/ListItemDescription";
 import ButtonTextOnly from "./common/components/buttons/ButtonTextOnly";
 import ListLinkItem from "./common/components/lists/ListLinkItem";
 import { convertToLocaleDateString } from "./common/dateUtils";
+import { Comment } from "./domain/comment";
+import { IconComment } from "./common/components/icons/IconComment";
 
 interface PlayListProps {
   plays: Play[];
   games: Game[];
+  comments: Comment[];
 }
 
 function getPlayLabel(play: Play) {
@@ -27,7 +30,7 @@ function getPlayLabel(play: Play) {
 }
 
 const PlayList = (props: PlayListProps) => {
-  const { plays, games } = props;
+  const { plays, games, comments } = props;
 
   const data = useMemo(
     () =>
@@ -48,6 +51,8 @@ const PlayList = (props: PlayListProps) => {
       <List>
         {currentData.map((play) => {
           const game = games.find((g) => g.id === play.gameId);
+          const noOfPlayComments =
+            comments.filter((x) => x.playId === play.id)?.length ?? 0;
           return (
             <ListLinkItem key={play.id} to={`/view/${play.id}`}>
               <ListItemIcon>
@@ -69,6 +74,16 @@ const PlayList = (props: PlayListProps) => {
                 {convertToLocaleDateString(play.getDate())}
                 <br />
                 <span className="text-slate-300">{getPlayLabel(play)}</span>
+                {noOfPlayComments > 0 ? (
+                  <>
+                    <div className="flex-col text-slate-400">
+                      <IconComment className="h-6 w-6 inline" />
+                      {noOfPlayComments}
+                    </div>
+                  </>
+                ) : (
+                  <></>
+                )}
               </ListItemDescription>
             </ListLinkItem>
           );

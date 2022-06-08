@@ -20,6 +20,7 @@ import { FC, useReducer } from "react";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { Game } from "./domain/game";
+import { useComments } from "./common/hooks/useComments";
 
 interface Playmate {
   player: Player;
@@ -48,6 +49,8 @@ export const ReportPlayerView: FC = () => {
   const playerId = useParams().playerId!;
   const [plays, loadingPlays, errorPlays] = usePlays();
   const [games, loadingGames, errorGames] = useGames();
+  const [comments] = useComments();
+
   const playerPlays = plays.filter((p) =>
     p.players.find((x) => x.id === playerId)
   );
@@ -87,7 +90,7 @@ export const ReportPlayerView: FC = () => {
       ></PlayerGamesReport>
 
       <Heading3>Plays</Heading3>
-      <PlayList plays={playerPlays} games={games} />
+      <PlayList plays={playerPlays} games={games} comments={comments} />
     </ViewContentLayout>
   );
 };

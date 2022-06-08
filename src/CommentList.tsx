@@ -47,7 +47,7 @@ function groupComments(comments: Comment[]): CommentGroup[] {
   });
 }
 
-export const CommentList = (props: { playId: string }) => {
+export const CommentList = (props: { playId?: string }) => {
   const [user] = useCurrentUser();
   const { playId } = props;
   const [comments, loading, error] = useComments(playId);

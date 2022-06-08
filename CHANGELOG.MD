@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## 2022-06-08
+
+### Added
+
+- Count of comments to play list to make it easier to recognize plays with comments
+
+### Changed
+
+- Renamed "Random starting player" to "Randomize starter" to fit the buttons in one row
+
 ## 2022-05-26
 
 ### Changed

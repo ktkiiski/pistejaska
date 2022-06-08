@@ -22,14 +22,14 @@ export default function SelectPlayersRandomizerButton({
         disabled={disabled}
         connectRight
       >
-        Random starting player
+        Randomize starter
       </Button>
       <DropdownMenu
         isOpen={isDropdownOpen}
         options={[
           {
             value: "randomizeStartingPlayer",
-            label: "Random starting player",
+            label: "Randomize starter",
             selected: true,
             disabled,
             onSelect: onRandomizeStartingPlayer,

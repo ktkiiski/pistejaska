@@ -8,10 +8,12 @@ import { useMemo } from "react";
 import { orderBy } from "lodash";
 import ImageGalleryStripe from "./common/components/gallery/ImageGalleryStripe";
 import { ImageGalleryItem } from "./common/components/gallery/ImageGallerySwipeView";
+import { useComments } from "./common/hooks/useComments";
 
 export const PlayListView = () => {
   const [plays, loadingPlays, errorPlays] = usePlays();
   const [games, loadingGames, errorGames] = useGames();
+  const [comments] = useComments();
 
   const images = useMemo(() => {
     const items: ImageGalleryItem[] = [];
@@ -45,7 +47,7 @@ export const PlayListView = () => {
       {loadingPlays || loadingGames ? (
         <SkeletonLoader />
       ) : (
-        <PlayList plays={plays} games={games} />
+        <PlayList plays={plays} games={games} comments={comments} />
       )}
     </ViewContentLayout>
   );

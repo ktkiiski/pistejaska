@@ -25,6 +25,7 @@ import ButtonPrimary from "./common/components/buttons/ButtonPrimary";
 import Heading1 from "./common/components/typography/Heading1";
 import Heading2 from "./common/components/typography/Heading2";
 import { useNavigate, useParams } from "react-router-dom";
+import { useComments } from "./common/hooks/useComments";
 
 export const ReportGameView: FC = () => {
   const [games] = useGames();
@@ -32,6 +33,7 @@ export const ReportGameView: FC = () => {
   const navigate = useNavigate();
 
   const [allPlays, loading, error] = usePlays();
+  const [comments] = useComments();
   const [filters, setFilters] = useState<ReportFilters>(emptyFilters);
 
   if (error) {
@@ -115,7 +117,7 @@ export const ReportGameView: FC = () => {
       </p>
 
       <Heading2>Plays</Heading2>
-      <PlayList games={games} plays={gamePlays} />
+      <PlayList games={games} plays={gamePlays} comments={comments} />
     </ViewContentLayout>
   );
 };
