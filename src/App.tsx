@@ -20,9 +20,24 @@ import Admin from "./Admin";
 import { LoadingSpinner } from "./common/components/LoadingSpinner";
 import NewPlayView from "./NewPlayView";
 import useCurrentUser from "./common/hooks/useCurrentUser";
+import { useEffect } from "react";
+import addOrUpdateUser from "./actions/addOrUpdateUser";
 
 const App = () => {
   const [user, loading] = useCurrentUser();
+
+  useEffect(() => {
+    // always add new users to DB (required for notifications)
+    if (user) {
+      const updateUser = async () => {
+        await addOrUpdateUser(user);
+      };
+      updateUser().catch(() => {
+        /* Hopefully we don't end up here */
+      });
+    }
+  }, [user]);
+
   if (loading) {
     return (
       <div className="w-full h-screen flex flex-col items-center justify-center">
