@@ -135,7 +135,8 @@ export const PlayView: FC = () => {
     <div className="block md:hidden">
       <div className="flex shadow-lg -mt-2 -ml-2 -mr-2 mb-4 rounded-t-xl p-2 bg-gradient-to-l from-slate-300 to-white">
         <img
-          className="object-cover object-top  w-24 h-24 rounded-full shadow-lg"
+          className="object-cover object-top  w-24 h-24 rounded-full shadow-lg cursor-pointer"
+          onClick={() => navigate(`/games/${game.id}`)}
           alt={game.name}
           src={game.icon}
         />
@@ -160,9 +161,10 @@ export const PlayView: FC = () => {
       <div className="flex bg-white rounded-xl -mt-2 -ml-2 -mr-2">
         <div>
           <img
-            className="max-h-72 rounded-tl-xl"
+            className="max-h-72 rounded-tl-xl cursor-pointer"
             alt={game.name}
             src={game.icon}
+            onClick={() => navigate(`/games/${game.id}`)}
           />
         </div>
         <div className="flex-auto p-6 shadow-xl">

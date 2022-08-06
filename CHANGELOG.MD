@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## 2022-08-07
+
+### Added
+
+- UX improvement: clicking play view's game icon navigates to game report viewlogo
+
 ## 2022-06-08
 
 ### Added
