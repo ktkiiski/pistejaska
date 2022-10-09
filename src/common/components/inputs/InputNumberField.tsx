@@ -59,6 +59,7 @@ const InputNumberField: VFC<InputNumberFieldProps> = (props) => {
         onFocus={onFocus}
         ref={inputRef}
         autoFocus={autoFocus}
+        autoComplete="off"
       />
     </FieldBase>
   );
