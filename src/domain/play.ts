@@ -14,7 +14,6 @@ import { formatDuration } from "../common/stringUtils";
 export type Player = {
   name: string;
   id: string;
-  elo?: number;
 };
 
 export type PlayDTO = {
