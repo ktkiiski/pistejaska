@@ -1,8 +1,16 @@
 import { Link } from "react-router-dom";
-import { getAuth, GoogleAuthProvider, signInWithRedirect } from "firebase/auth";
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signInWithRedirect,
+} from "firebase/auth";
 import { LoadingSpinner } from "./common/components/LoadingSpinner";
 import ButtonPrimary from "./common/components/buttons/ButtonPrimary";
 import useCurrentUser from "./common/hooks/useCurrentUser";
+
+const isSafari = () =>
+  navigator.userAgent.toLowerCase().indexOf("safari/") > -1;
 
 export const Login = () => {
   const center = {
@@ -18,7 +26,12 @@ export const Login = () => {
     const provider = new GoogleAuthProvider();
 
     try {
-      signInWithRedirect(auth, provider);
+      // (hopefully) temporary workaround until https://github.com/firebase/firebase-js-sdk/issues/6716 is fixed
+      if (isSafari()) {
+        signInWithPopup(auth, provider);
+      } else {
+        signInWithRedirect(auth, provider);
+      }
     } catch (error) {
       alert(error);
     }
