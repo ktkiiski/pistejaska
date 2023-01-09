@@ -70,6 +70,7 @@ export const SelectGame: FC = () => {
         >
           {recentlyPlayedGames.map((game) => (
             <Link
+              key={game.id}
               className="block aspect-square w-full h-full cursor-pointer hover:opacity-80"
               to={`/new/${game.id}`}
             >
