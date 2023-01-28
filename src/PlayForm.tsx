@@ -20,6 +20,8 @@ import Heading1 from "./common/components/typography/Heading1";
 import Heading3 from "./common/components/typography/Heading3";
 import CheckboxField from "./common/components/inputs/CheckboxField";
 
+const FormViewHeading = Heading1;
+
 export const PlayForm = (props: {
   game: Game;
   play: Play;
@@ -221,7 +223,7 @@ export const PlayForm = (props: {
         key="expansions"
         className="flex flex-col items-center text-left pb-2"
       >
-        <Heading3>Used expansions</Heading3>
+        <FormViewHeading>Used expansions</FormViewHeading>
         <div className="flex flex-col items-stretch space-y-2">
           {(game.expansions || []).map((expansion) =>
             renderExpansionField(expansion)
@@ -236,12 +238,14 @@ export const PlayForm = (props: {
           key={viewId}
           className="space-y-1 flex flex-col items-center text-left pb-2"
         >
-          {group ? <Heading3>{group}</Heading3> : null}
+          {group ? <FormViewHeading>{group}</FormViewHeading> : null}
           <FormFocusGroup focused={activeViewIndex === viewIndex}>
             {groupFields.map((item) => (
               <React.Fragment key={item.field.id}>
                 {item.type === "misc" && group ? null : (
-                  <Heading3 id={item.field.id}>{item.field.name}</Heading3>
+                  <FormViewHeading id={item.field.id}>
+                    {item.field.name}
+                  </FormViewHeading>
                 )}
                 {item.field.description ? (
                   <p className="my-2 mx-2 text-center">
@@ -298,7 +302,7 @@ export const PlayForm = (props: {
           </CardButtonRow>
         }
       >
-        <Heading1>{game.name}</Heading1>
+        <Heading3>{game.name}</Heading3>
         <SwipeableViews
           enableMouseEvents
           index={activeViewIndex}
