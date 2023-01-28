@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { ReactElement, ReactNode, useState } from "react";
 import SwipeableViews from "react-swipeable-views";
 import { Player, Play, PlayDTO } from "./domain/play";
 import {
@@ -19,8 +19,38 @@ import ButtonPrimary from "./common/components/buttons/ButtonPrimary";
 import Heading1 from "./common/components/typography/Heading1";
 import Heading3 from "./common/components/typography/Heading3";
 import CheckboxField from "./common/components/inputs/CheckboxField";
+import DropdownMenu, {
+  DropdownMenuOption,
+} from "./common/components/dropdowns/DropdownMenu";
 
-const FormViewHeading = Heading1;
+function FormViewHeading(props: {
+  children: ReactNode;
+  id?: string;
+  options: DropdownMenuOption<number>[];
+  onSelect: (index: number) => void;
+}) {
+  const { children, id, options, onSelect } = props;
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  return (
+    <Heading1 id={id} className="cursor-pointer">
+      <DropdownMenu
+        onClose={() => setIsDropdownOpen(false)}
+        isOpen={isDropdownOpen}
+        options={options}
+        onSelect={(option) => {
+          onSelect(option.value);
+          setIsDropdownOpen(false);
+        }}
+        overlaySelectedOption
+      >
+        <span onClick={() => setIsDropdownOpen(true)}>
+          {children}
+          <span className="text-lg align-middle">{` ▼`}</span>
+        </span>
+      </DropdownMenu>
+    </Heading1>
+  );
+}
 
 export const PlayForm = (props: {
   game: Game;
@@ -217,13 +247,32 @@ export const PlayForm = (props: {
     ));
   };
 
+  const viewTitles: string[] = [];
+  if (hasExpansions) {
+    viewTitles.push("Used expansions");
+  }
+  viewTitles.push(
+    ...fieldGroups.map(
+      ({ group, fields: groupFields }) => group || groupFields[0].field.name
+    )
+  );
+  const viewOptions = viewTitles.map<DropdownMenuOption<number>>(
+    (title, index) => ({
+      label: title,
+      value: index,
+      selected: index === activeViewIndex,
+    })
+  );
+
   const views = [
     hasExpansions && (
       <div
         key="expansions"
         className="flex flex-col items-center text-left pb-2"
       >
-        <FormViewHeading>Used expansions</FormViewHeading>
+        <FormViewHeading options={viewOptions} onSelect={setActiveViewIndex}>
+          Used expansions
+        </FormViewHeading>
         <div className="flex flex-col items-stretch space-y-2">
           {(game.expansions || []).map((expansion) =>
             renderExpansionField(expansion)
@@ -238,12 +287,23 @@ export const PlayForm = (props: {
           key={viewId}
           className="space-y-1 flex flex-col items-center text-left pb-2"
         >
-          {group ? <FormViewHeading>{group}</FormViewHeading> : null}
+          {group ? (
+            <FormViewHeading
+              options={viewOptions}
+              onSelect={setActiveViewIndex}
+            >
+              {group}
+            </FormViewHeading>
+          ) : null}
           <FormFocusGroup focused={activeViewIndex === viewIndex}>
             {groupFields.map((item) => (
               <React.Fragment key={item.field.id}>
                 {item.type === "misc" && group ? null : (
-                  <FormViewHeading id={item.field.id}>
+                  <FormViewHeading
+                    id={item.field.id}
+                    options={viewOptions}
+                    onSelect={setActiveViewIndex}
+                  >
                     {item.field.name}
                   </FormViewHeading>
                 )}
