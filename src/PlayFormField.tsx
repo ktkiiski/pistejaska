@@ -3,13 +3,12 @@ import { GameFieldDefinition, GameFieldOption } from "./domain/game";
 import DurationCounter from "./DurationCounter";
 import { Play } from "./domain/play";
 import { useFormFieldRef } from "./utils/focus";
-import ButtonUpload from "./common/components/buttons/ButtonUpload";
-import Spinner from "./common/components/Spinner";
 import InputTextField from "./common/components/inputs/InputTextField";
 import InputNumberField from "./common/components/inputs/InputNumberField";
 import NativeSelectField from "./common/components/inputs/NativeSelectField";
 import ButtonLight from "./common/components/buttons/ButtonLight";
 import { Temporal } from "@js-temporal/polyfill";
+import ButtonImageUpload from "./common/components/buttons/ButtonImageUpload";
 
 interface PlayFormFieldProps<T, F extends GameFieldDefinition<T>> {
   value: T | null;
@@ -93,17 +92,7 @@ export function PlayFormField<
   return field.type === "images" ? (
     <>
       <h5>Images</h5>
-      <ButtonUpload
-        idleLabel="Select image"
-        uploadingLabel={
-          <>
-            <Spinner className="inline-block w-4 h-4 mr-2" />
-            Uploading…
-          </>
-        }
-        accept="image/*"
-        onUpload={onImageUpload!}
-      />
+      <ButtonImageUpload onUpload={onImageUpload} />
 
       {play.getImages().map((filename) => (
         <React.Fragment key={filename}>

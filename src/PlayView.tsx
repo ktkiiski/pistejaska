@@ -1,12 +1,17 @@
 import React, { FC, useMemo, VFC } from "react";
 import { Play } from "./domain/play";
 import { useGames } from "./common/hooks/useGames";
-import { Game } from "./domain/game";
+import { Game, imageField } from "./domain/game";
 import { orderBy, sortBy } from "lodash";
-import { getFirestore, deleteDoc, doc } from "firebase/firestore";
+import {
+  getFirestore,
+  deleteDoc,
+  doc,
+  runTransaction,
+} from "firebase/firestore";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { LoadingSpinner } from "./common/components/LoadingSpinner";
-import { app } from "./common/firebase";
+import { app, db } from "./common/firebase";
 import { usePlay } from "./common/hooks/usePlay";
 import ViewContentLayout from "./common/components/ViewContentLayout";
 import { formatNthNumber, getPositionAsEmoji } from "./common/stringUtils";
@@ -31,6 +36,10 @@ import { CommentList } from "./CommentList";
 import { CommentAdd } from "./CommentAdd";
 import { convertToLocaleDateString } from "./common/dateUtils";
 import useCurrentUser from "./common/hooks/useCurrentUser";
+import ButtonImageUpload from "./common/components/buttons/ButtonImageUpload";
+import uploadPlayImage from "./utils/uploadPlayImage";
+import setMiscFieldValue from "./utils/setMiscFieldValue";
+import { playCollection } from "./common/hooks/usePlays";
 
 const hiddenMiscFields = ["images", "name", "date"];
 
@@ -94,6 +103,22 @@ export const PlayView: FC = () => {
       link: `/view/${play.id}`,
     }));
   }, [play]);
+
+  const onImageUpload = async (file: File) => {
+    const filename = await uploadPlayImage(playId, file);
+    runTransaction(db, async (transaction) => {
+      const playRef = doc(playCollection, playId);
+      const playDoc = await transaction.get(playRef);
+      const playState = playDoc.data();
+      if (!playState) return;
+      const newMisc = setMiscFieldValue(
+        playState.misc,
+        imageField.id,
+        (oldImages = []) => [...(oldImages as string[]), filename]
+      );
+      return transaction.update(playRef, { misc: newMisc });
+    });
+  };
 
   if (error) return <>Error: {error}</>;
 
@@ -209,12 +234,11 @@ export const PlayView: FC = () => {
       <Heading2>Scores</Heading2>
       <PlayTable game={game} play={play} />
 
-      {images.length > 0 && (
-        <>
-          <Heading2>Images</Heading2>
-          <ImageGalleryList images={images} />
-        </>
-      )}
+      <Heading2>Images</Heading2>
+      {images.length > 0 && <ImageGalleryList images={images} />}
+      <div className="mt-2 text-center">
+        <ButtonImageUpload onUpload={onImageUpload} />
+      </div>
 
       <Heading2>Comments</Heading2>
       <CommentList playId={play.id}></CommentList>

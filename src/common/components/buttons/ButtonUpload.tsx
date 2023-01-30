@@ -6,7 +6,7 @@ interface UploadButtonProps {
   uploadingLabel: ReactNode;
   disabled?: boolean;
   accept: string;
-  onUpload: (file: File) => Promise<void>;
+  onUpload: ((file: File) => Promise<void>) | undefined;
 }
 
 function ButtonUpload({
@@ -28,7 +28,7 @@ function ButtonUpload({
       setIsUploading(true);
       for (let idx = 0; idx < files.length; idx += 1) {
         const file = files.item(idx);
-        if (file) {
+        if (file && onUpload) {
           await onUpload(file);
         }
       }
