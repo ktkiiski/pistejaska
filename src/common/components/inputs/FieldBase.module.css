@@ -2,13 +2,16 @@
 .container {
   position: relative;
   padding-top: 0.75rem;
+  line-height: 1.25em;
+  /* Field contents are scaled according to this font size */
+  font-size: 1rem;
 }
 /* Label shown as a placeholder but shrinks up when there is a value */
 .label {
-  font-size: 1rem;
+  font-size: 1em;
   position: absolute;
-  top: 1.3rem;
-  left: 1rem;
+  top: 1.3em;
+  left: 1em;
   display: block;
   pointer-events: none;
   user-select: none;
@@ -19,15 +22,22 @@
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
 }
+.centered .label {
+  right: 1em;
+  text-align: center;
+}
 /* The input or select element */
 .input {
-  font-size: 1rem;
-  padding: 0.6rem 0.75rem;
+  font-size: 1em;
+  padding: 0.6em 0.75em;
   background: transparent;
   width: 100%;
   margin: 0;
   color: #475569;
   text-align: left;
+}
+.centered .input {
+  text-align: center;
 }
 /* The <fieldset> providing the borders around the input/select element */
 .fieldset {
@@ -38,6 +48,9 @@
   right: 0;
   bottom: 0;
 }
+.unbordered {
+  border-style: none !important;
+}
 /* The <legend> that is used to hide part of the border of <fieldset> */
 .legend {
   white-space: nowrap;
@@ -45,7 +58,7 @@
   text-overflow: ellipsis;
   user-select: none;
   width: 0;
-  font-size: 0.75rem;
+  font-size: 0.75em;
 }
 /* Hide browser-provided outline on focus */
 .input:focus {
@@ -54,14 +67,19 @@
 /* Shrink the label to the top when there is a value or focus */
 .hasValue .label,
 .input:focus ~ .label {
-  top: -0.1rem;
-  font-size: 0.75rem;
+  top: -0.1em;
+  font-size: 0.75em;
 }
 /* Hide part of the border when there is a value or focus */
 .hasValue .fieldset .legend,
 .input:focus ~ .fieldset .legend {
   width: auto;
   visibility: visible;
+}
+.centered.hasValue .fieldset .legend,
+.centered .input:focus ~ .fieldset .legend {
+  margin-left: auto;
+  margin-right: auto;
 }
 /* Colorize the label on focus */
 .input:focus ~ .label {

@@ -18,6 +18,8 @@ interface InputTextFieldProps {
   value: string;
   onChange: (value: string, event: ChangeEvent<HTMLInputElement>) => void;
   autoFocus?: boolean;
+  centered?: boolean;
+  unbordered?: boolean;
 }
 
 const InputTextField: VFC<InputTextFieldProps> = (props) => {
@@ -30,6 +32,8 @@ const InputTextField: VFC<InputTextFieldProps> = (props) => {
     onFocus,
     inputRef,
     autoFocus,
+    centered,
+    unbordered,
   } = props;
   const inputId = useId("input-text-", id);
   const onInputChange: ChangeEventHandler<HTMLInputElement> = (event) => {
@@ -42,6 +46,8 @@ const InputTextField: VFC<InputTextFieldProps> = (props) => {
       label={label}
       labelFor={inputId}
       hasValue={!!value}
+      centered={centered}
+      unbordered={unbordered}
     >
       <input
         id={inputId}

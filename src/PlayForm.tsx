@@ -6,6 +6,7 @@ import {
   GameExpansionDefinition,
   GameMiscFieldDefinition,
   GameScoreFieldDefinition,
+  nameField,
 } from "./domain/game";
 import { PlayFormScoreField } from "./PlayFormScoreField";
 import { PlayFormMiscField } from "./PlayFormMiscField";
@@ -17,11 +18,12 @@ import CardButtonRow from "./common/components/buttons/CardButtonRow";
 import Button from "./common/components/buttons/Button";
 import ButtonPrimary from "./common/components/buttons/ButtonPrimary";
 import Heading1 from "./common/components/typography/Heading1";
-import Heading3 from "./common/components/typography/Heading3";
 import CheckboxField from "./common/components/inputs/CheckboxField";
 import DropdownMenu, {
   DropdownMenuOption,
 } from "./common/components/dropdowns/DropdownMenu";
+import InputTextField from "./common/components/inputs/InputTextField";
+import styles from "./PlayForm.module.css";
 
 function FormViewHeading(props: {
   children: ReactNode;
@@ -143,7 +145,7 @@ export const PlayForm = (props: {
   const handleMiscChange = (
     misc: string,
     field: GameMiscFieldDefinition,
-    player: Player | undefined
+    player?: Player | undefined
   ) => {
     const playerId = player && player.id;
     const oldMisc = play.misc.filter(
@@ -362,7 +364,16 @@ export const PlayForm = (props: {
           </CardButtonRow>
         }
       >
-        <Heading3>{game.name}</Heading3>
+        <InputTextField
+          label={game.name}
+          value={play.getMiscFieldValue(nameField) ?? ""}
+          className={styles.editableHeading}
+          centered
+          unbordered
+          onChange={(newName) => {
+            handleMiscChange(newName, nameField);
+          }}
+        />
         <SwipeableViews
           enableMouseEvents
           index={activeViewIndex}
