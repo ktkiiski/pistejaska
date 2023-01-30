@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## 2023-01-30
+
+- **Images can be added to a play also when viewing a play** (above the comments)
+- When editing a play, **you can jump to a certain category easily** by clicking the category heading, and then choosing another category from the dropdown menu
+- **The name of the play can be edited from any category** by clicking the game name heading and typing a name there. The name can also be edited in "Metadata" normally
+
 ## 2022-11-06
 
 ### Fixed
