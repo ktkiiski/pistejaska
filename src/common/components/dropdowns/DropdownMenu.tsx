@@ -22,12 +22,12 @@ const animationClassNames = {
   exitActive: styles.exitActive,
 };
 
-export interface DropdownMenuOption {
+export interface DropdownMenuOption<Value = unknown> {
   label: ReactNode;
   description?: ReactNode;
   selected?: boolean;
   disabled?: boolean;
-  value: unknown;
+  value: Value;
   onSelect?: (event: SyntheticEvent<HTMLLIElement>) => void;
 }
 

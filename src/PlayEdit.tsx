@@ -4,30 +4,14 @@ import { Play, PlayDTO } from "./domain/play";
 import { PlayForm } from "./PlayForm";
 import { useGames } from "./common/hooks/useGames";
 import { usePlay } from "./common/hooks/usePlay";
-import { app } from "./common/firebase";
-import { getStorage, ref, uploadBytes } from "firebase/storage";
-import { getFirestore, doc, updateDoc } from "firebase/firestore";
 import { LoadingSpinner } from "./common/components/LoadingSpinner";
 import ViewContentLayout from "./common/components/ViewContentLayout";
 import { isEmpty } from "lodash";
-import { v4 as uuid } from "uuid";
 import Spinner from "./common/components/Spinner";
 import useConfirmLeave from "./common/hooks/useConfirmLeave";
-import { getTodayAsString } from "./common/dateUtils";
-
-const getFileExtension = (filename: string) => {
-  return filename.slice(((filename.lastIndexOf(".") - 1) >>> 0) + 2);
-};
-
-async function updatePlay(playId: string, changes: Partial<PlayDTO>) {
-  if (isEmpty(changes)) {
-    // Nothing to actually save
-    return;
-  }
-  // Update the play on Firestore
-  const db = getFirestore(app);
-  await updateDoc(doc(db, "plays-v1", playId), changes);
-}
+import uploadPlayImage from "./utils/uploadPlayImage";
+import setMiscFieldValue from "./utils/setMiscFieldValue";
+import updatePlay from "./utils/updatePlay";
 
 // Wait for 5 seconds until to save automatically
 const autoSaveInterval = 5000;
@@ -136,18 +120,11 @@ export const PlayEdit = () => {
   }
 
   const onImageUpload = async (fieldId: string, file: File) => {
-    const storage = getStorage(app);
-    const dateString = getTodayAsString();
-    const extension = getFileExtension(file.name);
-    const filename = `${dateString}--${playId}--${uuid()}.${extension}`;
-    const storageRef = ref(storage, "play-images/" + filename);
-    await uploadBytes(storageRef, file);
-    const oldValue = play.misc.find((x) => x.fieldId === fieldId);
-    const oldMisc = play.misc.filter((x) => x.fieldId !== fieldId);
-    const newMisc = oldMisc.concat({
-      fieldId,
-      data: ((oldValue?.data as string[]) || []).concat([filename]),
-    });
+    const filename = await uploadPlayImage(playId, file);
+    const newMisc = setMiscFieldValue(play.misc, fieldId, (oldImages = []) => [
+      ...(oldImages as string[]),
+      filename,
+    ]);
     onEdit({ misc: newMisc });
     // Trigger save immediately after an image upload, without the delay
     setIsSaveTriggered(true);

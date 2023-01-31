@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { ReactNode, useState } from "react";
 import SwipeableViews from "react-swipeable-views";
 import { Player, Play, PlayDTO } from "./domain/play";
 import {
@@ -6,6 +6,7 @@ import {
   GameExpansionDefinition,
   GameMiscFieldDefinition,
   GameScoreFieldDefinition,
+  nameField,
 } from "./domain/game";
 import { PlayFormScoreField } from "./PlayFormScoreField";
 import { PlayFormMiscField } from "./PlayFormMiscField";
@@ -17,8 +18,41 @@ import CardButtonRow from "./common/components/buttons/CardButtonRow";
 import Button from "./common/components/buttons/Button";
 import ButtonPrimary from "./common/components/buttons/ButtonPrimary";
 import Heading1 from "./common/components/typography/Heading1";
-import Heading3 from "./common/components/typography/Heading3";
 import CheckboxField from "./common/components/inputs/CheckboxField";
+import DropdownMenu, {
+  DropdownMenuOption,
+} from "./common/components/dropdowns/DropdownMenu";
+import InputTextField from "./common/components/inputs/InputTextField";
+import styles from "./PlayForm.module.css";
+
+function FormViewHeading(props: {
+  children: ReactNode;
+  id?: string;
+  options: DropdownMenuOption<number>[];
+  onSelect: (index: number) => void;
+}) {
+  const { children, id, options, onSelect } = props;
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  return (
+    <Heading1 id={id} className="cursor-pointer">
+      <DropdownMenu
+        onClose={() => setIsDropdownOpen(false)}
+        isOpen={isDropdownOpen}
+        options={options}
+        onSelect={(option) => {
+          onSelect(option.value);
+          setIsDropdownOpen(false);
+        }}
+        overlaySelectedOption
+      >
+        <span onClick={() => setIsDropdownOpen(true)}>
+          {children}
+          <span className="text-lg align-middle">{` ▼`}</span>
+        </span>
+      </DropdownMenu>
+    </Heading1>
+  );
+}
 
 export const PlayForm = (props: {
   game: Game;
@@ -111,7 +145,7 @@ export const PlayForm = (props: {
   const handleMiscChange = (
     misc: string,
     field: GameMiscFieldDefinition,
-    player: Player | undefined
+    player?: Player | undefined
   ) => {
     const playerId = player && player.id;
     const oldMisc = play.misc.filter(
@@ -215,13 +249,32 @@ export const PlayForm = (props: {
     ));
   };
 
+  const viewTitles: string[] = [];
+  if (hasExpansions) {
+    viewTitles.push("Used expansions");
+  }
+  viewTitles.push(
+    ...fieldGroups.map(
+      ({ group, fields: groupFields }) => group || groupFields[0].field.name
+    )
+  );
+  const viewOptions = viewTitles.map<DropdownMenuOption<number>>(
+    (title, index) => ({
+      label: title,
+      value: index,
+      selected: index === activeViewIndex,
+    })
+  );
+
   const views = [
     hasExpansions && (
       <div
         key="expansions"
         className="flex flex-col items-center text-left pb-2"
       >
-        <Heading3>Used expansions</Heading3>
+        <FormViewHeading options={viewOptions} onSelect={setActiveViewIndex}>
+          Used expansions
+        </FormViewHeading>
         <div className="flex flex-col items-stretch space-y-2">
           {(game.expansions || []).map((expansion) =>
             renderExpansionField(expansion)
@@ -236,12 +289,25 @@ export const PlayForm = (props: {
           key={viewId}
           className="space-y-1 flex flex-col items-center text-left pb-2"
         >
-          {group ? <Heading3>{group}</Heading3> : null}
+          {group ? (
+            <FormViewHeading
+              options={viewOptions}
+              onSelect={setActiveViewIndex}
+            >
+              {group}
+            </FormViewHeading>
+          ) : null}
           <FormFocusGroup focused={activeViewIndex === viewIndex}>
             {groupFields.map((item) => (
               <React.Fragment key={item.field.id}>
                 {item.type === "misc" && group ? null : (
-                  <Heading3 id={item.field.id}>{item.field.name}</Heading3>
+                  <FormViewHeading
+                    id={item.field.id}
+                    options={viewOptions}
+                    onSelect={setActiveViewIndex}
+                  >
+                    {item.field.name}
+                  </FormViewHeading>
                 )}
                 {item.field.description ? (
                   <p className="my-2 mx-2 text-center">
@@ -298,7 +364,16 @@ export const PlayForm = (props: {
           </CardButtonRow>
         }
       >
-        <Heading1>{game.name}</Heading1>
+        <InputTextField
+          label={game.name}
+          value={play.getMiscFieldValue(nameField) ?? ""}
+          className={styles.editableHeading}
+          centered
+          unbordered
+          onChange={(newName) => {
+            handleMiscChange(newName, nameField);
+          }}
+        />
         <SwipeableViews
           enableMouseEvents
           index={activeViewIndex}
