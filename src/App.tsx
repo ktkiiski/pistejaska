@@ -22,6 +22,7 @@ import NewPlayView from "./NewPlayView";
 import useCurrentUser from "./common/hooks/useCurrentUser";
 import { useEffect } from "react";
 import addOrUpdateUser from "./actions/addOrUpdateUser";
+import ReportPlayerGameView from "./ReportPlayerGameView";
 
 const App = () => {
   const [user, loading] = useCurrentUser();
@@ -53,6 +54,10 @@ const App = () => {
       <Route path="/games/:gameId" element={<ReportGameView />} />
       <Route path="/players" element={<ReportPlayerList />} />
       <Route path="/players/:playerId" element={<ReportPlayerView />} />
+      <Route
+        path="/players/:playerId/games/:gameId"
+        element={<ReportPlayerGameView />}
+      />
       <Route path="/edit/:playId" element={<PlayEdit />} />
       <Route path="/new/:gameId" element={<NewPlayView />} />
       <Route path="/replay/:playId" element={<ReplayView />} />

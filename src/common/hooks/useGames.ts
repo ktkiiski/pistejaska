@@ -15,7 +15,7 @@ const playConverter: FirestoreDataConverter<Game> = {
 const firestore = getFirestore(app);
 const query = collection(firestore, "games").withConverter(playConverter);
 
-export const useGames = (): [Game[], boolean, Error | undefined] => {
+export function useGames(): [Game[], boolean, Error | undefined] {
   const [games, loading, error] = useCollectionData(query);
   return [loading || !games ? [] : games, loading, error];
-};
+}

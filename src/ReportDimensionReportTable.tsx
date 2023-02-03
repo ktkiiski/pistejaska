@@ -1,23 +1,16 @@
-import React from "react";
 import { sortBy } from "lodash";
 import { GameMiscFieldDefinition } from "./domain/game";
 import { Play } from "./domain/play";
 import { getDimensionStatistics } from "./domain/statistics";
 import ReportTable from "./ReportTable";
-
-function renderPercentage(count: number, max: number) {
-  const percentage = Math.round((count / max) * 100);
-  if (Number.isNaN(percentage) || !Number.isFinite(percentage)) {
-    return "–";
-  }
-  return `${percentage}% (${count})`;
-}
+import { renderPercentage } from "./common/stringUtils";
 
 const ReportDimensionReportTable = (props: {
   plays: Play[];
   dimension: GameMiscFieldDefinition<string>;
+  playerId?: string;
 }) => {
-  const { plays, dimension } = props;
+  const { plays, dimension, playerId } = props;
 
   const columns = [
     { name: dimension.name },
@@ -37,7 +30,9 @@ const ReportDimensionReportTable = (props: {
     },
   ];
 
-  const stats = Array.from(getDimensionStatistics(plays, dimension).values());
+  const stats = Array.from(
+    getDimensionStatistics(plays, dimension, playerId).values()
+  );
   const rows = sortBy(
     stats,
     (stat) => stat.averageNormalizedPosition ?? Number.POSITIVE_INFINITY,

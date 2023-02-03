@@ -1,5 +1,5 @@
 import { Play, Player } from "./domain/play";
-import { sortBy, flatMap, groupBy, uniq, mean, orderBy } from "lodash";
+import { sortBy, groupBy, uniq, mean } from "lodash";
 import { usePlays } from "./common/hooks/usePlays";
 import ReportTable from "./ReportTable";
 import { stringifyScore } from "./common/stringUtils";
@@ -9,69 +9,38 @@ import ViewContentLayout from "./common/components/ViewContentLayout";
 import PlayList from "./PlayList";
 import { LoadingSpinner } from "./common/components/LoadingSpinner";
 import Heading1 from "./common/components/typography/Heading1";
-import Table from "./common/components/tables/Table";
-import TableHead from "./common/components/tables/TableHead";
-import TableHeadCell from "./common/components/tables/TableHeadCell";
 import Heading3 from "./common/components/typography/Heading3";
-import TableBody from "./common/components/tables/TableBody";
-import TableRow from "./common/components/tables/TableRow";
-import TableCell from "./common/components/tables/TableCell";
-import { FC, useReducer } from "react";
+import { FC } from "react";
 import { useParams } from "react-router-dom";
-import { Link } from "react-router-dom";
 import { Game } from "./domain/game";
 import { useComments } from "./common/hooks/useComments";
-
-interface Playmate {
-  player: Player;
-  plays: Play[];
-}
-
-function usePlaymates(playerId: string, playerPlays: Play[]): Playmate[] {
-  const playmatesById: Record<string, Playmate> = {};
-  playerPlays.forEach((play) => {
-    play.players.forEach((other) => {
-      const otherId = other.id;
-      if (otherId !== playerId) {
-        const playmate = playmatesById[otherId] ?? {
-          player: other,
-          plays: [],
-        };
-        playmatesById[otherId] = playmate;
-        playmate.plays.push(play);
-      }
-    });
-  });
-  return orderBy(playmatesById, (playMate) => playMate.plays.length, "desc");
-}
+import usePlayer from "./common/hooks/usePlayer";
+import ReportPlaymates from "./ReportPlaymates";
 
 export const ReportPlayerView: FC = () => {
   const playerId = useParams().playerId!;
   const [plays, loadingPlays, errorPlays] = usePlays();
   const [games, loadingGames, errorGames] = useGames();
   const [comments] = useComments();
+  const [player, loadingPlayer, errorPlayer] = usePlayer(playerId);
 
   const playerPlays = plays.filter((p) =>
     p.players.find((x) => x.id === playerId)
   );
 
-  if (errorPlays || errorGames) {
+  if (errorPlays || errorGames || errorPlayer) {
     return (
       <div>
         Permission denied. Ask permissions from panu.vuorinen@gmail.com.
       </div>
     );
   }
-  if (loadingPlays || loadingGames) {
+  if (loadingPlays || loadingGames || loadingPlayer) {
     return <LoadingSpinner />;
   }
 
-  const player = flatMap(plays, (p) => p.players).find(
-    (p) => p.id === playerId
-  );
-
   if (!player) {
-    return <>Error</>;
+    return <>Player not found</>;
   }
 
   return (
@@ -80,7 +49,7 @@ export const ReportPlayerView: FC = () => {
       <p>Based on {playerPlays.length} plays.</p>
 
       <Heading3>Most common playmates</Heading3>
-      <Playmates player={player} playerPlays={playerPlays}></Playmates>
+      <ReportPlaymates player={player} playerPlays={playerPlays} />
 
       <Heading3>Games</Heading3>
       <PlayerGamesReport
@@ -92,54 +61,6 @@ export const ReportPlayerView: FC = () => {
       <Heading3>Plays</Heading3>
       <PlayList plays={playerPlays} games={games} comments={comments} />
     </ViewContentLayout>
-  );
-};
-
-const Playmates = (props: { player: Player; playerPlays: Play[] }) => {
-  const { player, playerPlays } = props;
-  const playmates = usePlaymates(player.id, playerPlays);
-  const [isEveryPlaymateVisible, showAllPlaymates] = useReducer(
-    () => true,
-    false
-  );
-  const visiblePlaymates = isEveryPlaymateVisible
-    ? playmates
-    : playmates.slice(0, 10);
-
-  return !playmates.length ? (
-    <></>
-  ) : (
-    <>
-      <Table>
-        <TableHead>
-          <tr>
-            <TableHeadCell>Playmate</TableHeadCell>
-            <TableHeadCell>Play count</TableHeadCell>
-          </tr>
-        </TableHead>
-        <TableBody>
-          {visiblePlaymates.map((playMate) => (
-            <TableRow key={playMate.player.id}>
-              <TableCell>
-                <Link
-                  className="cursor-pointer hover:text-black"
-                  to={`/players/${playMate.player.id}`}
-                >
-                  {playMate.player.name}
-                </Link>
-              </TableCell>
-              <TableCell>{playMate.plays.length}</TableCell>
-            </TableRow>
-          ))}
-          {isEveryPlaymateVisible ||
-          visiblePlaymates.length >= playmates.length ? null : (
-            <TableRow className="cursor-pointer" onClick={showAllPlaymates}>
-              <TableCell colSpan={2}>Show all playmates…</TableCell>
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
-    </>
   );
 };
 
@@ -213,7 +134,7 @@ const PlayerGamesReport = (props: {
     return [
       {
         value: game?.name ?? "All",
-        link: game ? `/games/${game?.id}` : undefined,
+        link: game ? `/players/${player.id}/games/${game?.id}` : undefined,
       },
       {
         value: stringifyScore(maxScoresPlay.getTotal(player.id)),

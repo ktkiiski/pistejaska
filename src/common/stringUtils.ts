@@ -1,6 +1,14 @@
 export const stringifyScore = (score: number | null) =>
   score == null ? "—" : String(Math.round(score));
 
+export function renderPercentage(count: number, max: number) {
+  const percentage = Math.round((count / max) * 100);
+  if (Number.isNaN(percentage) || !Number.isFinite(percentage)) {
+    return "–";
+  }
+  return `${percentage}% (${count})`;
+}
+
 const numericEmojis = [
   "0️⃣",
   "1️⃣",

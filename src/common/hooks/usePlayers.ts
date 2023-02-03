@@ -3,7 +3,7 @@ import { groupBy, map, sortBy } from "lodash";
 import { Player } from "../../domain/play";
 import { useMemo } from "react";
 
-export const usePlayers = (): [Player[], boolean, Error | undefined] => {
+export function usePlayers(): [Player[], boolean, Error | undefined] {
   const [plays, loading, error] = usePlays();
 
   const players = useMemo(() => {
@@ -20,4 +20,4 @@ export const usePlayers = (): [Player[], boolean, Error | undefined] => {
   }, [plays]);
 
   return [players, loading, error];
-};
+}

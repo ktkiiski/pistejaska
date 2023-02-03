@@ -1,4 +1,4 @@
-import { Play } from "./play";
+import { Play, PlayRanking } from "./play";
 import { GameMiscFieldDefinition, GameFieldOption, Game } from "./game";
 
 export interface GameStatistics {
@@ -199,6 +199,182 @@ export function getGameStatistics(
   return statsByPlayerCount.filter((stats) => stats != null);
 }
 
+export interface GamePlayerStatistics {
+  /**
+   * The game for which these statistics are for.
+   */
+  game: Game;
+  /**
+   * The player ID for whom these statistics are for.
+   */
+  playerId: string;
+  /**
+   * The total number of plays for this player,
+   * where NOT playing alone.
+   */
+  playCount: number;
+  /**
+   * The total number of times the player has won the game.
+   */
+  winCount: number;
+  /**
+   * The average normalized ranking position of the player in games,
+   * or null if unavailable.
+   */
+  averageNormalizedPosition: number | null;
+  /**
+   * The sum for normalized positions, used to calculate the average.
+   */
+  normalizedPositionSum: number;
+  /**
+   * The maximum winning score for this player,
+   * or null if information not available.
+   */
+  maxWinningScore: number | null;
+  /**
+   * The minimum winning score for this player,
+   * or null if information not available.
+   */
+  minWinningScore: number | null;
+  /**
+   * The average winning score for this player,
+   * or null if information not available.
+   */
+  averageWinningScore: number | null;
+  /**
+   * The sum of all winning scores for this player.
+   * Used to calculate the average winning score by dividing
+   * this by `playCount`.
+   */
+  winningScoreSum: number;
+  /**
+   * The first game in which the player got the `maxWinningScore`.
+   */
+  maxWinningScorePlay: Play | null;
+  /**
+   * The first game in which the player got the `minWinningScore`.
+   */
+  minWinningScorePlay: Play | null;
+  /**
+   * Aggregated stats of other miscellaus player-specific dimensions.
+   */
+  dimensions: {
+    [fieldId: string]: {
+      minValue: number | null;
+      maxValue: number | null;
+      averageValue: number | null;
+      valueSum: number;
+      valueCount: number;
+    };
+  };
+}
+
+/**
+ * Analyses the statistics for a game for the given player.
+ * @param game the game to analyze
+ * @param plays all the plays for the game
+ */
+export function getGamePlayerStatistics(
+  game: Game,
+  plays: Play[],
+  playerId: string,
+  otherDimensions?: GameMiscFieldDefinition<number>[]
+): GamePlayerStatistics {
+  const initDimension = () => ({
+    minValue: null,
+    maxValue: null,
+    averageValue: null,
+    valueSum: 0,
+    valueCount: 0,
+  });
+
+  function aggregateRanking(
+    stats: GamePlayerStatistics,
+    ranking: PlayRanking,
+    play: Play
+  ) {
+    const { normalizedPosition } = ranking;
+    if (normalizedPosition != null) {
+      stats.playCount += 1;
+      stats.normalizedPositionSum += normalizedPosition;
+      stats.averageNormalizedPosition =
+        stats.normalizedPositionSum / stats.playCount;
+      if (normalizedPosition === 0) {
+        const winningScore = ranking.score;
+        stats.winCount += 1;
+        if (
+          stats.maxWinningScore == null ||
+          winningScore > stats.maxWinningScore
+        ) {
+          stats.maxWinningScore = winningScore;
+          stats.maxWinningScorePlay = play;
+        }
+        if (
+          stats.minWinningScore == null ||
+          winningScore < stats.minWinningScore
+        ) {
+          stats.minWinningScore = winningScore;
+          stats.minWinningScorePlay = play;
+        }
+        stats.winningScoreSum += winningScore;
+        stats.averageWinningScore = stats.winningScoreSum / stats.winCount;
+      }
+    }
+  }
+
+  function aggregateOtherDimension(
+    stats: GamePlayerStatistics,
+    field: GameMiscFieldDefinition<number>,
+    value: number
+  ) {
+    const dimension = stats.dimensions[field.id] ?? initDimension();
+    stats.dimensions[field.id] = dimension;
+    if (dimension.maxValue == null || value > dimension.maxValue) {
+      dimension.maxValue = value;
+    }
+    if (dimension.minValue == null || value < dimension.minValue) {
+      dimension.minValue = value;
+    }
+    dimension.valueCount += 1;
+    dimension.valueSum += value;
+    dimension.averageValue = dimension.valueSum / dimension.valueCount;
+  }
+
+  const playerStats: GamePlayerStatistics = {
+    game,
+    playerId,
+    playCount: 0,
+    winCount: 0,
+    averageNormalizedPosition: null,
+    normalizedPositionSum: 0,
+    maxWinningScore: null,
+    minWinningScore: null,
+    averageWinningScore: null,
+    winningScoreSum: 0,
+    maxWinningScorePlay: null,
+    minWinningScorePlay: null,
+    dimensions: {},
+  };
+  plays.forEach((play) => {
+    const { rankings } = play;
+    const ranking = rankings.find((r) => r.player.id === playerId);
+    if (!ranking) {
+      // Player not in this play
+      return;
+    }
+    aggregateRanking(playerStats, ranking, play);
+
+    // Aggregate other dimensions
+    otherDimensions?.forEach((field) => {
+      const value = play.getMiscFieldValue(field, playerId);
+      if (value != null) {
+        aggregateOtherDimension(playerStats, field, value);
+      }
+    });
+  });
+  return playerStats;
+}
+
 export interface DimensionValueStatistics<T> {
   /**
    * The dimension being analyzed.
@@ -247,7 +423,8 @@ export interface DimensionValueStatistics<T> {
  */
 export function getDimensionStatistics(
   plays: Play[],
-  dimension: GameMiscFieldDefinition<string>
+  dimension: GameMiscFieldDefinition<string>,
+  reportPlayerId?: string
 ): Map<string, DimensionValueStatistics<string>> {
   const statsByValue = new Map<string, DimensionValueStatistics<string>>();
   const playIdsByValue = new Map<string, Set<string>>();
@@ -270,6 +447,8 @@ export function getDimensionStatistics(
   // Go through all the games once and aggregate the stats for each value
   plays.forEach((play) => {
     play.misc.forEach(({ fieldId, playerId, data }) => {
+      // Skip if reporting for a specific player and this is not for them
+      if (reportPlayerId != null && playerId !== reportPlayerId) return;
       if (typeof data === "string" && fieldId === dimension.id) {
         let stats = statsByValue.get(data);
         if (!stats) {
