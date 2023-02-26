@@ -9,6 +9,7 @@ import NativeSelectField from "./common/components/inputs/NativeSelectField";
 import ButtonLight from "./common/components/buttons/ButtonLight";
 import { Temporal } from "@js-temporal/polyfill";
 import ButtonImageUpload from "./common/components/buttons/ButtonImageUpload";
+import InputNativeDateField from "./common/components/inputs/InputNativeDateField";
 
 interface PlayFormFieldProps<T, F extends GameFieldDefinition<T>> {
   value: T | null;
@@ -40,7 +41,6 @@ export function PlayFormField<
     onImageRemove,
   } = props;
   const inputRef = useFormFieldRef(fieldIndex);
-  const isNumeric = field.type === "number" || field.type === "duration";
   const createdAt = play.getCreationDate();
   const timeZone = Temporal.Now.timeZone();
   const createdToday = Temporal.Now.plainDateISO(timeZone).equals(
@@ -110,32 +110,64 @@ export function PlayFormField<
   ) : (
     <>
       <div>
-        {isNumeric ? (
-          <InputNumberField
-            className="w-60 max-w-full"
-            label={label}
-            value={value as number | null}
-            onChange={(newValue) => onChange(newValue as T | null, field)}
-            id={id}
-            onFocus={onFocus}
-            inputRef={inputRef}
-            min={field.minValue}
-            max={field.maxValue}
-            step={field.step}
-          />
-        ) : (
-          <InputTextField
-            className="w-60 max-w-full"
-            label={label}
-            value={value as string | ""}
-            onChange={(newValue) =>
-              onChange((newValue == null ? "" : newValue) as T | null, field)
-            }
-            id={id}
-            onFocus={onFocus}
-            inputRef={inputRef}
-          />
-        )}
+        {(() => {
+          switch (field.type) {
+            case "number":
+            case "duration":
+              return (
+                <InputNumberField
+                  className="w-60 max-w-full"
+                  label={label}
+                  value={value as number | null}
+                  onChange={(newValue) => onChange(newValue as T | null, field)}
+                  id={id}
+                  onFocus={onFocus}
+                  inputRef={inputRef}
+                  min={field.minValue}
+                  max={field.maxValue}
+                  step={field.step}
+                />
+              );
+            case "date":
+              return (
+                <InputNativeDateField
+                  className="w-60 max-w-full"
+                  label={label}
+                  value={value as string | null}
+                  onChange={(newValue) =>
+                    onChange(
+                      (newValue == null ? "" : newValue) as T | null,
+                      field
+                    )
+                  }
+                  id={id}
+                  onFocus={onFocus}
+                  inputRef={inputRef}
+                />
+              );
+
+            case "text":
+            case "boolean":
+            case "images":
+            default:
+              return (
+                <InputTextField
+                  className="w-60 max-w-full"
+                  label={label}
+                  value={value as string | ""}
+                  onChange={(newValue) =>
+                    onChange(
+                      (newValue == null ? "" : newValue) as T | null,
+                      field
+                    )
+                  }
+                  id={id}
+                  onFocus={onFocus}
+                  inputRef={inputRef}
+                />
+              );
+          }
+        })()}
       </div>
       {field.type !== "duration" || !createdToday ? null : (
         <div className="w-60 max-w-full">

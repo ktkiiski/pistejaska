@@ -4,9 +4,17 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## 2023-02-26
+
+### Changed
+
+- Better UX when inputting dates (native datepicker)
+
 ## 2023-02-03
 
-- Added reports for a player in some specific game
+### Added
+
+- Reports for a player in some specific game
 
 ## 2023-01-30
 
