@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Changed
 
 - Better UX when inputting dates (native datepicker)
+- Better UX: navigates back to reports from back button if navigated to play from reports view
 
 ## 2023-02-03
 

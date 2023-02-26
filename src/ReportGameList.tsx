@@ -139,7 +139,10 @@ export const ReportGameList = () => {
       ) : (
         <List>
           {sortedGameItems.map((game) => (
-            <ListLinkItem to={`/games/${game.id}`} key={game.id}>
+            <ListLinkItem
+              to={`/games/${game.id}?from=${window.location.pathname}`}
+              key={game.id}
+            >
               <ListItemIcon>
                 <img
                   alt={game.name}

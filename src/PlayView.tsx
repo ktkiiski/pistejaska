@@ -122,7 +122,12 @@ export const PlayView: FC = () => {
 
   if (error) return <>Error: {error}</>;
 
-  const onBack = () => navigate("/");
+  const onBack = () => {
+    const from = window.location.search.includes("?from=")
+      ? window.location.search.substring(6)
+      : "/";
+    navigate(from);
+  };
 
   if (loading) {
     return (
