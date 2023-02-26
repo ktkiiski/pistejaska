@@ -54,7 +54,10 @@ const PlayList = (props: PlayListProps) => {
           const noOfPlayComments =
             comments.filter((x) => x.playId === play.id)?.length ?? 0;
           return (
-            <ListLinkItem key={play.id} to={`/view/${play.id}`}>
+            <ListLinkItem
+              key={play.id}
+              to={`/view/${play.id}?from=${window.location.pathname}`}
+            >
               <ListItemIcon>
                 {game ? (
                   <img
