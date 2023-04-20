@@ -4,7 +4,6 @@ import { LoadingSpinner } from "./common/components/LoadingSpinner";
 import InputTextField from "./common/components/inputs/InputTextField";
 import ButtonPrimary from "./common/components/buttons/ButtonPrimary";
 import { User } from "firebase/auth";
-import { v4 as uuid } from "uuid";
 import { Temporal } from "@js-temporal/polyfill";
 import { addComment } from "./actions/addComment";
 
@@ -17,7 +16,7 @@ export const CommentAdd = (props: { playId: string; user: User }) => {
     event.preventDefault();
     setIsSaving(true);
     const commentDto = {
-      id: uuid(),
+      id: window.crypto.randomUUID(),
       playId: playId,
       comment: comment,
       userId: user.uid,

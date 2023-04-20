@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Play, Player } from "./domain/play";
-import { v4 as uuid } from "uuid";
 import { usePlayers } from "./common/hooks/usePlayers";
 import { useGames } from "./common/hooks/useGames";
 import ViewContentLayout from "./common/components/ViewContentLayout";
@@ -43,7 +42,7 @@ async function createPlay(
   players: Player[],
   userId: string
 ): Promise<Play> {
-  const playId = `${gameId}-${uuid()}`;
+  const playId = `${gameId}-${window.crypto.randomUUID()}`;
   const play = new Play({
     gameId: gameId,
     id: playId,
@@ -119,7 +118,10 @@ const SelectPlayers = (props: {
   };
 
   const onAddPlayer = () => {
-    setPlayers([...players, { name: currentPlayerName, id: uuid() }]);
+    setPlayers([
+      ...players,
+      { name: currentPlayerName, id: window.crypto.randomUUID() },
+    ]);
     setCurrentPlayerName("");
   };
 
