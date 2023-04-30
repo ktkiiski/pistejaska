@@ -10,6 +10,7 @@ import { round } from "lodash";
 import { Temporal } from "@js-temporal/polyfill";
 import { convertToLocaleDateString } from "../common/dateUtils";
 import { formatDuration } from "../common/stringUtils";
+import parseDate from "../utils/parseDate";
 
 export type Player = {
   name: string;
@@ -170,12 +171,10 @@ export class Play implements PlayDTO {
 
   public getDate(): Temporal.Instant {
     const dateField = this.misc.find((m) => m.fieldId === "date");
-
-    return dateField
-      ? Temporal.Instant.fromEpochMilliseconds(
-          Date.parse(dateField.data as string)
-        )
-      : Temporal.Instant.from("1900-01-01 00:00:00Z");
+    return (
+      parseDate(dateField?.data) ??
+      Temporal.Instant.from("1900-01-01 00:00:00Z")
+    );
   }
 
   public getCreationDate(): Temporal.Instant {
