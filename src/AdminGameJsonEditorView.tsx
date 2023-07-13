@@ -16,7 +16,7 @@ const defaultGameJson: GameDefinition = {
   scoreFields: [],
 };
 
-function Admin() {
+function AdminGameJsonEditorView() {
   const [gameId, setGameId] = useState<string | null>(null);
 
   const [games] = useGames();
@@ -84,4 +84,4 @@ function Admin() {
   );
 }
 
-export default Admin;
+export default AdminGameJsonEditorView;
