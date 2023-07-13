@@ -24,7 +24,7 @@ function updateJson(
   return isEqual(newJson, oldJson) ? oldJson : newJson;
 }
 
-function AdminGameEditor({
+function AdminGameJsonEditor({
   json,
   onSubmit,
   onDelete,
@@ -90,4 +90,4 @@ function AdminGameEditor({
   );
 }
 
-export default AdminGameEditor;
+export default AdminGameJsonEditor;

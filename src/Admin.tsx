@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { GameDefinition } from "./domain/game";
-import AdminGameEditor from "./AdminGameEditor";
+import AdminGameJsonEditor from "./AdminGameJsonEditor";
 import { useGames } from "./common/hooks/useGames";
 import { deleteDoc, doc, getFirestore, setDoc } from "firebase/firestore";
 import { app } from "./common/firebase";
@@ -47,7 +47,7 @@ function Admin() {
           : "Create new game"}
       </Heading2>
       {!initialGameJson ? null : (
-        <AdminGameEditor
+        <AdminGameJsonEditor
           json={initialGameJson}
           onSubmit={async (json) => {
             const { id } = json;
