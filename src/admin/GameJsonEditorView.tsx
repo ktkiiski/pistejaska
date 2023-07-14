@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { GameDefinition } from "../domain/game";
-import AdminGameJsonEditor from "./AdminGameJsonEditor";
+import GameJsonEditor from "./GameJsonEditor";
 import { useGames } from "../common/hooks/useGames";
 import { deleteDoc, doc, getFirestore, setDoc } from "firebase/firestore";
 import { app } from "../common/firebase";
@@ -18,7 +18,7 @@ const defaultGameJson: GameDefinition = {
   scoreFields: [],
 };
 
-function AdminGameJsonEditorView() {
+function GameJsonEditorView() {
   const navigate = useNavigate();
   const [gameId, setGameId] = useState<string | null>(null);
 
@@ -52,7 +52,7 @@ function AdminGameJsonEditorView() {
           : "Create new game"}
       </Heading2>
       {!initialGameJson ? null : (
-        <AdminGameJsonEditor
+        <GameJsonEditor
           json={initialGameJson}
           onSubmit={async (json) => {
             const { id } = json;
@@ -89,4 +89,4 @@ function AdminGameJsonEditorView() {
   );
 }
 
-export default AdminGameJsonEditorView;
+export default GameJsonEditorView;

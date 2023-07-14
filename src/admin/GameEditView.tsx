@@ -4,7 +4,7 @@ import Heading1 from "../common/components/typography/Heading1";
 import ViewContentLayout from "../common/components/ViewContentLayout";
 import React from "react";
 
-export default function AdminGameEditView() {
+export default function GameEditView() {
   const navigate = useNavigate();
 
   return (
