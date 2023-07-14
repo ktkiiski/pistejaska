@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
-import ButtonBack from "./common/components/buttons/ButtonBack";
-import Heading1 from "./common/components/typography/Heading1";
-import ViewContentLayout from "./common/components/ViewContentLayout";
+import ButtonBack from "../common/components/buttons/ButtonBack";
+import Heading1 from "../common/components/typography/Heading1";
+import ViewContentLayout from "../common/components/ViewContentLayout";
 import React from "react";
 
 export default function AdminGameEditView() {

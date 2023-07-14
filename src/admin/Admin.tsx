@@ -1,9 +1,9 @@
 import { useNavigate } from "react-router-dom";
-import Button from "./common/components/buttons/Button";
-import ButtonPrimary from "./common/components/buttons/ButtonPrimary";
-import CardButtonRow from "./common/components/buttons/CardButtonRow";
-import Heading1 from "./common/components/typography/Heading1";
-import ViewContentLayout from "./common/components/ViewContentLayout";
+import Button from "../common/components/buttons/Button";
+import ButtonPrimary from "../common/components/buttons/ButtonPrimary";
+import CardButtonRow from "../common/components/buttons/CardButtonRow";
+import Heading1 from "../common/components/typography/Heading1";
+import ViewContentLayout from "../common/components/ViewContentLayout";
 
 export default function Admin() {
   const navigate = useNavigate();
