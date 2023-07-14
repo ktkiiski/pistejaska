@@ -64,9 +64,11 @@ const App = () => {
       <Route path="/new/:gameId" element={<NewPlayView />} />
       <Route path="/replay/:playId" element={<ReplayView />} />
       <Route path="/new" element={<SelectGame />} />
-      <Route path="/admin" element={<Admin />} />
-      <Route path="/admin/edit-game" element={<AdminGameEditView />} />
-      <Route path="/admin/edit-game-json" element={<AdminGameJsonEditorView />} />
+      <Route path="/admin">
+        <Route index element={<Admin />} />
+        <Route path="edit-game" element={<AdminGameEditView />} />
+        <Route path="edit-game-json" element={<AdminGameJsonEditorView />} />
+      </Route>
       <Route path="/whatsnew" element={<WhatsNewView />} />
       <Route path="/reports" element={<Navigate to="/games" />} />
     </Routes>
