@@ -359,12 +359,15 @@ export class Game implements GameDefinition {
     return this.miscFields?.filter(isRelevantReportField) ?? [];
   }
 }
-export type GameDefinition = {
+export type GameBasicInfoDefinition = {
   name: string;
   // please use human-readable, slugified ids, like "terraforming-mars". Do not change once created!
   id: string;
   icon: string;
   simultaneousTurns: boolean;
+}
+
+export type GameDefinition = GameBasicInfoDefinition & {
   scoreFields: GameScoreFieldDefinition[];
   miscFields?: GameMiscFieldDefinition[];
   expansions?: GameExpansionDefinition[];
