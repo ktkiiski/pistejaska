@@ -3,25 +3,25 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@js-temporal/polyfill": "^0.4.3",
+    "@js-temporal/polyfill": "^0.4.4",
     "ajv": "^6.12.6",
-    "classnames": "^2.3.1",
+    "classnames": "^2.3.2",
     "cross-env": "^7.0.3",
-    "firebase": "^9.15.0",
-    "github-markdown-css": "^5.1.0",
-    "jsoneditor": "^9.5.7",
+    "firebase": "^10.1.0",
+    "github-markdown-css": "^5.2.0",
+    "jsoneditor": "^9.10.2",
     "lodash": "^4.17.21",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-firebase-hooks": "^5.1.1",
-    "react-markdown": "^8.0.0",
-    "react-router-dom": "^6.2.1",
+    "react-markdown": "^8.0.7",
+    "react-router-dom": "^6.15.0",
     "react-swipeable-views": "^0.14.0",
     "react-swipeable-views-utils": "^0.14.0",
     "react-tooltip": "^4.2.21",
-    "react-transition-group": "^4.4.2",
+    "react-transition-group": "^4.4.5",
     "remark-gfm": "^3.0.1",
-    "ts-trueskill": "^4.2.1"
+    "ts-trueskill": "^4.2.3"
   },
   "scripts": {
     "analyze": "source-map-explorer 'build/static/js/*.js'",
@@ -41,7 +41,7 @@
     "not op_mini all"
   ],
   "devDependencies": {
-    "@google-cloud/firestore": "^6.0.0",
+    "@google-cloud/firestore": "^6.7.0",
     "@types/jest": "^29.2.5",
     "@types/jsoneditor": "^9.9.0",
     "@types/lodash": "^4.14.178",
