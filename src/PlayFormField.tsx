@@ -42,9 +42,9 @@ export function PlayFormField<
   } = props;
   const inputRef = useFormFieldRef(fieldIndex);
   const createdAt = play.getCreationDate();
-  const timeZone = Temporal.Now.timeZone();
-  const createdToday = Temporal.Now.plainDateISO(timeZone).equals(
-    Temporal.PlainDate.from(createdAt.toString({ timeZone: timeZone }))
+  const timeZoneId = Temporal.Now.timeZoneId();
+  const createdToday = Temporal.Now.plainDateISO(timeZoneId).equals(
+    Temporal.PlainDate.from(createdAt.toString({ timeZone: timeZoneId }))
   );
 
   const onSetDurationFromStartClick = () => {

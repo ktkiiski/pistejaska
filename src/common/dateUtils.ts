@@ -1,16 +1,16 @@
 import { Temporal } from "@js-temporal/polyfill";
 
-const timeZone = Temporal.Now.timeZone();
+const timeZoneId = Temporal.Now.timeZoneId();
 
 export const getTodayAsString = () => Temporal.Now.plainDateISO().toString();
 
 export const convertToPlainDate = (instant: Temporal.Instant) => {
-  const zonedDateTime = instant.toZonedDateTimeISO(timeZone);
+  const zonedDateTime = instant.toZonedDateTimeISO(timeZoneId);
   return Temporal.PlainDate.from(zonedDateTime);
 };
 
 export const convertToPlainTime = (instant: Temporal.Instant) => {
-  const zonedDateTime = instant.toZonedDateTimeISO(timeZone);
+  const zonedDateTime = instant.toZonedDateTimeISO(timeZoneId);
   return Temporal.PlainTime.from(zonedDateTime);
 };
 
