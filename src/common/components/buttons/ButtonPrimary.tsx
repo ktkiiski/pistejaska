@@ -9,6 +9,7 @@ const ButtonPrimary: React.FC<ButtonProps> = ({
   <ButtonBase
     {...props}
     className={classNames(
+      "text-white",
       props.disabled
         ? "text-slate-400 bg-slate-300"
         : "bg-purple-700 hover:bg-purple-800",

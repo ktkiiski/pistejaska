@@ -42,7 +42,7 @@ function ButtonUpload({
     <label
       // Using ID to forcefully re-creating the file input on upload, to reset the selection
       key={id}
-      className={`${buttonBaseClassName} bg-purple-700 hover:bg-purple-800 ${
+      className={`${buttonBaseClassName} text-white bg-purple-700 hover:bg-purple-800 ${
         isEnabled ? "" : "text-slate-400 bg-slate-300 hover:bg-slate-300"
       }`}
       {...props}

@@ -9,6 +9,7 @@ const ButtonDanger: React.FC<ButtonProps> = ({
   <ButtonBase
     {...props}
     className={classNames(
+      "text-white",
       props.disabled
         ? "text-slate-400 bg-slate-300"
         : "bg-red-600 hover:bg-red-700",
