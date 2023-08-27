@@ -3,6 +3,7 @@ import NativeSelectField from "../common/components/inputs/NativeSelectField";
 import InputTextField from "../common/components/inputs/InputTextField";
 import InputNumberField from "../common/components/inputs/InputNumberField";
 import ButtonDanger from "../common/components/buttons/ButtonDanger";
+import EditOptions from "./EditOptions";
 
 interface EditGameMiscFieldProps {
   miscField: GameMiscFieldDefinition;
@@ -82,6 +83,14 @@ export default function EditGameMiscField({
             className="w-60 max-w-full"
           />
         </>
+      )}
+      {(type === "text" || type === "number") && (
+        <EditOptions
+          type={type}
+          options={options as GameFieldOption<string | number>[]}
+          onOptionsChange={(value) => handleChange("options", value)}
+          className="mt-2"
+        />
       )}
       <div className="pt-2 text-center">
         <ButtonDanger onClick={onMiscFieldRemove}>Remove</ButtonDanger>
