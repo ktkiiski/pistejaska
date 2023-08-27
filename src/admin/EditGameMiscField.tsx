@@ -24,11 +24,14 @@ export default function EditGameMiscField({
     options,
     minValue = null,
     maxValue = null,
+    valuePerPlayer = false,
+    affectsScoring = false,
+    isRelevantReportDimension = false,
   } = miscField;
 
   const handleChange = (
     field: keyof GameMiscFieldDefinition,
-    value: string | number | GameFieldOption<unknown>[] | null
+    value: string | number | boolean | GameFieldOption<unknown>[] | null
   ) => {
     const updated = { ...miscField, [field]: value };
     if (field === "type" && value === "text") {
@@ -84,6 +87,24 @@ export default function EditGameMiscField({
           />
         </>
       )}
+      <CheckboxField
+        label={"Value per player"}
+        checked={valuePerPlayer}
+        onChange={(value) => handleChange("valuePerPlayer", value)}
+        className="pt-2"
+      />
+      <CheckboxField
+        label={"Affects scoring"}
+        checked={affectsScoring}
+        onChange={(value) => handleChange("affectsScoring", value)}
+        className="pt-2"
+      />
+      <CheckboxField
+        label={"Is relevant report dimension"}
+        checked={isRelevantReportDimension}
+        onChange={(value) => handleChange("isRelevantReportDimension", value)}
+        className="pt-2"
+      />
       {(type === "text" || type === "number") && (
         <EditOptions
           type={type}
