@@ -3,6 +3,7 @@ import NativeSelectField from "../common/components/inputs/NativeSelectField";
 import InputTextField from "../common/components/inputs/InputTextField";
 import InputNumberField from "../common/components/inputs/InputNumberField";
 import ButtonDanger from "../common/components/buttons/ButtonDanger";
+import CheckboxField from "../common/components/inputs/CheckboxField";
 import EditOptions from "./EditOptions";
 
 interface EditGameMiscFieldProps {
@@ -42,34 +43,30 @@ export default function EditGameMiscField({
   };
 
   return (
-    <div className="p-2 space-y-1 border-2 rounded-md border-blue-200">
+    <div className="p-2 space-y-1 border-2 rounded-md border-blue-200 w-70 max-w-full">
       <NativeSelectField
-        label={"Type"}
+        label="Type"
         value={type}
         options={[
           { value: "text", label: "Text" },
           { value: "number", label: "Numeric" },
         ]}
         onChange={(value) => handleChange("type", value)}
-        className="w-60 max-w-full"
       />
       <InputTextField
-        label={"Name"}
+        label="Name"
         value={name}
         onChange={(value) => handleChange("name", value)}
-        className="w-60 max-w-full"
       />
       <InputTextField
-        label={"Id"}
+        label="Id"
         value={id}
         onChange={(value) => handleChange("id", value)}
-        className="w-60 max-w-full"
       />
       <InputTextField
-        label={"Description"}
+        label="Description"
         value={description}
         onChange={(value) => handleChange("description", value)}
-        className="w-60 max-w-full"
       />
       {type === "number" && (
         <>
@@ -77,13 +74,11 @@ export default function EditGameMiscField({
             label={"Minimum value"}
             value={minValue}
             onChange={(value) => handleChange("minValue", value)}
-            className="w-60 max-w-full"
           />
           <InputNumberField
             label={"Maximum value"}
             value={maxValue}
             onChange={(value) => handleChange("maxValue", value)}
-            className="w-60 max-w-full"
           />
         </>
       )}

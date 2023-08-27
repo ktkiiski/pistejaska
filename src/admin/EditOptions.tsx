@@ -31,23 +31,23 @@ export default function EditOptions({
     <div className={classNames(className, "space-y-1")}>
       {options && <Heading3>Options</Heading3>}
       {options?.map((option, i) => (
-        <div className="p-1 border-2 rounded-md border-blue-100 w-60 max-w-full"
+        <div className="p-1 border-2 rounded-md border-blue-100"
              key={i}>
           <InputTextField
-            label={"Label"}
+            label="Label"
             value={option.label}
             onChange={(label) => editOption({ ...option, label }, i)}
           />
           {type === "text" && (
             <InputTextField
-              label={"Value"}
+              label="Value"
               value={option.value as string}
               onChange={(value) => editOption({ ...option, value }, i)}
             />
           )}
           {type === "number" && (
             <InputNumberField
-              label={"Value"}
+              label="Value"
               value={option.value as number}
               onChange={(value) => editOption({ ...option, value }, i)}
             />

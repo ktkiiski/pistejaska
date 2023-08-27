@@ -18,31 +18,28 @@ export default function EditGameBasicInfo({ basicInfo, onBasicInfoChange }: Edit
   };
 
   return (
-    <>
+    <div className="w-70 max-w-full">
       <InputTextField
-        label={"Name"}
+        label="Name"
         value={name}
         onChange={(value) => handleChange("name", value)}
-        className="w-60 max-w-full"
       />
       <InputTextField
-        label={"Id"}
+        label="Id"
         value={id}
         onChange={(value) => handleChange("id", value)}
-        className="w-60 max-w-full"
       />
       <InputTextField
         label={"Icon URL"}
         value={icon}
         onChange={(value) => handleChange("icon", value)}
-        className="w-60 max-w-full"
       />
       <CheckboxField
         label={"Simultaneous turns"}
         checked={simultaneousTurns}
         onChange={(checked) => handleChange("simultaneousTurns", checked)}
-        className="w-60 max-w-full pt-2"
+        className="pt-2"
       />
-    </>
+    </div>
   );
 }
