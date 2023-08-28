@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
+                
+## 2023-08-28
+
+### Added
+
+- The admin side now has a form that can be used to add a new game
+  - Currently missing features of the new form:
+    - Not possible to add expansions
+    - Not possible to edit existing games
+    - Not possible to define options to score fields (although this is rarely needed)
+  - The JSON editor is still available, and has to be used for editing and deleting games
+
+### Changed
+
+- The admin side now has a frontpage that contains links to the new game creation form and the JSON editor
 
 ## 2023-04-30
 
