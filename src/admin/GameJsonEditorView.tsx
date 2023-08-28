@@ -3,12 +3,13 @@ import { useNavigate } from "react-router-dom";
 import { GameDefinition } from "../domain/game";
 import GameJsonEditor from "./GameJsonEditor";
 import { useGames } from "../common/hooks/useGames";
-import { deleteDoc, doc, getFirestore, setDoc } from "firebase/firestore";
+import { deleteDoc, doc, getFirestore } from "firebase/firestore";
 import { app } from "../common/firebase";
 import ButtonBack from "../common/components/buttons/ButtonBack";
 import Heading2 from "../common/components/typography/Heading2";
 import NativeSelectField from "../common/components/inputs/NativeSelectField";
 import ViewContentLayout from "../common/components/ViewContentLayout";
+import saveGame from "../utils/saveGame";
 
 const defaultGameJson: GameDefinition = {
   id: "",
@@ -55,14 +56,8 @@ function GameJsonEditorView() {
         <GameJsonEditor
           json={initialGameJson}
           onSubmit={async (json) => {
-            const { id } = json;
-            if (!id) {
-              throw new Error("Missing game ID");
-            }
-
-            const db = getFirestore(app);
-            await setDoc(doc(db, "games", id), json);
-            setGameId(id);
+            await saveGame(json);
+            setGameId(json.id);
           }}
           onDelete={
             !gameId

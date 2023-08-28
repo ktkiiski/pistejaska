@@ -6,14 +6,21 @@ import React, { useState } from "react";
 import EditGameBasicInfo from "./EditGameBasicInfo";
 import {
   GameBasicInfoDefinition,
+  GameDefinition,
+  GameFieldOption,
   GameMiscFieldDefinition,
   GameScoreFieldDefinition,
 } from "../domain/game";
 import EditGameScoreField from "./EditGameScoreField";
 import Heading2 from "../common/components/typography/Heading2";
 import ButtonLight from "../common/components/buttons/ButtonLight";
-import { omit } from "lodash";
+import { isEmpty, omit } from "lodash";
 import EditGameMiscField from "./EditGameMiscField";
+import ButtonPrimary from "../common/components/buttons/ButtonPrimary";
+import Spinner from "../common/components/Spinner";
+import { IconSmileyFace } from "../common/components/icons/IconSmileyFace";
+import classNames from "classnames";
+import saveGame from "../utils/saveGame";
 
 interface KeyedScoreFields {
   [key: string]: GameScoreFieldDefinition;
@@ -35,11 +42,48 @@ function getDefaultMiscField(): KeyedMiscFields {
   return { [crypto.randomUUID()]: { id: "", name: "", type: "text" } };
 }
 
+function omitEmptyOptions(
+  miscFields: GameMiscFieldDefinition[]
+): GameMiscFieldDefinition[] {
+  const isNotEmpty = (option: GameFieldOption<unknown>) =>
+    !isEmpty(option.label) || !isEmpty(option.value);
+  return miscFields.map((miscField) => ({
+    ...miscField,
+    options: miscField.options?.some(isNotEmpty)
+      ? miscField.options.filter(isNotEmpty)
+      : undefined,
+  }));
+}
+
 export default function GameEditView() {
   const navigate = useNavigate();
   const [basicInfo, setBasicInfo] = useState(getDefaultBasicInfo);
   const [scoreFields, setScoreFields] = useState(getDefaultScoreField);
   const [miscFields, setMiscFields] = useState<KeyedMiscFields>({});
+  const [isSaving, setIsSaving] = useState(false);
+  const [isSaved, setIsSaved] = useState(false);
+
+  const onSave = async () => {
+    if (isSaving || isSaved) return;
+    setIsSaving(true);
+    const game: GameDefinition = {
+      ...basicInfo,
+      scoreFields: Object.values(scoreFields),
+      miscFields: omitEmptyOptions(Object.values(miscFields)),
+    };
+
+    try {
+      await saveGame(game);
+      setIsSaving(false);
+      setIsSaved(true);
+      setTimeout(() => navigate("/admin"), 2000);
+    } catch (e) {
+      setIsSaving(false);
+      setIsSaved(false);
+      console.error(e);
+      alert(e);
+    }
+  };
 
   return (
     <ViewContentLayout
@@ -95,6 +139,23 @@ export default function GameEditView() {
         >
           Add miscellaneous field
         </ButtonLight>
+      </div>
+
+      <div className="flex flex-col items-center my-6">
+        <ButtonPrimary
+          onClick={onSave}
+          className={classNames({ "w-32": !isSaved })}
+        >
+          {!isSaving && !isSaved && "Save game"}
+          {isSaving && <Spinner className="inline-block w-5 h-5" />}
+          {isSaved && (
+            <>
+              <IconSmileyFace className="inline-block w-5 h-5 mr-2" />
+              Game saved!
+              <IconSmileyFace className="inline-block w-5 h-5 ml-2" />
+            </>
+          )}
+        </ButtonPrimary>
       </div>
     </ViewContentLayout>
   );
