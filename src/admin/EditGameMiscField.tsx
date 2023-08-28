@@ -110,7 +110,7 @@ export default function EditGameMiscField({
         />
       )}
       <div className="pt-2 text-center">
-        <ButtonDanger onClick={onMiscFieldRemove}>Remove</ButtonDanger>
+        <ButtonDanger onClick={onMiscFieldRemove}>Remove miscellaneous field</ButtonDanger>
       </div>
     </div>
   );

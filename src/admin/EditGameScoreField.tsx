@@ -66,7 +66,7 @@ export default function EditGameScoreField({
         onChange={(value) => handleChange("step", value)}
       />
       <div className="pt-2 text-center">
-        <ButtonDanger onClick={onScoreFieldRemove}>Remove</ButtonDanger>
+        <ButtonDanger onClick={onScoreFieldRemove}>Remove score field</ButtonDanger>
       </div>
     </div>
   );
