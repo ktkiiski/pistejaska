@@ -103,7 +103,7 @@ export default function GameEditView() {
 
         <Heading2>Score fields</Heading2>
         <div className="flex flex-col items-center pb-2 space-y-4">
-          {Object.entries(scoreFields).map(([key, scoreField]) => (
+          {Object.entries(scoreFields).map(([key, scoreField], i) => (
             <EditGameScoreField
               key={key}
               scoreField={scoreField}
@@ -111,6 +111,7 @@ export default function GameEditView() {
                 setScoreFields({ ...scoreFields, [key]: updatedScoreField })
               }
               onScoreFieldRemove={() => setScoreFields(omit(scoreFields, key))}
+              autoFocusFirstField={i !== 0}
             />
           ))}
           <ButtonLight

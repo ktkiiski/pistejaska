@@ -20,6 +20,7 @@ export default function EditGameBasicInfo({ basicInfo, onBasicInfoChange }: Edit
   return (
     <div className="w-70 max-w-full">
       <InputTextField
+        autoFocus
         label="Name"
         value={name}
         onChange={(value) => handleChange("name", value)}

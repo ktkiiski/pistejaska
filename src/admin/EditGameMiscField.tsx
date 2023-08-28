@@ -45,6 +45,7 @@ export default function EditGameMiscField({
   return (
     <div className="p-2 space-y-1 border-2 rounded-md border-blue-200 w-70 max-w-full">
       <NativeSelectField
+        autoFocus
         label="Type"
         value={type}
         options={[

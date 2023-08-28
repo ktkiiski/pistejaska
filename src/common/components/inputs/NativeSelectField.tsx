@@ -13,6 +13,7 @@ interface NativeSelectFieldProps<Value> {
   label: string;
   className?: string;
   id?: string;
+  autoFocus?: boolean;
   onFocus?: FocusEventHandler<HTMLSelectElement>;
   inputRef?: Ref<HTMLSelectElement>;
   value: Value;
@@ -21,7 +22,7 @@ interface NativeSelectFieldProps<Value> {
 }
 
 function NativeSelectField<Value>(props: NativeSelectFieldProps<Value>) {
-  const { id, label, value, options, className, onChange, onFocus, inputRef } =
+  const { id, label, value, options, className, onChange, autoFocus, onFocus, inputRef } =
     props;
   const inputId = useId("select-", id);
   const encodedOptions = options.map((option) => ({
@@ -55,6 +56,7 @@ function NativeSelectField<Value>(props: NativeSelectFieldProps<Value>) {
         onChange={onSelectChange}
         onFocus={onFocus}
         ref={inputRef}
+        autoFocus={autoFocus}
       >
         {selectedOption ? null : (
           <option value={selectedEncodedValue} disabled />

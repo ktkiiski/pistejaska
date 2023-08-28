@@ -34,6 +34,7 @@ export default function EditOptions({
         <div className="p-1 border-2 rounded-md border-blue-100"
              key={i}>
           <InputTextField
+            autoFocus
             label="Label"
             value={option.label}
             onChange={(label) => editOption({ ...option, label }, i)}
