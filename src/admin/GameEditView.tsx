@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import ButtonBack from "../common/components/buttons/ButtonBack";
 import Heading1 from "../common/components/typography/Heading1";
 import ViewContentLayout from "../common/components/ViewContentLayout";
-import React, { useState } from "react";
+import React, { FormEvent, useState } from "react";
 import EditGameBasicInfo from "./EditGameBasicInfo";
 import {
   GameBasicInfoDefinition,
@@ -63,7 +63,8 @@ export default function GameEditView() {
   const [isSaving, setIsSaving] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
 
-  const onSave = async () => {
+  const onSave = async (event: FormEvent) => {
+    event.preventDefault();
     if (isSaving || isSaved) return;
     setIsSaving(true);
     const game: GameDefinition = {
@@ -89,74 +90,76 @@ export default function GameEditView() {
     <ViewContentLayout
       header={<ButtonBack onClick={() => navigate("/admin")} />}
     >
-      <Heading1>Add new game</Heading1>
-      <div className="flex flex-col items-center pb-2 space-y-1">
-        <EditGameBasicInfo
-          basicInfo={basicInfo}
-          onBasicInfoChange={(updatedBasicInfo) =>
-            setBasicInfo({ ...basicInfo, ...updatedBasicInfo })
-          }
-        />
-      </div>
-
-      <Heading2>Score fields</Heading2>
-      <div className="flex flex-col items-center pb-2 space-y-4">
-        {Object.entries(scoreFields).map(([key, scoreField]) => (
-          <EditGameScoreField
-            key={key}
-            scoreField={scoreField}
-            onScoreFieldChange={(updatedScoreField) =>
-              setScoreFields({ ...scoreFields, [key]: updatedScoreField })
+      <form onSubmit={onSave}>
+        <Heading1>Add new game</Heading1>
+        <div className="flex flex-col items-center pb-2 space-y-1">
+          <EditGameBasicInfo
+            basicInfo={basicInfo}
+            onBasicInfoChange={(updatedBasicInfo) =>
+              setBasicInfo({ ...basicInfo, ...updatedBasicInfo })
             }
-            onScoreFieldRemove={() => setScoreFields(omit(scoreFields, key))}
           />
-        ))}
-        <ButtonLight
-          onClick={() =>
-            setScoreFields({ ...scoreFields, ...getDefaultScoreField() })
-          }
-        >
-          Add score field
-        </ButtonLight>
-      </div>
+        </div>
 
-      <Heading2>Miscellaneous fields</Heading2>
-      <div className="flex flex-col items-center pb-2 space-y-4">
-        {Object.entries(miscFields).map(([key, miscField]) => (
-          <EditGameMiscField
-            key={key}
-            miscField={miscField}
-            onMiscFieldChange={(updatedMiscField) =>
-              setMiscFields({ ...miscFields, [key]: updatedMiscField })
+        <Heading2>Score fields</Heading2>
+        <div className="flex flex-col items-center pb-2 space-y-4">
+          {Object.entries(scoreFields).map(([key, scoreField]) => (
+            <EditGameScoreField
+              key={key}
+              scoreField={scoreField}
+              onScoreFieldChange={(updatedScoreField) =>
+                setScoreFields({ ...scoreFields, [key]: updatedScoreField })
+              }
+              onScoreFieldRemove={() => setScoreFields(omit(scoreFields, key))}
+            />
+          ))}
+          <ButtonLight
+            onClick={() =>
+              setScoreFields({ ...scoreFields, ...getDefaultScoreField() })
             }
-            onMiscFieldRemove={() => setMiscFields(omit(miscFields, key))}
-          />
-        ))}
-        <ButtonLight
-          onClick={() =>
-            setMiscFields({ ...miscFields, ...getDefaultMiscField() })
-          }
-        >
-          Add miscellaneous field
-        </ButtonLight>
-      </div>
+          >
+            Add score field
+          </ButtonLight>
+        </div>
 
-      <div className="flex flex-col items-center my-6">
-        <ButtonPrimary
-          onClick={onSave}
-          className={classNames({ "w-32": !isSaved })}
-        >
-          {!isSaving && !isSaved && "Save game"}
-          {isSaving && <Spinner className="inline-block w-5 h-5" />}
-          {isSaved && (
-            <>
-              <IconSmileyFace className="inline-block w-5 h-5 mr-2" />
-              Game saved!
-              <IconSmileyFace className="inline-block w-5 h-5 ml-2" />
-            </>
-          )}
-        </ButtonPrimary>
-      </div>
+        <Heading2>Miscellaneous fields</Heading2>
+        <div className="flex flex-col items-center pb-2 space-y-4">
+          {Object.entries(miscFields).map(([key, miscField]) => (
+            <EditGameMiscField
+              key={key}
+              miscField={miscField}
+              onMiscFieldChange={(updatedMiscField) =>
+                setMiscFields({ ...miscFields, [key]: updatedMiscField })
+              }
+              onMiscFieldRemove={() => setMiscFields(omit(miscFields, key))}
+            />
+          ))}
+          <ButtonLight
+            onClick={() =>
+              setMiscFields({ ...miscFields, ...getDefaultMiscField() })
+            }
+          >
+            Add miscellaneous field
+          </ButtonLight>
+        </div>
+
+        <div className="flex flex-col items-center my-6">
+          <ButtonPrimary
+            type="submit"
+            className={classNames({ "w-32": !isSaved })}
+          >
+            {!isSaving && !isSaved && "Save game"}
+            {isSaving && <Spinner className="inline-block w-5 h-5" />}
+            {isSaved && (
+              <>
+                <IconSmileyFace className="inline-block w-5 h-5 mr-2" />
+                Game saved!
+                <IconSmileyFace className="inline-block w-5 h-5 ml-2" />
+              </>
+            )}
+          </ButtonPrimary>
+        </div>
+      </form>
     </ViewContentLayout>
   );
 }
