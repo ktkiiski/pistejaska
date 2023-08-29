@@ -1,12 +1,12 @@
 import { useEffect, useReducer, useRef, useState } from "react";
-import { GameDefinition, schema } from "./domain/game";
+import { GameDefinition, schema } from "../domain/game";
 import JsonEditor from "jsoneditor";
 import Ajv from "ajv";
 import { isEqual } from "lodash";
 import "jsoneditor/dist/jsoneditor.css";
-import useConfirmLeave from "./common/hooks/useConfirmLeave";
-import ButtonDanger from "./common/components/buttons/ButtonDanger";
-import ButtonPrimary from "./common/components/buttons/ButtonPrimary";
+import useConfirmLeave from "../common/hooks/useConfirmLeave";
+import ButtonDanger from "../common/components/buttons/ButtonDanger";
+import ButtonPrimary from "../common/components/buttons/ButtonPrimary";
 
 const ajv = new Ajv({ allErrors: true, verbose: true });
 
@@ -24,7 +24,7 @@ function updateJson(
   return isEqual(newJson, oldJson) ? oldJson : newJson;
 }
 
-function AdminGameEditor({
+function GameJsonEditor({
   json,
   onSubmit,
   onDelete,
@@ -90,4 +90,4 @@ function AdminGameEditor({
   );
 }
 
-export default AdminGameEditor;
+export default GameJsonEditor;

@@ -1,12 +1,15 @@
 import React, { useState } from "react";
-import { GameDefinition } from "./domain/game";
-import AdminGameEditor from "./AdminGameEditor";
-import { useGames } from "./common/hooks/useGames";
-import { deleteDoc, doc, getFirestore, setDoc } from "firebase/firestore";
-import { app } from "./common/firebase";
-import Heading2 from "./common/components/typography/Heading2";
-import NativeSelectField from "./common/components/inputs/NativeSelectField";
-import ViewContentLayout from "./common/components/ViewContentLayout";
+import { useNavigate } from "react-router-dom";
+import { GameDefinition } from "../domain/game";
+import GameJsonEditor from "./GameJsonEditor";
+import { useGames } from "../common/hooks/useGames";
+import { deleteDoc, doc, getFirestore } from "firebase/firestore";
+import { app } from "../common/firebase";
+import ButtonBack from "../common/components/buttons/ButtonBack";
+import Heading2 from "../common/components/typography/Heading2";
+import NativeSelectField from "../common/components/inputs/NativeSelectField";
+import ViewContentLayout from "../common/components/ViewContentLayout";
+import saveGame from "../utils/saveGame";
 
 const defaultGameJson: GameDefinition = {
   id: "",
@@ -16,7 +19,8 @@ const defaultGameJson: GameDefinition = {
   scoreFields: [],
 };
 
-function Admin() {
+function GameJsonEditorView() {
+  const navigate = useNavigate();
   const [gameId, setGameId] = useState<string | null>(null);
 
   const [games] = useGames();
@@ -24,7 +28,9 @@ function Admin() {
     ? null
     : games.find((game) => game.id === gameId) || defaultGameJson;
   return (
-    <ViewContentLayout>
+    <ViewContentLayout
+      header={<ButtonBack onClick={() => navigate("/admin")} />}
+    >
       <NativeSelectField
         className="w-full"
         label="Edited game"
@@ -47,17 +53,11 @@ function Admin() {
           : "Create new game"}
       </Heading2>
       {!initialGameJson ? null : (
-        <AdminGameEditor
+        <GameJsonEditor
           json={initialGameJson}
           onSubmit={async (json) => {
-            const { id } = json;
-            if (!id) {
-              throw new Error("Missing game ID");
-            }
-
-            const db = getFirestore(app);
-            await setDoc(doc(db, "games", id), json);
-            setGameId(id);
+            await saveGame(json);
+            setGameId(json.id);
           }}
           onDelete={
             !gameId
@@ -84,4 +84,4 @@ function Admin() {
   );
 }
 
-export default Admin;
+export default GameJsonEditorView;
