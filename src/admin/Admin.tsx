@@ -13,7 +13,7 @@ export default function Admin() {
       <Heading1>Add and edit games</Heading1>
       <CardButtonRow>
         <ButtonPrimary onClick={() => navigate("/admin/edit-game")}>
-          Add new game
+          Add new game (beta)
         </ButtonPrimary>
         <Button onClick={() => navigate("/admin/edit-game-json")}>
           Game JSON Editor
