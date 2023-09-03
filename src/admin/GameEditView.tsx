@@ -102,8 +102,8 @@ export default function GameEditView() {
             />
           </div>
 
-          <Heading2>Score fields</Heading2>
-          <div className="flex flex-col items-center pb-2 space-y-4">
+          <Heading2 className="mt-6">Score fields</Heading2>
+          <div className="flex flex-row flex-wrap gap-1.5 justify-center">
             {Object.entries(scoreFields).map(([key, scoreField], i) => (
               <EditGameScoreField
                 key={key}
@@ -117,6 +117,8 @@ export default function GameEditView() {
                 autoFocusFirstField={i !== 0}
               />
             ))}
+          </div>
+          <div className="text-center mt-3">
             <ButtonLight
               onClick={() =>
                 setScoreFields({ ...scoreFields, ...getDefaultScoreField() })
@@ -126,8 +128,8 @@ export default function GameEditView() {
             </ButtonLight>
           </div>
 
-          <Heading2>Miscellaneous fields</Heading2>
-          <div className="flex flex-col items-center pb-2 space-y-4">
+          <Heading2 className="mt-6">Miscellaneous fields</Heading2>
+          <div className="flex flex-row flex-wrap gap-1.5 justify-center">
             {Object.entries(miscFields).map(([key, miscField]) => (
               <EditGameMiscField
                 key={key}
@@ -138,6 +140,8 @@ export default function GameEditView() {
                 onMiscFieldRemove={() => setMiscFields(omit(miscFields, key))}
               />
             ))}
+          </div>
+          <div className="text-center mt-3">
             <ButtonLight
               onClick={() =>
                 setMiscFields({ ...miscFields, ...getDefaultMiscField() })
