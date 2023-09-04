@@ -47,7 +47,10 @@ export const ReportGameView: FC = () => {
     return <LoadingSpinner />;
   }
 
-  const unfilteredGamePlays = allPlays.filter((p) => p.gameId === gameId);
+  const unfilteredGamePlays = allPlays
+    .filter((p) => p.gameId === gameId)
+    .filter((x) => x.isResolved());
+
   const gamePlays = applyPlayFilters(unfilteredGamePlays, filters);
 
   const game = games?.find((g) => g.id === gameId);
