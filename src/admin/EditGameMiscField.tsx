@@ -10,12 +10,14 @@ interface EditGameMiscFieldProps {
   miscField: GameMiscFieldDefinition;
   onMiscFieldChange: (miscField: GameMiscFieldDefinition) => void;
   onMiscFieldRemove: () => void;
+  enableAutoFocus?: boolean;
 }
 
 export default function EditGameMiscField({
   miscField,
   onMiscFieldChange,
   onMiscFieldRemove,
+  enableAutoFocus = false,
 }: EditGameMiscFieldProps) {
   const {
     type,
@@ -45,7 +47,7 @@ export default function EditGameMiscField({
   return (
     <div className="p-2 space-y-1 border-2 rounded-md border-blue-200 w-70 max-w-full">
       <NativeSelectField
-        autoFocus
+        autoFocus={enableAutoFocus}
         label="Type"
         value={type}
         options={[
@@ -106,6 +108,7 @@ export default function EditGameMiscField({
           type={type}
           options={options as GameFieldOption<string | number>[]}
           onOptionsChange={(value) => handleChange("options", value)}
+          enableAutoFocus={enableAutoFocus}
           className="mt-2"
         />
       )}

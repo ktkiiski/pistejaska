@@ -7,14 +7,14 @@ interface EditGameScoreFieldProps {
   scoreField: GameScoreFieldDefinition;
   onScoreFieldChange: (scoreField: GameScoreFieldDefinition) => void;
   onScoreFieldRemove: () => void;
-  autoFocusFirstField?: boolean;
+  enableAutoFocus?: boolean;
 }
 
 export default function EditGameScoreField({
   scoreField,
   onScoreFieldChange,
   onScoreFieldRemove,
-  autoFocusFirstField = false,
+  enableAutoFocus = false,
 }: EditGameScoreFieldProps) {
   const {
     name,
@@ -35,7 +35,7 @@ export default function EditGameScoreField({
   return (
     <div className="p-2 space-y-1 border-2 rounded-md border-blue-200 w-70 max-w-full">
       <InputTextField
-        autoFocus={autoFocusFirstField}
+        autoFocus={enableAutoFocus}
         label="Name"
         value={name}
         onChange={(value) => handleChange("name", value)}

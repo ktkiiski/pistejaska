@@ -10,6 +10,7 @@ interface EditOptionsProps<T = string | number> {
   options?: GameFieldOption<T>[];
   onOptionsChange: (options: GameFieldOption<T>[]) => void;
   className: string;
+  enableAutoFocus?: boolean;
 }
 
 export default function EditOptions({
@@ -17,6 +18,7 @@ export default function EditOptions({
   options,
   onOptionsChange,
   className,
+  enableAutoFocus = false,
 }: EditOptionsProps) {
   const addOption = () => {
     const value = type === "text" ? "" : 0;
@@ -34,7 +36,7 @@ export default function EditOptions({
         <div className="p-1 border-2 rounded-md border-blue-100"
              key={i}>
           <InputTextField
-            autoFocus
+            autoFocus={enableAutoFocus}
             label="Label"
             value={option.label}
             onChange={(label) => editOption({ ...option, label }, i)}

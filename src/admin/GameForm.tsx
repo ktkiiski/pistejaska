@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import React, { FormEvent, useState } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
 import EditGameBasicInfo from "./EditGameBasicInfo";
 import {
   GameBasicInfoDefinition,
@@ -96,8 +96,11 @@ export default function GameForm({ game }: GameEditViewProps) {
   const [miscFields, setMiscFields] = useState(() =>
     getInitialMiscFields(game?.miscFields)
   );
+  const [isInitialRender, setIsInitialRender] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
+
+  useEffect(() => setIsInitialRender(false), []);
 
   const addScoreField = () => {
     setScoreFields({
@@ -150,7 +153,7 @@ export default function GameForm({ game }: GameEditViewProps) {
 
         <Heading2 className="mt-6">Score fields</Heading2>
         <div className="flex flex-row flex-wrap gap-1.5 justify-center">
-          {Object.entries(scoreFields).map(([key, scoreField], i) => (
+          {Object.entries(scoreFields).map(([key, scoreField]) => (
             <EditGameScoreField
               key={key}
               scoreField={scoreField}
@@ -158,7 +161,7 @@ export default function GameForm({ game }: GameEditViewProps) {
                 setScoreFields({ ...scoreFields, [key]: updatedScoreField })
               }
               onScoreFieldRemove={() => setScoreFields(omit(scoreFields, key))}
-              autoFocusFirstField={i !== 0}
+              enableAutoFocus={!isInitialRender}
             />
           ))}
         </div>
@@ -176,6 +179,7 @@ export default function GameForm({ game }: GameEditViewProps) {
                 setMiscFields({ ...miscFields, [key]: updatedMiscField })
               }
               onMiscFieldRemove={() => setMiscFields(omit(miscFields, key))}
+              enableAutoFocus={!isInitialRender}
             />
           ))}
         </div>
