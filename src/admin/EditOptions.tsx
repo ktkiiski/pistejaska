@@ -4,6 +4,7 @@ import ButtonLight from "../common/components/buttons/ButtonLight";
 import { GameFieldOption } from "../domain/game";
 import InputNumberField from "../common/components/inputs/InputNumberField";
 import classNames from "classnames";
+import { sortBy } from "lodash";
 
 interface EditOptionsProps<T = string | number> {
   type: "text" | "number";
@@ -27,6 +28,10 @@ export default function EditOptions({
 
   const editOption = (option: GameFieldOption<unknown>, index: number) => {
     onOptionsChange(Object.assign([], options, { [index]: option }));
+  };
+
+  const sortOptions = () => {
+    onOptionsChange(sortBy(options, "label", "value"));
   };
 
   const separateValueField = type === "number";
@@ -55,10 +60,13 @@ export default function EditOptions({
           )}
         </div>
       ))}
-      <div className="pt-2 text-center">
+      <div className="pt-2 space-x-2 text-center">
         <ButtonLight onClick={addOption}>
           {options ? "Add option" : "Define options"}
         </ButtonLight>
+        {options && options?.length > 0 && (
+          <ButtonLight onClick={sortOptions}>Sort (A-Z)</ButtonLight>
+        )}
       </div>
     </div>
   );
