@@ -4,6 +4,7 @@ import EditGameBasicInfo from "./EditGameBasicInfo";
 import {
   GameBasicInfoDefinition,
   GameDefinition,
+  GameFieldDefinition,
   GameFieldOption,
   GameMiscFieldDefinition,
   GameScoreFieldDefinition,
@@ -31,16 +32,46 @@ interface KeyedMiscFields {
   [key: string]: GameMiscFieldDefinition;
 }
 
-function getDefaultBasicInfo(): GameBasicInfoDefinition {
-  return { id: "", name: "", icon: "", simultaneousTurns: false };
+function toKeyedFields<
+  T extends GameFieldDefinition<number | string | string[]>
+>(fields: T[]): { [key: string]: T } {
+  return fields.reduce(
+    (result, field) => ({ ...result, [crypto.randomUUID()]: field }),
+    {}
+  );
 }
 
-function getDefaultScoreField(): KeyedScoreFields {
-  return { [crypto.randomUUID()]: { id: "", name: "", type: "number" } };
+function getInitialBasicInfo(game?: GameDefinition): GameBasicInfoDefinition {
+  return {
+    id: game?.id ?? "",
+    name: game?.name ?? "",
+    icon: game?.icon ?? "",
+    simultaneousTurns: game?.simultaneousTurns ?? false,
+  };
 }
 
-function getDefaultMiscField(): KeyedMiscFields {
-  return { [crypto.randomUUID()]: { id: "", name: "", type: "text" } };
+function getInitialScoreFields(
+  scoreFields?: GameScoreFieldDefinition[]
+): KeyedScoreFields {
+  const fields: GameScoreFieldDefinition[] =
+    scoreFields && scoreFields?.length > 0
+      ? scoreFields
+      : [{ id: "", name: "", type: "number" }];
+  return toKeyedFields(fields);
+}
+
+function getInitialMiscFields(
+  miscFields?: GameMiscFieldDefinition[]
+): KeyedMiscFields {
+  return toKeyedFields(miscFields ?? []);
+}
+
+function getEmptyScoreField(): GameScoreFieldDefinition {
+  return { id: "", name: "", type: "number" };
+}
+
+function getEmptyMiscField(): GameMiscFieldDefinition<string> {
+  return { id: "", name: "", type: "text" };
 }
 
 function omitEmptyOptions(
@@ -58,11 +89,29 @@ function omitEmptyOptions(
 
 export default function GameForm({ game }: GameEditViewProps) {
   const navigate = useNavigate();
-  const [basicInfo, setBasicInfo] = useState(getDefaultBasicInfo);
-  const [scoreFields, setScoreFields] = useState(getDefaultScoreField);
-  const [miscFields, setMiscFields] = useState<KeyedMiscFields>({});
+  const [basicInfo, setBasicInfo] = useState(() => getInitialBasicInfo(game));
+  const [scoreFields, setScoreFields] = useState(() =>
+    getInitialScoreFields(game?.scoreFields)
+  );
+  const [miscFields, setMiscFields] = useState(() =>
+    getInitialMiscFields(game?.miscFields)
+  );
   const [isSaving, setIsSaving] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
+
+  const addScoreField = () => {
+    setScoreFields({
+      ...scoreFields,
+      [crypto.randomUUID()]: getEmptyScoreField(),
+    });
+  };
+
+  const addMiscField = () => {
+    setMiscFields({
+      ...miscFields,
+      [crypto.randomUUID()]: getEmptyMiscField(),
+    });
+  };
 
   const onSave = async (event: FormEvent) => {
     event.preventDefault();
@@ -114,13 +163,7 @@ export default function GameForm({ game }: GameEditViewProps) {
           ))}
         </div>
         <div className="text-center mt-3">
-          <ButtonLight
-            onClick={() =>
-              setScoreFields({ ...scoreFields, ...getDefaultScoreField() })
-            }
-          >
-            Add score field
-          </ButtonLight>
+          <ButtonLight onClick={addScoreField}>Add score field</ButtonLight>
         </div>
 
         <Heading2 className="mt-6">Miscellaneous fields</Heading2>
@@ -137,11 +180,7 @@ export default function GameForm({ game }: GameEditViewProps) {
           ))}
         </div>
         <div className="text-center mt-3">
-          <ButtonLight
-            onClick={() =>
-              setMiscFields({ ...miscFields, ...getDefaultMiscField() })
-            }
-          >
+          <ButtonLight onClick={addMiscField}>
             Add miscellaneous field
           </ButtonLight>
         </div>
