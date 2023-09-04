@@ -3,13 +3,12 @@ import { useNavigate } from "react-router-dom";
 import { GameDefinition } from "../domain/game";
 import GameJsonEditor from "./GameJsonEditor";
 import { useGames } from "../common/hooks/useGames";
-import { deleteDoc, doc, getFirestore } from "firebase/firestore";
-import { app } from "../common/firebase";
 import ButtonBack from "../common/components/buttons/ButtonBack";
 import Heading2 from "../common/components/typography/Heading2";
 import NativeSelectField from "../common/components/inputs/NativeSelectField";
 import ViewContentLayout from "../common/components/ViewContentLayout";
 import saveGame from "../utils/saveGame";
+import deleteGame from "../utils/deleteGame";
 
 const defaultGameJson: GameDefinition = {
   id: "",
@@ -72,8 +71,7 @@ function GameJsonEditorView() {
                   ) {
                     return;
                   }
-                  const db = getFirestore(app);
-                  await deleteDoc(doc(db, "games", gameId));
+                  await deleteGame(gameId);
                   setGameId(null);
                 }
           }

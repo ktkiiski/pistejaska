@@ -17,6 +17,7 @@ import ReplayView from "./SelectPlayersFromPlay";
 import { ReportPlayerView } from "./ReportPlayerView";
 import { ReportPlayerList } from "./ReportPlayerList";
 import Admin from "./admin/Admin";
+import GameAddView from "./admin/GameAddView";
 import GameEditView from "./admin/GameEditView";
 import GameJsonEditorView from "./admin/GameJsonEditorView";
 import { LoadingSpinner } from "./common/components/LoadingSpinner";
@@ -66,7 +67,8 @@ const App = () => {
       <Route path="/new" element={<SelectGame />} />
       <Route path="/admin">
         <Route index element={<Admin />} />
-        <Route path="edit-game" element={<GameEditView />} />
+        <Route path="add-game" element={<GameAddView />} />
+        <Route path="edit-game/:gameId" element={<GameEditView />} />
         <Route path="edit-game-json" element={<GameJsonEditorView />} />
       </Route>
       <Route path="/whatsnew" element={<WhatsNewView />} />

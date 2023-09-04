@@ -20,6 +20,8 @@ interface InputTextFieldProps {
   autoFocus?: boolean;
   centered?: boolean;
   unbordered?: boolean;
+  required?: boolean;
+  type?: "text" | "url" | "email";
 }
 
 const InputTextField: VFC<InputTextFieldProps> = (props) => {
@@ -34,6 +36,8 @@ const InputTextField: VFC<InputTextFieldProps> = (props) => {
     autoFocus,
     centered,
     unbordered,
+    required = false,
+    type = "text",
   } = props;
   const inputId = useId("input-text-", id);
   const onInputChange: ChangeEventHandler<HTMLInputElement> = (event) => {
@@ -52,13 +56,14 @@ const InputTextField: VFC<InputTextFieldProps> = (props) => {
       <input
         id={inputId}
         className={fieldStyles.input}
-        type="text"
+        type={type}
         value={value == null ? "" : value.toString()}
         onChange={onInputChange}
         onFocus={onFocus}
         ref={inputRef}
         autoFocus={autoFocus}
         autoComplete="off"
+        required={required}
       />
     </FieldBase>
   );

@@ -24,6 +24,7 @@ interface InputNumberFieldProps {
   max?: number;
   step?: number;
   autoFocus?: boolean;
+  required?: boolean;
 }
 
 const InputNumberField: VFC<InputNumberFieldProps> = (props) => {
@@ -36,6 +37,7 @@ const InputNumberField: VFC<InputNumberFieldProps> = (props) => {
     onFocus,
     inputRef,
     autoFocus,
+    required = false,
   } = props;
   const inputId = useId("input-number-", id);
   const onInputChange: ChangeEventHandler<HTMLInputElement> = (event) => {
@@ -60,6 +62,7 @@ const InputNumberField: VFC<InputNumberFieldProps> = (props) => {
         ref={inputRef}
         autoFocus={autoFocus}
         autoComplete="off"
+        required={required}
       />
     </FieldBase>
   );

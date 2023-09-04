@@ -8,7 +8,7 @@ interface EditGameBasicInfoProps {
 }
 
 export default function EditGameBasicInfo({ basicInfo, onBasicInfoChange }: EditGameBasicInfoProps) {
-  const { id, name, icon, simultaneousTurns } = basicInfo;
+  const { name, icon, simultaneousTurns } = basicInfo;
 
   const handleChange = (
     field: keyof GameDefinition,
@@ -21,16 +21,13 @@ export default function EditGameBasicInfo({ basicInfo, onBasicInfoChange }: Edit
     <div className="w-70 max-w-full">
       <InputTextField
         autoFocus
+        required
         label="Name"
         value={name}
         onChange={(value) => handleChange("name", value)}
       />
       <InputTextField
-        label="Id"
-        value={id}
-        onChange={(value) => handleChange("id", value)}
-      />
-      <InputTextField
+        type="url"
         label={"Icon URL"}
         value={icon}
         onChange={(value) => handleChange("icon", value)}

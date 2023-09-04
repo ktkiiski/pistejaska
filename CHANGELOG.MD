@@ -3,7 +3,22 @@
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
-                
+                 
+## 2023-09-04
+
+### Added
+
+- The admin side now allows editing existing games using the same form that is used to add new games
+- Games can now be deleted from the admin frontpage
+
+### Changed
+                                                     
+- Various improvements to the form used to add/edit games in the admin side:
+  - The form sections now stack horizontally for more efficient use of screen real estate on desktop
+  - Added simple form validations
+  - Options defined for a game field can now be deleted, and the list of options is sortable
+  - Game and field ids are no longer visible/editable, but are generated automatically during save
+
 ## 2023-08-29
 
 ### Added
