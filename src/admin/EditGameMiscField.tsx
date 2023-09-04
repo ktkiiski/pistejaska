@@ -22,7 +22,6 @@ export default function EditGameMiscField({
   const {
     type,
     name,
-    id,
     description = "",
     options,
     minValue = null,
@@ -60,11 +59,6 @@ export default function EditGameMiscField({
         label="Name"
         value={name}
         onChange={(value) => handleChange("name", value)}
-      />
-      <InputTextField
-        label="Id"
-        value={id}
-        onChange={(value) => handleChange("id", value)}
       />
       <InputTextField
         label="Description"

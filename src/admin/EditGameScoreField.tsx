@@ -18,7 +18,6 @@ export default function EditGameScoreField({
 }: EditGameScoreFieldProps) {
   const {
     name,
-    id,
     description = "",
     minValue = null,
     maxValue = null,
@@ -39,11 +38,6 @@ export default function EditGameScoreField({
         label="Name"
         value={name}
         onChange={(value) => handleChange("name", value)}
-      />
-      <InputTextField
-        label="Id"
-        value={id}
-        onChange={(value) => handleChange("id", value)}
       />
       <InputTextField
         label="Description"

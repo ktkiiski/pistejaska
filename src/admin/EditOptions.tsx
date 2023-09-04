@@ -29,26 +29,24 @@ export default function EditOptions({
     onOptionsChange(Object.assign([], options, { [index]: option }));
   };
 
+  const separateValueField = type === "number";
+  const borderClasses = "mt-1 p-1 border-2 rounded-md border-blue-100";
+
   return (
-    <div className={classNames(className, "space-y-1")}>
+    <div className={className}>
       {options && <Heading3>Options</Heading3>}
       {options?.map((option, i) => (
-        <div className="p-1 border-2 rounded-md border-blue-100"
-             key={i}>
+        <div
+          className={classNames({ [borderClasses]: separateValueField })}
+          key={i}
+        >
           <InputTextField
             autoFocus={enableAutoFocus}
             label="Label"
             value={option.label}
             onChange={(label) => editOption({ ...option, label }, i)}
           />
-          {type === "text" && (
-            <InputTextField
-              label="Value"
-              value={option.value as string}
-              onChange={(value) => editOption({ ...option, value }, i)}
-            />
-          )}
-          {type === "number" && (
+          {separateValueField && (
             <InputNumberField
               label="Value"
               value={option.value as number}

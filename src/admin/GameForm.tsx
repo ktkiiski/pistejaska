@@ -41,6 +41,33 @@ function toKeyedFields<
   );
 }
 
+function slugify(input: string): string {
+  return input
+    .trim()
+    .toLowerCase()
+    .normalize("NFKD")
+    .replaceAll(/[^\w\s-]+/g, "")
+    .replaceAll(/\s+/g, "-") ?? "";
+}
+
+function generateMissingIds(game: GameDefinition): void {
+  if (!game.id && game.name) {
+    game.id = slugify(game.name);
+  }
+  [...game.scoreFields, ...(game.miscFields ?? [])].forEach((field) => {
+    if (!field.id && field.name) {
+      field.id = slugify(field.name);
+    }
+    if (field.type === "text") {
+      field.options?.forEach((option) => {
+        if (!option.value && option.label) {
+          option.value = slugify(option.label);
+        }
+      });
+    }
+  });
+}
+
 function getInitialBasicInfo(game?: GameDefinition): GameBasicInfoDefinition {
   return {
     id: game?.id ?? "",
@@ -120,13 +147,15 @@ export default function GameForm({ game }: GameEditViewProps) {
     event.preventDefault();
     if (isSaving || isSaved) return;
     setIsSaving(true);
-    const game: GameDefinition = {
-      ...basicInfo,
-      scoreFields: Object.values(scoreFields),
-      miscFields: omitEmptyOptions(Object.values(miscFields)),
-    };
 
     try {
+      const game: GameDefinition = {
+        ...basicInfo,
+        scoreFields: Object.values(scoreFields),
+        miscFields: omitEmptyOptions(Object.values(miscFields)),
+      };
+      generateMissingIds(game);
+
       await saveGame(game);
       setIsSaving(false);
       setIsSaved(true);
