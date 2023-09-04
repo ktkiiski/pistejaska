@@ -35,6 +35,7 @@ export default function EditGameScoreField({
     <div className="p-2 space-y-1 border-2 rounded-md border-blue-200 w-70 max-w-full">
       <InputTextField
         autoFocus={enableAutoFocus}
+        required
         label="Name"
         value={name}
         onChange={(value) => handleChange("name", value)}

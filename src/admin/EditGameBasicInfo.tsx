@@ -21,11 +21,13 @@ export default function EditGameBasicInfo({ basicInfo, onBasicInfoChange }: Edit
     <div className="w-70 max-w-full">
       <InputTextField
         autoFocus
+        required
         label="Name"
         value={name}
         onChange={(value) => handleChange("name", value)}
       />
       <InputTextField
+        type="url"
         label={"Icon URL"}
         value={icon}
         onChange={(value) => handleChange("icon", value)}

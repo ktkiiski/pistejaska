@@ -56,6 +56,7 @@ export default function EditGameMiscField({
         onChange={(value) => handleChange("type", value)}
       />
       <InputTextField
+        required
         label="Name"
         value={name}
         onChange={(value) => handleChange("name", value)}
