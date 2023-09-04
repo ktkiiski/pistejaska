@@ -5,14 +5,13 @@ import {
   GameBasicInfoDefinition,
   GameDefinition,
   GameFieldDefinition,
-  GameFieldOption,
   GameMiscFieldDefinition,
   GameScoreFieldDefinition,
 } from "../domain/game";
 import EditGameScoreField from "./EditGameScoreField";
 import Heading2 from "../common/components/typography/Heading2";
 import ButtonLight from "../common/components/buttons/ButtonLight";
-import { isEmpty, omit } from "lodash";
+import { omit } from "lodash";
 import EditGameMiscField from "./EditGameMiscField";
 import ButtonPrimary from "../common/components/buttons/ButtonPrimary";
 import Spinner from "../common/components/Spinner";
@@ -101,19 +100,6 @@ function getEmptyMiscField(): GameMiscFieldDefinition<string> {
   return { id: "", name: "", type: "text" };
 }
 
-function omitEmptyOptions(
-  miscFields: GameMiscFieldDefinition[]
-): GameMiscFieldDefinition[] {
-  const isNotEmpty = (option: GameFieldOption<unknown>) =>
-    !isEmpty(option.label) || !isEmpty(option.value);
-  return miscFields.map((miscField) => ({
-    ...miscField,
-    options: miscField.options?.some(isNotEmpty)
-      ? miscField.options.filter(isNotEmpty)
-      : undefined,
-  }));
-}
-
 export default function GameForm({ game }: GameEditViewProps) {
   const navigate = useNavigate();
   const [basicInfo, setBasicInfo] = useState(() => getInitialBasicInfo(game));
@@ -152,7 +138,7 @@ export default function GameForm({ game }: GameEditViewProps) {
       const game: GameDefinition = {
         ...basicInfo,
         scoreFields: Object.values(scoreFields),
-        miscFields: omitEmptyOptions(Object.values(miscFields)),
+        miscFields: Object.values(miscFields),
       };
       generateMissingIds(game);
 
