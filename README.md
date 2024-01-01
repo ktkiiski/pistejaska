@@ -12,7 +12,7 @@ Using the app requires Google login with whitelisted email. Emails are whitelist
 
 ## Requirements
 
-1. node.js (14 or newer)
+1. node.js (18 or newer)
 
 ## Technologies and why we use them
 
@@ -53,25 +53,25 @@ Alternatively, you can run `npx prettier src/* --write` to format all files in p
 
 ## Hosting
 
-Master branch of this project is automatically built & hosted in Netlify (https://pistejaska.panu.dev)
+Master branch of this project is automatically built & hosted in Netlify (https://www.pistejaska.net, also responds from https://pistejaska.panu.dev)
 
 ## Backups
 
+### Setup
+
+1. Install gcloud (https://cloud.google.com/sdk/docs/install)
+1. `gcloud auth login`
+1. `gcloud config set project pistejaska-dev`
+
 ### Backup export
 
-Are done manually by exporting data. Should automate this.
-
-1. Install gcloud (or use cloud shell https://console.cloud.google.com/?cloudshell=true)
-1. `gcloud config set project pistejaska-dev`
-1. `gcloud components install beta`
-1. `gcloud beta firestore export gs://pistejaska-dev-firestore-backups`
-1. Copy backups to Panu's dropbox (~\dev\pistejaska\backups) (optional)
+1. `gsutil -m cp -R gs://pistejaska-dev.appspot.com . # copy photos`
+1. `gcloud firestore export gs://pistejaska-dev-firestore-backups # export firestore`
+1. `gsutil -m cp -R gs://pistejaska-dev-firestore-backups . # copy firestore backup`
+1. Copy Firestore rules manually from https://console.firebase.google.com/u/0/project/pistejaska-dev/firestore/rules
 
 ### Backup import
 
-1. Install gcloud (or use cloud shell https://console.cloud.google.com/?cloudshell=true)
-1. `gcloud config set project pistejaska-dev`
-1. `gcloud components install beta`
 1. Get backup name from https://console.cloud.google.com/storage/browser/pistejaska-dev-firestore-backups?project=pistejaska-dev
 1. `gcloud beta firestore import gs://pistejaska-dev-firestore-backups/{name}`
 
