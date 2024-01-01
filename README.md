@@ -12,7 +12,7 @@ Using the app requires Google login with whitelisted email. Emails are whitelist
 
 ## Requirements
 
-1. node.js (18 or newer)
+1. node.js (20 or newer)
 
 ## Technologies and why we use them
 
