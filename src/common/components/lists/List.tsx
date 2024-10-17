@@ -6,6 +6,7 @@ const List: React.FC<{
   // TODO: These are not in use. Remove or use?
   showPagination?: boolean;
   showShowAll?: boolean;
+  children?: React.ReactNode;
 }> = ({ children, onClickShowAll, showPagination, showShowAll, className }) => (
   <>
     <CardContent

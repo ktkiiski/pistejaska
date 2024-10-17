@@ -3,6 +3,7 @@ import { FC } from "react";
 interface CommentSenderGroupProps {
   userPhotoURL: string | null | undefined;
   userDisplayName: string | undefined;
+  children?: React.ReactNode;
 }
 
 const CommentSenderGroup: FC<CommentSenderGroupProps> = ({

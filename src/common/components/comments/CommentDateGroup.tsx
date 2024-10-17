@@ -2,6 +2,8 @@ import { FC } from "react";
 
 interface CommentDateGroupProps {
   heading: string;
+  children?: React.ReactNode;
+  key?: string | number;
 }
 
 const CommentDateGroup: FC<CommentDateGroupProps> = ({ children, heading }) => {

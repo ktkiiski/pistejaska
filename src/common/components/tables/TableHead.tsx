@@ -1,4 +1,4 @@
-const TableHead: React.FC = ({ children }) => (
+const TableHead: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <thead className="bg-slate-200">{children}</thead>
 );
 

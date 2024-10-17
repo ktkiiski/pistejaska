@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { FC } from "react";
+import { FC, ReactNode } from "react";
 import styles from "./FieldBase.module.css";
 
 interface InputBaseProps {
@@ -9,6 +9,7 @@ interface InputBaseProps {
   hasValue: boolean;
   centered?: boolean;
   unbordered?: boolean;
+  children: ReactNode;
 }
 
 const labelClassName = classNames("text-slate-500", styles.label);

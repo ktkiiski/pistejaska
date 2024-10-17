@@ -3,6 +3,7 @@ import { FC } from "react";
 
 interface CommentListContainerProps {
   className?: string;
+  children?: React.ReactNode;
 }
 
 const CommentListContainer: FC<CommentListContainerProps> = ({

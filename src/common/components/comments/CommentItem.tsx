@@ -11,6 +11,7 @@ interface CommentItemProps {
   children: string;
   date: Temporal.Instant;
   onDelete: (() => void) | null;
+  key: string | number;
 }
 
 const actionMenuIcon = (

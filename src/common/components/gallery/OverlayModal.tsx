@@ -9,6 +9,7 @@ interface OverlayModalProps {
   sourceElementRef?: RefObject<HTMLElement | null>;
   onClose?: () => void;
   controls?: ReactNode;
+  children?: React.ReactNode;
 }
 
 /**

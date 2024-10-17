@@ -5,6 +5,7 @@ interface ViewContentLayoutProps {
   header?: React.ReactNode;
   footer?: React.ReactNode;
   className?: string;
+  children: React.ReactNode;
 }
 
 const ViewContentLayout: React.FC<ViewContentLayoutProps> = ({
