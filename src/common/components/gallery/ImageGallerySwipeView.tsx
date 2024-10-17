@@ -39,6 +39,7 @@ const ImageGallerySwipeView: VFC<ImageGallerySwipeViewProps> = ({
           key={index}
           className="max-w-full max-h-full shadow-lg object-contain"
           src={src}
+          loading="lazy"
           alt={title}
         />
       ))}

@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## 2024-10-17
+
+### Fixed
+
+- Performance issue with play list image overlay (it used to load all images (>1GB) on open)
+
 ## 2023-09-04
 
 ### Added
