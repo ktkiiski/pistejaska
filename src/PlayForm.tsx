@@ -1,5 +1,4 @@
 import React, { ReactNode, useState } from "react";
-import SwipeableViews from "react-swipeable-views";
 import { Player, Play, PlayDTO } from "./domain/play";
 import {
   Game,
@@ -24,6 +23,7 @@ import DropdownMenu, {
 } from "./common/components/dropdowns/DropdownMenu";
 import InputTextField from "./common/components/inputs/InputTextField";
 import styles from "./PlayForm.module.css";
+import SwipeableViews from "./lib/react-swipeable-views/src";
 
 function FormViewHeading(props: {
   children: ReactNode;
@@ -377,7 +377,7 @@ export const PlayForm = (props: {
         <SwipeableViews
           enableMouseEvents
           index={activeViewIndex}
-          onChangeIndex={(newIndex, oldIndex) => {
+          onChangeIndex={(newIndex: number, oldIndex: number) => {
             if (isSwitchingHack) setActiveViewIndex(newIndex);
             else setActiveViewIndex(oldIndex);
           }}

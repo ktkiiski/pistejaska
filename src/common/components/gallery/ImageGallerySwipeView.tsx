@@ -1,10 +1,10 @@
 import { VFC } from "react";
-import SwipeableViews from "react-swipeable-views";
-import { bindKeyboard, virtualize } from "react-swipeable-views-utils";
 import { Temporal } from "@js-temporal/polyfill";
 import { mapVirtualIdxToArrayIdx } from "./utils";
+import { virtualize } from "../../../lib/react-swipeable-views-utils/src";
+import SwipeableViews from "../../../lib/react-swipeable-views/src";
 
-const BindKeyboardSwipeableViews = bindKeyboard(virtualize(SwipeableViews));
+const BindKeyboardSwipeableViews = virtualize(SwipeableViews);
 
 export interface ImageGalleryItem {
   src: string;
@@ -48,7 +48,7 @@ const ImageGallerySwipeView: VFC<ImageGallerySwipeViewProps> = ({
       index={index}
       onClick={() => onIndexChange(index + 1)}
       onChangeIndex={onIndexChange}
-      slideRenderer={({ index }) => slideRenderer(images, index)}
+      slideRenderer={({ index }: any) => slideRenderer(images, index)}
     ></BindKeyboardSwipeableViews>
   );
 };
