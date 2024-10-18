@@ -72,7 +72,7 @@ export const PlayForm = (props: {
 
   const fields = game.getFields(play.expansions);
   const fieldGroupsById = groupBy(fields, ({ field }) =>
-    field.group ? `group:${field.group}` : `field:${field.id}`
+    field.group ? `group:${field.group}` : `field:${field.id}`,
   );
   const fieldGroups = map(fieldGroupsById, (groupFields, viewId) => ({
     group: groupFields[0].field.group,
@@ -91,7 +91,7 @@ export const PlayForm = (props: {
 
   const handleExpansionChange = (
     expansion: GameExpansionDefinition,
-    selected: boolean
+    selected: boolean,
   ) => {
     if (selected && !play.expansions.includes(expansion.id)) {
       onEdit({
@@ -99,19 +99,19 @@ export const PlayForm = (props: {
       });
     } else if (!selected && play.expansions.includes(expansion.id)) {
       const expansionScoreFieldIds = (expansion.scoreFields || []).map(
-        (field) => field.id
+        (field) => field.id,
       );
       const expansionMiscFieldIds = (expansion.miscFields || []).map(
-        (field) => field.id
+        (field) => field.id,
       );
       onEdit({
         expansions: play.expansions.filter((id) => id !== expansion.id),
         // Omit score and misc fields from the removed expansion (in case they had already been filled)
         scores: play.scores.filter(
-          (score) => !expansionScoreFieldIds.includes(score.fieldId)
+          (score) => !expansionScoreFieldIds.includes(score.fieldId),
         ),
         misc: play.misc.filter(
-          (misc) => !expansionMiscFieldIds.includes(misc.fieldId)
+          (misc) => !expansionMiscFieldIds.includes(misc.fieldId),
         ),
       });
     }
@@ -120,10 +120,10 @@ export const PlayForm = (props: {
   const handleScoreChange = (
     score: number | null,
     field: GameScoreFieldDefinition,
-    player: Player
+    player: Player,
   ) => {
     const oldScores = play.scores.filter(
-      (s) => s.fieldId !== field.id || s.playerId !== player.id
+      (s) => s.fieldId !== field.id || s.playerId !== player.id,
     );
 
     if (score === null) {
@@ -145,13 +145,13 @@ export const PlayForm = (props: {
   const handleMiscChange = (
     misc: string,
     field: GameMiscFieldDefinition,
-    player?: Player | undefined
+    player?: Player | undefined,
   ) => {
     const playerId = player && player.id;
     const oldMisc = play.misc.filter(
-      (s) => s.fieldId !== field.id || s.playerId !== playerId
+      (s) => s.fieldId !== field.id || s.playerId !== playerId,
     );
-    let newMisc = playerId
+    const newMisc = playerId
       ? oldMisc.concat({
           fieldId: field.id,
           data: misc,
@@ -167,7 +167,7 @@ export const PlayForm = (props: {
 
   const handleImageRemove = (
     filename: string,
-    field: GameMiscFieldDefinition
+    field: GameMiscFieldDefinition,
   ) => {
     // TODO: Actually delete images from storage?
     const oldValue = play.misc.find((x) => x.fieldId === field.id);
@@ -192,10 +192,10 @@ export const PlayForm = (props: {
 
   const renderMiscField = (
     field: GameMiscFieldDefinition,
-    viewIndex: number
+    viewIndex: number,
   ) => {
     if (field.valuePerPlayer === true) {
-      return players.map((p, index) => (
+      return players.map((p) => (
         <PlayFormMiscField
           key={p.id}
           field={field}
@@ -231,7 +231,7 @@ export const PlayForm = (props: {
 
   const renderScoreField = (
     field: GameScoreFieldDefinition,
-    viewIndex: number
+    viewIndex: number,
   ) => {
     return players.map((p) => (
       <PlayFormScoreField
@@ -255,15 +255,15 @@ export const PlayForm = (props: {
   }
   viewTitles.push(
     ...fieldGroups.map(
-      ({ group, fields: groupFields }) => group || groupFields[0].field.name
-    )
+      ({ group, fields: groupFields }) => group || groupFields[0].field.name,
+    ),
   );
   const viewOptions = viewTitles.map<DropdownMenuOption<number>>(
     (title, index) => ({
       label: title,
       value: index,
       selected: index === activeViewIndex,
-    })
+    }),
   );
 
   const views = [
@@ -277,7 +277,7 @@ export const PlayForm = (props: {
         </FormViewHeading>
         <div className="flex flex-col items-stretch space-y-2">
           {(game.expansions || []).map((expansion) =>
-            renderExpansionField(expansion)
+            renderExpansionField(expansion),
           )}
         </div>
       </div>

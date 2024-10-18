@@ -24,7 +24,7 @@ interface CommentGroup {
 
 function groupComments(comments: Comment[]): CommentGroup[] {
   const commentsByDate = groupBy(comments, (comment) =>
-    convertToLocaleDateString(comment.createdOn)
+    convertToLocaleDateString(comment.createdOn),
   );
   return map(commentsByDate, (dateComments, heading): CommentGroup => {
     const senderGroups: CommentGroup["senderGroups"] = [];
@@ -75,7 +75,6 @@ export const CommentList = (props: { playId?: string }) => {
   const groups = groupComments(comments);
 
   const onCommentDelete = (commentId: string) => {
-    // eslint-disable-next-line no-restricted-globals
     if (confirm(`Are you sure you want to permanently delete your comment?`)) {
       deleteComment(commentId);
     }
@@ -107,7 +106,7 @@ export const CommentList = (props: { playId?: string }) => {
                   </CommentItem>
                 ))}
               </CommentSenderGroup>
-            )
+            ),
           )}
         </CommentDateGroup>
       ))}

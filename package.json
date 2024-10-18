@@ -1,6 +1,7 @@
 {
   "name": "pistejaska",
   "version": "0.1.0",
+  "type": "module",
   "private": true,
   "dependencies": {
     "@js-temporal/polyfill": "^0.4.4",
@@ -25,22 +26,15 @@
   },
   "scripts": {
     "analyze": "source-map-explorer 'build/static/js/*.js'",
-    "lint": "eslint src --ext=.tsx,.ts",
+    "lint": "eslint .",
     "start": "vite",
     "build": "vite build"
   },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
-  "browserslist": [
-    ">0.2%",
-    "not dead",
-    "not ie <= 11",
-    "not op_mini all"
-  ],
   "devDependencies": {
+    "@eslint/js": "^9.9.0",
     "@google-cloud/firestore": "^7.10.0",
     "@types/jsoneditor": "^9.9.5",
+    "globals": "^15.11.0",
     "@types/lodash": "^4.17.11",
     "@types/node": "^20",
     "@types/react": "^18.3.11",
@@ -49,6 +43,10 @@
     "@types/react-transition-group": "^4.4.11",
     "@vitejs/plugin-react": "^4.3.2",
     "autoprefixer": "^10.4.20",
+    "eslint": "9.9.0",
+    "eslint-plugin-react-hooks": "^5.0.0",
+    "typescript-eslint": "^8.10.0",
+    "eslint-plugin-react-refresh": "^0.4.12",
     "postcss": "^8.4.47",
     "prettier": "^3.3.3",
     "source-map-explorer": "^2.5.3",
