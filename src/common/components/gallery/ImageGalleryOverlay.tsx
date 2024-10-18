@@ -5,6 +5,7 @@ import OverlayModal from "./OverlayModal";
 import ImageGallerySwipeView, {
   ImageGalleryItem,
 } from "./ImageGallerySwipeView";
+import { mapVirtualIdxToArrayIdx } from "./utils";
 
 interface ImageGalleryOverlayProps {
   visible: boolean;
@@ -23,7 +24,8 @@ const ImageGalleryOverlay: VFC<ImageGalleryOverlayProps> = ({
   onClose,
   sourceElementRef,
 }) => {
-  const image = images[index];
+  const idx = mapVirtualIdxToArrayIdx(index, images.length);
+  const image = images[idx];
   return (
     <OverlayModal
       visible={visible}

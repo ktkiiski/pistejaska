@@ -4,11 +4,21 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## 2024-10-18
+
+### Changed
+
+- Allow infinite loop scrolling for full screen image: when navigating left from first image the oldest image is shown
+
+### Fixed
+
+- Performance issue with play list full screen image
+
 ## 2024-10-17
 
 ### Fixed
 
-- Performance issue with play list image overlay (it used to load all images (>1GB) on open)
+- Performance issue with play list full screen image (it used to load all images (>1GB) on open)
 
 ## 2023-09-04
 

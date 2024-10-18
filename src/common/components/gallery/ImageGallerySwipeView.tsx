@@ -1,9 +1,10 @@
 import { VFC } from "react";
 import SwipeableViews from "react-swipeable-views";
-import { bindKeyboard } from "react-swipeable-views-utils";
+import { bindKeyboard, virtualize } from "react-swipeable-views-utils";
 import { Temporal } from "@js-temporal/polyfill";
+import { mapVirtualIdxToArrayIdx } from "./utils";
 
-const BindKeyboardSwipeableViews = bindKeyboard(SwipeableViews);
+const BindKeyboardSwipeableViews = bindKeyboard(virtualize(SwipeableViews));
 
 export interface ImageGalleryItem {
   src: string;
@@ -20,6 +21,21 @@ interface ImageGallerySwipeViewProps {
 
 const swipeableContainerStyle = { width: "100%", height: "100%" };
 
+const slideRenderer = (images: ImageGalleryItem[], index: number) => {
+  const idx = mapVirtualIdxToArrayIdx(index, images.length);
+  const img = images[idx];
+
+  return (
+    <div key={index} className="w-full h-full flex justify-center items-center">
+      <img
+        className="max-w-full max-h-full shadow-lg object-contain"
+        src={img.src}
+        alt={img.title}
+      />
+    </div>
+  );
+};
+
 const ImageGallerySwipeView: VFC<ImageGallerySwipeViewProps> = ({
   images,
   index,
@@ -27,23 +43,13 @@ const ImageGallerySwipeView: VFC<ImageGallerySwipeViewProps> = ({
 }) => {
   return (
     <BindKeyboardSwipeableViews
-      index={index}
-      className="cursor-pointer no-select"
-      onChangeIndex={onIndexChange}
-      slideClassName="w-full h-full flex justify-center items-center"
       containerStyle={swipeableContainerStyle}
-      onClick={() => onIndexChange((index + 1) % images.length)}
-    >
-      {images.map(({ src, title }, index) => (
-        <img
-          key={index}
-          className="max-w-full max-h-full shadow-lg object-contain"
-          src={src}
-          loading="lazy"
-          alt={title}
-        />
-      ))}
-    </BindKeyboardSwipeableViews>
+      className="cursor-pointer no-select"
+      index={index}
+      onClick={() => onIndexChange(index + 1)}
+      onChangeIndex={onIndexChange}
+      slideRenderer={({ index }) => slideRenderer(images, index)}
+    ></BindKeyboardSwipeableViews>
   );
 };
 
