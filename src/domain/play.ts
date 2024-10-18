@@ -103,11 +103,11 @@ export class Play implements PlayDTO {
     this.date = this.getMiscFieldValue(dateField);
     // Calculate normalized positions for each player
     this.rankings = rankScores(
-      this.players.map((player) => ({
+      this.players.map((player, index) => ({
         player,
         score: this.getTotal(player.id),
         tieBreaker: this.getTieBreaker(player.id),
-      })),
+      }))
     );
   }
 
@@ -143,14 +143,14 @@ export class Play implements PlayDTO {
   // get position. Gives equal position to equal scores.
   public getPosition(playerId: string) {
     const ranking = this.rankings.find(
-      (ranking) => ranking.player.id === playerId,
+      (ranking) => ranking.player.id === playerId
     );
     return ranking ? ranking.position : NaN;
   }
 
   public getTieBreaker(playerId: string): number {
     const score = this.scores.find(
-      (score) => score.fieldId === "tie-breaker" && score.playerId === playerId,
+      (score) => score.fieldId === "tie-breaker" && score.playerId === playerId
     );
     return score?.score || 0;
   }
@@ -204,10 +204,10 @@ export class Play implements PlayDTO {
 
   public getMiscFieldValue<T extends string | number | string[]>(
     field: GameMiscFieldDefinition<T>,
-    playerId?: string,
+    playerId?: string
   ): T | null | undefined {
     const item = this.misc.find(
-      (m) => m.fieldId === field.id && m.playerId === playerId,
+      (m) => m.fieldId === field.id && m.playerId === playerId
     );
     const value = item?.data;
     if (value == null) {
@@ -218,14 +218,14 @@ export class Play implements PlayDTO {
       return Number.isFinite(numberValue) ? (numberValue as T) : null;
     }
     if (field.type === "images") {
-      return (value as T) ?? [];
+      return (value as T) ?? ([] as any);
     }
     return String(value) as T;
   }
 
   public getMiscFieldDisplayValue(
     field: GameMiscFieldDefinition,
-    playerId?: string,
+    playerId?: string
   ): string {
     const value = this.getMiscFieldValue(field, playerId);
     // If this is a selected option, show the option label instead of the value ("id")
@@ -245,11 +245,12 @@ export class Play implements PlayDTO {
 
   public hasMiscFieldValue(
     fieldId: string,
-    fieldValue: string | number,
+    fieldValue: string | number
   ): boolean {
     return this.misc.some(
       // NOTE: Compare with "==" in case numbers are stringified
-      (m) => m.fieldId === fieldId && m.data == fieldValue,
+      // eslint-disable-next-line eqeqeq
+      (m) => m.fieldId === fieldId && m.data == fieldValue
     );
   }
 
@@ -261,7 +262,7 @@ export class Play implements PlayDTO {
    */
   public getScoreFieldValue(playerId: string, fieldId: string): number {
     const score = this.scores.find(
-      (item) => item.fieldId === fieldId && item.playerId === playerId,
+      (item) => item.fieldId === fieldId && item.playerId === playerId
     );
     return score?.score ?? 0;
   }

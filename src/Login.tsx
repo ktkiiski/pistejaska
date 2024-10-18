@@ -14,7 +14,7 @@ const isSafari = () =>
 
 export const Login = () => {
   const center = {
-    position: "absolute" as const,
+    position: "absolute" as any,
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",

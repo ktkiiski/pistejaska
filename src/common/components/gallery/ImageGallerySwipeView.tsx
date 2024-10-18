@@ -53,9 +53,7 @@ const ImageGallerySwipeView: VFC<ImageGallerySwipeViewProps> = ({
       index={index}
       onClick={() => onIndexChange(index + 1)}
       onChangeIndex={onIndexChange}
-      slideRenderer={({ index }: { index: number }) =>
-        slideRenderer(images, index)
-      }
+      slideRenderer={({ index }: any) => slideRenderer(images, index)}
     ></BindKeyboardSwipeableViews>
   );
 };

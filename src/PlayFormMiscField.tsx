@@ -10,7 +10,7 @@ type PlayFormMiscFieldProps<T> = {
   onChange: (
     value: string,
     field: GameMiscFieldDefinition<T>,
-    player: Player | undefined,
+    player: Player | undefined
   ) => void;
   onFocus: (e: React.FocusEvent<HTMLElement>) => void;
   player?: Player;
@@ -32,7 +32,7 @@ export function PlayFormMiscField<T>(props: PlayFormMiscFieldProps<T>) {
   const value =
     (
       play.misc.find(
-        (m) => m.fieldId === field.id && m.playerId === playerId,
+        (m) => m.fieldId === field.id && m.playerId === playerId
       ) || ({} as any)
     ).data ||
     (field.getDefaultValue && field.getDefaultValue()) ||

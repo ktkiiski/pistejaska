@@ -48,7 +48,7 @@ const PlayMiscFields: VFC<{ game: Game; play: Play }> = ({ game, play }) => {
   const expansionIds = play.expansions;
   const visibleFields = orderBy(
     game.getMiscFields(expansionIds),
-    "order",
+    "order"
   ).filter(({ field }) => !hiddenMiscFields.includes(field.id));
   return (
     <>
@@ -62,7 +62,7 @@ const PlayMiscFields: VFC<{ game: Game; play: Play }> = ({ game, play }) => {
             .join(", ") || "None"}
         </div>
       )}
-      {visibleFields.map(({ field }) => {
+      {visibleFields.map(({ field }, idx) => {
         if (field.valuePerPlayer) {
           return (
             <React.Fragment key={field.id}>
@@ -114,7 +114,7 @@ export const PlayView: FC = () => {
       const newMisc = setMiscFieldValue(
         playState.misc,
         imageField.id,
-        (oldImages = []) => [...(oldImages as string[]), filename],
+        (oldImages = []) => [...(oldImages as string[]), filename]
       );
       return transaction.update(playRef, { misc: newMisc });
     });
@@ -152,7 +152,7 @@ export const PlayView: FC = () => {
 
   const onDelete = async () => {
     const reallyDelete = await window.confirm(
-      `Do you really want to delete play ${play.getName()}?`,
+      `Do you really want to delete play ${play.getName()}?`
     );
     if (!reallyDelete) return;
     const db = getFirestore(app);
@@ -320,8 +320,8 @@ const PlayTable = (props: { game: Game; play: Play }) => {
                   {
                     (
                       play.scores.find(
-                        (s) => s.fieldId === f.id && s.playerId === p.id,
-                      ) || {}
+                        (s) => s.fieldId === f.id && s.playerId === p.id
+                      ) || ({} as any)
                     ).score
                   }
                 </TableCell>
