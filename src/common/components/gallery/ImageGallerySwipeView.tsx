@@ -1,8 +1,10 @@
 import { VFC } from "react";
+
 import { Temporal } from "@js-temporal/polyfill";
 import { mapVirtualIdxToArrayIdx } from "./utils";
-import { virtualize } from "../../../lib/react-swipeable-views-utils/src";
 import SwipeableViews from "../../../lib/react-swipeable-views/src";
+import { virtualize } from "../../../lib/react-swipeable-views-utils/src";
+import { useHotkeys } from "react-hotkeys-hook";
 
 const BindKeyboardSwipeableViews = virtualize(SwipeableViews);
 
@@ -41,6 +43,9 @@ const ImageGallerySwipeView: VFC<ImageGallerySwipeViewProps> = ({
   index,
   onIndexChange,
 }) => {
+  useHotkeys(["left", "j"], () => onIndexChange(index - 1));
+  useHotkeys(["right", "k"], () => onIndexChange(index + 1));
+
   return (
     <BindKeyboardSwipeableViews
       containerStyle={swipeableContainerStyle}
