@@ -2,7 +2,7 @@ import { useEffect, useReducer, useRef, useState } from "react";
 import { GameDefinition, schema } from "../domain/game";
 import JsonEditor from "jsoneditor";
 import Ajv from "ajv";
-import { isEqual } from "lodash";
+import { isEqual } from "lodash-es";
 import "jsoneditor/dist/jsoneditor.css";
 import useConfirmLeave from "../common/hooks/useConfirmLeave";
 import ButtonDanger from "../common/components/buttons/ButtonDanger";
@@ -19,7 +19,7 @@ interface AdminGameEditorProps {
 
 function updateJson(
   oldJson: GameDefinition | null,
-  newJson: GameDefinition | null
+  newJson: GameDefinition | null,
 ): GameDefinition | null {
   return isEqual(newJson, oldJson) ? oldJson : newJson;
 }

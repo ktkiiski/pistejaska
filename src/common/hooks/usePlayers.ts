@@ -1,5 +1,5 @@
 import { usePlays } from "./usePlays";
-import { groupBy, map, sortBy } from "lodash";
+import { groupBy, map, sortBy } from "lodash-es";
 import { Player } from "../../domain/play";
 import { useMemo } from "react";
 
@@ -11,9 +11,9 @@ export function usePlayers(): [Player[], boolean, Error | undefined] {
     const allPlayers = sortBy(
       groupBy(
         plays.flatMap((v) => v.players),
-        (p) => p.id
+        (p) => p.id,
       ),
-      (group) => -group.length
+      (group) => -group.length,
     );
 
     return map(allPlayers, (p) => p[0]);

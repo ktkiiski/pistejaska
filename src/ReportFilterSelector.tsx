@@ -9,7 +9,7 @@ import {
   toggleFieldValueFilter,
 } from "./domain/filters";
 import { Play } from "./domain/play";
-import { sortBy, union } from "lodash";
+import { sortBy, union } from "lodash-es";
 import { Game } from "./domain/game";
 import MultiSelectField from "./common/components/inputs/MultiSelectField";
 import { pluralize } from "./common/stringUtils";
@@ -74,7 +74,7 @@ function ReportFilterSelector({
             const isSelected = filters.expansions.includes(expansion.id);
             const nestedPlays = applyPlayFilters(
               plays,
-              isSelected ? filters : nestedFilters
+              isSelected ? filters : nestedFilters,
             );
             return {
               label: expansion.name,
@@ -98,11 +98,11 @@ function ReportFilterSelector({
               const nestedFilters = toggleFieldValueFilter(
                 filters,
                 field.id,
-                option.value
+                option.value,
               );
               const nestedPlays = applyPlayFilters(plays, nestedFilters);
               const isSelected = !!filters.fieldValues[field.id]?.includes(
-                option.value
+                option.value,
               );
               return {
                 label: option.label,

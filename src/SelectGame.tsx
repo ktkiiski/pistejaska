@@ -3,7 +3,7 @@ import { Game } from "./domain/game";
 import { useGames } from "./common/hooks/useGames";
 import ViewContentLayout from "./common/components/ViewContentLayout";
 import { usePlays } from "./common/hooks/usePlays";
-import { orderBy } from "lodash";
+import { orderBy } from "lodash-es";
 import Heading1 from "./common/components/typography/Heading1";
 import List from "./common/components/lists/List";
 import ListItemIcon from "./common/components/lists/ListItemIcon";
@@ -19,7 +19,7 @@ function useRecentlyPlayedGames(games: Game[]) {
   const sortedPlays = orderBy(
     plays,
     [(play) => play.getDate().epochSeconds, "created"],
-    ["desc", "desc"]
+    ["desc", "desc"],
   );
   const recentlyPlayedGames: Game[] = [];
   for (
@@ -52,12 +52,12 @@ export const SelectGame: FC = () => {
     return name1 === "generic game"
       ? -1
       : name2 === "generic game"
-      ? 1
-      : name1 > name2
-      ? 1
-      : name1 < name2
-      ? -1
-      : 0;
+        ? 1
+        : name1 > name2
+          ? 1
+          : name1 < name2
+            ? -1
+            : 0;
   });
   return (
     <ViewContentLayout>

@@ -11,7 +11,7 @@ import {
 import EditGameScoreField from "./EditGameScoreField";
 import Heading2 from "../common/components/typography/Heading2";
 import ButtonLight from "../common/components/buttons/ButtonLight";
-import { omit } from "lodash";
+import { omit } from "lodash-es";
 import EditGameMiscField from "./EditGameMiscField";
 import ButtonPrimary from "../common/components/buttons/ButtonPrimary";
 import Spinner from "../common/components/Spinner";
@@ -32,21 +32,23 @@ interface KeyedMiscFields {
 }
 
 function toKeyedFields<
-  T extends GameFieldDefinition<number | string | string[]>
+  T extends GameFieldDefinition<number | string | string[]>,
 >(fields: T[]): { [key: string]: T } {
   return fields.reduce(
     (result, field) => ({ ...result, [crypto.randomUUID()]: field }),
-    {}
+    {},
   );
 }
 
 function slugify(input: string): string {
-  return input
-    .trim()
-    .toLowerCase()
-    .normalize("NFKD")
-    .replaceAll(/[^\w\s-]+/g, "")
-    .replaceAll(/\s+/g, "-") ?? "";
+  return (
+    input
+      .trim()
+      .toLowerCase()
+      .normalize("NFKD")
+      .replaceAll(/[^\w\s-]+/g, "")
+      .replaceAll(/\s+/g, "-") ?? ""
+  );
 }
 
 function generateMissingIds(game: GameDefinition): void {
@@ -77,7 +79,7 @@ function getInitialBasicInfo(game?: GameDefinition): GameBasicInfoDefinition {
 }
 
 function getInitialScoreFields(
-  scoreFields?: GameScoreFieldDefinition[]
+  scoreFields?: GameScoreFieldDefinition[],
 ): KeyedScoreFields {
   const fields: GameScoreFieldDefinition[] =
     scoreFields && scoreFields?.length > 0
@@ -87,7 +89,7 @@ function getInitialScoreFields(
 }
 
 function getInitialMiscFields(
-  miscFields?: GameMiscFieldDefinition[]
+  miscFields?: GameMiscFieldDefinition[],
 ): KeyedMiscFields {
   return toKeyedFields(miscFields ?? []);
 }
@@ -104,10 +106,10 @@ export default function GameForm({ game }: GameEditViewProps) {
   const navigate = useNavigate();
   const [basicInfo, setBasicInfo] = useState(() => getInitialBasicInfo(game));
   const [scoreFields, setScoreFields] = useState(() =>
-    getInitialScoreFields(game?.scoreFields)
+    getInitialScoreFields(game?.scoreFields),
   );
   const [miscFields, setMiscFields] = useState(() =>
-    getInitialMiscFields(game?.miscFields)
+    getInitialMiscFields(game?.miscFields),
   );
   const [isInitialRender, setIsInitialRender] = useState(true);
   const [isSaving, setIsSaving] = useState(false);

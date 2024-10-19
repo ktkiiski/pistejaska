@@ -6,7 +6,7 @@ import { useGames } from "./common/hooks/useGames";
 import { usePlay } from "./common/hooks/usePlay";
 import { LoadingSpinner } from "./common/components/LoadingSpinner";
 import ViewContentLayout from "./common/components/ViewContentLayout";
-import { isEmpty } from "lodash";
+import { isEmpty } from "lodash-es";
 import Spinner from "./common/components/Spinner";
 import useConfirmLeave from "./common/hooks/useConfirmLeave";
 import uploadPlayImage from "./utils/uploadPlayImage";
@@ -86,7 +86,7 @@ export const PlayEdit = () => {
       // Trigger the save after the given interval
       const timeout = setTimeout(
         () => setIsSaveTriggered(true),
-        autoSaveInterval
+        autoSaveInterval,
       );
       return () => clearTimeout(timeout);
     }
@@ -138,7 +138,7 @@ export const PlayEdit = () => {
 
     if (currentDuration == null && duration > tenMins && duration < tenHours) {
       const setDuration = window.confirm(
-        `Looks like the play began ${duration}h ago.\n\nDo you want to set the play length to be ${duration} hours?`
+        `Looks like the play began ${duration}h ago.\n\nDo you want to set the play length to be ${duration} hours?`,
       );
       if (setDuration) {
         // TODO: Should not dangerously mutate an existing instance!!!

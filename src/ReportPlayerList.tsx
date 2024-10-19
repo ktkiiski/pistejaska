@@ -1,4 +1,4 @@
-import { flatMap, groupBy, orderBy } from "lodash";
+import { flatMap, groupBy, orderBy } from "lodash-es";
 import { usePlays } from "./common/hooks/usePlays";
 import ViewContentLayout from "./common/components/ViewContentLayout";
 import { LoadingSpinner } from "./common/components/LoadingSpinner";
@@ -26,9 +26,9 @@ export const ReportPlayerList = () => {
   const players = groupBy(
     orderBy(
       flatMap(plays, (p) => p.players),
-      (p) => p.name
+      (p) => p.name,
     ),
-    (p) => p.id
+    (p) => p.id,
   );
 
   return (

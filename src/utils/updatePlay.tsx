@@ -1,11 +1,11 @@
 import { PlayDTO } from "../domain/play";
 import { db } from "../common/firebase";
 import { doc, updateDoc } from "firebase/firestore";
-import { isEmpty } from "lodash";
+import { isEmpty } from "lodash-es";
 
 export default async function updatePlay(
   playId: string,
-  changes: Partial<PlayDTO>
+  changes: Partial<PlayDTO>,
 ) {
   if (isEmpty(changes)) {
     // Nothing to actually save

@@ -1,5 +1,5 @@
 import { Play } from "./play";
-import { map, groupBy, sortBy, orderBy } from "lodash";
+import { map, groupBy, sortBy, orderBy } from "lodash-es";
 import { rate, Rating } from "ts-trueskill";
 
 function countPlaysForPlayerId(playerId: string, plays: Play[]) {

@@ -5,7 +5,7 @@ import PlayList from "./PlayList";
 import { useGames } from "./common/hooks/useGames";
 import Heading1 from "./common/components/typography/Heading1";
 import { useMemo } from "react";
-import { orderBy } from "lodash";
+import { orderBy } from "lodash-es";
 import ImageGalleryStripe from "./common/components/gallery/ImageGalleryStripe";
 import { ImageGalleryItem } from "./common/components/gallery/ImageGallerySwipeView";
 import { useComments } from "./common/hooks/useComments";
@@ -27,7 +27,7 @@ export const PlayListView = () => {
             link: `/view/${play.id}`,
           });
         });
-      }
+      },
     );
     return items;
   }, [plays]);

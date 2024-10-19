@@ -1,4 +1,4 @@
-import { union } from "lodash";
+import { union } from "lodash-es";
 import { Play } from "./play";
 
 export interface ReportFilters {
@@ -27,7 +27,7 @@ export const emptyFilters: ReportFilters = {
 
 export function addExpansionFilter(
   filters: ReportFilters,
-  expansionId: string | null
+  expansionId: string | null,
 ): ReportFilters {
   const newExpansions = union(filters.expansions, [expansionId]);
   return { ...filters, expansions: newExpansions };
@@ -35,17 +35,17 @@ export function addExpansionFilter(
 
 export function removeExpansionFilter(
   filters: ReportFilters,
-  expansionId: string | null
+  expansionId: string | null,
 ): ReportFilters {
   const newExpansions = filters.expansions.filter(
-    (expId) => expId !== expansionId
+    (expId) => expId !== expansionId,
   );
   return { ...filters, expansions: newExpansions };
 }
 
 export function toggleExpansionFilter(
   filters: ReportFilters,
-  expansionId: string | null
+  expansionId: string | null,
 ): ReportFilters {
   return filters.expansions.includes(expansionId)
     ? removeExpansionFilter(filters, expansionId)
@@ -55,7 +55,7 @@ export function toggleExpansionFilter(
 export function setFieldValueFilter(
   filters: ReportFilters,
   fieldId: string,
-  values: string[]
+  values: string[],
 ) {
   const newFieldValues = { ...filters.fieldValues };
   if (values.length) {
@@ -69,7 +69,7 @@ export function setFieldValueFilter(
 export function addFieldValueFilter(
   filters: ReportFilters,
   fieldId: string,
-  value: string
+  value: string,
 ): ReportFilters {
   const newValues = union(filters.fieldValues[fieldId], [value]);
   return setFieldValueFilter(filters, fieldId, newValues);
@@ -78,10 +78,10 @@ export function addFieldValueFilter(
 export function removeFieldValueFilter(
   filters: ReportFilters,
   fieldId: string,
-  value: string
+  value: string,
 ): ReportFilters {
   const newValues = filters.fieldValues[fieldId]?.filter(
-    (val) => val !== value
+    (val) => val !== value,
   );
   return setFieldValueFilter(filters, fieldId, newValues ?? []);
 }
@@ -89,7 +89,7 @@ export function removeFieldValueFilter(
 export function toggleFieldValueFilter(
   filters: ReportFilters,
   fieldId: string,
-  value: string
+  value: string,
 ): ReportFilters {
   return filters.fieldValues[fieldId]?.includes(fieldId)
     ? removeFieldValueFilter(filters, fieldId, value)
@@ -115,21 +115,21 @@ export function applyPlayFilters(allPlays: Play[], filters: ReportFilters) {
           ? // No expansions used?
             play.expansions.length === 0
           : // This particular expansion is used?
-            play.expansions.includes(expansionId)
+            play.expansions.includes(expansionId),
       ),
-    allPlays
+    allPlays,
   );
   // Filter by player count
   if (playerCount != null) {
     filteredPlays = filteredPlays.filter(
-      (play) => play.players.length === playerCount
+      (play) => play.players.length === playerCount,
     );
   }
   // Filter by dimension values
   filteredPlays = Object.keys(fieldValues).reduce((plays, fieldId) => {
     const values = fieldValues[fieldId];
     return plays.filter((play) =>
-      values.every((value) => play.hasMiscFieldValue(fieldId, value))
+      values.every((value) => play.hasMiscFieldValue(fieldId, value)),
     );
   }, filteredPlays);
   return filteredPlays;

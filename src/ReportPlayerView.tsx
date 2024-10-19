@@ -1,5 +1,5 @@
 import { Play, Player } from "./domain/play";
-import { sortBy, groupBy, uniq, mean } from "lodash";
+import { sortBy, groupBy, uniq, mean } from "lodash-es";
 import { usePlays } from "./common/hooks/usePlays";
 import ReportTable from "./ReportTable";
 import { stringifyScore } from "./common/stringUtils";
@@ -25,7 +25,7 @@ export const ReportPlayerView: FC = () => {
   const [player, loadingPlayer, errorPlayer] = usePlayer(playerId);
 
   const playerPlays = plays.filter((p) =>
-    p.players.find((x) => x.id === playerId)
+    p.players.find((x) => x.id === playerId),
   );
 
   if (errorPlays || errorGames || errorPlayer) {
@@ -71,7 +71,7 @@ const PlayerGamesReport = (props: {
 }) => {
   const { player, plays, games } = props;
   const playerPlays = plays.filter((p) =>
-    p.players.find((x) => x.id === player.id)
+    p.players.find((x) => x.id === player.id),
   );
   const playerGames = uniq(Object.keys(groupBy(playerPlays, (p) => p.gameId)));
 
@@ -101,10 +101,10 @@ const PlayerGamesReport = (props: {
     const avgGameDuration = mean(allGameDurations); // NOTE: Will be NaN if no information available
 
     const maxScoresPlay = sortBy(gamePlays, (p) =>
-      p.getTotal(player.id)
+      p.getTotal(player.id),
     ).reverse()[0];
     const bestPositionPlay = sortBy(gamePlays, (p) =>
-      p.getPosition(player.id)
+      p.getPosition(player.id),
     )[0];
     const winnedPlays = gamePlays.filter((p) => p.getPosition(player.id) === 1);
 
@@ -123,12 +123,13 @@ const PlayerGamesReport = (props: {
     const percentile =
       Math.round(
         Math.round(
-          ((trueSkills.length - playerTrueSkillIndex) / trueSkills.length) * 100
-        ) / 10
+          ((trueSkills.length - playerTrueSkillIndex) / trueSkills.length) *
+            100,
+        ) / 10,
       ) * 10;
     const totalGamePlayTime = gamePlays.reduce(
       (sum, play) => sum + (play.getDurationInHours() ?? avgGameDuration),
-      0
+      0,
     );
 
     return [
@@ -149,7 +150,7 @@ const PlayerGamesReport = (props: {
       },
       {
         value: `${Math.round(
-          (winnedPlays.length / gamePlays.length) * 100
+          (winnedPlays.length / gamePlays.length) * 100,
         )}% (${winnedPlays.length})`,
       },
       {

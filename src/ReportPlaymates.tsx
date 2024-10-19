@@ -7,7 +7,7 @@ import TableRow from "./common/components/tables/TableRow";
 import TableCell from "./common/components/tables/TableCell";
 import { useReducer } from "react";
 import { Link } from "react-router-dom";
-import { orderBy } from "lodash";
+import { orderBy } from "lodash-es";
 
 interface Playmate {
   player: Player;
@@ -40,7 +40,7 @@ export default function ReportPlaymates(props: {
   const playmates = usePlaymates(player.id, playerPlays);
   const [isEveryPlaymateVisible, showAllPlaymates] = useReducer(
     () => true,
-    false
+    false,
   );
   const visiblePlaymates = isEveryPlaymateVisible
     ? playmates

@@ -9,8 +9,7 @@ import {
 } from "./domain/game";
 import { PlayFormScoreField } from "./PlayFormScoreField";
 import { PlayFormMiscField } from "./PlayFormMiscField";
-import groupBy from "lodash/groupBy";
-import map from "lodash/map";
+import { map, groupBy } from "lodash-es";
 import { FormFocusGroup, FormFocusContextProvider } from "./utils/focus";
 import ViewContentLayout from "./common/components/ViewContentLayout";
 import CardButtonRow from "./common/components/buttons/CardButtonRow";

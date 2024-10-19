@@ -1,4 +1,4 @@
-import { groupBy, last, map } from "lodash";
+import { groupBy, last, map } from "lodash-es";
 import { LoadingSpinner } from "./common/components/LoadingSpinner";
 import CommentItem from "./common/components/comments/CommentItem";
 import CommentSenderGroup from "./common/components/comments/CommentSenderGroup";

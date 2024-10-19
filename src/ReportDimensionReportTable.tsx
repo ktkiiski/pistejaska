@@ -1,4 +1,4 @@
-import { sortBy } from "lodash";
+import { sortBy } from "lodash-es";
 import { GameMiscFieldDefinition } from "./domain/game";
 import { Play } from "./domain/play";
 import { getDimensionStatistics } from "./domain/statistics";
@@ -31,12 +31,12 @@ const ReportDimensionReportTable = (props: {
   ];
 
   const stats = Array.from(
-    getDimensionStatistics(plays, dimension, playerId).values()
+    getDimensionStatistics(plays, dimension, playerId).values(),
   );
   const rows = sortBy(
     stats,
     (stat) => stat.averageNormalizedPosition ?? Number.POSITIVE_INFINITY,
-    (stat) => -stat.useCount
+    (stat) => -stat.useCount,
   );
   const playCount = plays.length;
 
@@ -63,7 +63,7 @@ const ReportDimensionReportTable = (props: {
         return { value: "—" };
       }
       return { value: `${y.value} %` };
-    })
+    }),
   );
 
   return (

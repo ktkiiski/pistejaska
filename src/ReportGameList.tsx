@@ -1,4 +1,4 @@
-import { groupBy, last, mapValues, orderBy, sortBy } from "lodash";
+import { groupBy, last, mapValues, orderBy, sortBy } from "lodash-es";
 import { Game } from "./domain/game";
 import { useGames } from "./common/hooks/useGames";
 import ViewContentLayout from "./common/components/ViewContentLayout";
@@ -115,7 +115,7 @@ export const ReportGameList = () => {
   const sortedGameItems = orderBy(
     games,
     currentSortCriteria.getSortKey,
-    currentSortCriteria.direction
+    currentSortCriteria.direction,
   );
 
   return (

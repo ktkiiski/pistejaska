@@ -15,7 +15,7 @@ import List from "./common/components/lists/List";
 import ListItem from "./common/components/lists/ListItem";
 import ListItemIcon from "./common/components/lists/ListItemIcon";
 import ListItemText from "./common/components/lists/ListItemText";
-import { orderBy, shuffle } from "lodash";
+import { orderBy, shuffle } from "lodash-es";
 import InputTextField from "./common/components/inputs/InputTextField";
 import { useNavigate } from "react-router-dom";
 import { getAuth } from "firebase/auth";
@@ -40,7 +40,7 @@ function shiftValues<T>(values: T[], offset: number) {
 async function createPlay(
   gameId: string,
   players: Player[],
-  userId: string
+  userId: string,
 ): Promise<Play> {
   const playId = `${gameId}-${window.crypto.randomUUID()}`;
   const play = new Play({
@@ -97,10 +97,10 @@ const SelectPlayers = (props: {
           players.every((other) => play.hasPlayer(other.id))
             ? count + 1
             : count,
-        0
+        0,
       );
     },
-    "desc"
+    "desc",
   );
   const visiblePlayers = showAllPlayers
     ? selectablePlayers
@@ -163,7 +163,7 @@ const SelectPlayers = (props: {
           ? // Animating random starting player: just shift players without changing order
             (oldPlayers) => shiftValues(oldPlayers, 1)
           : // Shuffle players
-            (oldPlayers) => shuffle(oldPlayers)
+            (oldPlayers) => shuffle(oldPlayers),
       );
       animation = requestAnimationFrame(animate);
     }

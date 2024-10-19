@@ -5,7 +5,7 @@ import React, {
   useContext,
   useState,
 } from "react";
-import orderBy from "lodash/orderBy";
+import { orderBy } from "lodash-es";
 
 interface FormFieldItem {
   element: HTMLElement;

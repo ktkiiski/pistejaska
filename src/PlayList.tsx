@@ -1,6 +1,6 @@
 import { useMemo, useReducer } from "react";
 import { Play } from "./domain/play";
-import { orderBy } from "lodash";
+import { orderBy } from "lodash-es";
 import { Game } from "./domain/game";
 import List from "./common/components/lists/List";
 import ListItemIcon from "./common/components/lists/ListItemIcon";
@@ -37,9 +37,9 @@ const PlayList = (props: PlayListProps) => {
       orderBy(
         plays,
         [(play) => play.getDate().epochSeconds, "created"],
-        ["desc", "desc"]
+        ["desc", "desc"],
       ),
-    [plays]
+    [plays],
   );
 
   const [limit, increaseLimit] = useReducer((oldLimit) => oldLimit * 2, 10);

@@ -5,7 +5,7 @@ import ButtonLight from "../common/components/buttons/ButtonLight";
 import { GameFieldOption } from "../domain/game";
 import InputNumberField from "../common/components/inputs/InputNumberField";
 import classNames from "classnames";
-import { sortBy } from "lodash";
+import { sortBy } from "lodash-es";
 
 interface EditOptionsProps<T = string | number> {
   type: "text" | "number";

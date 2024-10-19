@@ -2,7 +2,7 @@ import React, { FC, useMemo, VFC } from "react";
 import { Play } from "./domain/play";
 import { useGames } from "./common/hooks/useGames";
 import { Game, imageField } from "./domain/game";
-import { orderBy, sortBy } from "lodash";
+import { orderBy, sortBy } from "lodash-es";
 import {
   getFirestore,
   deleteDoc,

@@ -1,7 +1,7 @@
 import { getTodayAsString } from "../common/dateUtils";
 import { MiscDataDTO } from "./play";
 import { JSONSchema7 } from "json-schema";
-import { sortBy } from "lodash";
+import { sortBy } from "lodash-es";
 
 const fieldIdSchema: JSONSchema7 = {
   title: "Field ID",
@@ -163,7 +163,7 @@ const miscFieldSchema: JSONSchema7 = {
           ...fieldSchema.properties,
           ...commonMiscFieldProperties,
         },
-      } as JSONSchema7)
+      }) as JSONSchema7,
   ),
 };
 
@@ -292,14 +292,14 @@ export class Game implements GameDefinition {
     const { scoreFields, expansions = [] } = this;
     return [
       ...scoreFields.map(
-        (field) => ({ field, type: "score", order: 1 } as const)
+        (field) => ({ field, type: "score", order: 1 }) as const,
       ),
       ...expansions
         .filter(({ id }) => expansionIds.includes(id))
         .flatMap((expansion) => expansion.scoreFields || [])
-        .map((field) => ({ field, type: "score", order: 2 } as const)),
+        .map((field) => ({ field, type: "score", order: 2 }) as const),
       ...Game.getDefaultScoreFields().map(
-        (field) => ({ field, type: "score", order: 9999 } as const)
+        (field) => ({ field, type: "score", order: 9999 }) as const,
       ),
     ];
   }
@@ -308,14 +308,14 @@ export class Game implements GameDefinition {
     const { miscFields = [], expansions = [] } = this;
     return [
       ...miscFields.map(
-        (field) => ({ field, type: "misc", order: 3 } as const)
+        (field) => ({ field, type: "misc", order: 3 }) as const,
       ),
       ...expansions
         .filter(({ id }) => expansionIds.includes(id))
         .flatMap((expansion) => expansion.miscFields || [])
-        .map((field) => ({ field, type: "misc", order: 4 } as const)),
+        .map((field) => ({ field, type: "misc", order: 4 }) as const),
       ...Game.getDefaultMiscFields().map(
-        (field) => ({ field, type: "misc", order: 5 } as const)
+        (field) => ({ field, type: "misc", order: 5 }) as const,
       ),
     ];
   }
@@ -326,7 +326,7 @@ export class Game implements GameDefinition {
         ...this.getScoreFields(expansionIds),
         ...this.getMiscFields(expansionIds),
       ],
-      (x) => x.order
+      (x) => x.order,
     );
   }
 
@@ -365,7 +365,7 @@ export type GameBasicInfoDefinition = {
   id: string;
   icon: string;
   simultaneousTurns: boolean;
-}
+};
 
 export type GameDefinition = GameBasicInfoDefinition & {
   scoreFields: GameScoreFieldDefinition[];
@@ -431,7 +431,7 @@ export type GameExpansionDefinition = {
 };
 
 function isRelevantReportField(
-  field: GameMiscFieldDefinition
+  field: GameMiscFieldDefinition,
 ): field is GameMiscFieldDefinition<string> {
   return (field.isRelevantReportDimension ?? false) && field.type !== "number";
 }

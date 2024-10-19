@@ -1,4 +1,4 @@
-import sortBy from "lodash/sortBy";
+import { sortBy } from "lodash-es";
 
 interface ScoredObject {
   score: number;
@@ -24,7 +24,7 @@ interface RankedObject {
  * - `normalizedPosition`: ranked position normalized between 0...1
  */
 export function rankScores<T extends ScoredObject>(
-  values: T[]
+  values: T[],
 ): (T & RankedObject)[] {
   const { length } = values;
   if (!length) {
@@ -40,7 +40,7 @@ export function rankScores<T extends ScoredObject>(
     // Primarily sort by score
     (obj) => -obj.score,
     // Secondarily sort by tie-breaker
-    (obj) => -(obj.tieBreaker ?? 0)
+    (obj) => -(obj.tieBreaker ?? 0),
   );
   const maxScore = scored[0].score;
   const minScore = scored[length - 1].score;

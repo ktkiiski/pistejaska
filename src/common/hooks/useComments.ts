@@ -8,7 +8,7 @@ import {
   where,
 } from "firebase/firestore";
 import { useUsers } from "./useUsers";
-import { sortBy } from "lodash";
+import { sortBy } from "lodash-es";
 import { Comment, CommentDTO } from "../../domain/comment";
 
 const commentConverter: FirestoreDataConverter<CommentDTO> = {
@@ -17,11 +17,11 @@ const commentConverter: FirestoreDataConverter<CommentDTO> = {
 };
 
 export const useComments = (
-  playId?: string
+  playId?: string,
 ): [Comment[], boolean, Error | undefined] => {
   const firestore = getFirestore(app);
   const allComments = collection(firestore, "comments-v1").withConverter(
-    commentConverter
+    commentConverter,
   );
   const q = playId
     ? query(allComments, where("playId", "==", playId))

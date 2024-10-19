@@ -6,7 +6,7 @@ import {
   imageField,
 } from "./game";
 import { rankScores } from "../common/rankings";
-import { round } from "lodash";
+import { round } from "lodash-es";
 import { Temporal } from "@js-temporal/polyfill";
 import { convertToLocaleDateString } from "../common/dateUtils";
 import { formatDuration } from "../common/stringUtils";
