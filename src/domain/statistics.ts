@@ -94,7 +94,7 @@ export interface GameStatistics {
 export function getGameStatistics(
   game: Game,
   plays: Play[],
-  otherDimensions?: GameMiscFieldDefinition<number>[]
+  otherDimensions?: GameMiscFieldDefinition<number>[],
 ): GameStatistics[] {
   const initStats = (playerCount: number | null): GameStatistics => ({
     game,
@@ -125,7 +125,7 @@ export function getGameStatistics(
   function aggregateWinningScore(
     stats: GameStatistics,
     winningScore: number,
-    play: Play
+    play: Play,
   ) {
     stats.playCount += 1;
     if (stats.maxWinningScore == null || winningScore > stats.maxWinningScore) {
@@ -143,7 +143,7 @@ export function getGameStatistics(
   function aggregateDuration(
     stats: GameStatistics,
     playerCount: number,
-    duration: number
+    duration: number,
   ) {
     stats.durationSum += duration;
     stats.durationCount += 1;
@@ -156,7 +156,7 @@ export function getGameStatistics(
   function aggregateOtherDimension(
     stats: GameStatistics,
     field: GameMiscFieldDefinition<number>,
-    value: number
+    value: number,
   ) {
     const dimension = stats.dimensions[field.id] ?? initDimension();
     stats.dimensions[field.id] = dimension;
@@ -175,7 +175,7 @@ export function getGameStatistics(
   const statsByPlayerCount: GameStatistics[] = [anyPlayerStats];
   plays.forEach((play) => {
     const playerCount = play.rankings.length;
-    let playerCountStats =
+    const playerCountStats =
       statsByPlayerCount[playerCount] || initStats(playerCount);
     statsByPlayerCount[playerCount] = playerCountStats;
     const [win] = play.rankings;
@@ -278,7 +278,7 @@ export function getGamePlayerStatistics(
   game: Game,
   plays: Play[],
   playerId: string,
-  otherDimensions?: GameMiscFieldDefinition<number>[]
+  otherDimensions?: GameMiscFieldDefinition<number>[],
 ): GamePlayerStatistics {
   const initDimension = () => ({
     minValue: null,
@@ -291,7 +291,7 @@ export function getGamePlayerStatistics(
   function aggregateRanking(
     stats: GamePlayerStatistics,
     ranking: PlayRanking,
-    play: Play
+    play: Play,
   ) {
     const { normalizedPosition } = ranking;
     if (normalizedPosition != null) {
@@ -325,7 +325,7 @@ export function getGamePlayerStatistics(
   function aggregateOtherDimension(
     stats: GamePlayerStatistics,
     field: GameMiscFieldDefinition<number>,
-    value: number
+    value: number,
   ) {
     const dimension = stats.dimensions[field.id] ?? initDimension();
     stats.dimensions[field.id] = dimension;
@@ -424,7 +424,7 @@ export interface DimensionValueStatistics<T> {
 export function getDimensionStatistics(
   plays: Play[],
   dimension: GameMiscFieldDefinition<string>,
-  reportPlayerId?: string
+  reportPlayerId?: string,
 ): Map<string, DimensionValueStatistics<string>> {
   const statsByValue = new Map<string, DimensionValueStatistics<string>>();
   const playIdsByValue = new Map<string, Set<string>>();
@@ -483,7 +483,7 @@ export function getDimensionStatistics(
             }
           } else {
             console.warn(
-              `Play ${play.id} probably corrupt: player with ID ${playerId} was not in this play`
+              `Play ${play.id} probably corrupt: player with ID ${playerId} was not in this play`,
             );
           }
         }
