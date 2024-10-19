@@ -1,12 +1,9 @@
 import classNames from "classnames";
 import { HTMLAttributes } from "react";
-
-export const listItemClassName =
-  "flex flex-row select-none flex flex-1 items-center px-4 py-2";
-export const listItemInteractiveClassName = classNames(
+import {
+  listItemInteractiveClassName,
   listItemClassName,
-  "cursor-pointer hover:bg-slate-50"
-);
+} from "./ListItem.utils";
 
 const ListItem: React.FC<HTMLAttributes<HTMLLIElement>> = ({
   className,
@@ -18,7 +15,7 @@ const ListItem: React.FC<HTMLAttributes<HTMLLIElement>> = ({
     <li
       className={classNames(
         onClick ? listItemInteractiveClassName : listItemClassName,
-        className
+        className,
       )}
       onClick={onClick}
       {...props}

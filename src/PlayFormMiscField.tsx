@@ -33,6 +33,7 @@ export function PlayFormMiscField<T>(props: PlayFormMiscFieldProps<T>) {
     (
       play.misc.find(
         (m) => m.fieldId === field.id && m.playerId === playerId,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       ) || ({} as any)
     ).data ||
     (field.getDefaultValue && field.getDefaultValue()) ||

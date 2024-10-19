@@ -1,13 +1,6 @@
 import classNames from "classnames";
 import { ButtonHTMLAttributes } from "react";
-
-export const buttonBaseClassName = `inline-block px-4 py-3
-text-sm font-semibold text-center
-uppercase transition
-duration-200 ease-in-out
-shadow-md
-rounded-full
-cursor-pointer`.replace(/\s+/g, " ");
+import { buttonBaseClassName } from "./ButtonBase.utils";
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   connectLeft?: boolean;
@@ -29,7 +22,7 @@ const ButtonBase: React.FC<ButtonProps> = ({
       buttonBaseClassName,
       className,
       connectLeft && "rounded-l-none",
-      connectRight && "rounded-r-none"
+      connectRight && "rounded-r-none",
     )}
     onClick={!disabled ? onClick : undefined}
     type={type ?? "button"}

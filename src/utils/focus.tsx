@@ -15,6 +15,7 @@ interface FormFieldItem {
 const FormFieldContext = createContext<FormFieldItem[] | null>(null);
 const FormFieldGroupContext = createContext<FormFieldItem[] | null>(null);
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useFormFieldRef(index: number) {
   const ref = useRef<(HTMLInputElement & HTMLSelectElement) | null>(null);
   const formFieldItems = useContext(FormFieldContext);

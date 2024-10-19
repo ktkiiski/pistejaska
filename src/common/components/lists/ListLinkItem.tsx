@@ -1,10 +1,10 @@
 import classNames from "classnames";
 import { Link, LinkProps } from "react-router-dom";
-import { listItemInteractiveClassName } from "./ListItem";
+import { listItemInteractiveClassName } from "./ListItem.utils";
 
 const listLinkItemClassName = classNames(
   listItemInteractiveClassName,
-  "cursor-pointer hover:bg-gray-100"
+  "cursor-pointer hover:bg-gray-100",
 );
 
 const ListLinkItem: React.FC<LinkProps> = ({
